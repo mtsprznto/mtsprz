@@ -1,0 +1,24 @@
+[
+  {
+    "id": "blast-up",
+    "title": "Blast-Up",
+    "description": "Landing page corporativa para Blast-Up, empresa de ingeniería especializada en vibraciones, geotecnia e instrumentación minera. Sitio web profesional con Next.js, modelado 3D interactivo y diseño moderno.",
+    "tags": ["Next.js", "React", "TypeScript", "Three.js", "Tailwind"],
+    "url": "https://blast-up.cl/",
+    "images": [
+      "/portafolio/blast-landing.png",
+      "/portafolio/blast-dashboard.png"
+    ]
+  },
+  {
+    "id": "novablast",
+    "title": "NovaBlast-AI",
+    "description": "Simulador de fragmentación y control de energía para minería. Plataforma web con motor 3D en tiempo real (WebGPU), análisis geotécnico, mapeo de precisión y simulación cinemática impulsada por IA.",
+    "tags": ["Next.js", "React", "TypeScript", "Three.js", "WebGPU", "IA"],
+    "url": "https://novablast.blast-up.cl/",
+    "images": [
+      "/portafolio/novablast-landing.png",
+      "/portafolio/novablast-simulador.png"
+    ]
+  }
+]

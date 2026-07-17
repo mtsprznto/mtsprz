@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+---
+
+<BaseLayout
+  title="Blog"
+  description="Articulos sobre SEO, marketing digital, desarrollo web y automatizaciones para pymes en la Region de Los Lagos y el sur de Chile."
+>
+  <Header />
+  <main class="min-h-screen bg-[#010101] pt-28 pb-20">
+    <div class="mx-auto max-w-6xl px-6">
+      <div class="reveal-group">
+        <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Blog</p>
+        <h1 class="reveal-item text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-[0.9] tracking-[-2px]">Blog</h1>
+        <p class="reveal-item mt-3 text-white/60 font-body font-light max-w-xl">Consejos y guias sobre soluciones digitales para pymes del sur de Chile</p>
+      </div>
+
+      <div class="mt-12 md:mt-16 space-y-5 reveal-group">
+        {
+          posts.map((post, i) => (
+            <article class={`reveal-item liquid-glass rounded-[1.25rem] p-6 transition-all hover:scale-[1.01]`}>
+              <time class="text-xs text-white/40">
+                {post.data.pubDate.toLocaleDateString("es-CL", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </time>
+              <h2 class="mt-2 text-xl font-heading font-bold text-white">
+                <a href={`/blog/${post.slug}`} class="transition-colors hover:text-white/60">
+                  {post.data.title}
+                </a>
+              </h2>
+              <p class="mt-2 text-sm text-white/60 font-body font-light">{post.data.description}</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                {post.data.tags.map((tag) => (
+                  <span class="liquid-glass rounded-full px-2.5 py-0.5 text-[11px] text-white/60">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

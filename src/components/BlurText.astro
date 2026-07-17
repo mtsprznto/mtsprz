@@ -1,0 +1,34 @@
+---
+const { text, as: Tag = "h1", className = "" } = Astro.props;
+const words = text.split(" ");
+const id = `bt-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<Tag class={className} id={id}>
+  {words.map((word, i) => (
+    <span class="blur-word" style={`animation-delay: ${i * 0.1}s`}>{word}</span>
+  ))}
+</Tag>
+<script data-id={id} is:inline>
+(function() {
+  var s = document.currentScript;
+  var el = document.getElementById(s.getAttribute("data-id"));
+  if (!el) return;
+
+  var obs = new IntersectionObserver(
+    function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          el.querySelectorAll(".blur-word").forEach(function(w) {
+            w.classList.add("visible");
+          });
+          obs.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  obs.observe(el);
+})();
+</script>

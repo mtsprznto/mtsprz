@@ -1,0 +1,29 @@
+---
+const { text, as: Tag = "h1", className = "", staggerMs = 0.06 } = Astro.props;
+const chars = text.split("");
+---
+
+<Tag class={className}>
+  {chars.map((char, i) => (
+    <span class="stagger-char" style={`animation-delay: ${i * staggerMs}s`}>
+      {char === " " ? "\u00A0" : char}
+    </span>
+  ))}
+</Tag>
+<script is:inline>
+(function() {
+  var el = document.currentScript.previousElementSibling;
+  if (!el) return;
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        el.querySelectorAll(".stagger-char").forEach(function(c) {
+          c.classList.add("visible");
+        });
+        obs.unobserve(el);
+      }
+    });
+  }, { threshold: 0.1 });
+  obs.observe(el);
+})();
+</script>

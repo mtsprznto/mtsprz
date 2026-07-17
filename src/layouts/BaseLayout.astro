@@ -1,0 +1,123 @@
+---
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  breadcrumbs?: { name: string; path: string }[];
+}
+
+const { title, description, canonical, breadcrumbs } = Astro.props;
+const site = "https://solucionesdigitalessur.cl";
+const brand = "Mtsprz";
+const defaultTitle = `${brand} | Soluciones Digitales`;
+const fullTitle = title ? `${title} | ${brand}` : defaultTitle;
+---
+
+<!doctype html>
+<html lang="es-CL" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical || site} />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="apple-touch-icon" href="/logo.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical || site} />
+    <meta property="og:locale" content="es_CL" />
+
+    <meta name="twitter:card" content="summary_large_text" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <meta name="theme-color" content="#010101" />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": `${site}/#organization`,
+          name: "Mtsprz",
+          url: site,
+          logo: `${site}/logo.jpg`,
+          description: "Soluciones Digitales en la Región de Los Lagos",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Puerto Varas",
+            addressRegion: "Los Lagos",
+            addressCountry: "CL",
+          },
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: -41.319,
+            longitude: -72.985,
+          },
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "customer service",
+            telephone: "+56975475781",
+            availableLanguage: ["Spanish"],
+            areaServed: "CL-LL",
+          },
+        },
+        {
+          "@type": "WebSite",
+          "@id": `${site}/#website`,
+          url: site,
+          name: defaultTitle,
+          description: "Soluciones digitales para pymes en la Región de Los Lagos",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${site}/buscar?q={search_term_string}`,
+            },
+            "query-input": "required name=search_term_string",
+          },
+        },
+        ...(breadcrumbs && breadcrumbs.length > 0
+          ? [
+              {
+                "@type": "BreadcrumbList",
+                "@id": `${canonical || site}/#breadcrumb`,
+                itemListElement: breadcrumbs.map((cr, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  name: cr.name,
+                  item: `${site}${cr.path}`,
+                })),
+              },
+            ]
+          : []),
+      ],
+    })} />
+  </head>
+  <body class="min-h-screen bg-[#010101] text-text-primary antialiased">
+    <slot />
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        },
+        { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+      );
+
+      document.querySelectorAll(".reveal, .reveal-group").forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+---
+const { class: className = "", innerClass = "" } = Astro.props;
+---
+
+<div class={className} style="perspective:1000px">
+  <div class={`card-inner ${innerClass}`} style="transform-style:preserve-3d;transition:transform 0.2s ease-out">
+    <slot />
+  </div>
+  <script is:inline>
+  (function(){
+    var w = document.currentScript.parentElement;
+    var n = w.querySelector(".card-inner");
+    if (!w || !n) return;
+    w.addEventListener("mousemove",function(e){
+      var r = w.getBoundingClientRect();
+      var x = (e.clientX - r.left - r.width / 2) / 20;
+      var y = (e.clientY - r.top - r.height / 2) / 20;
+      n.style.transform = "rotateY(" + x + "deg) rotateX(" + (-y) + "deg)";
+      n.querySelectorAll("[data-tz]").forEach(function(el){
+        el.style.transform = "translateZ(" + el.getAttribute("data-tz") + "px)";
+      });
+    });
+    w.addEventListener("mouseleave",function(){
+      n.style.transform = "rotateY(0deg) rotateX(0deg)";
+      n.querySelectorAll("[data-tz]").forEach(function(el){
+        el.style.transform = "translateZ(0px)";
+      });
+    });
+  })();
+  </script>
+</div>

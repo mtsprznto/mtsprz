@@ -1,0 +1,176 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import ServiceCard from "../../components/ServiceCard.astro";
+import BlurText from "../../components/BlurText.astro";
+import Footer from "../../components/Footer.astro";
+
+interface Service {
+  icon: string;
+  title: string;
+  description: string;
+  descriptionLong: string;
+  tags: string[];
+  accent: string;
+}
+
+const services: Service[] = [
+  {
+    icon: "Code",
+    title: "Desarrollo Web",
+    description: "Sitios web modernos con Astro. Rápidos, seguros y optimizados para SEO.",
+    descriptionLong: "Creamos experiencias digitales que impulsan tu negocio. Cada proyecto está optimizado para velocidad, accesibilidad y conversión.",
+    tags: ["Astro", "SEO", "Responsive", "Rendimiento"],
+    accent: "#6366f1",
+  },
+  {
+    icon: "Search",
+    title: "SEO",
+    description: "Posicionamiento en Google. SEO local, técnico y de contenido.",
+    descriptionLong: "Lleva tu negocio a los primeros resultados de búsqueda. Estrategia SEO completa para la Región de Los Lagos.",
+    tags: ["Local", "Google", "Contenido", "Analítica"],
+    accent: "#10b981",
+  },
+  {
+    icon: "Bot",
+    title: "Automatizaciones",
+    description: "Bots, flujos de email, CRM y procesos automatizados.",
+    descriptionLong: "Automatiza tus procesos y ahorra horas de trabajo cada semana. Conectamos tus herramientas favoritas.",
+    tags: ["WhatsApp", "CRM", "Email", "Workflows"],
+    accent: "#06b6d4",
+  },
+  {
+    icon: "Palette",
+    title: "Diseño Gráfico",
+    description: "Identidad corporativa, logotipos y material publicitario.",
+    descriptionLong: "Construye una marca que conecte con tu audiencia. Diseñamos tu identidad visual desde cero.",
+    tags: ["Identidad", "Logos", "UX/UI", "Marca"],
+    accent: "#ec4899",
+  },
+  {
+    icon: "TrendingUp",
+    title: "Marketing Digital",
+    description: "Redes sociales, Google Ads y estrategia de contenido.",
+    descriptionLong: "Aumenta tu alcance y convierte más clientes. Estrategias digitales basadas en datos para pymes.",
+    tags: ["Redes", "Ads", "Contenido", "Analítica"],
+    accent: "#f59e0b",
+  },
+  {
+    icon: "Globe",
+    title: "Consultoría Digital",
+    description: "Diagnóstico y plan de transformación digital para pymes.",
+    descriptionLong: "Evaluamos tu negocio y creamos una hoja de ruta digital clara, realista y adaptada a tu presupuesto.",
+    tags: ["Diagnóstico", "Plan", "Pymes", "Estrategia"],
+    accent: "#8b5cf6",
+  },
+];
+
+---
+
+<BaseLayout
+  title="Servicios"
+  description="Ofrecemos desarrollo web, SEO, automatizaciones, diseño gráfico, marketing digital y consultoría para pymes en la Región de Los Lagos."
+>
+  <Header />
+
+  <main>
+    <!-- Hero -->
+    <section class="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#010101]">
+      <div class="absolute inset-0 z-0">
+        <video
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
+          autoplay loop muted playsinline
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-b from-[#010101] via-transparent to-[#010101]" />
+      </div>
+      <div class="relative z-10 text-center px-6">
+        <p class="text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Servicios</p>
+        <h1 class="text-5xl sm:text-7xl md:text-8xl font-heading font-bold text-white leading-[0.9] tracking-[-2px]">SERVICIOS</h1>
+        <p class="mt-4 text-white/60 font-body font-light max-w-md mx-auto">Todo lo que tu negocio necesita para crecer en el entorno digital</p>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="relative bg-[#010101] py-28 md:py-36">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="reveal-group mb-12 md:mb-16 text-center">
+          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Nuestros Servicios</p>
+          <BlurText
+            text="Todo lo que tu negocio necesita"
+            as="h2"
+            className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.1] tracking-[-1px]"
+            wordMs={60}
+          />
+          <p class="mt-4 text-white/50 font-body font-light max-w-lg mx-auto text-sm">
+            Soluciones digitales diseñadas para pymes y empresas del sur de Chile
+          </p>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((s, i) => (
+            <ServiceCard
+              icon={s.icon}
+              title={s.title}
+              description={s.description}
+              tags={s.tags}
+              number={i + 1}
+              accent={s.accent}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-[#010101] py-28 md:py-36">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="cta-card reveal-group relative rounded-[1.375rem] p-10 md:p-14 text-center max-w-3xl mx-auto overflow-hidden bg-[#0a0a0b] border border-white/[0.06]">
+          <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute inset-0 opacity-30" style="background: radial-gradient(ellipse at 50% 0%, #6366f133, transparent 60%);" />
+            <div class="absolute -top-1/2 -left-1/2 w-full h-full animate-gradient-slow opacity-20" style="background: conic-gradient(from 0deg at 50% 50%, #6366f1, #8b5cf6, #ec4899, #6366f1); filter: blur(80px);" />
+          </div>
+          <div class="absolute top-6 left-8 flex gap-2 opacity-20 pointer-events-none">
+            <div class="w-1.5 h-1.5 rounded-full bg-white/40" />
+            <div class="w-1.5 h-1.5 rounded-full bg-white/20" />
+            <div class="w-1.5 h-1.5 rounded-full bg-white/10" />
+          </div>
+          <div class="relative">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-white tracking-[-1px] leading-[1.1]">¿Listo para impulsar tu negocio?</h2>
+            <p class="mx-auto mt-4 max-w-lg text-sm text-white/50 font-body font-light leading-relaxed">
+              Conversemos sin compromiso. Te ayudamos a definir la mejor estrategia digital para tu empresa en el sur de Chile.
+            </p>
+            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="/contacto"
+                class="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-medium text-white transition-all duration-300"
+                style="background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+              >
+                <span class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" style="background: #6366f166;" />
+                <span class="relative">Contáctanos</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </a>
+              <span class="text-[11px] text-white/30 font-body tracking-wide">o llama al <span class="text-white/50">+56975475781</span></span>
+            </div>
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-white/30 font-body">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Sin compromiso
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Respuesta en 24 hrs
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Atención personalizada
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

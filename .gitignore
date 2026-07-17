@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.vercel/
+.env
+.astro/
+.DS_Store
+*.local
+thoughts/
+.opencode/*
+AGENTS.md

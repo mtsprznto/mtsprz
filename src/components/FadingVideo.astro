@@ -1,0 +1,68 @@
+---
+const { src, class: className, style: styleStr, id: idProp } = Astro.props;
+const id = idProp || `fv-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div id={id} style="display:contents">
+  <video
+    src={src}
+    autoplay
+    muted
+    playsinline
+    preload="auto"
+    class={className}
+    style={styleStr}
+  />
+</div>
+<script data-id={id} is:inline>
+(function() {
+  var s = document.currentScript;
+  var container = document.getElementById(s.getAttribute("data-id"));
+  if (!container) return;
+  var v = container.querySelector("video");
+  if (!v) return;
+
+  var raf = null;
+  var fadingOut = false;
+  var FADE_MS = 500;
+  var LEAD = 0.55;
+
+  function fadeTo(target, duration) {
+    if (raf) cancelAnimationFrame(raf);
+    var start = performance.now();
+    var startOpacity = parseFloat(v.style.opacity) || 0;
+    var delta = target - startOpacity;
+
+    function tick(now) {
+      var p = Math.min((now - start) / duration, 1);
+      v.style.opacity = String(startOpacity + delta * p);
+      if (p < 1) raf = requestAnimationFrame(tick);
+    }
+
+    raf = requestAnimationFrame(tick);
+  }
+
+  v.addEventListener("loadeddata", function() {
+    v.style.opacity = "0";
+    v.play();
+    fadeTo(1, FADE_MS);
+  });
+
+  v.addEventListener("timeupdate", function() {
+    if (!fadingOut && v.duration - v.currentTime <= LEAD && v.duration - v.currentTime > 0) {
+      fadingOut = true;
+      fadeTo(0, FADE_MS);
+    }
+  });
+
+  v.addEventListener("ended", function() {
+    v.style.opacity = "0";
+    setTimeout(function() {
+      v.currentTime = 0;
+      v.play();
+      fadingOut = false;
+      fadeTo(1, FADE_MS);
+    }, 100);
+  });
+})();
+</script>

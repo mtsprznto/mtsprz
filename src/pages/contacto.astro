@@ -1,0 +1,104 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { Send, Phone, Mail, MapPin } from "@lucide/astro";
+---
+
+<BaseLayout
+  title="Contacto"
+  description="Contacta a Mtsprz. Estamos en Puerto Varas, Region de Los Lagos. Cotiza tu pagina web, SEO o automatizacion hoy."
+>
+  <Header />
+  <main class="min-h-screen bg-[#010101] pt-28 pb-20">
+    <div class="mx-auto max-w-6xl px-6">
+      <div class="reveal-group">
+        <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Contacto</p>
+        <h1 class="reveal-item text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-[0.9] tracking-[-2px]">Contacto</h1>
+        <p class="reveal-item mt-3 text-white/60 font-body font-light max-w-lg">Conversemos sin compromiso sobre tu proximo proyecto digital</p>
+      </div>
+
+      <div class="mt-12 md:mt-16 grid gap-6 md:gap-8 lg:grid-cols-2">
+        <div class="reveal-group space-y-4">
+          <div class="reveal-item liquid-glass rounded-[1.25rem] p-5 flex items-center gap-4">
+            <div class="liquid-glass rounded-[0.75rem] w-10 h-10 flex items-center justify-center shrink-0">
+              <Phone size={18} class="text-white" stroke-width="1.5" />
+            </div>
+            <span class="text-sm text-white/70 font-body">+56 9 7547 5781</span>
+          </div>
+          <div class="reveal-item liquid-glass rounded-[1.25rem] p-5 flex items-center gap-4">
+            <div class="liquid-glass rounded-[0.75rem] w-10 h-10 flex items-center justify-center shrink-0">
+              <Mail size={18} class="text-white" stroke-width="1.5" />
+            </div>
+            <span class="text-sm text-white/70 font-body">contacto@mtsprz.org</span>
+          </div>
+          <div class="reveal-item liquid-glass rounded-[1.25rem] p-5 flex items-center gap-4">
+            <div class="liquid-glass rounded-[0.75rem] w-10 h-10 flex items-center justify-center shrink-0">
+              <MapPin size={18} class="text-white" stroke-width="1.5" />
+            </div>
+            <span class="text-sm text-white/70 font-body">Puerto Varas, Region de Los Lagos, Chile</span>
+          </div>
+        </div>
+
+        <form id="contact-form" class="reveal-group liquid-glass rounded-[1.25rem] p-6 space-y-4" novalidate>
+          <div class="reveal-item">
+            <label for="name" class="block text-sm font-medium text-white/60">Nombre</label>
+            <input type="text" id="name" name="name" required class="mt-1 w-full rounded-lg bg-black/40 px-4 py-2.5 text-sm text-white outline-none ring-1 ring-white/10 transition-all focus:ring-white/30 placeholder:text-white/30" placeholder="Tu nombre" />
+          </div>
+          <div class="reveal-item">
+            <label for="email" class="block text-sm font-medium text-white/60">Email</label>
+            <input type="email" id="email" name="email" required class="mt-1 w-full rounded-lg bg-black/40 px-4 py-2.5 text-sm text-white outline-none ring-1 ring-white/10 transition-all focus:ring-white/30 placeholder:text-white/30" placeholder="tu@email.com" />
+          </div>
+          <div class="reveal-item">
+            <label for="message" class="block text-sm font-medium text-white/60">Mensaje</label>
+            <textarea id="message" name="message" rows={4} required class="mt-1 w-full rounded-lg bg-black/40 px-4 py-2.5 text-sm text-white outline-none ring-1 ring-white/10 transition-all focus:ring-white/30 placeholder:text-white/30" placeholder="Cuentanos de tu proyecto..."></textarea>
+          </div>
+          <div id="form-status" class="text-xs font-body hidden"></div>
+          <button type="submit" id="submit-btn" class="reveal-item liquid-glass-strong rounded-full px-5 py-2.5 text-sm font-medium text-white flex items-center gap-2 transition-all hover:scale-105">
+            <Send id="send-icon" size={16} stroke-width="1.5" />
+            <span id="btn-text">Enviar Mensaje</span>
+          </button>
+        </form>
+
+        <script>
+          const form = document.getElementById("contact-form");
+          const status = document.getElementById("form-status");
+          const btn = document.getElementById("submit-btn");
+          const btnText = document.getElementById("btn-text");
+          const sendIcon = document.getElementById("send-icon");
+
+          form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            btn.disabled = true;
+            btnText.textContent = "Enviando...";
+            status.className = "text-xs font-body hidden";
+
+            try {
+              const res = await fetch("/api/contact", {
+                method: "POST",
+                body: new FormData(form),
+              });
+              const data = await res.json();
+
+              if (res.ok) {
+                status.className = "text-xs font-body text-emerald-400";
+                status.textContent = data.message || "Mensaje enviado correctamente";
+                form.reset();
+              } else {
+                status.className = "text-xs font-body text-red-400";
+                status.textContent = data.error || "Error al enviar el mensaje";
+              }
+            } catch {
+              status.className = "text-xs font-body text-red-400";
+              status.textContent = "Error de conexión. Intenta nuevamente.";
+            }
+
+            btn.disabled = false;
+            btnText.textContent = "Enviar Mensaje";
+          });
+        </script>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

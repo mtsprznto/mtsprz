@@ -1,0 +1,79 @@
+<header class="fixed top-0 left-0 right-0 z-50 flex justify-center px-6 sm:px-0">
+  <nav class="relative mt-0 flex w-full sm:w-[88%] max-w-6xl items-center liquid-glass rounded-lg sm:rounded-full px-0 sm:px-1.5 h-12 sm:h-auto sm:py-1.5">
+    <a href="/" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
+      <img src="/logo.jpg" alt="Mtsprz" width="28" height="28" class="rounded-full object-cover" />
+    </a>
+
+    <div class="hidden md:flex flex-1 items-center justify-center gap-1">
+      <a href="/servicios" class="nav-link px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white">Servicios</a>
+      <a href="/portafolio" class="nav-link px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white">Portafolio</a>
+      <a href="/blog" class="nav-link px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white">Blog</a>
+      <a href="/contacto" class="nav-link px-3 py-2 text-sm font-medium text-white/80 transition-colors hover:text-white">Contacto</a>
+    </div>
+
+    <div class="flex items-center ml-auto md:ml-0">
+      <a href="/contacto" class="hidden md:inline-flex rounded-full bg-white px-4 py-2 text-sm font-medium text-black whitespace-nowrap transition-all hover:scale-105">Cotizar</a>
+      <button id="nav-toggle" class="flex md:hidden items-center justify-center w-8 h-8 text-white z-50 relative" aria-label="Menu">
+        <svg id="nav-icon-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+        <svg id="nav-icon-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Full-screen mobile overlay -->
+  <div id="nav-overlay" class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#010101] opacity-0 pointer-events-none transition-all duration-300 ease-out md:hidden">
+    <button id="nav-overlay-close" class="absolute top-6 right-6 flex items-center justify-center w-10 h-10 text-white/40 hover:text-white transition-colors" aria-label="Cerrar menú">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <nav class="flex flex-col items-center gap-8">
+      <a href="/servicios" class="text-2xl sm:text-3xl font-heading font-bold text-white/80 hover:text-white transition-colors">Servicios</a>
+      <a href="/portafolio" class="text-2xl sm:text-3xl font-heading font-bold text-white/80 hover:text-white transition-colors">Portafolio</a>
+      <a href="/blog" class="text-2xl sm:text-3xl font-heading font-bold text-white/80 hover:text-white transition-colors">Blog</a>
+      <a href="/contacto" class="text-2xl sm:text-3xl font-heading font-bold text-white/80 hover:text-white transition-colors">Contacto</a>
+      <a href="/contacto" class="mt-6 rounded-full bg-white px-10 py-3.5 text-sm font-medium text-black transition-all hover:scale-105">Cotizar</a>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+(function() {
+  var toggle = document.getElementById("nav-toggle");
+  var overlay = document.getElementById("nav-overlay");
+  var overlayClose = document.getElementById("nav-overlay-close");
+  var openIcon = document.getElementById("nav-icon-open");
+  var closeIcon = document.getElementById("nav-icon-close");
+  if (!toggle || !overlay) return;
+
+  function open() {
+    overlay.classList.remove("pointer-events-none", "opacity-0");
+    overlay.classList.add("pointer-events-auto", "opacity-100");
+    openIcon.classList.add("hidden");
+    closeIcon.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function close() {
+    overlay.classList.remove("pointer-events-auto", "opacity-100");
+    overlay.classList.add("pointer-events-none", "opacity-0");
+    openIcon.classList.remove("hidden");
+    closeIcon.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  toggle.addEventListener("click", function() {
+    if (overlay.classList.contains("opacity-100")) {
+      close();
+    } else {
+      open();
+    }
+  });
+
+  if (overlayClose) {
+    overlayClose.addEventListener("click", close);
+  }
+
+  overlay.querySelectorAll("a").forEach(function(link) {
+    link.addEventListener("click", close);
+  });
+})();
+</script>

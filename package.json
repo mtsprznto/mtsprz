@@ -1,0 +1,28 @@
+{
+  "name": "mtsprz",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Landing page profesional para Soluciones Digitales en la Región de Los Lagos, Chile",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "sync": "astro sync"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^7.0.0",
+    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/vercel": "^11.0.3",
+    "@lucide/astro": "^1.25.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "astro": "^7.1.0",
+    "resend": "^6.17.2",
+    "tailwindcss": "^4.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.0"
+  }
+}
