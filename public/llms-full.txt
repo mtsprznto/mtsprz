@@ -1,0 +1,94 @@
+# Mtsprz | Soluciones Digitales
+> Agencia de soluciones digitales en la Región de Los Lagos, Chile. Desarrollamos páginas web, SEO local, automatizaciones, diseño gráfico, marketing digital y consultoría para pymes del sur de Chile.
+>
+> Founded: 2024 | Location: Puerto Varas, Región de Los Lagos, Chile
+> Contact: contacto@mtsprz.org | +56975475781
+
+## Website
+https://mtsprz.org
+
+## Services
+
+### Desarrollo Web
+Creamos sitios web profesionales con Astro, el framework moderno que genera páginas ultrarrápidas. Carga en menos de 1.5 segundos, diseño responsive, SEO optimizado desde el día uno. Presupuestos desde $150.000 para landing pages hasta $1.200.000 para tiendas online completas con Webpay. Entregamos sitios en 2 a 4 semanas.
+
+### SEO Local
+Posicionamos tu negocio en Google Maps y búsquedas locales en la Región de Los Lagos. Incluye optimización de Google Business Profile, investigación de palabras clave con intención local, contenido geolocalizado y construcción de enlaces desde directorios chilenos. Resultados visibles en 2 a 4 meses.
+
+### Automatizaciones
+Bots de WhatsApp inteligentes que atienden a tus clientes 24/7, flujos de email automatizados para seguimiento de ventas y CRM diseñados para pymes del sur de Chile. Respuestas automáticas a preguntas frecuentes, envío de catálogos, agendamiento de citas y transferencia a humano cuando sea necesario. Planes desde $80.000 mensuales.
+
+### Diseño Gráfico
+Identidad corporativa completa, logotipos, manual de marca y material publicitario. Construimos marcas que conectan con la audiencia de la Región de Los Lagos y el sur de Chile.
+
+### Marketing Digital
+Estrategias basadas en datos para pymes: redes sociales, Google Ads, contenido geolocalizado y analítica. Aumentamos tu alcance y conversión con campañas optimizadas para el mercado del sur de Chile.
+
+### Consultoría Digital
+Diagnóstico completo de tu presencia digital actual y hoja de ruta personalizada para tu transformación digital. Evaluamos tu sitio web, SEO, redes sociales y procesos para crear un plan realista adaptado a tu presupuesto.
+
+## Region-Specific Services
+
+### Puerto Varas
+Soluciones digitales para pymes en Puerto Varas: desarrollo web, SEO local, automatizaciones y diseño gráfico. Especialistas en negocios turísticos y comerciales de la Cuenca del Lago Llanquihue.
+
+### Osorno
+Agencia digital para pymes en Osorno: páginas web profesionales, posicionamiento SEO local en Google Maps y automatizaciones para negocios osorninos.
+
+### Valdivia
+Servicios digitales para pymes en Valdivia: sitios web modernos, SEO local y marketing digital con enfoque en el mercado valdiviano.
+
+## Blog
+
+### Guía completa de SEO para pymes en la Región de Los Lagos
+Guía SEO local para pymes del sur de Chile. Estrategias de posicionamiento en Google, Google Business Profile, palabras clave locales, contenido geolocalizado, velocidad de carga, Core Web Vitals. Ideal para negocios en Puerto Varas, Osorno, Valdivia, Ancud, Castro.
+https://mtsprz.org/blog/guia-seo-pymes-sur-chile
+
+### Cómo posicionar tu negocio en Google Maps en la Región de Los Lagos
+Guía definitiva para aparecer en los 3 resultados destacados de Google Maps. Pasos: crear y verificar Google Business Profile, optimizar cada sección, conseguir reseñas, construir señales locales en directorios chilenos. Errores comunes y diferencias entre posicionar en el sur vs Santiago.
+https://mtsprz.org/blog/como-posicionar-negocio-google-maps-los-lagos
+
+### SEO local para pymes en la Región de Los Lagos
+Guía completa 2026 de SEO local. Pasos detallados: Google Business Profile optimizado, palabras clave con intención local, contenido geolocalizado, enlaces desde directorios. Comparativa SEO Santiago vs Región de Los Lagos. Cómo medir el éxito del SEO local.
+https://mtsprz.org/blog/seo-local-pymes-region-los-lagos
+
+### Cómo automatizar WhatsApp para tu negocio en Puerto Varas
+Automatización de WhatsApp con bots inteligentes para pymes del sur de Chile. Beneficios: atención 24/7, respuestas automáticas, agendamiento de citas, calificación de leads. Tipos de automatización: bot básico, con catálogo, con agenda, con CRM. Precios desde $80.000 mensuales.
+https://mtsprz.org/blog/automatizar-whatsapp-negocio-puerto-varas
+
+### Agencia digital para pymes en Osorno
+Servicios de agencia digital en Osorno: desarrollo web con Astro, SEO local, automatizaciones. Por qué elegir una agencia local vs agencia de Santiago. Casos de éxito en la Región de Los Lagos. Precios y tiempos de entrega.
+https://mtsprz.org/blog/agencia-digital-pymes-osorno
+
+### Cuánto cuesta una página web en Puerto Varas 2026
+Guía de precios actualizada: landing page desde $150.000, sitio corporativo desde $350.000, tienda online desde $650.000. Factores que determinan el precio: tipo de sitio, tecnología, SEO incluido, costos ocultos (dominio, hosting, mantenimiento). Comparativa sitio profesional vs Wix/WordPress.
+https://mtsprz.org/blog/cuanto-cuesta-pagina-web-puerto-varas
+
+### Cómo crear una página web para emprendedores en el sur de Chile
+Guía paso a paso para emprendedores: definir tipo de sitio (landing, multi-página, e-commerce), elegir tecnología (Astro vs Wix vs WordPress), optimizar para búsquedas locales, diseño responsive y velocidad. Por qué los emprendedores del sur necesitan página web. Precios desde $150.000.
+https://mtsprz.org/blog/como-crear-pagina-web-emprendedores-sur-chile
+
+## Portfolio
+
+### Blast-Up
+Landing page corporativa para empresa de ingeniería especializada en vibraciones, geotecnia e instrumentación minera. Tecnologías: Next.js, React, TypeScript, Three.js, Tailwind.
+https://blast-up.cl/
+
+### NovaBlast-AI
+Simulador de fragmentación y control de energía para minería con WebGPU e IA.
+https://novablast.blast-up.cl/
+
+## Contact
+- Email: contacto@mtsprz.org
+- Phone: +56975475781
+- Location: Puerto Varas, Región de Los Lagos, Chile
+- Contact page: https://mtsprz.org/contacto
+
+## Company
+- Name: Mtsprz
+- Full brand: Mtsprz | Soluciones Digitales
+- Region: Región de Los Lagos, Chile
+- Service area: Puerto Varas, Osorno, Valdivia, Ancud, Castro, y toda la Región de Los Lagos
+- Founded: 2024
+- Technologies: Astro, React, Next.js, TypeScript, Tailwind CSS, Node.js, WebGPU
+- AI crawlers allowed: GPTBot, Google-Extended, CCBot (see robots.txt)

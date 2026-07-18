@@ -10,6 +10,7 @@ const blog = defineCollection({
     author: z.string().default("Mtsprz"),
     image: z.string().optional(),
     tags: z.array(z.string()).default([]),
+    modifiedTime: z.date().optional(),
   }),
 });
 

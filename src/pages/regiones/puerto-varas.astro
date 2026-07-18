@@ -11,6 +11,32 @@ import Footer from "../../components/Footer.astro";
   canonical="https://mtsprz.org/regiones/puerto-varas"
   breadcrumbs={[{ name: "Puerto Varas", path: "/regiones/puerto-varas" }]}
 >
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://mtsprz.org/regiones/puerto-varas#localbusiness",
+    name: "Mtsprz en Puerto Varas",
+    description: "Agencia de soluciones digitales en Puerto Varas, Región de Los Lagos, Chile.",
+    url: "https://mtsprz.org/regiones/puerto-varas",
+    telephone: "+56975475781",
+    email: "contacto@mtsprz.org",
+    areaServed: [
+      { "@type": "City", name: "Puerto Varas" },
+      { "@type": "State", name: "Región de Los Lagos" }
+    ],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Puerto Varas",
+      addressRegion: "Los Lagos",
+      addressCountry: "CL"
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: -41.319,
+      longitude: -72.985
+    },
+    parentOrganization: { "@id": "https://mtsprz.org/#organization" }
+  })} />
   <Header />
   <main class="min-h-screen bg-[#010101] pt-28 pb-20">
     <div class="mx-auto max-w-6xl px-6">

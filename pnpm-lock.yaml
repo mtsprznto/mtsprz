@@ -20,6 +20,9 @@ importers:
       '@lucide/astro':
         specifier: ^1.25.0
         version: 1.25.0(astro@7.1.1(@astrojs/markdown-remark@7.2.1)(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.2)(@types/node@24.13.3)(@vercel/functions@3.7.5)(jiti@2.7.0))
+      '@rolldown/binding-linux-x64-gnu':
+        specifier: ^1.2.0
+        version: 1.2.0
       '@tailwindcss/vite':
         specifier: ^4.1.0
         version: 4.3.3(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0))
@@ -656,6 +659,12 @@ packages:
     cpu: [x64]
     os: [linux]
     libc: [glibc]
+
+  '@rolldown/binding-linux-x64-gnu@1.2.0':
+    resolution: {integrity: sha512-MK7L0018jjh1jR3mh21G2j1zAVcpscJBlPo2z19pRjv2XOYGRhaV4LyiD8HO6nCDdZln9IFgCMIV5yt4E3klGQ==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [linux]
 
   '@rolldown/binding-linux-x64-musl@1.1.5':
     resolution: {integrity: sha512-Me+PfPI2TMeOQk0gYWfLQZtTktrmzbr8cDboqX83XKc7UrgAi55gF+2dUkWdxd19n55Essp2yeca+O9N5rBxHg==}
@@ -2787,6 +2796,8 @@ snapshots:
 
   '@rolldown/binding-linux-x64-gnu@1.1.5':
     optional: true
+
+  '@rolldown/binding-linux-x64-gnu@1.2.0': {}
 
   '@rolldown/binding-linux-x64-musl@1.1.5':
     optional: true

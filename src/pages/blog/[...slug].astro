@@ -15,12 +15,20 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const slug = post.id.replace(/\.(md|mdx)$/, "");
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const allPosts = await getCollection("blog");
+const postTags = post.data.tags || [];
+const postTagSet = new Set(postTags.map((t: string) => t.toLowerCase()));
 const related = allPosts
   .filter((p) => p.id !== post.id)
-  .sort(() => Math.random() - 0.5)
-  .slice(0, 2);
+  .map((p) => {
+    const pTags = (p.data.tags || []).map((t: string) => t.toLowerCase());
+    const shared = pTags.filter((t: string) => postTagSet.has(t)).length;
+    return { post: p, relevance: shared };
+  })
+  .sort((a, b) => b.relevance - a.relevance || Math.random() - 0.5)
+  .slice(0, 2)
+  .map((r) => r.post);
 
 function readingTime(text: string): number {
   const words = text.split(/\s+/).length;
@@ -43,6 +51,7 @@ const shareText = encodeURIComponent(post.data.title);
   ]}
   article={{
     publishedTime: post.data.pubDate.toISOString(),
+    modifiedTime: (post.data.modifiedTime || post.data.pubDate).toISOString(),
     author: post.data.author,
     tags: post.data.tags,
   }}
@@ -72,6 +81,7 @@ const shareText = encodeURIComponent(post.data.title);
           </time>
           <span class="text-white/20">&middot;</span>
           <span>{readMin} min de lectura</span>
+          <span class="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[10px] text-emerald-400 font-medium tracking-wide">Actualizado</span>
         </div>
 
         <h1 class="reveal-item mt-3 text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.05] tracking-[-1px]">

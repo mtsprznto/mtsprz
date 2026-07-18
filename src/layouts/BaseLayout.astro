@@ -9,10 +9,20 @@ export interface Props {
   article?: {
     title?: string;
     publishedTime?: string;
+    modifiedTime?: string;
     author?: string;
     tags?: string[];
   };
   breadcrumbs?: { name: string; path: string }[];
+  noindex?: boolean;
+  video?: {
+    url: string;
+    name: string;
+    description: string;
+    thumbnailUrl?: string;
+    uploadDate?: string;
+    duration?: string;
+  };
 }
 
 const {
@@ -22,6 +32,8 @@ const {
   image,
   article,
   breadcrumbs,
+  noindex,
+  video,
 } = Astro.props;
 const site = "https://mtsprz.org";
 const brand = "Mtsprz";
@@ -29,6 +41,24 @@ const defaultTitle = `${brand} | Soluciones Digitales`;
 const fullTitle = title ? `${title} | ${brand}` : defaultTitle;
 const ogImage = image || `${site}/logo.jpg`;
 const currentUrl = canonical || site;
+const defaultBreadcrumbs: { name: string; path: string }[] = [];
+if (canonical && canonical !== site) {
+  const path = new URL(canonical).pathname;
+  const segments = path.replace(/\/$/, "").split("/").filter(Boolean);
+  let acc = "";
+  for (const seg of segments) {
+    acc += `/${seg}`;
+    defaultBreadcrumbs.push({
+      name: seg.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+      path: acc,
+    });
+  }
+}
+const resolvedBreadcrumbs = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs.length > 0 ? defaultBreadcrumbs : undefined;
+const personSameAs = [
+  "https://www.linkedin.com/company/mtsprz",
+  "https://github.com/mtsprz",
+];
 ---
 
 <!doctype html>
@@ -39,13 +69,13 @@ const currentUrl = canonical || site;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={currentUrl} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" type="image/jpeg" href="/logo.jpg" />
     <link rel="apple-touch-icon" href="/logo.jpg" />
-    <link rel="alternate" hreflang="es-CL" href={currentUrl} />
-    <link rel="alternate" hreflang="x-default" href={currentUrl} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" />
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <meta property="og:type" content={article ? "article" : "website"} />
@@ -64,54 +94,36 @@ const currentUrl = canonical || site;
     <meta name="twitter:image" content={ogImage} />
 
     <meta name="theme-color" content="#010101" />
-    <meta name="author" content={brand} />
+    <meta name="author" content="Mtsprz, Soluciones Digitales" />
     <meta name="geo.region" content="CL-LL" />
     <meta name="geo.placename" content="Puerto Varas" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
-        ...(article
-          ? [
-              {
-                "@type": "Article",
-                "@id": `${currentUrl}#article`,
-                headline: article.title || title,
-                description: description,
-                image: ogImage,
-                datePublished: article.publishedTime,
-                author: {
-                  "@type": "Person",
-                  name: article.author || brand,
-                },
-                publisher: {
-                  "@type": "Organization",
-                  "@id": `${site}/#organization`,
-                  name: brand,
-                  logo: {
-                    "@type": "ImageObject",
-                    url: `${site}/logo.jpg`,
-                  },
-                },
-                ...(article.tags && article.tags.length > 0
-                  ? { keywords: article.tags.join(", ") }
-                  : {}),
-                mainEntityOfPage: {
-                  "@type": "WebPage",
-                  "@id": currentUrl,
-                },
-              },
-            ]
-          : []),
+        {
+          "@type": "Person",
+          "@id": `${site}/#person`,
+          name: "Mtsprz",
+          url: site,
+          sameAs: personSameAs,
+          knowsAbout: "Soluciones digitales, desarrollo web, SEO, automatizaciones, marketing digital",
+          worksFor: { "@id": `${site}/#organization` },
+        },
         {
           "@type": "Organization",
           "@id": `${site}/#organization`,
           name: "Mtsprz",
           url: site,
-          logo: `${site}/logo.jpg`,
+          logo: {
+            "@type": "ImageObject",
+            url: `${site}/logo.jpg`,
+          },
           description: "Soluciones Digitales en la Región de Los Lagos",
           address: {
             "@type": "PostalAddress",
+            streetAddress: "Puerto Varas",
             addressLocality: "Puerto Varas",
             addressRegion: "Los Lagos",
             addressCountry: "CL",
@@ -125,9 +137,11 @@ const currentUrl = canonical || site;
             "@type": "ContactPoint",
             contactType: "customer service",
             telephone: "+56975475781",
+            email: "contacto@mtsprz.org",
             availableLanguage: ["Spanish"],
             areaServed: "CL-LL",
           },
+          sameAs: personSameAs,
         },
         {
           "@type": "WebSite",
@@ -135,6 +149,7 @@ const currentUrl = canonical || site;
           url: site,
           name: defaultTitle,
           description: "Soluciones digitales para pymes en la Región de Los Lagos",
+          publisher: { "@id": `${site}/#organization` },
           potentialAction: {
             "@type": "SearchAction",
             target: {
@@ -144,17 +159,70 @@ const currentUrl = canonical || site;
             "query-input": "required name=search_term_string",
           },
         },
-        ...(breadcrumbs && breadcrumbs.length > 0
+        ...(video
+          ? [
+              {
+                "@type": "VideoObject",
+                "@id": `${currentUrl}#video`,
+                name: video.name,
+                description: video.description,
+                thumbnailUrl: video.thumbnailUrl || `${site}/logo.jpg`,
+                contentUrl: video.url,
+                embedUrl: video.url,
+                uploadDate: video.uploadDate || "2026-06-19",
+                duration: video.duration || "PT30S",
+              },
+            ]
+          : []),
+        ...(article
+          ? [
+              {
+                "@type": "Article",
+                "@id": `${currentUrl}#article`,
+                headline: article.title || title,
+                description: description,
+                image: ogImage,
+                datePublished: article.publishedTime,
+                ...(article.modifiedTime ? { dateModified: article.modifiedTime } : {}),
+                author: {
+                  "@type": "Person",
+                  name: article.author || "Mtsprz",
+                  url: `${site}/#person`,
+                  sameAs: personSameAs,
+                },
+                publisher: {
+                  "@type": "Organization",
+                  "@id": `${site}/#organization`,
+                },
+                ...(article.tags && article.tags.length > 0
+                  ? { keywords: article.tags.join(", ") }
+                  : {}),
+                mainEntityOfPage: {
+                  "@type": "WebPage",
+                  "@id": currentUrl,
+                },
+              },
+            ]
+          : []),
+        ...(resolvedBreadcrumbs
           ? [
               {
                 "@type": "BreadcrumbList",
-                "@id": `${canonical || site}/#breadcrumb`,
-                itemListElement: breadcrumbs.map((cr, i) => ({
-                  "@type": "ListItem",
-                  position: i + 1,
-                  name: cr.name,
-                  item: `${site}${cr.path}`,
-                })),
+                "@id": `${currentUrl}#breadcrumb`,
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Inicio",
+                    item: site,
+                  },
+                  ...resolvedBreadcrumbs.map((cr, i) => ({
+                    "@type": "ListItem",
+                    position: i + 2,
+                    name: cr.name,
+                    item: `${site}${cr.path}`,
+                  })),
+                ],
               },
             ]
           : []),

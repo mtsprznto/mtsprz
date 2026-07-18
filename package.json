@@ -17,6 +17,7 @@
     "@astrojs/sitemap": "^3.7.0",
     "@astrojs/vercel": "^11.0.3",
     "@lucide/astro": "^1.25.0",
+    "@rolldown/binding-linux-x64-gnu": "^1.2.0",
     "@tailwindcss/vite": "^4.1.0",
     "astro": "^7.1.0",
     "resend": "^6.17.2",

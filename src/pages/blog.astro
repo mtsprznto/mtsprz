@@ -5,6 +5,12 @@ import Footer from "../components/Footer.astro";
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("blog");
+
+function isRecent(d: Date): boolean {
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  return d >= weekAgo;
+}
 ---
 
 <BaseLayout
@@ -31,6 +37,9 @@ const posts = await getCollection("blog");
                   month: "long",
                   day: "numeric",
                 })}
+                {post.data.modifiedTime && (
+                  <span class="ml-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[10px] text-emerald-400 font-medium">Actualizado</span>
+                )}
               </time>
               <h2 class="mt-2 text-xl font-heading font-bold text-white">
                 <a href={`/blog/${post.id.replace(/\.(md|mdx)$/, "")}`} class="transition-colors hover:text-white/60">
