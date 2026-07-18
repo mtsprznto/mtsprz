@@ -7,8 +7,8 @@ import projects from "../data/projects.json";
 ---
 
 <BaseLayout
-  title="Portafolio"
-  description="Proyectos de desarrollo web realizados por Mtsprz. Sitios web, aplicaciones y soluciones digitales para pymes en Chile."
+  title="Portafolio de Desarrollo Web"
+  description="Proyectos de desarrollo web y aplicaciones realizados por Mtsprz en la Región de Los Lagos. Sitios web modernos con Astro, React y Next.js para pymes en Chile."
 >
   <Header />
   <main class="min-h-screen bg-[#010101]">
@@ -29,7 +29,7 @@ import projects from "../data/projects.json";
               <div class="carousel-track relative h-full flex transition-transform duration-500 ease-out" style="width:100%">
                 {p.images.map((img) => (
                   <div class="carousel-slide shrink-0 h-full relative" style="width:100%">
-                    <img src={img} alt="" loading="eager" class="w-full h-full object-cover" />
+                    <img src={img} alt={`Captura de pantalla del proyecto ${p.title} - ${idx + 1}`} loading="eager" class="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>

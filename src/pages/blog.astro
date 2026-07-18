@@ -8,8 +8,8 @@ const posts = await getCollection("blog");
 ---
 
 <BaseLayout
-  title="Blog"
-  description="Articulos sobre SEO, marketing digital, desarrollo web y automatizaciones para pymes en la Region de Los Lagos y el sur de Chile."
+  title="Blog de Marketing Digital y SEO"
+  description="Artículos sobre SEO local, marketing digital, desarrollo web y automatizaciones para pymes en la Región de Los Lagos y el sur de Chile."
 >
   <Header />
   <main class="min-h-screen bg-[#010101] pt-28 pb-20">
@@ -32,7 +32,7 @@ const posts = await getCollection("blog");
                 })}
               </time>
               <h2 class="mt-2 text-xl font-heading font-bold text-white">
-                <a href={`/blog/${post.slug}`} class="transition-colors hover:text-white/60">
+                <a href={`/blog/${post.id.replace(/\.(md|mdx)$/, "")}`} class="transition-colors hover:text-white/60">
                   {post.data.title}
                 </a>
               </h2>

@@ -8,38 +8,219 @@ import { render } from "astro:content";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id.replace(/\.(md|mdx)$/, "") },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
+const slug = post.id.replace(/\.(md|mdx)$/, "");
 const { Content } = await render(post);
+const allPosts = await getCollection("blog");
+const related = allPosts
+  .filter((p) => p.id !== post.id)
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 2);
+
+function readingTime(text: string): number {
+  const words = text.split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+
+const readMin = readingTime(post.body || "");
+const postUrl = `https://mtsprz.org/blog/${slug}`;
+const shareText = encodeURIComponent(post.data.title);
 ---
 
 <BaseLayout
   title={post.data.title}
   description={post.data.description}
+  canonical={postUrl}
+  image={post.data.image || undefined}
+  breadcrumbs={[
+    { name: "Blog", path: "/blog" },
+    { name: post.data.title, path: `/blog/${slug}` },
+  ]}
+  article={{
+    publishedTime: post.data.pubDate.toISOString(),
+    author: post.data.author,
+    tags: post.data.tags,
+  }}
 >
   <Header />
-  <main class="min-h-screen bg-[#010101] pt-28 pb-20">
-    <div class="mx-auto max-w-3xl px-6">
-      <div class="reveal-group">
-        <time class="reveal-item text-xs text-white/40">
-          {post.data.pubDate.toLocaleDateString("es-CL", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          })}
-        </time>
-        <h1 class="reveal-item mt-2 text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[0.9] tracking-[-1px]">
+
+  <main class="min-h-screen bg-[#010101] pt-28 sm:pt-32 pb-20">
+    <article class="mx-auto max-w-3xl px-6">
+      <nav class="mb-8">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 transition-colors font-body tracking-wide uppercase"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          Volver al blog
+        </a>
+      </nav>
+
+      <header class="reveal-group">
+        <div class="reveal-item flex flex-wrap items-center gap-3 text-xs text-white/40 font-body">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toLocaleDateString("es-CL", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
+          <span class="text-white/20">&middot;</span>
+          <span>{readMin} min de lectura</span>
+        </div>
+
+        <h1 class="reveal-item mt-3 text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.05] tracking-[-1px]">
           {post.data.title}
         </h1>
-      </div>
-      <div class="reveal-group mt-8 max-w-none text-white/70 font-body font-light leading-relaxed prose prose-invert">
+
+        <p class="reveal-item mt-4 text-base sm:text-lg text-white/50 font-body font-light leading-relaxed max-w-2xl">
+          {post.data.description}
+        </p>
+
+        <div class="reveal-item mt-6 flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] flex items-center justify-center text-xs font-bold text-white">
+              M
+            </div>
+            <div class="text-sm">
+              <p class="text-white/80 font-medium font-body">{post.data.author}</p>
+              <p class="text-[11px] text-white/40 font-body">Mtsprz Soluciones Digitales</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-item mt-6 flex flex-wrap gap-2">
+          {post.data.tags.map((tag) => (
+            <span class="rounded-full bg-white/[0.04] border border-white/[0.06] px-3 py-1 text-[11px] text-white/50 font-body tracking-wide">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </header>
+
+      <div class="reveal-group mt-10 md:mt-12 prose-blog max-w-none">
         <Content />
       </div>
-    </div>
+
+      <footer class="reveal-group mt-12 pt-8 border-t border-white/[0.06]">
+        <div class="reveal-item flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] flex items-center justify-center text-xs font-bold text-white">
+              M
+            </div>
+            <div class="text-sm">
+              <p class="text-white/80 font-medium font-body">{post.data.author}</p>
+              <p class="text-[11px] text-white/40 font-body">Mtsprz Soluciones Digitales</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-white/30 font-body mr-1">Compartir</span>
+            <a
+              href={`https://wa.me/?text=${shareText}%20${encodeURIComponent(postUrl)}`}
+              target="_blank" rel="noopener noreferrer"
+              class="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all"
+              aria-label="Compartir en WhatsApp"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+            </a>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(postUrl)}`}
+              target="_blank" rel="noopener noreferrer"
+              class="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all"
+              aria-label="Compartir en Twitter"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46L20 4"/></svg>
+            </a>
+            <a
+              href={`https://linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
+              target="_blank" rel="noopener noreferrer"
+              class="w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all"
+              aria-label="Compartir en LinkedIn"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <button
+              class="copy-link-btn w-8 h-8 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-white/50 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all"
+              aria-label="Copiar enlace"
+              data-url={postUrl}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+            </button>
+          </div>
+        </div>
+      </footer>
+
+      <div class="reveal-group mt-12">
+        <div class="reveal-item liquid-glass rounded-[1.25rem] p-6 sm:p-8 text-center">
+          <h2 class="text-lg sm:text-xl font-heading font-bold text-white tracking-[-0.5px]">Lleva tu negocio al siguiente nivel</h2>
+          <p class="mt-2 text-sm text-white/50 font-body font-light max-w-md mx-auto">
+          En Mtsprz creamos soluciones digitales para pymes del sur de Chile. Conversemos sin compromiso.
+          </p>
+          <a
+            href="/contacto"
+            class="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-black transition-all hover:scale-105"
+          >
+            Solicitar cotización
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      {
+        related.length > 0 && (
+          <div class="reveal-group mt-12 md:mt-16">
+            <h2 class="reveal-item text-sm uppercase tracking-[0.2em] text-white/30 font-body mb-6">Artículos relacionados</h2>
+            <div class="grid gap-4 sm:grid-cols-2">
+              {related.map((r) => {
+                const rSlug = r.id.replace(/\.(md|mdx)$/, "");
+                return (
+                  <a
+                    href={`/blog/${rSlug}`}
+                    class="reveal-item group liquid-glass rounded-[1.25rem] p-5 transition-all hover:scale-[1.02]"
+                  >
+                    <time class="text-[11px] text-white/40 font-body">
+                      {r.data.pubDate.toLocaleDateString("es-CL", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </time>
+                    <h3 class="mt-2 text-base font-heading font-bold text-white group-hover:text-white/80 transition-colors leading-snug">
+                      {r.data.title}
+                    </h3>
+                    <p class="mt-1.5 text-xs text-white/50 font-body font-light line-clamp-2">
+                      {r.data.description}
+                    </p>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )
+      }
+    </article>
   </main>
+
   <Footer />
+
+  <script is:inline>
+  (function() {
+    var btn = document.querySelector(".copy-link-btn");
+    if (!btn) return;
+    btn.addEventListener("click", function() {
+      var url = btn.getAttribute("data-url");
+      navigator.clipboard.writeText(url).then(function() {
+        var original = btn.innerHTML;
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+        setTimeout(function() { btn.innerHTML = original; }, 2000);
+      });
+    });
+  })();
+  </script>
 </BaseLayout>

@@ -1,0 +1,24 @@
+# Mtsprz | Soluciones Digitales
+https://mtsprz.org
+
+Agencia de soluciones digitales con enfoque en la Región de Los Lagos, Chile. Servicios de desarrollo web, SEO, automatizaciones, diseño gráfico, marketing digital y consultoría para pymes del sur de Chile.
+
+## Pages
+- Home: https://mtsprz.org/
+- Servicios: https://mtsprz.org/servicios
+- Portafolio: https://mtsprz.org/portafolio
+- Blog: https://mtsprz.org/blog
+- Contacto: https://mtsprz.org/contacto
+
+## Services
+- Desarrollo Web: sitios modernos con Astro, optimizados para SEO y rendimiento
+- SEO Local: posicionamiento en Google para la Región de Los Lagos
+- Automatizaciones: bots, flujos de email, CRM y procesos automatizados
+- Diseño Gráfico: identidad corporativa, logos y material publicitario
+- Marketing Digital: redes sociales, Google Ads y estrategia de contenido
+- Consultoría Digital: diagnóstico y plan de transformación digital para pymes
+
+## Contact
+- Email: contacto@mtsprz.org
+- Phone: +56975475781
+- Location: Puerto Varas, Región de Los Lagos, Chile

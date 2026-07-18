@@ -62,8 +62,8 @@ const services: Service[] = [
 ---
 
 <BaseLayout
-  title="Soluciones Digitales para el Sur de Chile"
-  description="Mtsprz - Agencia de soluciones digitales en la Región de Los Lagos. Creamos páginas web, automatizaciones, SEO y marketing digital para pymes y empresas del sur de Chile."
+  title="Agencia de Soluciones Digitales en Puerto Varas"
+  description="Mtsprz - Agencia de soluciones digitales en la Región de Los Lagos. Creamos páginas web, SEO local, automatizaciones y marketing digital para pymes de Puerto Varas y el sur de Chile."
 >
   <Header />
 
@@ -76,6 +76,8 @@ const services: Service[] = [
           loop
           muted
           playsinline
+          preload="metadata"
+          poster="/logo.jpg"
           class="w-full h-full object-cover opacity-100"
         />
         <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#010101] to-transparent" />
@@ -152,6 +154,23 @@ const services: Service[] = [
               accent={s.accent}
             />
           ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#010101] py-28 md:py-36 border-t border-white/[0.03]">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="reveal-group max-w-3xl mx-auto text-center">
+          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Nosotros</p>
+          <h2 class="reveal-item text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.05] tracking-[-1px]">
+            Agencia Digital en la Región de Los Lagos
+          </h2>
+          <p class="reveal-item mt-6 text-white/60 font-body font-light leading-relaxed max-w-2xl mx-auto text-sm sm:text-base">
+            Mtsprz nació en Puerto Varas con la misión de llevar soluciones digitales profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad sin pagar precios de Santiago. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
+          </p>
+          <p class="reveal-item mt-4 text-white/50 font-body font-light leading-relaxed max-w-2xl mx-auto text-sm">
+            Trabajamos con negocios de Puerto Varas, Osorno, Valdivia, Ancud, Castro y toda la Región de Los Lagos. Cada proyecto incluye optimización SEO desde el día uno, diseño responsive y atención personalizada sin importar el tamaño de tu empresa.
+          </p>
         </div>
       </div>
     </section>

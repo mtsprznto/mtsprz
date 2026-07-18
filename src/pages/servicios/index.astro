@@ -68,9 +68,48 @@ const services: Service[] = [
 ---
 
 <BaseLayout
-  title="Servicios"
-  description="Ofrecemos desarrollo web, SEO, automatizaciones, diseño gráfico, marketing digital y consultoría para pymes en la Región de Los Lagos."
+  title="Servicios Digitales para Pymes"
+  description="Ofrecemos desarrollo web profesional, SEO local en la Región de Los Lagos, automatizaciones, diseño gráfico, marketing digital y consultoría para pymes en Chile."
+  breadcrumbs={[{ name: "Servicios", path: "/servicios" }]}
 >
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Cuanto cuesta una pagina web profesional",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El costo depende de la complejidad del proyecto. Desde landing pages hasta sitios web con blog, portafolio y sistema de contacto. Contactanos para una cotizacion personalizada sin compromiso."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Que es el SEO local y por que es importante para mi negocio",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "El SEO local optimiza tu presencia en Google para busquedas geograficas como 'taller mecanico en Puerto Varas' o 'abogado en Osorno'. Es importante porque atrae clientes que estan buscando activamente tus servicios en tu misma zona."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Cuanto tiempo toma desarrollar un sitio web con Astro",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Un sitio web profesional con Astro se entrega en 2 a 4 semanas, dependiendo de la cantidad de paginas, funcionalidades y contenido. Astro permite desarrollar sitios ultra rapidos optimizados para SEO desde el inicio."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ofrecen servicios de diseño grafico y branding",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Si, ofrecemos creacion de identidad corporativa, logotipos, manual de marca y material publicitario para pymes en la Region de Los Lagos."
+        }
+      }
+    ]
+  })} />
   <Header />
 
   <main>
@@ -80,6 +119,8 @@ const services: Service[] = [
         <video
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
           autoplay loop muted playsinline
+          preload="metadata"
+          poster="/logo.jpg"
           class="absolute inset-0 w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-b from-[#010101] via-transparent to-[#010101]" />

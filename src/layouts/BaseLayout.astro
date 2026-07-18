@@ -5,14 +5,30 @@ export interface Props {
   title: string;
   description: string;
   canonical?: string;
+  image?: string;
+  article?: {
+    title?: string;
+    publishedTime?: string;
+    author?: string;
+    tags?: string[];
+  };
   breadcrumbs?: { name: string; path: string }[];
 }
 
-const { title, description, canonical, breadcrumbs } = Astro.props;
-const site = "https://solucionesdigitalessur.cl";
+const {
+  title,
+  description,
+  canonical,
+  image,
+  article,
+  breadcrumbs,
+} = Astro.props;
+const site = "https://mtsprz.org";
 const brand = "Mtsprz";
 const defaultTitle = `${brand} | Soluciones Digitales`;
 const fullTitle = title ? `${title} | ${brand}` : defaultTitle;
+const ogImage = image || `${site}/logo.jpg`;
+const currentUrl = canonical || site;
 ---
 
 <!doctype html>
@@ -22,29 +38,71 @@ const fullTitle = title ? `${title} | ${brand}` : defaultTitle;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical || site} />
+    <link rel="canonical" href={currentUrl} />
     <link rel="icon" type="image/jpeg" href="/logo.jpg" />
     <link rel="apple-touch-icon" href="/logo.jpg" />
+    <link rel="alternate" hreflang="es-CL" href={currentUrl} />
+    <link rel="alternate" hreflang="x-default" href={currentUrl} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical || site} />
+    <meta property="og:url" content={currentUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content={brand} />
 
-    <meta name="twitter:card" content="summary_large_text" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <meta name="theme-color" content="#010101" />
+    <meta name="author" content={brand} />
+    <meta name="geo.region" content="CL-LL" />
+    <meta name="geo.placename" content="Puerto Varas" />
 
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
+        ...(article
+          ? [
+              {
+                "@type": "Article",
+                "@id": `${currentUrl}#article`,
+                headline: article.title || title,
+                description: description,
+                image: ogImage,
+                datePublished: article.publishedTime,
+                author: {
+                  "@type": "Person",
+                  name: article.author || brand,
+                },
+                publisher: {
+                  "@type": "Organization",
+                  "@id": `${site}/#organization`,
+                  name: brand,
+                  logo: {
+                    "@type": "ImageObject",
+                    url: `${site}/logo.jpg`,
+                  },
+                },
+                ...(article.tags && article.tags.length > 0
+                  ? { keywords: article.tags.join(", ") }
+                  : {}),
+                mainEntityOfPage: {
+                  "@type": "WebPage",
+                  "@id": currentUrl,
+                },
+              },
+            ]
+          : []),
         {
           "@type": "Organization",
           "@id": `${site}/#organization`,
