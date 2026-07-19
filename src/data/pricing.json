@@ -1,0 +1,163 @@
+{
+  "services": [
+    {
+      "id": "landing",
+      "category": "Desarrollo Web",
+      "name": "Landing Page",
+      "description": "Sitio web de 1 a 3 páginas, ideal para emprendedores",
+      "price": 350000,
+      "promoPrice": 290000,
+      "features": ["1-3 páginas", "Diseño responsive", "Formulario de contacto", "SEO básico", "Hosting 1 año"],
+      "popular": false
+    },
+    {
+      "id": "web-profesional",
+      "category": "Desarrollo Web",
+      "name": "Sitio Web Profesional",
+      "description": "Sitio completo con blog, galería y más secciones",
+      "price": 800000,
+      "promoPrice": 690000,
+      "features": ["5-10 páginas", "Blog integrado", "SEO optimizado", "Galería de imágenes", "Hosting 1 año", "Panel admin"],
+      "popular": true
+    },
+    {
+      "id": "ecommerce",
+      "category": "Desarrollo Web",
+      "name": "Tienda Online",
+      "description": "E-commerce completo con carrito de compras y pagos",
+      "price": 1800000,
+      "promoPrice": 1500000,
+      "features": ["Catálogo ilimitado", "Carrito de compras", "Webpay/Flow integrado", "Dashboard ventas", "SEO avanzado", "Hosting 1 año"],
+      "popular": false
+    },
+    {
+      "id": "seo-audit",
+      "category": "SEO",
+      "name": "Auditoría SEO",
+      "description": "Análisis completo de tu sitio web y plan de acción",
+      "price": 200000,
+      "promoPrice": 150000,
+      "features": ["Análisis técnico", "Auditoría de contenido", "Competencia local", "Plan de acción", "Reporte ejecutivo"],
+      "popular": false
+    },
+    {
+      "id": "seo-local",
+      "category": "SEO",
+      "name": "SEO Local",
+      "description": "Posiciona tu negocio en Google Maps y búsquedas locales",
+      "price": 300000,
+      "promoPrice": 250000,
+      "features": ["Google My Business", "Citas locales", "Optimización Maps", "Reporte mensual", "Soporte 3 meses"],
+      "popular": true
+    },
+    {
+      "id": "seo-mensual",
+      "category": "SEO",
+      "name": "Mantenimiento SEO Mensual",
+      "description": "SEO continuo para mantener y mejorar tu posicionamiento",
+      "price": 150000,
+      "promoPrice": 120000,
+      "features": ["Monitoreo posiciones", "Optimización continua", "Reporte mensual", "Soporte prioritario"],
+      "monthly": true,
+      "popular": false
+    },
+    {
+      "id": "bot-whatsapp",
+      "category": "Automatizaciones",
+      "name": "Bot WhatsApp",
+      "description": "Chatbot automatizado para atención al cliente 24/7",
+      "price": 300000,
+      "promoPrice": 250000,
+      "features": ["Respuestas automáticas", "Catálogo interactivo", "Integración WhatsApp API", "Dashboard gestión", "Soporte 1 mes"],
+      "popular": true
+    },
+    {
+      "id": "email-flow",
+      "category": "Automatizaciones",
+      "name": "Flujo Email Marketing",
+      "description": "Automatización de correos para nurturing de clientes",
+      "price": 250000,
+      "promoPrice": 200000,
+      "features": ["Secuencia bienvenida", "Carritos abandonados", "Newsletter automático", "Integración API", "Plantillas diseño"],
+      "monthly": false,
+      "popular": false
+    },
+    {
+      "id": "crm-integration",
+      "category": "Automatizaciones",
+      "name": "Integración CRM",
+      "description": "Conecta tus herramientas y centraliza clientes",
+      "price": 500000,
+      "promoPrice": 400000,
+      "features": ["Conexión API", "Sincronización datos", "Automatización tareas", "Reportes ventas", "Capacitación"],
+      "popular": false
+    },
+    {
+      "id": "logo-brand",
+      "category": "Diseño Gráfico",
+      "name": "Logo + Identidad Visual",
+      "description": "Marca profesional que conecta con tu audiencia",
+      "price": 350000,
+      "promoPrice": 290000,
+      "features": ["Logo principal", "Variantes cromáticas", "Tipografía corporativa", "Paleta de colores", "Manual de marca"],
+      "popular": true
+    },
+    {
+      "id": "social-media",
+      "category": "Marketing Digital",
+      "name": "Gestión Redes Sociales",
+      "description": "Contenido y gestión profesional de tus redes",
+      "price": 350000,
+      "promoPrice": 290000,
+      "features": ["8 publicaciones/mes", "Diseño gráfico", "Copywriting", "Reporte mensual", "Gestión de comunidad"],
+      "monthly": true,
+      "popular": false
+    },
+    {
+      "id": "google-ads",
+      "category": "Marketing Digital",
+      "name": "Google Ads",
+      "description": "Campañas publicitarias efectivas en Google",
+      "price": 250000,
+      "promoPrice": 200000,
+      "features": ["Configuración campaña", "Optimización continua", "Segmentación local", "Reporte semanal", "A/B testing"],
+      "monthly": true,
+      "popular": false
+    }
+  ],
+  "packs": [
+    {
+      "id": "pack-digital",
+      "name": "Pack Digital Completo",
+      "description": "Web profesional + SEO Local + Bot WhatsApp",
+      "services": ["web-profesional", "seo-local", "bot-whatsapp"],
+      "totalPrice": 1400000,
+      "discount": 200000,
+      "promoPrice": 1100000,
+      "popular": true,
+      "badge": "Más contratado"
+    },
+    {
+      "id": "pack-emprendedor",
+      "name": "Pack Emprendedor",
+      "description": "Landing page + Logo + Redes Sociales",
+      "services": ["landing", "logo-brand", "social-media"],
+      "totalPrice": 1050000,
+      "discount": 150000,
+      "promoPrice": 500000,
+      "popular": false,
+      "badge": "Mejor precio"
+    },
+    {
+      "id": "pack-seo-completo",
+      "name": "Pack SEO Completo",
+      "description": "Auditoría + SEO Local + 3 meses mantenimiento",
+      "services": ["seo-audit", "seo-local", "seo-mensual"],
+      "totalPrice": 650000,
+      "discount": 100000,
+      "promoPrice": 450000,
+      "popular": false,
+      "badge": "Recomendado"
+    }
+  ]
+}

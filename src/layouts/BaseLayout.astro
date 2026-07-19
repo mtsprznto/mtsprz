@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import CotizarModal from "../components/CotizarModal.astro";
 
 export interface Props {
   title: string;
@@ -245,6 +246,7 @@ const personSameAs = [
   </head>
   <body class="min-h-screen bg-[#010101] text-text-primary antialiased">
     <slot />
+    <CotizarModal />
     <script>
       const observer = new IntersectionObserver(
         (entries) => {

@@ -113,10 +113,6 @@ const shareText = encodeURIComponent(post.data.title);
   }}
 >
   <Header />
-  <Breadcrumbs items={[
-    { name: "Blog", path: "/blog" },
-    { name: post.data.title, path: `/blog/${slug}` },
-  ]} class="mx-auto max-w-4xl px-6 pt-6 pb-2" />
   {hasFAQ && (
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
@@ -155,6 +151,10 @@ const shareText = encodeURIComponent(post.data.title);
   }
 
   <main class="min-h-screen bg-[#010101] pt-28 sm:pt-32 pb-20">
+    <Breadcrumbs items={[
+      { name: "Blog", path: "/blog" },
+      { name: post.data.title, path: `/blog/${slug}` },
+    ]} class="mx-auto max-w-3xl px-6 pb-6" />
     <article class="mx-auto max-w-3xl px-6">
       <nav class="mb-8">
         <a
