@@ -2,18 +2,46 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Card3D from "../../components/Card3D.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Footer from "../../components/Footer.astro";
 ---
 
 <BaseLayout
   title="Soluciones Digitales en Valdivia"
-  description="Mtsprz - Agencia de soluciones digitales en Valdivia, Región de Los Ríos. Creamos páginas web, SEO local y automatizaciones para pymes en Valdivia."
+  description="Mtsprz - Agencia de soluciones digitales en Valdivia, Región de Los Lagos. Creamos páginas web, SEO local y automatizaciones para pymes de Valdivia y el sur de Chile."
   canonical="https://mtsprz.org/regiones/valdivia"
   breadcrumbs={[{ name: "Valdivia", path: "/regiones/valdivia" }]}
 >
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://mtsprz.org/regiones/valdivia#localbusiness",
+    name: "Mtsprz en Valdivia",
+    description: "Agencia de soluciones digitales en Valdivia, Región de Los Lagos, Chile.",
+    url: "https://mtsprz.org/regiones/valdivia",
+    telephone: "+56975475781",
+    email: "contacto@mtsprz.org",
+    areaServed: [
+      { "@type": "City", name: "Valdivia" },
+      { "@type": "State", name: "Región de Los Lagos" }
+    ],
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Valdivia",
+      addressRegion: "Los Lagos",
+      addressCountry: "CL"
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: -39.814,
+      longitude: -73.246
+    },
+    parentOrganization: { "@id": "https://mtsprz.org/#organization" }
+  })} />
   <Header />
   <main class="min-h-screen bg-[#010101] pt-28 pb-20">
     <div class="mx-auto max-w-6xl px-6">
+      <Breadcrumbs items={[{ name: "Valdivia", path: "/regiones/valdivia" }]} class="mb-6" />
       <div class="reveal-group">
         <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Valdivia</p>
         <h1 class="reveal-item text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-[0.9] tracking-[-2px]">

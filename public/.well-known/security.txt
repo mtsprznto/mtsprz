@@ -1,0 +1,23 @@
+# Security Contact
+# ================
+Contact: mailto:contacto@mtsprz.org
+
+# Policy
+# ======
+Preferred-Languages: es, en
+
+# Encryption
+# ==========
+# TODO: Add PGP key URL if available
+
+# Author
+# ======
+# This security.txt file is maintained by Mtsprz Soluciones Digitales
+
+# Expiry
+# ======
+Expires: 2027-07-18T23:59:59.000Z
+
+# Canonical
+# =========
+Canonical: https://mtsprz.org/.well-known/security.txt

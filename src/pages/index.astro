@@ -73,6 +73,15 @@ const services: Service[] = [
   }}
 >
   <link rel="preload" as="video" href="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4" fetchpriority="high" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": "https://mtsprz.org/#aboutpage",
+    url: "https://mtsprz.org",
+    description: "Mtsprz es una agencia de soluciones digitales en Puerto Varas, Región de Los Lagos, Chile. Ayudamos a pymes del sur de Chile a crecer con páginas web, SEO local, automatizaciones y diseño gráfico.",
+    mainEntity: { "@id": "https://mtsprz.org/#organization" },
+    significantLink: ["https://mtsprz.org/servicios", "https://mtsprz.org/portafolio", "https://mtsprz.org/blog"]
+  })} />
   <Header />
 
   <main>
@@ -93,18 +102,22 @@ const services: Service[] = [
       </div>
 
       <div class="relative z-10 flex flex-1 flex-col items-center justify-center w-full max-w-7xl mx-auto px-6 pt-20 md:pt-32">
-        <StaggerText
-          text="EXPERTOS EN"
-          as="h1"
-          className="text-[clamp(1rem,5.5vw,6rem)] sm:text-6xl md:text-7xl lg:text-[6rem] font-heading font-bold text-white leading-[1.05] tracking-tight text-center"
-          staggerMs={0.05}
-        />
-        <StaggerText
-          text="SOLUCIONES DIGITALES"
-          as="p"
-          className="text-[clamp(1rem,5.5vw,6rem)] sm:text-6xl md:text-7xl lg:text-[6rem] font-heading font-bold text-white/70 leading-[1.05] tracking-tight text-center -mt-1 sm:-mt-2"
-          staggerMs={0.045}
-        />
+        <h1 aria-label="EXPERTOS EN SOLUCIONES DIGITALES" class="text-[clamp(1rem,5.5vw,6rem)] sm:text-6xl md:text-7xl lg:text-[6rem] font-heading font-bold text-white leading-[1.05] tracking-tight text-center">
+          <span aria-hidden="true">
+            <StaggerText
+              text="EXPERTOS EN"
+              as="span"
+              className="block"
+              staggerMs={0.05}
+            />
+            <StaggerText
+              text="SOLUCIONES DIGITALES"
+              as="span"
+              className="block text-white/70 -mt-1 sm:-mt-2"
+              staggerMs={0.045}
+            />
+          </span>
+        </h1>
         <p class="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg text-white/60 font-body font-light leading-relaxed max-w-xl text-center">
           Creamos sitios web profesionales, posicionamos tu negocio en Google y automatizamos tus procesos.
           <span class="block mt-1.5 text-white/60 text-xs sm:text-sm leading-relaxed">Tu agencia digital de confianza en Puerto Varas y la Región de Los Lagos.</span>
@@ -140,6 +153,141 @@ const services: Service[] = [
       </div>
     </section>
 
+    <!-- Service Discovery — 2026 SEO: indexable, linked, GEO-optimized -->
+    <section class="relative bg-[#010101] py-16 md:py-20" id="diagnostico">
+      <div class="mx-auto max-w-3xl px-6 text-center">
+        <div class="liquid-glass rounded-[1.5rem] p-8 md:p-10">
+          <p class="text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-3">Diagnóstico Rápido</p>
+          <h2 class="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-white tracking-[-0.5px]">
+            ¿Qué necesita tu negocio en <span class="text-[#6366f1]">Puerto Varas</span>, <span class="text-[#10b981]">Osorno</span> o <span class="text-[#06b6d4]">Valdivia</span>?
+          </h2>
+          <p class="mt-2 text-sm text-white/50 font-body font-light max-w-lg mx-auto">
+            Cada pyme es diferente. Encuentra el servicio digital ideal para tu empresa en la Región de Los Lagos.
+          </p>
+
+          <!-- Service cards — fully crawlable anchor links -->
+          <div class="mt-8 grid gap-4 sm:grid-cols-3 text-left">
+            <a href="/servicios/#desarrollo-web" class="group block rounded-xl border border-white/10 p-5 hover:border-[#6366f1]/50 transition-all duration-300">
+              <svg class="w-6 h-6 text-[#6366f1] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 3.75L2.25 12l5.25 8.25m9-16.5L21.75 12l-5.25 8.25"/></svg>
+              <h3 class="text-white font-heading font-semibold text-base">Sitio Web Profesional</h3>
+              <p class="mt-1 text-sm text-white/50 font-body leading-relaxed">Páginas ultrarrápidas con Astro, diseño responsive y SEO local incluido para tu negocio en el sur de Chile.</p>
+              <span class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-[#6366f1] group-hover:gap-2 transition-all">Saber más →</span>
+            </a>
+            <a href="/servicios/#seo" class="group block rounded-xl border border-white/10 p-5 hover:border-[#10b981]/50 transition-all duration-300">
+              <svg class="w-6 h-6 text-[#10b981] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+              <h3 class="text-white font-heading font-semibold text-base">Posicionamiento SEO Local</h3>
+              <p class="mt-1 text-sm text-white/50 font-body leading-relaxed">Aparece en Google Maps y búsquedas locales en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos.</p>
+              <span class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-[#10b981] group-hover:gap-2 transition-all">Saber más →</span>
+            </a>
+            <a href="/servicios/#automatizaciones" class="group block rounded-xl border border-white/10 p-5 hover:border-[#06b6d4]/50 transition-all duration-300">
+              <svg class="w-6 h-6 text-[#06b6d4] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"/></svg>
+              <h3 class="text-white font-heading font-semibold text-base">Automatización de Procesos</h3>
+              <p class="mt-1 text-sm text-white/50 font-body leading-relaxed">Bots para WhatsApp, flujos de email marketing, integraciones CRM y workflows que ahorran horas a tu pyme.</p>
+              <span class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-[#06b6d4] group-hover:gap-2 transition-all">Saber más →</span>
+            </a>
+          </div>
+
+          <!-- Full-width CTA for undecided visitors -->
+          <a href="/contacto" class="mt-4 group block rounded-xl border border-[#6366f1]/20 p-4 bg-[#6366f1]/5 hover:bg-[#6366f1]/10 hover:border-[#6366f1]/40 transition-all duration-300">
+            <div class="flex items-center justify-between gap-4">
+              <div class="text-left">
+                <h3 class="text-white font-heading font-semibold text-sm">¿No sabes por dónde empezar?</h3>
+                <p class="text-sm text-white/50 font-body">Cuéntanos tu situación y te recomendamos la solución ideal sin compromiso.</p>
+              </div>
+              <span class="shrink-0 inline-flex items-center gap-1 text-xs font-medium text-[#6366f1] group-hover:gap-2 transition-all whitespace-nowrap">Diagnóstico gratuito →</span>
+            </div>
+          </a>
+
+          <!-- GEO Quick Answer Block — optimized for AI Overviews extraction -->
+          <div class="mt-6 pt-4 border-t border-white/5 text-left">
+            <p class="text-xs text-white/40 font-body leading-relaxed">
+              <strong class="text-white/60">Respuesta rápida:</strong>
+              La mayoría de las pymes en la Región de Los Lagos comienzan con un sitio web profesional optimizado para SEO local.
+              Si ya tienes página, el siguiente paso es el posicionamiento en Google Maps y búsquedas locales.
+              Las automatizaciones son ideales cuando tu negocio empieza a recibir más clientes de los que puedes atender manualmente.
+              <a href="/contacto" class="text-[#6366f1] hover:underline ml-1">Solicita un diagnóstico →</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Structured Data: Service + FAQPage (2026 SEO / GEO) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Service",
+          "@id": "https://mtsprz.org/#service-web",
+          "name": "Desarrollo Web Profesional",
+          "description": "Páginas web ultrarrápidas con Astro para pymes en la Región de Los Lagos. Diseño responsive, SEO local incluido y optimización Core Web Vitals.",
+          "provider": { "@id": "https://mtsprz.org/#organization" },
+          "areaServed": [
+            { "@type": "City", "name": "Puerto Varas" },
+            { "@type": "City", "name": "Osorno" },
+            { "@type": "City", "name": "Valdivia" }
+          ],
+          "serviceType": "Desarrollo Web"
+        },
+        {
+          "@type": "Service",
+          "@id": "https://mtsprz.org/#service-seo",
+          "name": "Posicionamiento SEO Local",
+          "description": "Optimización para Google Maps y búsquedas locales en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos.",
+          "provider": { "@id": "https://mtsprz.org/#organization" },
+          "areaServed": [
+            { "@type": "City", "name": "Puerto Varas" },
+            { "@type": "City", "name": "Osorno" },
+            { "@type": "City", "name": "Valdivia" }
+          ],
+          "serviceType": "SEO Local"
+        },
+        {
+          "@type": "Service",
+          "@id": "https://mtsprz.org/#service-automation",
+          "name": "Automatización de Procesos",
+          "description": "Bots para WhatsApp, flujos de email marketing, integraciones CRM y workflows que ahorran horas de trabajo a pymes del sur de Chile.",
+          "provider": { "@id": "https://mtsprz.org/#organization" },
+          "areaServed": [
+            { "@type": "City", "name": "Puerto Varas" },
+            { "@type": "City", "name": "Osorno" },
+            { "@type": "City", "name": "Valdivia" }
+          ],
+          "serviceType": "Automatización"
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://mtsprz.org/#faq-home",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "¿Qué servicio digital necesita mi pyme en la Región de Los Lagos?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "La mayoría de las pymes en la Región de Los Lagos comienzan con un sitio web profesional optimizado para SEO local. Si ya tienes página, el siguiente paso es el posicionamiento en Google Maps y búsquedas locales. Las automatizaciones son ideales cuando tu negocio empieza a recibir más clientes de los que puedes atender manualmente."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuánto cuesta una página web en Puerto Varas?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Los precios varían según la complejidad del proyecto. En Mtsprz ofrecemos sitios web profesionales con Astro desde presupuestos accesibles para pymes del sur de Chile, incluyendo SEO local y diseño responsive. Solicita un diagnóstico gratuito sin compromiso."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cómo funciona el SEO local en Osorno y Valdivia?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El SEO local optimiza tu presencia en Google Maps y búsquedas geográficas. Trabajamos con tu Google Business Profile, generamos citaciones en directorios chilenos y creamos contenido con keywords locales de la Región de Los Lagos para que tu negocio aparezca cuando los clientes buscan cerca."
+              }
+            }
+          ]
+        }
+      ]
+    })} />
+
     <section class="relative bg-[#010101] py-28 md:py-36 overflow-hidden">
       <div class="mx-auto max-w-6xl px-6">
         <div class="reveal-group text-center sm:text-left">
@@ -153,14 +301,16 @@ const services: Service[] = [
 
         <div class="mt-16 md:mt-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
-            <ServiceCard
-              icon={s.icon}
-              title={s.title}
-              description={s.description}
-              tags={s.tags}
-              number={i + 1}
-              accent={s.accent}
-            />
+            <div id={s.title.toLowerCase().replace(/\s+/g, '-')} class="service-card" data-tags={(s.title + " " + s.tags.join(" ")).toLowerCase()} style="transition: opacity 0.3s ease, transform 0.3s ease">
+              <ServiceCard
+                icon={s.icon}
+                title={s.title}
+                description={s.description}
+                tags={s.tags}
+                number={i + 1}
+                accent={s.accent}
+              />
+            </div>
           ))}
         </div>
       </div>
@@ -177,7 +327,7 @@ const services: Service[] = [
             Mtsprz nació en Puerto Varas con la misión de llevar soluciones digitales profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad sin pagar precios de Santiago. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
           </p>
           <p class="reveal-item mt-4 text-white/50 font-body font-light leading-relaxed max-w-2xl mx-auto text-sm">
-            Trabajamos con negocios de Puerto Varas, Osorno, Valdivia, Ancud, Castro y toda la Región de Los Lagos. Cada proyecto incluye optimización SEO desde el día uno, diseño responsive y atención personalizada sin importar el tamaño de tu empresa.
+            Trabajamos con negocios de <a href="/regiones/puerto-varas" class="text-white/70 underline underline-offset-2 decoration-white/20 hover:decoration-white/60 transition-all">Puerto Varas</a>, <a href="/regiones/osorno" class="text-white/70 underline underline-offset-2 decoration-white/20 hover:decoration-white/60 transition-all">Osorno</a>, <a href="/regiones/valdivia" class="text-white/70 underline underline-offset-2 decoration-white/20 hover:decoration-white/60 transition-all">Valdivia</a>, Ancud, Castro y toda la Región de Los Lagos. Cada proyecto incluye optimización SEO desde el día uno, diseño responsive y atención personalizada sin importar el tamaño de tu empresa.
           </p>
         </div>
       </div>

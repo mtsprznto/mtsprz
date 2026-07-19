@@ -39,7 +39,9 @@ const site = "https://mtsprz.org";
 const brand = "Mtsprz";
 const defaultTitle = `${brand} | Soluciones Digitales`;
 const fullTitle = title ? `${title} | ${brand}` : defaultTitle;
-const ogImage = image || `${site}/logo.jpg`;
+const ogImage = image
+  ? (image.startsWith("/") ? `${site}${image}` : image)
+  : `${site}/logo.jpg`;
 const currentUrl = canonical || site;
 const defaultBreadcrumbs: { name: string; path: string }[] = [];
 if (canonical && canonical !== site) {
@@ -58,6 +60,8 @@ const resolvedBreadcrumbs = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs 
 const personSameAs = [
   "https://www.linkedin.com/company/mtsprz",
   "https://github.com/mtsprz",
+  // TODO: Replace with actual Google Business Profile URL (ver "Perfil de Negocio" en Google)
+  "https://www.google.com/maps/place/?q=Mtsprz+Soluciones+Digitales+Puerto+Varas",
 ];
 ---
 
@@ -69,6 +73,8 @@ const personSameAs = [
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={currentUrl} />
+    <link rel="alternate" hreflang="es-CL" href={currentUrl} />
+    <link rel="alternate" hreflang="x-default" href={currentUrl} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="icon" type="image/jpeg" href="/logo.jpg" />
     <link rel="apple-touch-icon" href="/logo.jpg" />
@@ -76,7 +82,7 @@ const personSameAs = [
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" />
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:title" content={fullTitle} />
@@ -226,6 +232,17 @@ const personSameAs = [
               },
             ]
           : []),
+        {
+          "@type": "WebPage",
+          "@id": currentUrl,
+          url: currentUrl,
+          name: fullTitle,
+          description: description,
+          isPartOf: { "@id": `${site}/#website` },
+          about: { "@id": `${site}/#organization` },
+          lastReviewed: "2026-07-18",
+          ...(article ? { datePublished: article.publishedTime, dateModified: article.modifiedTime } : {}),
+        },
       ],
     })} />
   </head>

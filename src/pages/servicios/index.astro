@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import ServiceCard from "../../components/ServiceCard.astro";
 import BlurText from "../../components/BlurText.astro";
 import Footer from "../../components/Footer.astro";
@@ -12,6 +13,7 @@ interface Service {
   descriptionLong: string;
   tags: string[];
   accent: string;
+  slug?: string;
 }
 
 const services: Service[] = [
@@ -22,6 +24,7 @@ const services: Service[] = [
     descriptionLong: "Creamos experiencias digitales que impulsan tu negocio. Cada proyecto está optimizado para velocidad, accesibilidad y conversión.",
     tags: ["Astro", "SEO", "Responsive", "Rendimiento"],
     accent: "#6366f1",
+    slug: "desarrollo-web",
   },
   {
     icon: "Search",
@@ -30,6 +33,7 @@ const services: Service[] = [
     descriptionLong: "Lleva tu negocio a los primeros resultados de búsqueda. Estrategia SEO completa para la Región de Los Lagos.",
     tags: ["Local", "Google", "Contenido", "Analítica"],
     accent: "#10b981",
+    slug: "seo",
   },
   {
     icon: "Bot",
@@ -38,6 +42,7 @@ const services: Service[] = [
     descriptionLong: "Automatiza tus procesos y ahorra horas de trabajo cada semana. Conectamos tus herramientas favoritas.",
     tags: ["WhatsApp", "CRM", "Email", "Workflows"],
     accent: "#06b6d4",
+    slug: "automatizaciones",
   },
   {
     icon: "Palette",
@@ -84,39 +89,64 @@ const services: Service[] = [
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
+        {
+          "@type": "FAQPage",
+          "@id": "https://mtsprz.org/servicios#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "¿Cuánto cuesta una página web profesional?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El costo depende de la complejidad del proyecto. Desde landing pages desde $150.000 hasta tiendas online completas por $1.200.000. Contáctanos para una cotización personalizada sin compromiso."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué es el SEO local y por qué es importante para mi negocio?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El SEO local optimiza tu presencia en Google para búsquedas geográficas como 'taller mecánico en Puerto Varas' o 'abogado en Osorno'. Atrae clientes que buscan activamente tus servicios en tu misma zona. En la Región de Los Lagos, la competencia digital es menor que en Santiago, lo que permite resultados visibles en 2 a 4 meses."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuánto tiempo toma desarrollar un sitio web con Astro?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Un sitio web profesional con Astro se entrega en 2 a 4 semanas, dependiendo de la cantidad de páginas y funcionalidades. Astro permite desarrollar sitios ultra rápidos que obtienen puntuación superior a 95 en PageSpeed Insights, optimizados para SEO desde el inicio."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué procesos puedo automatizar en mi pyme?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Puedes automatizar respuestas de WhatsApp, envío de correos de seguimiento, agendamiento de citas, facturación recurrente y flujos de CRM. En Mtsprz configuramos bots inteligentes que atienden a tus clientes 24/7, ideales para pymes en la Región de Los Lagos."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Ofrecen servicios de diseño gráfico y branding?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Sí, ofrecemos creación de identidad corporativa, logotipos, manual de marca y material publicitario para pymes en la Región de Los Lagos. Diseñamos una identidad visual coherente que conecta con tu audiencia local."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué resultados puedo esperar del marketing digital?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Resultados medibles: mayor alcance en redes sociales, aumento de tráfico web, generación de leads calificados y mejora en la tasa de conversión. En Mtsprz diseñamos estrategias basadas en datos adaptadas al mercado de la Región de Los Lagos."
+              }
+            },
           {
             "@type": "Question",
-            "name": "Cuanto cuesta una pagina web profesional",
+            "name": "En que se diferencia una pagina web con Astro de una en WordPress",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "El costo depende de la complejidad del proyecto. Desde landing pages hasta sitios web con blog, portafolio y sistema de contacto. Contactanos para una cotizacion personalizada sin compromiso."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Que es el SEO local y por que es importante para mi negocio",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "El SEO local optimiza tu presencia en Google para busquedas geograficas como 'taller mecanico en Puerto Varas' o 'abogado en Osorno'. Es importante porque atrae clientes que estan buscando activamente tus servicios en tu misma zona."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Cuanto tiempo toma desarrollar un sitio web con Astro",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Un sitio web profesional con Astro se entrega en 2 a 4 semanas, dependiendo de la cantidad de paginas, funcionalidades y contenido. Astro permite desarrollar sitios ultra rapidos optimizados para SEO desde el inicio."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Ofrecen servicios de diseno grafico y branding",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Si, ofrecemos creacion de identidad corporativa, logotipos, manual de marca y material publicitario para pymes en la Region de Los Lagos."
+              "text": "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos del promedio WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son inherentemente mas seguros al no depender de plugins de terceros, y tienen mejor posicionamiento SEO desde el dia uno."
             }
           }
         ]
@@ -198,6 +228,10 @@ const services: Service[] = [
       </div>
     </section>
 
+    <div class="mx-auto max-w-6xl px-6 pt-16">
+      <Breadcrumbs items={[{ name: "Servicios", path: "/servicios" }]} />
+    </div>
+
     <!-- Services -->
     <section class="relative bg-[#010101] py-28 md:py-36">
       <div class="mx-auto max-w-6xl px-6">
@@ -223,7 +257,36 @@ const services: Service[] = [
               tags={s.tags}
               number={i + 1}
               accent={s.accent}
+              id={s.slug}
             />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="bg-[#010101] py-28 md:py-36 border-t border-white/[0.03]">
+      <div class="mx-auto max-w-3xl px-6">
+        <div class="reveal-group mb-12 md:mb-16 text-center">
+          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Preguntas Frecuentes</p>
+          <h2 class="reveal-item text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.1] tracking-[-1px]">Resolvemos tus dudas</h2>
+        </div>
+        <div class="reveal-group space-y-4">
+          {[
+            { q: "¿Cuánto cuesta una página web profesional?", a: "El costo depende de la complejidad del proyecto. Desde landing pages desde $150.000 hasta tiendas online completas por $1.200.000. Te ofrecemos una cotización personalizada sin compromiso." },
+            { q: "¿Qué es el SEO local y por qué es importante?", a: "El SEO local optimiza tu presencia en Google para búsquedas geográficas como 'taller mecánico en Puerto Varas' o 'abogado en Osorno'. Es clave porque atrae clientes que están buscando activamente tus servicios en tu misma zona." },
+            { q: "¿Qué procesos puedo automatizar en mi pyme?", a: "Puedes automatizar respuestas de WhatsApp, envío de correos de seguimiento, agendamiento de citas y flujos de CRM. Configuramos bots inteligentes que atienden a tus clientes 24/7." },
+            { q: "¿En qué se diferencia Astro de WordPress?", a: "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos de WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son más seguros al no depender de plugins, y tienen mejor SEO desde el día uno." },
+          ].map((faq) => (
+            <details class="reveal-item group liquid-glass rounded-[1.25rem] overflow-hidden transition-all duration-300 open:border-[#6366f1]/30">
+              <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 sm:px-6 py-4 sm:py-5 text-sm sm:text-base font-heading font-semibold text-white/90 hover:text-white transition-colors list-none [&::-webkit-details-marker]:hidden">
+                <span>{faq.q}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-white/30 group-open:rotate-180 transition-transform duration-300"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="px-5 sm:px-6 pb-4 sm:pb-5">
+                <p class="text-sm text-white/50 font-body font-light leading-relaxed">{faq.a}</p>
+              </div>
+            </details>
           ))}
         </div>
       </div>

@@ -2,15 +2,25 @@
   <div class="mx-auto max-w-6xl px-6 py-10">
     <div class="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
       <div class="flex items-center gap-3">
-        <img src="/logo.jpg" alt="Mtsprz Soluciones Digitales" width="28" height="28" class="rounded-full object-cover" />
+        <picture>
+          <source srcset="/logo.avif" type="image/avif" />
+          <source srcset="/logo.webp" type="image/webp" />
+          <img src="/logo.jpg" alt="Mtsprz Soluciones Digitales" width="28" height="28" class="rounded-full object-cover" loading="eager" />
+        </picture>
         <p class="text-sm text-white/40 font-body">
           2026 Mtsprz. Puerto Varas, Region de Los Lagos.
         </p>
       </div>
-      <div class="flex gap-6 text-sm text-white/50 font-body">
+      <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/50 font-body">
         <a href="/servicios" class="transition-colors hover:text-white">Servicios</a>
-        <a href="/contacto" class="transition-colors hover:text-white">Contacto</a>
+        <a href="/portafolio" class="transition-colors hover:text-white">Portafolio</a>
         <a href="/blog" class="transition-colors hover:text-white">Blog</a>
+        <a href="/contacto" class="transition-colors hover:text-white">Contacto</a>
+        <span class="text-white/20">|</span>
+        <span class="text-[11px] text-white/30 tracking-wide">Regiones:</span>
+        <a href="/regiones/puerto-varas" class="text-[13px] transition-colors hover:text-white">Pto. Varas</a>
+        <a href="/regiones/osorno" class="text-[13px] transition-colors hover:text-white">Osorno</a>
+        <a href="/regiones/valdivia" class="text-[13px] transition-colors hover:text-white">Valdivia</a>
       </div>
     </div>
   </div>

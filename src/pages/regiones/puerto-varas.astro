@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Card3D from "../../components/Card3D.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Footer from "../../components/Footer.astro";
 ---
 
@@ -40,6 +41,7 @@ import Footer from "../../components/Footer.astro";
   <Header />
   <main class="min-h-screen bg-[#010101] pt-28 pb-20">
     <div class="mx-auto max-w-6xl px-6">
+      <Breadcrumbs items={[{ name: "Puerto Varas", path: "/regiones/puerto-varas" }]} class="mb-6" />
       <div class="reveal-group">
         <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Puerto Varas</p>
         <h1 class="reveal-item text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-[0.9] tracking-[-2px]">

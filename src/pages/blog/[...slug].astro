@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Footer from "../../components/Footer.astro";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
@@ -35,6 +36,61 @@ function readingTime(text: string): number {
   return Math.max(1, Math.ceil(words / 200));
 }
 
+function extractFAQ(body: string): { question: string; answer: string }[] {
+  const results: { question: string; answer: string }[] = [];
+  const regex = /^##\s+(.+\?)\s*\n\n([\s\S]*?)(?=\n\n##\s|\n---|\n\[|$)/gm;
+  let match;
+  while ((match = regex.exec(body)) !== null) {
+    const question = match[1].trim();
+    const rawAnswer = match[2].trim();
+    const answer = rawAnswer.split(/\n\n/)[0].replace(/\n/g, " ").slice(0, 300);
+    if (answer.length > 20) {
+      results.push({ question, answer });
+    }
+  }
+  return results;
+}
+
+// Extract HowTo steps from markdown body
+// Supports two formats:
+//   ## Paso N: Título
+//   ### N. Título  (numbered subsection)
+function extractHowToSteps(body: string): { position: number; name: string; text: string }[] {
+  const results: { position: number; name: string; text: string }[] = [];
+
+  // Pattern 1: "## Paso N: Título"
+  const pasoRegex = /^##\s+Paso\s+(\d+)[:\.]\s+(.+)\n\n([\s\S]*?)(?=\n\n##\s+|\n---|\n\[|$)/gim;
+  let match;
+  while ((match = pasoRegex.exec(body)) !== null) {
+    const position = parseInt(match[1], 10);
+    const name = match[2].trim();
+    const rawText = match[3].trim();
+    const text = rawText.split(/\n\n/)[0].replace(/\n/g, " ").slice(0, 500);
+    if (text.length > 20) {
+      results.push({ position, name, text });
+    }
+  }
+
+  // Pattern 2: "### N. Título" (numbered subsections, only if no "Paso" steps found)
+  if (results.length === 0) {
+    const numberedRegex = /^###\s+(\d+)[\.\)]\s+(.+)\n\n([\s\S]*?)(?=\n\n###\s+|\n\n##\s+|\n---|\n\[|$)/gm;
+    while ((match = numberedRegex.exec(body)) !== null) {
+      const position = parseInt(match[1], 10);
+      const name = match[2].trim();
+      const rawText = match[3].trim();
+      const text = rawText.split(/\n\n/)[0].replace(/\n/g, " ").slice(0, 500);
+      if (text.length > 20) {
+        results.push({ position, name, text });
+      }
+    }
+  }
+
+  return results.sort((a, b) => a.position - b.position);
+}
+
+const faqItems = extractFAQ(post.body || "");
+const hasFAQ = faqItems.length > 0;
+
 const readMin = readingTime(post.body || "");
 const postUrl = `https://mtsprz.org/blog/${slug}`;
 const shareText = encodeURIComponent(post.data.title);
@@ -57,6 +113,46 @@ const shareText = encodeURIComponent(post.data.title);
   }}
 >
   <Header />
+  <Breadcrumbs items={[
+    { name: "Blog", path: "/blog" },
+    { name: post.data.title, path: `/blog/${slug}` },
+  ]} class="mx-auto max-w-4xl px-6 pt-6 pb-2" />
+  {hasFAQ && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "@id": `${postUrl}#faq`,
+      "mainEntity": faqItems.map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: f.answer,
+        },
+      })),
+    })} />
+  )}
+
+  {
+    (() => {
+      const howToSteps = extractHowToSteps(post.body || "");
+      if (howToSteps.length >= 2) {
+        return <script type="application/ld+json" set:html={JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "HowTo",
+          "name": post.data.title,
+          "description": post.data.description,
+          "step": howToSteps.map((s) => ({
+            "@type": "HowToStep",
+            "position": s.position,
+            "name": s.name,
+            "text": s.text,
+          })),
+        })} />;
+      }
+      return null;
+    })()
+  }
 
   <main class="min-h-screen bg-[#010101] pt-28 sm:pt-32 pb-20">
     <article class="mx-auto max-w-3xl px-6">
@@ -81,7 +177,11 @@ const shareText = encodeURIComponent(post.data.title);
           </time>
           <span class="text-white/20">&middot;</span>
           <span>{readMin} min de lectura</span>
-          <span class="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[10px] text-emerald-400 font-medium tracking-wide">Actualizado</span>
+          {post.data.modifiedTime && (
+            <span class="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[10px] text-emerald-400 font-medium tracking-wide">
+              Actualizado {new Date(post.data.modifiedTime).toLocaleDateString("es-CL", { day: "numeric", month: "short", year: "numeric" })}
+            </span>
+          )}
         </div>
 
         <h1 class="reveal-item mt-3 text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.05] tracking-[-1px]">
@@ -112,6 +212,26 @@ const shareText = encodeURIComponent(post.data.title);
           ))}
         </div>
       </header>
+
+      <!-- GEO Answer Block: resumen ejecutivo para AI Overviews y LLMs -->
+      <div class="reveal-group mt-8 md:mt-10">
+        <div class="reveal-item relative rounded-[1.25rem] border border-[#6366f1]/20 bg-gradient-to-br from-[#6366f1]/[0.04] to-[#8b5cf6]/[0.02] p-5 sm:p-6">
+          <div class="absolute top-0 right-0 w-32 h-32 pointer-events-none opacity-[0.03]">
+            <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.5" class="text-white w-full h-full"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="25"/><circle cx="50" cy="50" r="10"/></svg>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="mt-0.5 shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#6366f1]/10 border border-[#6366f1]/20">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="min-w-0">
+              <p class="text-[11px] uppercase tracking-[0.15em] text-[#6366f1]/60 font-medium font-body mb-1">Respuesta rápida</p>
+              <p class="text-sm sm:text-base text-white/80 font-body font-light leading-relaxed">
+                {post.data.description}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="reveal-group mt-10 md:mt-12 prose-blog max-w-none">
         <Content />

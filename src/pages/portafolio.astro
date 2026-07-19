@@ -28,11 +28,19 @@ import projects from "../data/projects.json";
         <article class="reveal-item group/project relative overflow-hidden w-full bg-[#010101]">
           <div class="project-carousel relative w-full overflow-hidden" style="height:clamp(300px,50vh,600px)">
               <div class="carousel-track relative h-full flex transition-transform duration-500 ease-out" style="width:100%">
-                {p.images.map((img) => (
-                  <div class="carousel-slide shrink-0 h-full relative" style="width:100%">
-                    <img src={img} alt={`Captura de pantalla del proyecto ${p.title} - ${idx + 1}`} loading="eager" class="w-full h-full object-cover" />
-                  </div>
-                ))}
+                  {p.images.map((img, iIdx) => {
+                    const avifSrc = img.replace(/\.(png|jpg|jpeg)$/i, '.avif');
+                    const webpSrc = img.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+                    return (
+                    <div class="carousel-slide shrink-0 h-full relative" style="width:100%">
+                      <picture>
+                        <source srcset={avifSrc} type="image/avif" />
+                        <source srcset={webpSrc} type="image/webp" />
+                        <img src={img} alt={iIdx === 0 ? `Captura principal del proyecto ${p.title}` : `Vista adicional del proyecto ${p.title} - ${iIdx + 1}`} loading={iIdx === 0 ? "eager" : "lazy"} decoding="async" width="1200" height="675" class="w-full h-full object-cover" />
+                      </picture>
+                    </div>
+                    );
+                  })}
               </div>
             </div>
 

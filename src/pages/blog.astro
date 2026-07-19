@@ -18,6 +18,25 @@ function isRecent(d: Date): boolean {
   description="Artículos sobre SEO local, marketing digital, desarrollo web y automatizaciones para pymes en la Región de Los Lagos y el sur de Chile."
   canonical="https://mtsprz.org/blog"
 >
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": "https://mtsprz.org/blog#blog",
+    "name": "Blog de Marketing Digital y SEO | Mtsprz",
+    "description": "Artículos sobre SEO local, marketing digital, desarrollo web y automatizaciones para pymes en la Región de Los Lagos y el sur de Chile.",
+    "url": "https://mtsprz.org/blog",
+    "publisher": { "@id": "https://mtsprz.org/#organization" },
+    "blogPost": [
+      ...posts.map((p) => ({
+        "@type": "BlogPosting",
+        "@id": `https://mtsprz.org/blog/${p.id.replace(/\.(md|mdx)$/, "")}#article`,
+        "headline": p.data.title,
+        "description": p.data.description,
+        "datePublished": p.data.pubDate.toISOString(),
+        "author": { "@type": "Person", "name": p.data.author || "Mtsprz", "url": "https://mtsprz.org/#person" },
+      })),
+    ],
+  })} />
   <Header />
   <main class="min-h-screen bg-[#010101] pt-28 pb-20">
     <div class="mx-auto max-w-6xl px-6">

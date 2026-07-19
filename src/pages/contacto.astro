@@ -10,6 +10,17 @@ import { Send, Phone, Mail, MapPin } from "@lucide/astro";
   description="Contacta a Mtsprz en Puerto Varas, Región de Los Lagos. Solicita una cotización sin compromiso para tu página web, SEO local o automatización."
   canonical="https://mtsprz.org/contacto"
 >
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "@id": "https://mtsprz.org/contacto#contactpage",
+    url: "https://mtsprz.org/contacto",
+    description: "Formulario de contacto y datos de Mtsprz en Puerto Varas, Región de Los Lagos.",
+    mainEntity: {
+      "@type": "Organization",
+      "@id": "https://mtsprz.org/#organization"
+    }
+  })} />
   <Header />
   <main class="min-h-screen bg-[#010101] pt-28 pb-20">
     <div class="mx-auto max-w-6xl px-6">

@@ -2,8 +2,9 @@ User-agent: *
 Allow: /
 
 Sitemap: https://mtsprz.org/sitemap-index.xml
+Sitemap: https://mtsprz.org/image-sitemap.xml
 
-# AI bots — allow crawling for citation eligibility
+# AI bots — allow crawling for citation eligibility (GEO)
 User-agent: GPTBot
 Allow: /
 
@@ -11,4 +12,19 @@ User-agent: Google-Extended
 Allow: /
 
 User-agent: CCBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Bytespider
 Allow: /

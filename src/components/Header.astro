@@ -1,7 +1,11 @@
 <header class="fixed top-0 sm:top-4 left-0 right-0 z-50 flex justify-center px-6 sm:px-0">
   <nav class="relative mt-0 flex w-full sm:w-[88%] max-w-6xl items-center liquid-glass rounded-lg sm:rounded-full px-0 sm:px-1.5 h-12 sm:h-auto sm:py-1.5">
     <a href="/" class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
-      <img src="/logo.jpg" alt="Mtsprz Soluciones Digitales" width="28" height="28" class="rounded-full object-cover" />
+      <picture>
+        <source srcset="/logo.avif" type="image/avif" />
+        <source srcset="/logo.webp" type="image/webp" />
+        <img src="/logo.jpg" alt="Mtsprz Soluciones Digitales" width="28" height="28" class="rounded-full object-cover" loading="eager" />
+      </picture>
     </a>
 
     <div class="hidden md:flex flex-1 items-center justify-center gap-1">
