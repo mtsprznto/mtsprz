@@ -103,7 +103,7 @@ const personSameAs = [
     <meta name="author" content="Mtsprz, Soluciones Digitales" />
     <meta name="geo.region" content="CL-LL" />
     <meta name="geo.placename" content="Puerto Varas" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    {!noindex && <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
 
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
@@ -111,10 +111,12 @@ const personSameAs = [
         {
           "@type": "Person",
           "@id": `${site}/#person`,
-          name: "Mtsprz",
-          url: site,
+          name: "Equipo Mtsprz",
+          url: `${site}/nosotros`,
+          image: `${site}/logo.jpg`,
+          description: "Expertos en soluciones digitales para pymes en la Región de Los Lagos, Chile. Desarrollo web, SEO local, automatizaciones, diseño gráfico y marketing digital.",
           sameAs: personSameAs,
-          knowsAbout: "Soluciones digitales, desarrollo web, SEO, automatizaciones, marketing digital",
+          knowsAbout: "Desarrollo web con Astro, SEO local, automatización de procesos, diseño gráfico, marketing digital, transformación digital para pymes, Google Business Profile, optimización para motores de búsqueda, integraciones CRM",
           worksFor: { "@id": `${site}/#organization` },
         },
         {
@@ -190,12 +192,7 @@ const personSameAs = [
                 image: ogImage,
                 datePublished: article.publishedTime,
                 ...(article.modifiedTime ? { dateModified: article.modifiedTime } : {}),
-                author: {
-                  "@type": "Person",
-                  name: article.author || "Mtsprz",
-                  url: `${site}/#person`,
-                  sameAs: personSameAs,
-                },
+                author: { "@id": `${site}/#person` },
                 publisher: {
                   "@type": "Organization",
                   "@id": `${site}/#organization`,

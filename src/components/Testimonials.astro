@@ -1,0 +1,103 @@
+---
+export interface Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  business: string;
+  location: string;
+  text: string;
+  rating: number;
+}
+
+export interface Props {
+  testimonials: Testimonial[];
+}
+
+const { testimonials } = Astro.props;
+const hasTestimonials = testimonials.length > 0;
+---
+
+{
+  hasTestimonials && (
+    <section class="bg-[#010101] py-28 md:py-36 border-t border-white/[0.03]">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="reveal-group mb-12 md:mb-16 text-center">
+          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Testimonios</p>
+          <h2 class="reveal-item text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.1] tracking-[-1px]">
+            Lo que dicen nuestros clientes
+          </h2>
+          <p class="reveal-item mt-3 text-white/50 font-body font-light max-w-lg mx-auto text-sm">
+            Empresas de la Región de Los Lagos que confiaron en Mtsprz
+          </p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {testimonials.map((t, i) => (
+            <div
+              class="reveal-item liquid-glass rounded-[1.375rem] p-6 sm:p-7 flex flex-col"
+              style={`transition-delay: ${i * 0.1}s`}
+            >
+              <!-- Stars -->
+              <div class="flex items-center gap-0.5 mb-4" aria-label={`${t.rating} de 5 estrellas`}>
+                {Array.from({ length: 5 }, (_, j) => (
+                  <svg
+                    key={j}
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill={j < t.rating ? "#f59e0b" : "none"}
+                    stroke={j < t.rating ? "#f59e0b" : "rgba(255,255,255,0.15)"}
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                ))}
+              </div>
+
+              <!-- Texto -->
+              <blockquote class="flex-1">
+                <p class="text-sm sm:text-base text-white/70 font-body font-light leading-relaxed">
+                  &ldquo;{t.text}&rdquo;
+                </p>
+              </blockquote>
+
+              <!-- Autor -->
+              <div class="mt-5 pt-4 border-t border-white/[0.06]">
+                <p class="text-sm text-white font-heading font-semibold">{t.name}</p>
+                <p class="text-[11px] text-white/40 font-body">
+                  {t.role}, {t.business} &middot; {t.location}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Review schema markup -->
+        <script type="application/ld+json" set:html={JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": testimonials.map((t) => ({
+            "@type": "Review",
+            "@id": `https://mtsprz.org/#review-${t.id}`,
+            itemReviewed: {
+              "@type": "Organization",
+              "@id": "https://mtsprz.org/#organization",
+              name: "Mtsprz",
+            },
+            reviewRating: {
+              "@type": "Rating",
+              ratingValue: t.rating,
+              bestRating: 5,
+            },
+            author: {
+              "@type": "Person",
+              name: t.name,
+            },
+            reviewBody: t.text,
+          })),
+        })} />
+      </div>
+    </section>
+  )
+}

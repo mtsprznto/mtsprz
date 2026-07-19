@@ -3,7 +3,7 @@ title: "Como crear una pagina web para emprendedores en el sur de Chile"
 description: "Guia paso a paso para crear tu pagina web profesional siendo emprendedor en el sur de Chile. Desde Puerto Varas a Punta Arenas, tu negocio merece estar en internet."
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
-author: "Mtsprz"
+author: "Equipo Mtsprz"
 image: "/logo.jpg"
 tags: ["paginas web", "emprendedores", "sur de chile", "crear pagina web", "pymes", "region de los lagos"]
 ---

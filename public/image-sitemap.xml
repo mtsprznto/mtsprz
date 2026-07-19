@@ -81,6 +81,13 @@
       <image:loc>https://mtsprz.org/logo.jpg</image:loc>
     </image:image>
   </url>
+  <!-- Nosotros -->
+  <url>
+    <loc>https://mtsprz.org/nosotros</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/logo.jpg</image:loc>
+    </image:image>
+  </url>
   <!-- Regiones -->
   <url>
     <loc>https://mtsprz.org/regiones/puerto-varas</loc>

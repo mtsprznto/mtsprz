@@ -6,6 +6,8 @@ import BlurText from "../components/BlurText.astro";
 import ServiceCard from "../components/ServiceCard.astro";
 import Footer from "../components/Footer.astro";
 import { ArrowUpRight } from "@lucide/astro";
+import Testimonials from "../components/Testimonials.astro";
+import testimonialsData from "../data/testimonials.json";
 
 interface Service {
   icon: string;
@@ -386,6 +388,8 @@ const services: Service[] = [
         </div>
       </div>
     </section>
+
+    <Testimonials testimonials={testimonialsData} />
   </main>
 
   <Footer />
