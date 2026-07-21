@@ -21,52 +21,61 @@ const services: Service[] = [
   {
     icon: "Code",
     title: "Desarrollo Web",
-    description: "Sitios web modernos con Astro. Rápidos, seguros y optimizados para SEO.",
-    descriptionLong: "Creamos experiencias digitales que impulsan tu negocio. Cada proyecto está optimizado para velocidad, accesibilidad y conversión.",
-    tags: ["Astro", "SEO", "Responsive", "Rendimiento"],
+    description: "Landing pages, sitios corporativos, e-commerce y aplicaciones web a medida. Modernos, veloces y hechos para convertir.",
+    descriptionLong: "Creamos experiencias digitales que impulsan tu negocio. Cada proyecto est\u00e1 optimizado para velocidad 90+ Lighthouse, SEO desde el d\u00eda uno y m\u00e1xima seguridad. Stack moderno (Astro, Next.js, FastAPI).",
+    tags: ["Landing Pages", "Sitios Corporativos", "E-commerce", "Apps Web"],
     accent: "#6366f1",
     slug: "desarrollo-web",
   },
   {
-    icon: "Search",
-    title: "SEO",
-    description: "Posicionamiento en Google. SEO local, técnico y de contenido.",
-    descriptionLong: "Lleva tu negocio a los primeros resultados de búsqueda. Estrategia SEO completa para la Región de Los Lagos.",
-    tags: ["Local", "Google", "Contenido", "Analítica"],
-    accent: "#10b981",
-    slug: "seo",
-  },
-  {
     icon: "Bot",
-    title: "Automatizaciones",
-    description: "Bots, flujos de email, CRM y procesos automatizados.",
-    descriptionLong: "Automatiza tus procesos y ahorra horas de trabajo cada semana. Conectamos tus herramientas favoritas.",
-    tags: ["WhatsApp", "CRM", "Email", "Workflows"],
+    title: "Automatizaci\u00f3n de Procesos",
+    description: "Bots WhatsApp, automatizaci\u00f3n Excel, flujos de email, integraci\u00f3n CRM y workflows. Tu negocio funcionando solo.",
+    descriptionLong: "Recupera horas de trabajo cada semana. Automatizamos procesos manuales, conectamos tus herramientas y eliminamos tareas repetitivas. Desde Excel hasta APIs complejas.",
+    tags: ["WhatsApp Bots", "Excel Automation", "CRM", "Workflows n8n"],
     accent: "#06b6d4",
     slug: "automatizaciones",
   },
   {
-    icon: "Palette",
-    title: "Diseño Gráfico",
-    description: "Identidad corporativa, logotipos y material publicitario.",
-    descriptionLong: "Construye una marca que conecte con tu audiencia. Diseñamos tu identidad visual desde cero.",
-    tags: ["Identidad", "Logos", "UX/UI", "Marca"],
-    accent: "#ec4899",
+    icon: "BarChart3",
+    title: "Datos e Inteligencia",
+    description: "Dashboards interactivos, scraping web, APIs a medida, OCR y procesamiento de documentos. Tus datos al servicio de tus decisiones.",
+    descriptionLong: "Transformamos datos crudos en decisiones inteligentes. Dashboards en tiempo real, extracci\u00f3n automatizada de datos web, APIs que conectan tus sistemas y digitalizaci\u00f3n de documentos con OCR.",
+    tags: ["Dashboards", "Scraping", "APIs", "OCR"],
+    accent: "#f97316",
+    slug: "datos",
+  },
+  {
+    icon: "Search",
+    title: "SEO",
+    description: "Posicionamiento en Google. SEO local, t\u00e9cnico y de contenido para la Regi\u00f3n de Los Lagos.",
+    descriptionLong: "Lleva tu negocio a los primeros resultados de b\u00fasqueda. Estrategia SEO completa con enfoque local: Google Maps, b\u00fasquedas por ciudad y contenido optimizado para tu zona.",
+    tags: ["SEO Local", "Google Maps", "Auditor\u00eda", "Contenido"],
+    accent: "#10b981",
+    slug: "seo",
   },
   {
     icon: "TrendingUp",
     title: "Marketing Digital",
-    description: "Redes sociales, Google Ads y estrategia de contenido.",
-    descriptionLong: "Aumenta tu alcance y convierte más clientes. Estrategias digitales basadas en datos para pymes.",
-    tags: ["Redes", "Ads", "Contenido", "Analítica"],
+    description: "Google Ads, redes sociales y estrategia de contenido. Resultados medibles desde la primera semana.",
+    descriptionLong: "Clientes busc\u00e1ndote hoy. Campa\u00f1as segmentadas geogr\u00e1ficamente, gesti\u00f3n profesional de redes sociales y contenido que conecta con tu audiencia local.",
+    tags: ["Google Ads", "Redes Sociales", "Contenido", "Anal\u00edtica"],
     accent: "#f59e0b",
   },
   {
+    icon: "Palette",
+    title: "Dise\u00f1o Gr\u00e1fico",
+    description: "Identidad corporativa, logotipos y manual de marca. Tu marca profesional lista para el mercado.",
+    descriptionLong: "Construye una marca que conecte con tu audiencia. Dise\u00f1amos tu identidad visual desde cero: logo, paleta, tipograf\u00eda y papeler\u00eda. Todo en formatos vectoriales listos para usar.",
+    tags: ["Logos", "Identidad Visual", "Manual de Marca", "UX/UI"],
+    accent: "#ec4899",
+  },
+  {
     icon: "Globe",
-    title: "Consultoría Digital",
-    description: "Diagnóstico y plan de transformación digital para pymes.",
-    descriptionLong: "Evaluamos tu negocio y creamos una hoja de ruta digital clara, realista y adaptada a tu presupuesto.",
-    tags: ["Diagnóstico", "Plan", "Pymes", "Estrategia"],
+    title: "Consultor\u00eda Digital",
+    description: "Diagn\u00f3stico gratuito de tu negocio. Hoja de ruta clara con prioridades, presupuestos y plazos.",
+    descriptionLong: "Evaluamos tu situaci\u00f3n actual sin compromiso. Identificamos oportunidades digitales reales y te entregamos un plan accionable con prioridades a 30, 60 y 90 d\u00edas.",
+    tags: ["Diagn\u00f3stico", "Plan Digital", "Pymes", "Estrategia"],
     accent: "#8b5cf6",
   },
 ];
@@ -74,14 +83,14 @@ const services: Service[] = [
 ---
 
 <BaseLayout
-  title="Servicios Digitales para Pymes"
-  description="Ofrecemos desarrollo web profesional, SEO local en la Región de Los Lagos, automatizaciones, diseño gráfico, marketing digital y consultoría para pymes en Chile."
+  title="Servicios Digitales Profesionales — Mtsprz"
+  description="Transformamos procesos manuales en software automatizado. Desarrollo web, automatizaci\u00f3n de procesos, dashboards de datos, bots WhatsApp, SEO local y m\u00e1s. Soluciones digitales para pymes en la Regi\u00f3n de Los Lagos."
   canonical="https://mtsprz.org/servicios"
   breadcrumbs={[{ name: "Servicios", path: "/servicios" }]}
   video={{
     url: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4",
     name: "Mtsprz Servicios Digitales",
-    description: "Servicios de desarrollo web, SEO local, automatizaciones, diseño gráfico, marketing digital y consultoría para pymes en la Región de Los Lagos.",
+    description: "Soluciones digitales profesionales: desarrollo web, automatizaci\u00f3n de procesos, dashboards de datos, SEO local, marketing digital, diseño gr\u00e1fico y consultor\u00eda para pymes en la Regi\u00f3n de Los Lagos.",
     thumbnailUrl: "https://mtsprz.org/logo.jpg",
     uploadDate: "2026-06-19",
   }}
@@ -94,60 +103,60 @@ const services: Service[] = [
           "@type": "FAQPage",
           "@id": "https://mtsprz.org/servicios#faq",
           "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "¿Cuánto cuesta una página web profesional?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "El costo depende de la complejidad del proyecto. Desde landing pages desde $150.000 hasta tiendas online completas por $1.200.000. Contáctanos para una cotización personalizada sin compromiso."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "¿Qué es el SEO local y por qué es importante para mi negocio?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "El SEO local optimiza tu presencia en Google para búsquedas geográficas como 'taller mecánico en Puerto Varas' o 'abogado en Osorno'. Atrae clientes que buscan activamente tus servicios en tu misma zona. En la Región de Los Lagos, la competencia digital es menor que en Santiago, lo que permite resultados visibles en 2 a 4 meses."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "¿Cuánto tiempo toma desarrollar un sitio web con Astro?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Un sitio web profesional con Astro se entrega en 2 a 4 semanas, dependiendo de la cantidad de páginas y funcionalidades. Astro permite desarrollar sitios ultra rápidos que obtienen puntuación superior a 95 en PageSpeed Insights, optimizados para SEO desde el inicio."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "¿Qué procesos puedo automatizar en mi pyme?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Puedes automatizar respuestas de WhatsApp, envío de correos de seguimiento, agendamiento de citas, facturación recurrente y flujos de CRM. En Mtsprz configuramos bots inteligentes que atienden a tus clientes 24/7, ideales para pymes en la Región de Los Lagos."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "¿Ofrecen servicios de diseño gráfico y branding?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Sí, ofrecemos creación de identidad corporativa, logotipos, manual de marca y material publicitario para pymes en la Región de Los Lagos. Diseñamos una identidad visual coherente que conecta con tu audiencia local."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "¿Qué resultados puedo esperar del marketing digital?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Resultados medibles: mayor alcance en redes sociales, aumento de tráfico web, generación de leads calificados y mejora en la tasa de conversión. En Mtsprz diseñamos estrategias basadas en datos adaptadas al mercado de la Región de Los Lagos."
-              }
-            },
           {
             "@type": "Question",
-            "name": "En que se diferencia una pagina web con Astro de una en WordPress",
+            "name": "\u00bfCu\u00e1nto cuesta una p\u00e1gina web profesional?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos del promedio WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son inherentemente mas seguros al no depender de plugins de terceros, y tienen mejor posicionamiento SEO desde el dia uno."
+              "text": "Depende de la complejidad. Landing pages desde $290.000, sitios corporativos de 5-10 p\u00e1ginas desde $690.000, y tiendas online completas desde $1.500.000. Incluyen hosting, SSL y SEO b\u00e1sico. Cont\u00e1ctanos para una cotizaci\u00f3n personalizada sin compromiso."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "\u00bfQu\u00e9 es el SEO local y por qu\u00e9 es importante para mi negocio?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "El SEO local optimiza tu presencia en Google para b\u00fasquedas geogr\u00e1ficas como 'taller mec\u00e1nico en Puerto Varas' o 'abogado en Osorno'. Atrae clientes que buscan activamente tus servicios en tu misma zona. En la Regi\u00f3n de Los Lagos, la competencia digital es menor que en Santiago, lo que permite resultados visibles en 2 a 4 meses."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "\u00bfC\u00f3mo puedo automatizar procesos en mi pyme?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots que atienden 24/7), email marketing (secuencias que nutren clientes), integraci\u00f3n de CRM (datos que fluyen entre sistemas) y workflows completos con n8n. Una corredora de propiedades t\u00edpica ahorra 10+ horas semanales."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "\u00bfQu\u00e9 es un dashboard de datos y para qu\u00e9 sirve?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Un dashboard muestra tus indicadores clave en tiempo real: ventas, clientes, inventario, lo que sea relevante para tu negocio. Conectamos tus datos (Excel, base de datos, APIs) y creamos visualizaciones interactivas accesibles desde cualquier dispositivo. Decisiones basadas en datos, no en corazonadas."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "\u00bfHacen scraping o extracci\u00f3n de datos de sitios web?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "S\u00ed. Extraemos datos de cualquier sitio web o sistema sin API: precios de competencia, directorios de empresas, portales inmobiliarios, redes sociales. Te entregamos los datos limpios en Excel o base de datos, actualizados peri\u00f3dicamente."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "\u00bfOfrecen servicios de dise\u00f1o gr\u00e1fico y branding?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "S\u00ed. Creamos identidad corporativa completa: logo principal con variantes, tipograf\u00eda, paleta de colores, papeler\u00eda b\u00e1sica y manual de marca. Todo en formatos vectoriales listos para imprimir y usar en digital."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "\u00bfEn qu\u00e9 se diferencia una p\u00e1gina web con Astro de una en WordPress?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos de WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son inherentemente m\u00e1s seguros al no depender de plugins de terceros, y tienen mejor posicionamiento SEO desde el d\u00eda uno."
             }
           }
         ]
@@ -158,7 +167,23 @@ const services: Service[] = [
           {
             "@type": "Service",
             "name": "Desarrollo Web",
-            "description": "Sitios web modernos con Astro. Rapidos, seguros y optimizados para SEO.",
+            "description": "Landing pages, sitios corporativos, e-commerce y aplicaciones web a medida.",
+            "provider": { "@id": "https://mtsprz.org/#organization" },
+            "areaServed": "CL-LL",
+            "audience": { "@type": "Audience", "audienceType": "pymes" }
+          },
+          {
+            "@type": "Service",
+            "name": "Automatizacion de Procesos",
+            "description": "Bots WhatsApp, automatizacion Excel, flujos de email, CRM y workflows.",
+            "provider": { "@id": "https://mtsprz.org/#organization" },
+            "areaServed": "CL-LL",
+            "audience": { "@type": "Audience", "audienceType": "pymes" }
+          },
+          {
+            "@type": "Service",
+            "name": "Datos e Inteligencia",
+            "description": "Dashboards interactivos, scraping web, APIs a medida y procesamiento de documentos.",
             "provider": { "@id": "https://mtsprz.org/#organization" },
             "areaServed": "CL-LL",
             "audience": { "@type": "Audience", "audienceType": "pymes" }
@@ -166,23 +191,7 @@ const services: Service[] = [
           {
             "@type": "Service",
             "name": "SEO Local",
-            "description": "Posicionamiento en Google. SEO local, tecnico y de contenido para la Region de Los Lagos.",
-            "provider": { "@id": "https://mtsprz.org/#organization" },
-            "areaServed": "CL-LL",
-            "audience": { "@type": "Audience", "audienceType": "pymes" }
-          },
-          {
-            "@type": "Service",
-            "name": "Automatizaciones",
-            "description": "Bots, flujos de email, CRM y procesos automatizados para pymes.",
-            "provider": { "@id": "https://mtsprz.org/#organization" },
-            "areaServed": "CL-LL",
-            "audience": { "@type": "Audience", "audienceType": "pymes" }
-          },
-          {
-            "@type": "Service",
-            "name": "Diseno Grafico",
-            "description": "Identidad corporativa, logotipos y material publicitario.",
+            "description": "Posicionamiento en Google Maps y busquedas locales para la Region de Los Lagos.",
             "provider": { "@id": "https://mtsprz.org/#organization" },
             "areaServed": "CL-LL",
             "audience": { "@type": "Audience", "audienceType": "pymes" }
@@ -190,7 +199,15 @@ const services: Service[] = [
           {
             "@type": "Service",
             "name": "Marketing Digital",
-            "description": "Redes sociales, Google Ads y estrategia de contenido.",
+            "description": "Google Ads, redes sociales y estrategia de contenido con resultados medibles.",
+            "provider": { "@id": "https://mtsprz.org/#organization" },
+            "areaServed": "CL-LL",
+            "audience": { "@type": "Audience", "audienceType": "pymes" }
+          },
+          {
+            "@type": "Service",
+            "name": "Diseno Grafico",
+            "description": "Identidad corporativa, logotipos, manual de marca y papelería profesional.",
             "provider": { "@id": "https://mtsprz.org/#organization" },
             "areaServed": "CL-LL",
             "audience": { "@type": "Audience", "audienceType": "pymes" }
@@ -198,7 +215,7 @@ const services: Service[] = [
           {
             "@type": "Service",
             "name": "Consultoria Digital",
-            "description": "Diagnostico y plan de transformacion digital para pymes.",
+            "description": "Diagnostico gratuito y hoja de ruta digital para pymes en el sur de Chile.",
             "provider": { "@id": "https://mtsprz.org/#organization" },
             "areaServed": "CL-LL",
             "audience": { "@type": "Audience", "audienceType": "pymes" }
@@ -275,9 +292,9 @@ const services: Service[] = [
         </div>
         <div class="reveal-group space-y-4">
           {[
-            { q: "¿Cuánto cuesta una página web profesional?", a: "El costo depende de la complejidad del proyecto. Desde landing pages desde $150.000 hasta tiendas online completas por $1.200.000. Te ofrecemos una cotización personalizada sin compromiso." },
-            { q: "¿Qué es el SEO local y por qué es importante?", a: "El SEO local optimiza tu presencia en Google para búsquedas geográficas como 'taller mecánico en Puerto Varas' o 'abogado en Osorno'. Es clave porque atrae clientes que están buscando activamente tus servicios en tu misma zona." },
-            { q: "¿Qué procesos puedo automatizar en mi pyme?", a: "Puedes automatizar respuestas de WhatsApp, envío de correos de seguimiento, agendamiento de citas y flujos de CRM. Configuramos bots inteligentes que atienden a tus clientes 24/7." },
+            { q: "¿Cuánto cuesta una página web profesional?", a: "Landing pages desde $290.000, sitios corporativos (5-10 páginas) desde $690.000, tiendas online desde $1.500.000. Todos incluyen hosting, SSL, SEO básico y Analytics. Cotización personalizada sin compromiso." },
+            { q: "¿Qué procesos puedo automatizar en mi pyme?", a: "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots 24/7 que atienden clientes), email marketing (secuencias que nutren y venden), integración CRM (datos que fluyen solos) y workflows completos. Una corredora típica ahorra 10+ horas semanales." },
+            { q: "¿Qué es un dashboard de datos y para qué sirve?", a: "Un dashboard muestra tus indicadores clave en tiempo real: ventas, clientes, inventario. Conectamos tus datos (Excel, base de datos, APIs) y creamos visualizaciones interactivas accesibles desde cualquier dispositivo. Decisiones basadas en datos." },
             { q: "¿En qué se diferencia Astro de WordPress?", a: "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos de WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son más seguros al no depender de plugins, y tienen mejor SEO desde el día uno." },
           ].map((faq) => (
             <details class="reveal-item group liquid-glass rounded-[1.25rem] overflow-hidden transition-all duration-300 open:border-[#6366f1]/30">

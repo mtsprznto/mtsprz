@@ -42,6 +42,71 @@ EMAIL_BLACKLIST = {
     "png", "jpg", "jpeg",
 }
 
+# Dominios completos a rechazar (cualquier email en estos dominios)
+EMAIL_DOMAIN_BLACKLIST = {
+    "sentry.io",
+    "sentry-next.wixpress.com",
+    "sentry.wixpress.com",
+    "factoryhub.com",
+    "ejemplo.com",
+    "dominio.com",
+    "domain.com",
+    "test.com",
+    "email.com",
+    "mail.com",
+    "yopmail.com",
+    "tempomai.com",
+    "correo.com",
+}
+
+# Dominios/sitios que NO son sitios web reales (placeholders de GMaps, etc)
+URL_BLACKLIST = {
+    "support.google",
+    "support.google.com",
+    "maps.google.com",
+    "google.com",
+    "facebook.com",
+    "instagram.com",
+    "youtube.com",
+    "linkedin.com",
+}
+
+
+def es_url_valida(url: str) -> bool:
+    """Verifica si una URL es un sitio web real (no placeholder)."""
+    if not url:
+        return False
+    from urllib.parse import urlparse
+    parsed = urlparse(url)
+    dominio = parsed.netloc.lower()
+    # Quitar www.
+    if dominio.startswith("www."):
+        dominio = dominio[4:]
+    if dominio in URL_BLACKLIST:
+        return False
+    # URLs de Google Maps
+    if "google.com/maps" in url:
+        return False
+    return True
+
+
+# Regex para validar email mínimamente (evita %20, espacios, etc)
+EMAIL_VALID_RE = re.compile(
+    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+)
+
+
+def es_email_valido(email: str) -> bool:
+    """Valida email: formato correcto + no blacklist de dominios."""
+    if not EMAIL_VALID_RE.match(email):
+        return False
+    if any(b in email for b in EMAIL_BLACKLIST):
+        return False
+    dominio = email.split("@")[1].lower()
+    if dominio in EMAIL_DOMAIN_BLACKLIST:
+        return False
+    return True
+
 
 class WebScraper(BaseScraper):
     """Scraper de sitios web para extraer contactos."""
@@ -96,13 +161,13 @@ class WebScraper(BaseScraper):
             emails = set()
             for a_tag in soup.find_all("a", href=re.compile(r"^mailto:", re.I)):
                 email = a_tag["href"].replace("mailto:", "").split("?")[0].strip()
-                if "@" in email and not any(b in email for b in EMAIL_BLACKLIST):
+                if es_email_valido(email):
                     emails.add(email.lower())
 
             # --- Emails desde texto HTML ---
             for match in EMAIL_RE.finditer(resp.text):
                 e = match.group(0).lower().strip()
-                if not any(b in e for b in EMAIL_BLACKLIST):
+                if es_email_valido(e):
                     emails.add(e)
 
             result["emails"] = sorted(emails)
@@ -139,6 +204,10 @@ class WebScraper(BaseScraper):
     def enrichen_prospect(self, prospect: Prospect) -> Prospect:
         """Visita el sitio web del prospecto y enriquece sus datos."""
         if not prospect.sitio_web:
+            return prospect
+
+        if not es_url_valida(prospect.sitio_web):
+            log.info("  URL no válida (placeholder): {url}", url=prospect.sitio_web)
             return prospect
 
         log.info("Extrayendo contactos de: {url}", url=prospect.sitio_web)

@@ -46,6 +46,8 @@ export const GET: APIRoute = async ({ params, locals }) => {
         name: s.name || "",
         description: s.description || "",
         price: s.price || 0,
+        deliverables: s.deliverables || [],
+        is_monthly: !!s.is_monthly,
       })),
       totalAmount: c.total_amount as number,
       paymentTerms: (c.payment_terms as string) || "",
@@ -60,6 +62,16 @@ export const GET: APIRoute = async ({ params, locals }) => {
       clientSignature: (c.client_signature_data as string) || undefined,
       adminSignedAt: c.admin_signed_at ? new Date(c.admin_signed_at as string).toLocaleString("es-CL") : undefined,
       clientSignedAt: c.client_signed_at ? new Date(c.client_signed_at as string).toLocaleString("es-CL") : undefined,
+      // Nuevos campos opcionales
+      clientNationality: (c.client_nationality as string) || undefined,
+      clientProfession: (c.client_profession as string) || undefined,
+      paymentMethod: (c.payment_method as string) || undefined,
+      warrantyDays: (c.warranty_days as number) ?? undefined,
+      revisionDays: (c.revision_days as number) ?? undefined,
+      acceptanceEmail: (c.acceptance_email as string) || undefined,
+      subcontractingAllowed: (c.subcontracting_allowed as boolean) ?? undefined,
+      jurisdiction: (c.jurisdiction as string) || "Puerto Varas",
+      prestadorRut: (c.prestador_rut as string) || undefined,
     };
 
     const pdfBytes = await generateContractPdf(contractData);

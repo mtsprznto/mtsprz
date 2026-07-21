@@ -56,6 +56,8 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
       "client_address", "company_name", "services", "total_amount",
       "payment_terms", "start_date", "end_date", "duration_months",
       "schedule", "special_clauses",
+      "client_nationality", "client_profession", "payment_method",
+      "warranty_days", "revision_days", "acceptance_email", "subcontracting_allowed",
     ];
 
     const updates: string[] = [];

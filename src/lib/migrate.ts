@@ -120,6 +120,22 @@ ALTER TABLE id_verifications ADD COLUMN IF NOT EXISTS rut_valid BOOLEAN DEFAULT 
 ALTER TABLE id_verifications ADD COLUMN IF NOT EXISTS mrz_valid BOOLEAN DEFAULT false;
 ALTER TABLE id_verifications ADD COLUMN IF NOT EXISTS verification_status VARCHAR(20) DEFAULT 'pending' CHECK (verification_status IN ('pending','passed','failed'))`,
   },
+  {
+    name: "004_contract_legal_fields",
+    sql: `
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS payment_terms TEXT;
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS start_date DATE;
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS end_date DATE;
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS duration_months INT;
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS schedule TEXT;
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS special_clauses TEXT`,
+  },
+  {
+    name: "005_add_service_fields",
+    sql: `
+ALTER TABLE services ADD COLUMN IF NOT EXISTS is_popular BOOLEAN DEFAULT false;
+ALTER TABLE services ADD COLUMN IF NOT EXISTS is_monthly BOOLEAN DEFAULT false`,
+  },
 ];
 
 let _sql: ReturnType<typeof neon> | null = null;

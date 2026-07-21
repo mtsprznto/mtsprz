@@ -292,7 +292,7 @@
           setLoading(verifyBtn, verifySpinner, verifyText, false);
           return;
         }
-        window.location.href = '/cotizar?email=' + encodeURIComponent(currentEmail);
+        window.location.href = '/cotizar';
       } catch(e) {
         showError(codeError, 'Error de conexión. Intenta de nuevo.');
       }

@@ -126,6 +126,7 @@ class BaseScraper(ABC):
         """GET con retry + backoff exponencial.
 
         NO reintenta errores 4xx (excepto 429 rate-limit) — son permanentes.
+        Tampoco reintenta errores de DNS (getaddrinfo) — no van a resolverse solos.
         """
         retry_on = retry_on or [429, 500, 502, 503, 504]
         last_error: Optional[Exception] = None
@@ -150,6 +151,7 @@ class BaseScraper(ABC):
                 return resp
             except (httpx.HTTPError, httpx.TimeoutException) as e:
                 last_error = e
+                estr = str(e)
                 # No reintentar si es error 4xx (el raise_for_status lo convierte)
                 if isinstance(e, httpx.HTTPStatusError):
                     status = e.response.status_code
@@ -157,10 +159,15 @@ class BaseScraper(ABC):
                         log.warning("Error {code} en {url} — saltando (error cliente)", code=status, url=url)
                         self._stats["errores"] += 1
                         return None
+                # No reintentar errores de DNS — no se autocurarán
+                if "getaddrinfo failed" in estr or "[Errno 11001]" in estr or "[Errno -2]" in estr or "Name or service not known" in estr:
+                    log.warning("DNS error en {url} — saltando (no resuelve)", url=url)
+                    self._stats["errores"] += 1
+                    return None
                 wait = 2 ** attempt * self.delay
                 log.warning(
                     "Error en {url} (intento {a}/{m}): {e} — espera {w}s",
-                    url=url, a=attempt, m=self.max_retries, e=str(e)[:80], w=wait,
+                    url=url, a=attempt, m=self.max_retries, e=estr[:80], w=wait,
                 )
                 time.sleep(wait)
 

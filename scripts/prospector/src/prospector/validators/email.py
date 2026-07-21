@@ -25,6 +25,18 @@ _TEMP_DOMAINS: set[str] = {
     "getnada.com",
     "trashmail.com",
     "tempr.email",
+    # Tracking / analytics — no son emails reales de contacto
+    "sentry.io",
+    "sentry-next.wixpress.com",
+    "sentry.wixpress.com",
+    # Placeholder / dominios de relleno
+    "factoryhub.com",
+    "ejemplo.com",
+    "example.com",
+    "domain.com",
+    "test.com",
+    "email.com",
+    "mail.com",
 }
 
 

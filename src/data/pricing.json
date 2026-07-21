@@ -3,113 +3,329 @@
     {
       "id": "landing",
       "category": "Desarrollo Web",
-      "name": "Landing Page",
-      "description": "Sitio web de 1 a 3 páginas, ideal para emprendedores",
+      "name": "Landing Page Profesional",
+      "description": "Página web de alto impacto diseñada para convertir visitantes en clientes. Ideal para campañas, lanzamientos o tu primera presencia digital profesional.",
       "price": 350000,
       "promoPrice": 290000,
-      "features": ["1-3 páginas", "Diseño responsive", "Formulario de contacto", "SEO básico", "Hosting 1 año"],
+      "features": [
+        "1 a 3 páginas con diseño UI/UX personalizado",
+        "100% responsive (móvil, tablet, escritorio)",
+        "Formulario de contacto con validación + notificaciones",
+        "SEO on-page básico (meta tags, estructura)",
+        "Optimización Lighthouse 90+ (velocidad asegurada)",
+        "Hosting con SSL + CDN (3 meses incluido)",
+        "Google Analytics 4 configurado",
+        "Botón WhatsApp flotante"
+      ],
       "popular": false
     },
     {
       "id": "web-profesional",
       "category": "Desarrollo Web",
       "name": "Sitio Web Profesional",
-      "description": "Sitio completo con blog, galería y más secciones",
+      "description": "Tu centro digital completo. Un sitio moderno y veloz que posiciona tu marca, muestra tus servicios y convence a tus clientes de contratarte.",
       "price": 800000,
       "promoPrice": 690000,
-      "features": ["5-10 páginas", "Blog integrado", "SEO optimizado", "Galería de imágenes", "Hosting 1 año", "Panel admin"],
+      "features": [
+        "5 a 10 páginas con arquitectura de información",
+        "Diseño UI/UX personalizado con 2 propuestas visuales",
+        "Blog integrado con CMS editable",
+        "Panel administrador para gestionar contenido",
+        "SEO avanzado on-page + datos estructurados",
+        "Galería de imágenes optimizada",
+        "Formularios inteligentes con validación",
+        "Hosting con SSL + CDN (3 meses incluido)",
+        "Google Analytics 4 + Search Console",
+        "Capacitación del equipo para gestión autónoma"
+      ],
       "popular": true
     },
     {
       "id": "ecommerce",
       "category": "Desarrollo Web",
-      "name": "Tienda Online",
-      "description": "E-commerce completo con carrito de compras y pagos",
+      "name": "Tienda Online (E-commerce)",
+      "description": "Tu tienda lista para vender. Catálogo ilimitado, carrito inteligente, pagos integrados (Webpay/Flow) y panel de control de ventas en tiempo real.",
       "price": 1800000,
       "promoPrice": 1500000,
-      "features": ["Catálogo ilimitado", "Carrito de compras", "Webpay/Flow integrado", "Dashboard ventas", "SEO avanzado", "Hosting 1 año"],
+      "features": [
+        "Catálogo de productos ilimitado con variantes",
+        "Carrito de compras funcional con recuperación",
+        "Webpay / Flow / Mercado Pago integrados",
+        "Dashboard de ventas en tiempo real",
+        "Gestión de inventario y órdenes",
+        "Panel administrador completo",
+        "SEO avanzado para e-commerce",
+        "Hosting premium con SSL + CDN (3 meses)",
+        "Capacitación del equipo",
+        "Soporte 30 días post-lanzamiento"
+      ],
+      "popular": false
+    },
+    {
+      "id": "web-app",
+      "category": "Desarrollo Web",
+      "name": "Aplicación Web a Medida",
+      "description": "Sistemas web hechos a tu medida: paneles de administración, portales de clientes, apps internas, gestores de contenido. Si necesitas algo que no existe, lo creamos.",
+      "price": 1500000,
+      "promoPrice": 1200000,
+      "features": [
+        "Levantamiento detallado de requerimientos",
+        "Arquitectura escalable moderna (Astro / Next.js / FastAPI)",
+        "Autenticación de usuarios y roles",
+        "Panel de administración personalizado",
+        "API REST o GraphQL según necesidad",
+        "Base de datos PostgreSQL optimizada",
+        "Despliegue en Vercel / Railway / Cloudflare",
+        "SSL + CDN incluidos",
+        "Documentación técnica del sistema",
+        "Capacitación del equipo"
+      ],
+      "popular": false
+    },
+    {
+      "id": "bot-whatsapp",
+      "category": "Automatización de Procesos",
+      "name": "Bot WhatsApp Inteligente",
+      "description": "Atención al cliente 24/7 sin que contestes un solo mensaje. Automatiza respuestas, cotizaciones, agendamiento y catálogo directamente en WhatsApp.",
+      "price": 350000,
+      "promoPrice": 290000,
+      "features": [
+        "Levantamiento de casos de uso y flujos de conversación",
+        "Configuración WhatsApp Business API oficial",
+        "Respuestas automáticas inteligentes",
+        "Catálogo interactivo de productos/servicios",
+        "Agendamiento de citas automatizado",
+        "Dashboard de conversaciones en tiempo real",
+        "Integración con CRM (opcional)",
+        "Soporte 1 mes post-lanzamiento"
+      ],
+      "popular": true
+    },
+    {
+      "id": "email-flow",
+      "category": "Automatización de Procesos",
+      "name": "Flujo de Email Marketing",
+      "description": "Correos que trabajan por ti mientras duermes. Secuencias de bienvenida, recuperación de clientes, newsletters automáticas que nutren y venden.",
+      "price": 250000,
+      "promoPrice": 200000,
+      "features": [
+        "Levantamiento de flujos de comunicación",
+        "Secuencia de bienvenida automatizada multi-paso",
+        "Recuperación de carritos abandonados (e-commerce)",
+        "Newsletter periódico automático",
+        "Diseño de plantillas profesionales responsive",
+        "Integración API con tu CRM",
+        "Reportes de apertura, clics y conversión",
+        "Configuración de entregabilidad (SPF, DKIM, DMARC)"
+      ],
+      "monthly": false,
+      "popular": false
+    },
+    {
+      "id": "crm-integration",
+      "category": "Automatización de Procesos",
+      "name": "Integración y Automatización CRM",
+      "description": "Conecta todas tus herramientas para que trabajen como un solo equipo. Olvídate de copiar datos entre sistemas: los datos fluyen solos.",
+      "price": 500000,
+      "promoPrice": 400000,
+      "features": [
+        "Levantamiento de procesos actuales y brechas",
+        "Conexión API entre sistemas (CRM, web, WhatsApp, email)",
+        "Sincronización bidireccional de datos en tiempo real",
+        "Automatización de tareas repetitivas",
+        "Reportes de ventas y KPIs personalizados",
+        "Dashboard de gestión unificado",
+        "Capacitación del equipo",
+        "Soporte 30 días post-implementación"
+      ],
+      "popular": false
+    },
+    {
+      "id": "excel-automation",
+      "category": "Automatización de Procesos",
+      "name": "Automatización Excel y Reportes",
+      "description": "Deja de perder horas copiando y pegando datos. Automatizamos tus planillas, reportes y procesos manuales en Excel para que tu equipo se enfoque en lo importante.",
+      "price": 300000,
+      "promoPrice": 250000,
+      "features": [
+        "Diagnóstico de procesos manuales actuales",
+        "Automatización de reportes recurrentes",
+        "Limpieza y transformación automática de datos",
+        "Generación de informes PDF/Excel automatizada",
+        "Conexión de Excel con bases de datos o APIs",
+        "Dashboard en Excel actualizado automáticamente",
+        "Documentación del proceso automatizado",
+        "Capacitación al equipo"
+      ],
+      "popular": true
+    },
+    {
+      "id": "workflow-automation",
+      "category": "Automatización de Procesos",
+      "name": "Automatización de Procesos (n8n / Make)",
+      "description": "Conecta todas tus aplicaciones sin programar. Automatizaciones entre web, CRM, email, WhatsApp, Google Sheets y cualquier herramienta que uses.",
+      "price": 400000,
+      "promoPrice": 350000,
+      "features": [
+        "Mapeo de procesos y puntos de dolor",
+        "Conexión entre herramientas (web, CRM, email, redes)",
+        "Automatización de tareas multi-paso",
+        "Disparadores condicionales inteligentes",
+        "Monitoreo de ejecuciones y alertas",
+        "Panel de control de automatizaciones",
+        "Documentación del sistema",
+        "Soporte 30 días post-implementación"
+      ],
+      "popular": false
+    },
+    {
+      "id": "dashboard-viz",
+      "category": "Datos e Inteligencia",
+      "name": "Dashboard y Visualización de Datos",
+      "description": "Tus datos contando una historia clara. Dashboards interactivos que muestran en tiempo real lo que realmente importa para tu negocio. Decisiones basadas en datos, no en corazonadas.",
+      "price": 500000,
+      "promoPrice": 400000,
+      "features": [
+        "Levantamiento de KPIs y métricas clave del negocio",
+        "Conexión a fuentes de datos (Excel, DB, APIs, Google Sheets)",
+        "Dashboard interactivo web (Streamlit / Metabase / Grafana)",
+        "Visualizaciones personalizadas (gráficos, tablas, mapas)",
+        "Filtros interactivos por fecha, categoría, región",
+        "Actualización automática de datos",
+        "Acceso web desde cualquier dispositivo",
+        "Capacitación al equipo"
+      ],
+      "popular": false
+    },
+    {
+      "id": "scraping-etl",
+      "category": "Datos e Inteligencia",
+      "name": "Scraping Web y Extracción de Datos (ETL)",
+      "description": "Extrae datos de cualquier sitio web o sistema que no tenga API. Automatizamos la recolección de información de tu competencia, directorios, portales y más.",
+      "price": 350000,
+      "promoPrice": 290000,
+      "features": [
+        "Análisis de fuentes de datos objetivo",
+        "Scraper web a medida (Python + Playwright/Selenium)",
+        "Extracción, limpieza y transformación automática (ETL)",
+        "Exportación a Excel, CSV, JSON o base de datos",
+        "Programación de ejecuciones periódicas",
+        "Manejo de rotación de IPs y anti-bloqueo",
+        "Documentación técnica",
+        "Soporte 15 días post-entrega"
+      ],
+      "popular": false
+    },
+    {
+      "id": "api-development",
+      "category": "Datos e Inteligencia",
+      "name": "API y Backend a Medida",
+      "description": "Conecta tus sistemas, crea servicios web, o expón tus datos de forma segura. APIs robustas que permiten que tus herramientas hablen entre sí.",
+      "price": 400000,
+      "promoPrice": 350000,
+      "features": [
+        "Levantamiento de requerimientos de integración",
+        "API REST o GraphQL según tu necesidad",
+        "Autenticación segura (JWT / API Keys / OAuth)",
+        "Documentación interactiva (Swagger / OpenAPI)",
+        "Base de datos PostgreSQL optimizada",
+        "Monitoreo y logs de uso",
+        "Despliegue en servidor seguro",
+        "Soporte 30 días post-implementación"
+      ],
+      "popular": false
+    },
+    {
+      "id": "ocr-docs",
+      "category": "Datos e Inteligencia",
+      "name": "OCR y Procesamiento de Documentos",
+      "description": "Digitaliza documentos, facturas, boletas y formularios escaneados. Convierte pilas de papeles en datos estructurados que puedes buscar, filtrar y analizar.",
+      "price": 300000,
+      "promoPrice": 250000,
+      "features": [
+        "Análisis de tipos de documentos a procesar",
+        "Configuración de OCR con reconocimiento de texto",
+        "Extracción automática de campos clave (RUT, fechas, montos)",
+        "Exportación a Excel / JSON / base de datos",
+        "Validación y limpieza automática de datos extraídos",
+        "Programación de procesamiento periódico",
+        "Documentación del sistema",
+        "Soporte 15 días post-entrega"
+      ],
       "popular": false
     },
     {
       "id": "seo-audit",
       "category": "SEO",
-      "name": "Auditoría SEO",
-      "description": "Análisis completo de tu sitio web y plan de acción",
+      "name": "Auditoría SEO Completa",
+      "description": "Radiografía completa de tu sitio web. Descubrimos exactamente qué está frenando tu posicionamiento en Google y te entregamos un plan de acción priorizado para subir posiciones.",
       "price": 200000,
       "promoPrice": 150000,
-      "features": ["Análisis técnico", "Auditoría de contenido", "Competencia local", "Plan de acción", "Reporte ejecutivo"],
+      "features": [
+        "Auditoría técnica completa (rastreo, indexación, Core Web Vitals)",
+        "Análisis de contenido y estructura del sitio",
+        "Estudio de competencia local (Región de Los Lagos)",
+        "Evaluación del perfil de backlinks",
+        "Ranking actual de palabras clave objetivo",
+        "Reporte ejecutivo con plan de acción priorizado",
+        "Recomendaciones concretas paso a paso"
+      ],
       "popular": false
     },
     {
       "id": "seo-local",
       "category": "SEO",
-      "name": "SEO Local",
-      "description": "Posiciona tu negocio en Google Maps y búsquedas locales",
+      "name": "SEO Local — Google Maps",
+      "description": "Aparece cuando tus clientes te buscan en tu misma ciudad. Posicionamiento en Google Maps y búsquedas locales para que te encuentren justo cuando necesitan lo que ofreces.",
       "price": 300000,
       "promoPrice": 250000,
-      "features": ["Google My Business", "Citas locales", "Optimización Maps", "Reporte mensual", "Soporte 3 meses"],
+      "features": [
+        "Optimización completa de Google Business Profile",
+        "Gestión de citas locales en directorios chilenos",
+        "Estrategia de reseñas y reputación online",
+        "Contenido local optimizado (ciudades + servicios)",
+        "Monitoreo semanal de posiciones locales",
+        "Reporte mensual de resultados",
+        "Soporte continuo 3 meses"
+      ],
       "popular": true
     },
     {
       "id": "seo-mensual",
       "category": "SEO",
       "name": "Mantenimiento SEO Mensual",
-      "description": "SEO continuo para mantener y mejorar tu posicionamiento",
+      "description": "SEO continuo para mantener y mejorar tu posición en Google mes a mes. Ideal para negocios que ya tienen base SEO y quieren sostener su ventaja competitiva.",
       "price": 150000,
       "promoPrice": 120000,
-      "features": ["Monitoreo posiciones", "Optimización continua", "Reporte mensual", "Soporte prioritario"],
+      "features": [
+        "Monitoreo semanal de posiciones y tráfico",
+        "Optimización continua de contenido existente",
+        "Análisis de competencia mensual",
+        "Detección y corrección de errores técnicos",
+        "Actualización de Google Business Profile",
+        "Reporte mensual detallado con recomendaciones",
+        "Soporte prioritario vía WhatsApp"
+      ],
       "monthly": true,
       "popular": false
     },
     {
-      "id": "bot-whatsapp",
-      "category": "Automatizaciones",
-      "name": "Bot WhatsApp",
-      "description": "Chatbot automatizado para atención al cliente 24/7",
-      "price": 300000,
-      "promoPrice": 250000,
-      "features": ["Respuestas automáticas", "Catálogo interactivo", "Integración WhatsApp API", "Dashboard gestión", "Soporte 1 mes"],
-      "popular": true
-    },
-    {
-      "id": "email-flow",
-      "category": "Automatizaciones",
-      "name": "Flujo Email Marketing",
-      "description": "Automatización de correos para nurturing de clientes",
-      "price": 250000,
-      "promoPrice": 200000,
-      "features": ["Secuencia bienvenida", "Carritos abandonados", "Newsletter automático", "Integración API", "Plantillas diseño"],
-      "monthly": false,
-      "popular": false
-    },
-    {
-      "id": "crm-integration",
-      "category": "Automatizaciones",
-      "name": "Integración CRM",
-      "description": "Conecta tus herramientas y centraliza clientes",
-      "price": 500000,
-      "promoPrice": 400000,
-      "features": ["Conexión API", "Sincronización datos", "Automatización tareas", "Reportes ventas", "Capacitación"],
-      "popular": false
-    },
-    {
-      "id": "logo-brand",
-      "category": "Diseño Gráfico",
-      "name": "Logo + Identidad Visual",
-      "description": "Marca profesional que conecta con tu audiencia",
-      "price": 350000,
-      "promoPrice": 290000,
-      "features": ["Logo principal", "Variantes cromáticas", "Tipografía corporativa", "Paleta de colores", "Manual de marca"],
-      "popular": true
-    },
-    {
       "id": "social-media",
       "category": "Marketing Digital",
-      "name": "Gestión Redes Sociales",
-      "description": "Contenido y gestión profesional de tus redes",
+      "name": "Gestión de Redes Sociales",
+      "description": "Presencia profesional y constante en tus redes. Contenido que conecta con tu audiencia local, diseñado y redactado por profesionales, no por algoritmos.",
       "price": 350000,
       "promoPrice": 290000,
-      "features": ["8 publicaciones/mes", "Diseño gráfico", "Copywriting", "Reporte mensual", "Gestión de comunidad"],
+      "features": [
+        "Estrategia de contenido mensual alineada a tu negocio",
+        "8 publicaciones diseñadas profesionalmente",
+        "Copywriting persuasivo para cada publicación",
+        "Gráficas e imágenes personalizadas",
+        "Gestion de comunidad y respuestas",
+        "Interacción con seguidores y cuentas clave",
+        "Reporte mensual de rendimiento y alcance",
+        "Optimización continua según métricas"
+      ],
       "monthly": true,
       "popular": false
     },
@@ -117,22 +333,67 @@
       "id": "google-ads",
       "category": "Marketing Digital",
       "name": "Google Ads",
-      "description": "Campañas publicitarias efectivas en Google",
+      "description": "Clientes buscándote hoy. Campañas segmentadas geográficamente que ponen tu negocio frente a personas que ya están buscando lo que ofreces en tu zona.",
       "price": 250000,
       "promoPrice": 200000,
-      "features": ["Configuración campaña", "Optimización continua", "Segmentación local", "Reporte semanal", "A/B testing"],
+      "features": [
+        "Configuración completa de campaña (Search + Maps)",
+        "Investigación de palabras clave locales",
+        "Segmentación geográfica (ciudades, radios)",
+        "Creación de anuncios persuasivos",
+        "A/B testing continuo de anuncios",
+        "Optimización diaria de puja y presupuesto",
+        "Reporte semanal de rendimiento y CPA",
+        "Soporte y ajustes durante toda la campaña"
+      ],
       "monthly": true,
       "popular": false
+    },
+    {
+      "id": "logo-brand",
+      "category": "Diseño Gráfico",
+      "name": "Logo + Identidad Visual",
+      "description": "Tu marca profesional lista para el mercado. No solo un logo: una identidad visual coherente que comunica quién eres y por qué confiar en ti.",
+      "price": 350000,
+      "promoPrice": 290000,
+      "features": [
+        "Sesión de briefing y descubrimiento de marca",
+        "Investigación de mercado y competencia",
+        "Logo principal + variantes cromáticas y monocromo",
+        "Tipografía corporativa seleccionada",
+        "Paleta de colores con valores HEX/RGB/CMYK",
+        "Papelería básica (tarjeta, firma email, portada redes)",
+        "Manual de marca en PDF",
+        "Entrega de archivos en formato vectorial (AI, EPS, PNG, SVG)"
+      ],
+      "popular": true
+    },
+    {
+      "id": "consulting",
+      "category": "Consultoría",
+      "name": "Diagnóstico Digital Gratuito",
+      "description": "Sin compromiso. Analizamos tu situación actual, identificamos las oportunidades digitales reales para tu negocio y te entregamos una hoja de ruta clara con prioridades, presupuestos y plazos.",
+      "price": 150000,
+      "promoPrice": 0,
+      "features": [
+        "Revisión de tu presencia digital actual (web, redes, SEO)",
+        "Análisis de competencia local",
+        "Identificación de procesos automatizables",
+        "Hoja de ruta digital priorizada (30/60/90 días)",
+        "Recomendaciones con presupuestos estimados",
+        "Sin compromiso de contratación"
+      ],
+      "popular": true
     }
   ],
   "packs": [
     {
-      "id": "pack-digital",
+      "id": "pack-digital-completo",
       "name": "Pack Digital Completo",
-      "description": "Web profesional + SEO Local + Bot WhatsApp",
+      "description": "Web profesional + SEO Local + Bot WhatsApp. La combinación ideal para pymes que quieren presencia seria y atención automatizada.",
       "services": ["web-profesional", "seo-local", "bot-whatsapp"],
-      "totalPrice": 1400000,
-      "discount": 200000,
+      "totalPrice": 1450000,
+      "discount": 350000,
       "promoPrice": 1100000,
       "popular": true,
       "badge": "Más contratado"
@@ -140,24 +401,46 @@
     {
       "id": "pack-emprendedor",
       "name": "Pack Emprendedor",
-      "description": "Landing page + Logo + Redes Sociales",
+      "description": "Landing page + Logo + Redes Sociales. Todo lo que necesitas para lanzar tu negocio al mundo digital.",
       "services": ["landing", "logo-brand", "social-media"],
       "totalPrice": 1050000,
-      "discount": 150000,
-      "promoPrice": 500000,
+      "discount": 250000,
+      "promoPrice": 800000,
       "popular": false,
       "badge": "Mejor precio"
     },
     {
+      "id": "pack-datos",
+      "name": "Pack Datos e Inteligencia",
+      "description": "Dashboard interactivo + Automatización Excel + API a medida. Toma el control total de tus datos y procesos.",
+      "services": ["dashboard-viz", "excel-automation", "api-development"],
+      "totalPrice": 1200000,
+      "discount": 200000,
+      "promoPrice": 1000000,
+      "popular": false,
+      "badge": "Nuevo"
+    },
+    {
       "id": "pack-seo-completo",
       "name": "Pack SEO Completo",
-      "description": "Auditoría + SEO Local + 3 meses mantenimiento",
+      "description": "Auditoría + SEO Local + 3 meses de mantenimiento. Aparece en Google y mantente ahí.",
       "services": ["seo-audit", "seo-local", "seo-mensual"],
       "totalPrice": 650000,
       "discount": 100000,
-      "promoPrice": 450000,
+      "promoPrice": 550000,
       "popular": false,
       "badge": "Recomendado"
+    },
+    {
+      "id": "pack-automatizacion",
+      "name": "Pack Automatización Total",
+      "description": "Bot WhatsApp + Email Flows + Automatización Excel. Recupera horas de trabajo cada semana.",
+      "services": ["bot-whatsapp", "email-flow", "excel-automation"],
+      "totalPrice": 900000,
+      "discount": 160000,
+      "promoPrice": 740000,
+      "popular": false,
+      "badge": "Más valor"
     }
   ]
 }

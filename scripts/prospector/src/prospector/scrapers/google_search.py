@@ -25,15 +25,33 @@ from prospector.scrapers.base import BaseScraper, ScraperResult
 log = get_logger(__name__)
 
 
+# Pool de User-Agents para rotar y evitar detección
+_USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0",
+]
+_ua_index = 0
+
+
 class GoogleSearchScraper(BaseScraper):
     """Busca sitios web de empresas usando Google Search."""
 
-    def __init__(self, delay: float = 1.5, dry_run: bool = False):
+    def __init__(self, delay: float = 3.0, dry_run: bool = False):
         super().__init__(name="google_search", delay=delay, dry_run=dry_run)
 
     def scrape(self, **kwargs) -> ScraperResult:
         """Interfaz BaseScraper."""
         return ScraperResult()
+
+    def _rotar_user_agent(self) -> str:
+        """Retorna el siguiente User-Agent del pool (round-robin)."""
+        global _ua_index
+        ua = _USER_AGENTS[_ua_index % len(_USER_AGENTS)]
+        _ua_index += 1
+        return ua
 
     def buscar_sitio_web(self, nombre: str, ciudad: str = "", rubro: str = "") -> Optional[str]:
         """Busca en Google el sitio web oficial de una empresa.
@@ -57,14 +75,12 @@ class GoogleSearchScraper(BaseScraper):
             resp = self._fetch(
                 url,
                 headers={
-                    "User-Agent": (
-                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) "
-                        "Chrome/120.0.0.0 Safari/537.36"
-                    ),
+                    "User-Agent": self._rotar_user_agent(),
                     "Accept": "text/html,application/xhtml+xml",
                     "Accept-Language": "es-CL,es;q=0.9,en;q=0.8",
                 },
+                # No reintentar 429 — Google no lo levanta en segundos
+                retry_on=[],
             )
         except Exception as e:
             log.trace("Error buscando {nombre}: {e}", nombre=nombre, e=str(e)[:80])
@@ -88,8 +104,8 @@ class GoogleSearchScraper(BaseScraper):
 
             # Saltar resultados de Google propios
             if any(skip in href for skip in [
-                "google.com", "youtube.com", "facebook.com", "instagram.com",
-                "twitter.com", "linkedin.com", "maps.google",
+                "google.com", "support.google", "youtube.com", "facebook.com",
+                "instagram.com", "twitter.com", "linkedin.com", "maps.google",
             ]):
                 continue
 
@@ -117,9 +133,9 @@ class GoogleSearchScraper(BaseScraper):
         """Filtra URLs no deseadas (redes sociales, directorios, etc.)."""
         url_lower = url.lower()
         if any(skip in url_lower for skip in [
-            "google.com", "youtube.com", "facebook.com", "instagram.com",
-            "twitter.com", "linkedin.com", "maps.google", "yelu.cl",
-            "chilerut", "mercadolibre", "yapo.cl", "clasificados",
+            "google.com", "support.google", "youtube.com", "facebook.com",
+            "instagram.com", "twitter.com", "linkedin.com", "maps.google",
+            "yelu.cl", "chilerut", "mercadolibre", "yapo.cl", "clasificados",
             "todo.cl", "dondepago", "páginasamarillas",
         ]):
             return False
@@ -130,13 +146,30 @@ class GoogleSearchScraper(BaseScraper):
             return False
         return True
 
+    # Placeholders conocidos que NO deben guardarse como sitio_web
+    _PLACEHOLDER_DOMAINS = {
+        "support.google", "support.google.com", "maps.google.com",
+        "google.com", "facebook.com", "instagram.com",
+    }
+
+    def _es_placeholder(self, url: str) -> bool:
+        """Detecta si una URL es placeholder (no sitio web real)."""
+        from urllib.parse import urlparse
+        try:
+            dominio = urlparse(url).netloc.lower()
+            if dominio.startswith("www."):
+                dominio = dominio[4:]
+            return dominio in self._PLACEHOLDER_DOMAINS
+        except Exception:
+            return False
+
     def enrichen_prospect(self, prospect) -> tuple[bool, Optional[str]]:
         """Busca el sitio web de un prospecto que no tiene web."""
         if prospect.sitio_web:
             return False, None
 
         sitio = self.buscar_sitio_web(prospect.empresa, prospect.comuna, prospect.rubro)
-        if sitio:
+        if sitio and not self._es_placeholder(sitio):
             return True, sitio
         return False, None
 

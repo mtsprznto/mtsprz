@@ -9,12 +9,14 @@ La base de datos es un archivo JSON con la siguiente estructura:
     }
 
 Escritura atómica: escribe a un .tmp y hace rename (POSIX atomic).
+  Windows fallback: si rename falla por archivo bloqueado, copia+borra.
 Backup automático: antes de cada escritura copia el archivo actual a backups/.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
@@ -77,11 +79,21 @@ class JSONDatabase:
         return self._prospects
 
     def _save_atomic(self, data: dict) -> None:
-        """Guarda con escritura atómica: tmp → rename."""
+        """Guarda con escritura atómica: tmp → rename.
+
+        En POSIX usa os.replace() (atómico). En Windows si el archivo
+        destino está bloqueado, cae a copia+borrado como fallback.
+        """
         tmp = self._file.with_suffix(".json.tmp")
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2, default=str)
-        tmp.replace(self._file)  # POSIX atomic rename
+        try:
+            os.replace(tmp, self._file)  # atómico en POSIX
+        except PermissionError:
+            # Windows: archivo bloqueado → copiar contenido + borrar tmp
+            log.warning("Replace atómico falló (Windows lock), usando copia fallback")
+            shutil.copy2(tmp, self._file)
+            tmp.unlink(missing_ok=True)
         log.debug("Guardados {n} prospectos en {f}", n=len(data["prospects"]), f=self._file)
 
     def _backup(self) -> None:

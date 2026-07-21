@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { query, initDb } from "../../lib/db";
+import { sendEmail } from "../../lib/mail";
 
 export const prerender = false;
 
@@ -21,6 +22,13 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     await initDb();
+
+    // Verificar que el email esté verificado
+    const verResult = await query("SELECT 1 FROM verified_emails WHERE email = $1", [email]);
+    if (verResult.rows.length === 0) {
+      return new Response(JSON.stringify({ error: "Email no verificado. Debes verificar tu correo antes de cotizar." }), { status: 403 });
+    }
+
     await query(
       "INSERT INTO quote_requests (email, services, total, message) VALUES ($1, $2, $3, $4)",
       [email, JSON.stringify(services), total, body.message || null]
@@ -84,6 +92,53 @@ export const POST: APIRoute = async ({ request }) => {
       });
     } catch (err) {
       console.error("[Resend] Failed to send quote notification:", err);
+    }
+
+    // Enviar confirmación al solicitante
+    const confirmHtml = `
+      <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
+        <div style="text-align:center;margin-bottom:24px">
+          <div style="width:48px;height:48px;margin:0 auto 12px;background:rgba(99,102,241,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h2 style="margin:0;font-size:18px;font-weight:700;letter-spacing:-0.5px">Cotización Recibida</h2>
+        </div>
+        <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6">
+          Hola,
+        </p>
+        <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6">
+          Hemos recibido tu solicitud de cotización en <strong style="color:#fafafa">Mtsprz</strong>. 
+          Estos son los servicios que seleccionaste:
+        </p>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:16px">
+          <thead>
+            <tr><th style="padding:8px 12px;text-align:left;color:rgba(250,250,250,0.4);font-size:11px;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06)">Servicio</th><th style="padding:8px 12px;text-align:right;color:rgba(250,250,250,0.4);font-size:11px;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06)">Precio</th></tr>
+          </thead>
+          <tbody>${servicesHtml}</tbody>
+        </table>
+        <div style="text-align:right;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)">
+          <span style="font-size:13px;color:rgba(250,250,250,0.5)">Total estimado: </span>
+          <strong style="font-size:18px;color:#6366f1">$${(total / 1000).toFixed(0)}k</strong>
+        </div>
+        <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:20px 0 0;line-height:1.6">
+          Un miembro de nuestro equipo te contactará pronto para resolver dudas y comenzar con tu proyecto.
+        </p>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:24px 0" />
+        <p style="font-size:11px;color:rgba(250,250,250,0.3);margin:0;text-align:center">
+          Mtsprz — Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org
+        </p>
+      </div>
+    `;
+
+    try {
+      await sendEmail({
+        to: email,
+        subject: `Hemos recibido tu cotización — Mtsprz`,
+        html: confirmHtml,
+        replyTo: "contacto@mtsprz.org",
+      });
+    } catch (err) {
+      console.error("[Resend] Failed to send quote confirmation to requester:", err);
     }
   }
 

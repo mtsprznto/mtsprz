@@ -3,7 +3,7 @@ import { query, initDb } from "../../lib/db";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   let body: { email?: string; code?: string };
   try {
     body = await request.json();
@@ -42,6 +42,14 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (err) {
     console.error("[DB] Failed to save email:", err);
   }
+
+  cookies.set("mtsprz_verified", email, {
+    path: "/",
+    maxAge: 86400,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: import.meta.env.PROD,
+  });
 
   return new Response(JSON.stringify({ success: true, email }), { status: 200 });
 };

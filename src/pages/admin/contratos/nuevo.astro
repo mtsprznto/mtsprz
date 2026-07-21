@@ -1,6 +1,23 @@
 ---
 import AdminLayout from "../../../layouts/AdminLayout.astro";
-import pricing from "../../../data/pricing.json";
+import { query, initDb } from "../../../lib/db";
+
+await initDb();
+const result = await query("SELECT * FROM services WHERE is_active = true ORDER BY category, name");
+interface Service {
+  id: number;
+  slug: string;
+  name: string;
+  description: string | null;
+  price: number;
+  promo_price: number | null;
+  category: string | null;
+  includes_maintenance: boolean;
+  maintenance_price: number;
+  is_monthly: boolean;
+}
+const services = result.rows as Service[];
+const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 ---
 
 <AdminLayout title="Nuevo Contrato" description="Crear nuevo contrato">
@@ -92,6 +109,14 @@ import pricing from "../../../data/pricing.json";
               <input name="client_rut" maxlength="20" pattern="\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]" title="Formato: 77.670.736-8" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="77.670.736-8" />
             </div>
             <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Nacionalidad</label>
+              <input name="client_nationality" maxlength="100" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Chilena" value="Chilena" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Profesión / Giro</label>
+              <input name="client_profession" maxlength="255" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Ingeniero Comercial / Consultoría" />
+            </div>
+            <div>
               <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Email <span class="text-red-400/60">*</span></label>
               <input name="client_email" type="email" maxlength="255" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" required placeholder="contacto@blast-up.cl" />
             </div>
@@ -100,8 +125,26 @@ import pricing from "../../../data/pricing.json";
               <input name="client_phone" maxlength="50" pattern="[\+\d\s\-\(\)]{8,20}" title="Formato: +56 9 7547 5781" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="+56 9 7547 5781" />
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Dirección</label>
-              <input name="client_address" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Av. Bosques de Montemar 30, Of. 316" />
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Dirección <span class="text-white/20 font-normal normal-case">(incluir comuna)</span></label>
+              <input name="client_address" autocomplete="off" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Av. Bosques de Montemar 30, Of. 316, Concón, Región de Valparaíso" />
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="2b">
+          <div class="flex items-center gap-2.5 mb-5">
+            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-400/10 text-violet-400">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <div>
+              <span class="font-heading text-sm font-semibold text-white tracking-tight">Datos del Prestador</span>
+              <p class="text-[11px] text-white/30">Mtsprz — Soluciones Digitales</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">RUT Prestador</label>
+              <input name="prestador_rut" maxlength="20" pattern="\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]" title="Formato: 12.345.678-9" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="12.345.678-9" />
             </div>
           </div>
         </div>
@@ -124,11 +167,11 @@ import pricing from "../../../data/pricing.json";
               <div class="flex flex-col sm:flex-row gap-3">
                 <div class="w-full sm:flex-[3]">
                   <label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Servicio</label>
-                  <select class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body service-select" onchange="updateServicePrice(this)">
-                    <option value="">Personalizado...</option>
-                    {pricing.services.map(s => (
-                      <option value={s.id} data-price={s.promoPrice || s.price}>{s.name}</option>
-                    ))}
+                    <select class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body service-select" onchange="updateServicePrice(this)">
+                      <option value="">Personalizado...</option>
+                      {services.map(s => (
+                        <option value={s.slug} data-price={s.promo_price && s.promo_price > 0 ? s.promo_price : s.price} data-price-full={s.price}>{s.name}</option>
+                      ))}
                   </select>
                 </div>
                 <div class="w-full sm:flex-[2]">
@@ -142,15 +185,47 @@ import pricing from "../../../data/pricing.json";
                 <div class="flex sm:items-end gap-2 pt-1 sm:pt-0 sm:pb-[1px]">
                   <div class="hidden sm:block w-px h-8 bg-white/[0.06] self-center"></div>
                   <button type="button" class="inline-flex items-center justify-center w-9 h-9 rounded-xl text-sm text-white/30 border border-white/[0.06] transition-all duration-200 hover:border-red-400/30 hover:text-red-400 remove-service" onclick="this.closest('.service-row').remove(); updateTotal();">✕</button>
-                </div>
+              </div>
+              <div class="mt-2">
+                <details class="service-deliverables-details" open>
+                  <summary class="text-[10px] font-medium text-white/30 uppercase tracking-wider cursor-pointer hover:text-white/50 transition-colors">Entregables</summary>
+                  <textarea class="service-deliverables w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2 px-3.5 text-xs text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body resize-y mt-1" rows="3" placeholder="Entregable 1&#10;Entregable 2&#10;Entregable 3"></textarea>
+                </details>
               </div>
             </div>
+          </div>
           </div>
           <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/[0.06]">
             <span class="text-xs text-white/30"><span id="serviceCount">1</span> servicio(s)</span>
             <div class="flex items-center gap-2">
               <span class="text-xs text-white/40">Total estimado</span>
               <span id="totalDisplay" class="text-xl font-bold text-accent font-mono tracking-tight">$0</span>
+            </div>
+          </div>
+
+          <div id="recurringWarning" class="hidden mt-4 rounded-xl border border-sky-400/20 bg-sky-400/[0.04] p-4">
+            <div class="flex gap-3">
+              <span class="shrink-0 mt-0.5 flex items-center justify-center w-5 h-5 rounded-full bg-sky-400/20 text-sky-400">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </span>
+              <div>
+                <p class="text-xs font-semibold text-sky-400 mb-1">Servicios recurrentes en esquema de pago único</p>
+                <p class="text-[11px] text-sky-300/70 leading-relaxed" id="recurringWarningDetail"></p>
+                <p class="text-[10px] text-sky-300/40 mt-1.5">Si el precio es mensual, marcar "is_monthly" en el catálogo o aclarar en cláusulas especiales "precio de $X.XXX por mes, facturación mensual adelantada".</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="ivaWarning" class="hidden mt-4 rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-4">
+            <div class="flex gap-3">
+              <span class="shrink-0 mt-0.5 flex items-center justify-center w-5 h-5 rounded-full bg-amber-400/20 text-amber-400">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </span>
+              <div>
+                <p class="text-xs font-semibold text-amber-400 mb-1">Validar tratamiento tributario antes de emitir</p>
+                <p class="text-[11px] text-amber-300/70 leading-relaxed" id="ivaWarningDetail"></p>
+                <p class="text-[10px] text-amber-300/40 mt-1.5">Consultar con contador antes de emitir la primera boleta. Si corresponde IVA, usar factura y ajustar cláusula SÉPTIMA.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -186,8 +261,34 @@ import pricing from "../../../data/pricing.json";
               <input name="end_date" type="date" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Forma de Pago</label>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Modalidad de Pago</label>
+              <select name="payment_method" onchange="togglePaymentTerms()" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body">
+                <option value="">Personalizada...</option>
+                <option value="contado">Contado</option>
+                <option value="50_50">50% Inicio + 50% Entrega</option>
+                <option value="hitos">Por Hitos</option>
+              </select>
+            </div>
+            <div id="paymentTermsGroup">
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Términos de Pago</label>
               <input name="payment_terms" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Transferencia mensual anticipada" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Días de Garantía</label>
+              <input name="warranty_days" type="number" min="0" max="365" value="15" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Días de Revisión</label>
+              <input name="revision_days" type="number" min="0" max="60" value="5" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input name="subcontracting_allowed" type="checkbox" checked class="w-4 h-4 rounded border-white/[0.08] bg-white/[0.04] text-accent focus:ring-accent/30" />
+                <div>
+                  <span class="block text-[11px] font-medium text-white/40">Permitir subcontratación</span>
+                  <span class="block text-[10px] text-white/25">El Prestador podrá subcontratar parcialmente con autorización del Cliente</span>
+                </div>
+              </label>
             </div>
             <div id="scheduleGroup" style="display:none;" class="sm:col-span-2">
               <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-2">Jornada / Horario</label>
@@ -266,6 +367,10 @@ import pricing from "../../../data/pricing.json";
                 <span class="text-white/35">Duración</span>
                 <span class="text-white/60 text-right" id="previewDuration">—</span>
               </div>
+              <div class="flex justify-between py-2 border-b border-white/[0.04]">
+                <span class="text-white/35">Pago</span>
+                <span class="text-white/60 text-right" id="previewPayment">—</span>
+              </div>
               <div class="flex justify-between py-2">
                 <span class="text-white/50 font-medium">Total</span>
                 <span class="text-lg font-bold text-accent font-mono" id="previewTotal">$0</span>
@@ -337,22 +442,28 @@ import pricing from "../../../data/pricing.json";
   </div>
 </AdminLayout>
 
-<script id="pricing-data" type="application/json">{JSON.stringify(pricing.services)}</script>
+<script id="pricing-data" type="application/json">{JSON.stringify({ rut: prestadorRut, services })}</script>
 
 <script is:inline>
   var pricingServices = {};
   var allServices = [];
+  var prestadorRut = "Pendiente";
   try {
-    allServices = JSON.parse(document.getElementById("pricing-data").textContent);
+    var configData = JSON.parse(document.getElementById("pricing-data").textContent);
+    prestadorRut = configData.rut || "Pendiente";
+    // Override from form field if filled
+    var rutField = document.querySelector("[name='prestador_rut']");
+    if (rutField && rutField.value) prestadorRut = rutField.value;
+    allServices = configData.services || [];
     allServices.forEach(function(s) {
-      pricingServices[s.id] = {
+      pricingServices[s.slug] = {
         name: s.name,
-        price: s.promoPrice || s.price,
+        price: s.promo_price && s.promo_price > 0 ? s.promo_price : s.price,
         description: s.description || "",
-        deliverables: s.features || [],
-        includes_maintenance: false,
-        maintenance_price: 0,
-        maintenance_description: "",
+        deliverables: s.deliverables || [],
+        includes_maintenance: !!s.includes_maintenance,
+        maintenance_price: s.maintenance_price || 0,
+        maintenance_description: s.maintenance_description || "",
       };
     });
   } catch(e) { console.warn("Error loading pricing data:", e); }
@@ -366,17 +477,23 @@ import pricing from "../../../data/pricing.json";
         pricingServices = {};
         var opts = '<option value="">Personalizado...</option>';
         json.services.forEach(function(s) {
-          var p = s.promo_price || s.price;
+          var promoP = s.promo_price && s.promo_price > 0 ? s.promo_price : null;
+          var fullP = s.price;
+          var displayPrice = promoP || fullP;
           pricingServices[s.slug] = {
             name: s.name,
-            price: p,
+            price: displayPrice,
+            price_full: fullP,
             description: s.description || "",
             deliverables: s.deliverables || [],
             includes_maintenance: s.includes_maintenance || false,
             maintenance_price: s.maintenance_price || 0,
             maintenance_description: s.maintenance_description || "",
+            is_monthly: !!s.is_monthly,
           };
-          opts += '<option value="' + s.slug + '" data-price="' + p + '">' + s.name + "</option>";
+          var label = s.name + ' — $' + fullP.toLocaleString('es-CL');
+          if (promoP && promoP !== fullP) label += ' (promo $' + promoP.toLocaleString('es-CL') + ')';
+          opts += '<option value="' + s.slug + '" data-price="' + displayPrice + '" data-price-full="' + fullP + '">' + label + "</option>";
         });
         document.querySelectorAll(".service-select").forEach(function(sel) {
           var currentVal = sel.value;
@@ -397,15 +514,32 @@ import pricing from "../../../data/pricing.json";
     var nameInput = row.querySelector(".service-name");
     var selected = select.options[select.selectedIndex];
     var dataPrice = selected.getAttribute("data-price");
+    var dataPriceFull = selected.getAttribute("data-price-full");
+    var delivTextarea = row.querySelector(".service-deliverables");
     if (dataPrice) {
       priceInput.value = dataPrice;
-      nameInput.value = selected.text;
+      var svc = pricingServices[select.value];
+      // Name from service data (not selected.text, which may contain price info)
+      nameInput.value = svc ? svc.name : selected.text;
       nameInput.readOnly = true;
+      // Auto-fill deliverables from service data
+      if (svc && svc.deliverables && svc.deliverables.length > 0) {
+        delivTextarea.value = svc.deliverables.join("\n");
+      } else {
+        delivTextarea.value = "";
+      }
     } else {
       nameInput.readOnly = false;
+      delivTextarea.value = "";
     }
     updateTotal();
     updatePreview();
+  }
+
+  // Strip price info from service names (prevents " — $400.000 (promo $350.000)" leaking into doc)
+  function sanitizeServiceName(raw) {
+    // Strip trailing price info: " — $400.000 (promo $350.000)" or "— $250.000" or " (promo $290.000)"
+    return (raw || "").replace(/\s*[-–—].*\(promo\s*\$[\d\.]+.*\)/g, "").replace(/\s*[-–—]\s*\$[\d\.]+[\s\S]*$/g, "").trim();
   }
 
   function getServices() {
@@ -414,19 +548,83 @@ import pricing from "../../../data/pricing.json";
       var select = row.querySelector(".service-select");
       var nameInput = row.querySelector(".service-name");
       var priceInput = row.querySelector(".service-price");
+      var delivTextarea = row.querySelector(".service-deliverables");
       var id = select.value || "custom";
       var svc = pricingServices[id] || {};
+      // Read deliverables from textarea first (user can edit), fallback to service data
+      var deliverables = [];
+      if (delivTextarea && delivTextarea.value.trim()) {
+        deliverables = delivTextarea.value.split("\n").map(function(s) { return s.trim(); }).filter(Boolean);
+      } else if (svc.deliverables) {
+        deliverables = svc.deliverables;
+      }
       return {
         id: id,
-        name: nameInput.value || "Servicio personalizado",
+        name: sanitizeServiceName(nameInput.value) || "Servicio personalizado",
         price: parseInt(priceInput.value) || 0,
         description: svc.description || "",
-        deliverables: svc.deliverables || [],
+        deliverables: deliverables,
         includes_maintenance: svc.includes_maintenance || false,
         maintenance_price: svc.maintenance_price || 0,
         maintenance_description: svc.maintenance_description || "",
+        is_monthly: !!svc.is_monthly,
       };
     });
+  }
+
+  // Keywords que implican servicio continuo/recurrente aunque is_monthly sea false
+  var RECURRING_PATTERNS = [
+    "mensual", "monthly", "gestión de redes", "gestion de redes",
+    "mantenimiento seo", "community", "social media", "seguimiento",
+    "soporte continuo", "monitoreo continuo",
+  ];
+
+  function checkRecurringMismatch(svcs) {
+    var mismatched = svcs.filter(function(s) {
+      if (s.is_monthly) return false; // ya marcado correcto
+      var name = (s.name || "").toLowerCase();
+      return RECURRING_PATTERNS.some(function(p) { return name.includes(p); });
+    });
+    var banner = document.getElementById("recurringWarning");
+    var detail = document.getElementById("recurringWarningDetail");
+    if (mismatched.length > 0) {
+      var names = mismatched.map(function(s) { return '"' + s.name + '"'; }).join(", ");
+      detail.textContent = names + " — nombre implica servicio continuo pero el precio está contabilizado una sola vez. " +
+        "Si es cobro mensual, el texto firmado solo respalda el monto total indicado (perjudica al prestador).";
+      banner.classList.remove("hidden");
+    } else {
+      banner.classList.add("hidden");
+    }
+  }
+
+  // Slugs/keywords de servicios que pueden clasificar como 1ª categoría → posible IVA/factura
+  var IVA_RISK_PATTERNS = [
+    "ecommerce", "e-commerce", "tienda", "web-app", "aplicacion", "aplicación",
+    "crm", "bot", "sistema", "backend", "api", "plataforma",
+    "whatsapp", "automatizacion", "automatización",
+  ];
+
+  function checkIvaRisk(svcs) {
+    var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
+    var risky = svcs.filter(function(s) {
+      var slug = (s.id || "").toLowerCase();
+      var name = (s.name || "").toLowerCase();
+      return IVA_RISK_PATTERNS.some(function(p) { return slug.includes(p) || name.includes(p); });
+    });
+    var riskyTotal = risky.reduce(function(sum, s) { return sum + s.price; }, 0);
+    var pct = total > 0 ? Math.round((riskyTotal / total) * 100) : 0;
+
+    var banner = document.getElementById("ivaWarning");
+    var detail = document.getElementById("ivaWarningDetail");
+    if (risky.length > 0) {
+      var names = risky.map(function(s) { return s.name + " ($" + s.price.toLocaleString("es-CL") + ")"; }).join(", ");
+      detail.textContent = "Servicios de posible 1ª categoría: " + names + " — " + pct + "% del total. " +
+        "El SII puede clasificar desarrollo transaccional (e-commerce, apps, bots, CRM) como actividad afecta a IVA (Art. 20 N°3 LIR). " +
+        "Si corresponde factura en vez de boleta de honorarios, el IVA no declarado (19%) quedaría a cargo del prestador.";
+      banner.classList.remove("hidden");
+    } else {
+      banner.classList.add("hidden");
+    }
   }
 
   function updateTotal() {
@@ -438,6 +636,8 @@ import pricing from "../../../data/pricing.json";
     document.getElementById("serviceCount").textContent = svcs.length + (svcs.length === 1 ? "" : "");
     var totalInput = document.querySelector("[name='total_amount']");
     if (!totalInput.value) totalInput.value = String(total);
+    checkRecurringMismatch(svcs);
+    checkIvaRisk(svcs);
     updatePreview();
   }
 
@@ -461,6 +661,11 @@ import pricing from "../../../data/pricing.json";
     var duration = document.querySelector("[name='duration_months']").value;
     document.getElementById("previewDuration").textContent = duration ? duration + " meses" : "—";
 
+    var pmLabels = { contado: "Contado", "50_50": "50/50", hitos: "Por Hitos" };
+    var pm = document.querySelector("[name='payment_method']")?.value;
+    var pmEl = document.getElementById("previewPayment");
+    if (pmEl) pmEl.textContent = pm ? (pmLabels[pm] || pm) : "—";
+
     var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
     document.getElementById("previewTotal").textContent = "$" + total.toLocaleString("es-CL");
   }
@@ -474,7 +679,12 @@ import pricing from "../../../data/pricing.json";
     var opts = "";
     for (var si = 0; si < allServices.length; si++) {
       var s = allServices[si];
-      opts += '<option value="' + s.id + '" data-price="' + (s.promoPrice || s.price) + '">' + s.name + "</option>";
+      var promoP = s.promo_price && s.promo_price > 0 ? s.promo_price : null;
+      var fullP = s.price;
+      var displayPrice = promoP || fullP;
+      var label = s.name + ' — $' + fullP.toLocaleString('es-CL');
+      if (promoP && promoP !== fullP) label += ' (promo $' + promoP.toLocaleString('es-CL') + ')';
+      opts += '<option value="' + s.slug + '" data-price="' + displayPrice + '" data-price-full="' + fullP + '">' + label + "</option>";
     }
     var div = document.createElement("div");
     div.className = "service-row rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4 transition-all duration-200";
@@ -498,15 +708,62 @@ import pricing from "../../../data/pricing.json";
           '<div class="hidden sm:block w-px h-8 bg-white/[0.06] self-center"></div>' +
           '<button type="button" class="inline-flex items-center justify-center w-9 h-9 rounded-xl text-sm text-white/30 border border-white/[0.06] transition-all duration-200 hover:border-red-400/30 hover:text-red-400 remove-service">✕</button>' +
         "</div>" +
+      "</div>" +
+      '<div class="mt-2">' +
+        '<details class="service-deliverables-details" open>' +
+          '<summary class="text-[10px] font-medium text-white/30 uppercase tracking-wider cursor-pointer hover:text-white/50 transition-colors">Entregables</summary>' +
+          '<textarea class="service-deliverables w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2 px-3.5 text-xs text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body resize-y mt-1" rows="3" placeholder="Entregable 1&#10;Entregable 2&#10;Entregable 3"></textarea>' +
+        "</details>" +
       "</div>";
     div.querySelector(".remove-service").onclick = function() { div.remove(); updateTotal(); };
     return div;
   }
 
+  function checkDuplicateNames() {
+    var names = Array.from(document.querySelectorAll(".service-name")).map(function(inp) { return inp.value.trim().toLowerCase(); });
+    var nameCount = {};
+    names.forEach(function(n) { if (n) nameCount[n] = (nameCount[n] || 0) + 1; });
+    var dupes = Object.keys(nameCount).filter(function(n) { return nameCount[n] > 1; });
+    // Highlight duplicates
+    document.querySelectorAll(".service-name").forEach(function(inp) {
+      var val = inp.value.trim().toLowerCase();
+      var isDup = dupes.indexOf(val) !== -1 && val !== "";
+      inp.style.borderColor = isDup ? "rgba(239,68,68,0.5)" : "";
+      inp.style.backgroundColor = isDup ? "rgba(239,68,68,0.05)" : "";
+    });
+    return dupes.length > 0;
+  }
+
   document.getElementById("addServiceBtn").addEventListener("click", function() {
     document.getElementById("servicesContainer").appendChild(createServiceRow());
     updateTotal();
+    // Attach duplicate checker to new row's name input
+    var rows = document.querySelectorAll(".service-row");
+    var lastRow = rows[rows.length - 1];
+    lastRow.querySelector(".service-name").addEventListener("input", function() {
+      checkDuplicateNames();
+      updatePreview();
+    });
+    lastRow.querySelector(".service-select").addEventListener("change", function() {
+      checkDuplicateNames();
+    });
   });
+
+  // Attach duplicate checker to existing rows on page load
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".service-name").forEach(function(inp) {
+      inp.addEventListener("input", function() { checkDuplicateNames(); updatePreview(); });
+    });
+  });
+  // Also run after loadServiceDescriptions populates selects
+  var origLoad = loadServiceDescriptions;
+  loadServiceDescriptions = function() {
+    return origLoad.apply(this, arguments).then(function() {
+      document.querySelectorAll(".service-name").forEach(function(inp) {
+        inp.addEventListener("input", function() { checkDuplicateNames(); updatePreview(); });
+      });
+    }).catch(function(e) { console.warn(e); });
+  };
 
   var dayNames = { 0: "Dom", 1: "Lun", 2: "Mar", 3: "Mi\u00e9", 4: "Jue", 5: "Vie", 6: "S\u00e1b" };
   var scheduleDays = [1, 2, 3, 4, 5];
@@ -585,145 +842,272 @@ import pricing from "../../../data/pricing.json";
   document.querySelector("[name='client_name']").addEventListener("input", updatePreview);
   document.querySelector("[name='duration_months']").addEventListener("input", updatePreview);
 
+  togglePaymentTerms();
+  document.querySelector("[name='payment_method']")?.addEventListener("change", function() {
+    togglePaymentTerms();
+    updatePreview();
+  });
+  ["warranty_days","revision_days","client_nationality","client_profession","subcontracting_allowed","prestador_rut"].forEach(function(n) {
+    var el = document.querySelector("[name='" + n + "']");
+    if (el) el.addEventListener("change", updatePreview);
+  });
   presetDays("lun-vie");
   updateTotal();
   updatePreview();
   loadServiceDescriptions();
 
-  function renderContractPreview() {
-    var templateLabels = { proyecto_unico: "Proyecto \u00danico", recurrente: "Servicio Recurrente (Mensual)", jornada_dedicada: "Jornada Dedicada (Horario Fijo)" };
-    var selected = document.querySelector("input[name='templateType']:checked");
-    var templateType = selected ? (templateLabels[selected.value] || selected.value) : "—";
+  function togglePaymentTerms() {
+    var sel = document.querySelector("[name='payment_method']");
+    var grp = document.getElementById("paymentTermsGroup");
+    if (sel && grp) {
+      grp.style.display = sel.value === "" ? "block" : "none";
+    }
+  }
 
+  // ── Preview: 19 cláusulas ────────────────────────────────────────────────
+  function renderContractPreview() {
     var clientName = document.querySelector("[name='client_name']").value || "—";
     var clientRut = document.querySelector("[name='client_rut']").value || "—";
+    var clientNationality = document.querySelector("[name='client_nationality']")?.value || "Chilena";
+    var clientProfession = document.querySelector("[name='client_profession']")?.value || "";
     var clientEmail = document.querySelector("[name='client_email']").value || "—";
     var clientPhone = document.querySelector("[name='client_phone']").value || "—";
     var clientAddress = document.querySelector("[name='client_address']").value || "—";
+    var paymentMethod = document.querySelector("[name='payment_method']")?.value || "";
+    var paymentTerms = document.querySelector("[name='payment_terms']")?.value || "";
+    var warrantyDays = document.querySelector("[name='warranty_days']")?.value || "15";
+    var revisionDays = document.querySelector("[name='revision_days']")?.value || "5";
+    var subcontracting = document.querySelector("[name='subcontracting_allowed']")?.checked !== false;
 
     var svcs = getServices();
     var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
     var duration = document.querySelector("[name='duration_months']").value || "—";
-    var paymentTerms = document.querySelector("[name='payment_terms']").value || "";
     var startDate = document.querySelector("[name='start_date']").value || "";
     var endDate = document.querySelector("[name='end_date']").value || "";
-    var schedule = "";
-    try {
-      var selTpl = document.querySelector("input[name='templateType']:checked");
-      if (selTpl && selTpl.value === "jornada_dedicada") {
-        var fEl = document.getElementById("scheduleFrom");
-        var tEl = document.getElementById("scheduleTo");
-        if (fEl && tEl) {
-          var active = [];
-          for (var d = 0; d <= 6; d++) {
-            var chip = document.getElementById("day" + d);
-            if (chip && chip.className.indexOf("bg-accent") !== -1) active.push(d);
-          }
-          if (active.length > 0) {
-            active.sort();
-            var rngs = [];
-            var st = active[0], en = active[0];
-            for (var i = 1; i < active.length; i++) {
-              if (active[i] === en + 1 || (en === 6 && active[i] === 0)) en = active[i];
-              else { rngs.push({ s: st, e: en }); st = active[i]; en = active[i]; }
-            }
-            rngs.push({ s: st, e: en });
-            var dN = {0:"Dom",1:"Lun",2:"Mar",3:"Mi\u00e9",4:"Jue",5:"Vie",6:"S\u00e1b"};
-            var ds = rngs.map(function(r) { return r.s === r.e ? dN[r.s] : dN[r.s] + "-" + dN[r.e]; }).join(", ");
-            schedule = ds + " " + fEl.value + "\u2013" + tEl.value;
-          }
-        }
-      }
-    } catch(e) { schedule = "Error: " + e.message; }
-    var clauses = document.querySelector("[name='special_clauses']").value || "";
+    var specialClauses = document.querySelector("[name='special_clauses']")?.value || "";
 
     var dateStr = new Date().toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" });
-
     function fmt(n) { return "$" + n.toLocaleString("es-CL"); }
+
+    // Helper: clause header
+    var ordinals = ["PRIMERA","SEGUNDA","TERCERA","CUARTA","QUINTA","SEXTA","SÉPTIMA","OCTAVA","NOVENA","DÉCIMA","DÉCIMA PRIMERA","DÉCIMA SEGUNDA","DÉCIMA TERCERA","DÉCIMA CUARTA","DÉCIMA QUINTA","DÉCIMA SEXTA","DÉCIMA SÉPTIMA","DÉCIMA OCTAVA","DÉCIMA NOVENA"];
+    function clauseTitle(idx, title) {
+      return '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e5e7eb;">' + ordinals[idx] + '. — ' + title + '</h3>';
+    }
+    function clauseText(t) {
+      return '<p style="font-size:11px;color:#374151;margin:0 0 6px;line-height:1.55;">' + t + '</p>';
+    }
+    function clauseBold(label, text) {
+      return '<p style="font-size:11px;color:#374151;margin:0 0 4px;line-height:1.55;"><strong style="color:#111827;">' + label + '</strong>' + text + '</p>';
+    }
+    function clauseItem(letter, text) {
+      return '<p style="font-size:11px;color:#374151;margin:0 0 3px 16px;line-height:1.5;text-indent:-12px;padding-left:12px;"><strong>' + letter + ')</strong> ' + text + '</p>';
+    }
 
     var html = "";
 
-    html += '<div style="text-align:center;margin-bottom:24px;padding-bottom:20px;border-bottom:2px solid #e5e7eb;">';
-    html += '<h1 style="font-size:20px;font-weight:700;color:#111827;letter-spacing:-0.02em;margin:0 0 4px;">CONTRATO DE PRESTACI\u00d3N DE SERVICIOS</h1>';
-    html += '<p style="font-size:12px;color:#6b7280;margin:0;">Mtsprz &mdash; Tecnolog\u00eda y Desarrollo Web</p>';
-    html += '<p style="font-size:11px;color:#9ca3af;margin:8px 0 0;">Fecha: ' + dateStr + " | N\u00b0 Contrato: (se generar\u00e1 al crear)</p>";
-    html += "</div>";
+    // ── HEADER ──
+    html += '<div style="text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #4f46e5;">';
+    html += '<h1 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 2px;">CONTRATO DE PRESTACIÓN DE SERVICIOS</h1>';
+    html += '<p style="font-size:11px;color:#6b7280;margin:0;">Mtsprz — Soluciones Digitales</p>';
+    html += '<p style="font-size:10px;color:#9ca3af;margin:6px 0 0;">Fecha: ' + dateStr + ' | N° Contrato: (se generará al crear)</p>';
+    html += '</div>';
 
-    html += '<div style="margin-bottom:20px;">';
-    html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">1. IDENTIFICACI\u00d3N DE LAS PARTES</h2>';
-    html += '<table style="width:100%;font-size:12px;border-collapse:collapse;">';
-    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;width:120px;vertical-align:top;">PRESTADOR:</td><td style="padding:4px 0;color:#111827;">Mat\u00edas P\u00e9rez Nauto — Mtsprz</td></tr>';
-    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;width:120px;vertical-align:top;">CLIENTE:</td><td style="padding:4px 0;color:#111827;">' + clientName + "</td></tr>";
-    if (clientRut !== "—") html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">RUT:</td><td style="padding:4px 0;color:#111827;">' + clientRut + "</td></tr>";
-    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">EMAIL:</td><td style="padding:4px 0;color:#111827;">' + clientEmail + "</td></tr>";
-    if (clientPhone !== "—") html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">TEL\u00c9FONO:</td><td style="padding:4px 0;color:#111827;">' + clientPhone + "</td></tr>";
-    if (clientAddress !== "—") html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">DIRECCI\u00d3N:</td><td style="padding:4px 0;color:#111827;">' + clientAddress + "</td></tr>";
-    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">TIPO:</td><td style="padding:4px 0;color:#111827;font-weight:600;">' + templateType + "</td></tr>";
-    html += "</table>";
-    html += "</div>";
+    // ── 1. IDENTIFICACIÓN DE LAS PARTES ──
+    html += clauseTitle(0, 'IDENTIFICACIÓN DE LAS PARTES');
+    html += '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:8px;">';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;width:130px;">PRESTADOR:</td><td style="padding:2px 0;color:#111827;">Mtsprz — Soluciones Digitales</td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">RUT PRESTADOR:</td><td style="padding:2px 0;color:#111827;">' + prestadorRut + '</td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">DOMICILIO:</td><td style="padding:2px 0;color:#111827;">Puerto Varas, Región de Los Lagos, Chile</td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CORREO:</td><td style="padding:2px 0;color:#111827;">contacto@mtsprz.org</td></tr>';
+    html += '<tr><td colspan="2" style="padding:4px 0;"></td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CLIENTE:</td><td style="padding:2px 0;color:#111827;">' + clientName + '</td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">RUT:</td><td style="padding:2px 0;color:#111827;">' + clientRut + '</td></tr>';
+    var isCompanyRut = /^[5-9]\d{7,}/.test((clientRut || '').replace(/[.\-]/g, ''));
+    if (!isCompanyRut && clientNationality) html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">NACIONALIDAD:</td><td style="padding:2px 0;color:#111827;">' + clientNationality + '</td></tr>';
+    if (clientProfession) html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">' + (isCompanyRut ? 'GIRO:' : 'PROFESIÓN / GIRO:') + '</td><td style="padding:2px 0;color:#111827;">' + clientProfession + '</td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">DOMICILIO:</td><td style="padding:2px 0;color:#111827;">' + clientAddress + '</td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CORREO:</td><td style="padding:2px 0;color:#111827;">' + clientEmail + '</td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">TELÉFONO:</td><td style="padding:2px 0;color:#111827;">' + clientPhone + '</td></tr>';
+    html += '</table>';
 
-    html += '<div style="margin-bottom:20px;">';
-    html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">2. SERVICIOS Y VALORES</h2>';
-    html += '<table style="width:100%;font-size:12px;border-collapse:collapse;">';
-    html += '<thead><tr style="background:#f9fafb;"><th style="text-align:left;padding:8px 10px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Servicio</th><th style="text-align:right;padding:8px 10px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Valor</th></tr></thead>';
-    html += "<tbody>";
-    for (var i = 0; i < svcs.length; i++) {
-      var s = svcs[i];
-      html += '<tr><td style="padding:8px 10px;border-bottom:1px solid #f3f4f6;color:#111827;font-weight:600;">' + (s.name || "Servicio personalizado") + '</td><td style="padding:8px 10px;border-bottom:1px solid #f3f4f6;color:#374151;text-align:right;font-family:monospace;font-weight:600;">' + fmt(s.price) + "</td></tr>";
-      if (s.description) {
-        html += '<tr><td colspan="2" style="padding:2px 10px 8px 10px;color:#6b7280;font-size:11px;line-height:1.5;border-bottom:1px solid #f3f4f6;">';
-        html += s.description;
-        if (s.deliverables && s.deliverables.length > 0) {
-          html += '<div style="margin-top:6px;font-weight:600;color:#374151;">Entregables:</div><ul style="margin:4px 0 0 14px;padding:0;">';
-          for (var d = 0; d < s.deliverables.length; d++) {
-            html += '<li style="margin-bottom:2px;">' + s.deliverables[d] + "</li>";
-          }
-          html += "</ul>";
+    // ── 2. DECLARACIONES ──
+    html += clauseTitle(1, 'DECLARACIONES');
+    html += clauseText('El PRESTADOR declara: (a) Ser persona natural, con capacidad para contratar y obligarse (Art. 1445 CC). (b) Dedicarse profesionalmente a servicios digitales. (c) Contar con experiencia técnica necesaria.');
+    html += clauseText('El CLIENTE declara: (a) Tener capacidad legal para contratar. (b) Que los datos proporcionados son veraces. (c) Que este contrato tiene naturaleza civil y NO constituye relación laboral.');
+
+    // ── 3. OBJETO DEL CONTRATO ──
+    html += clauseTitle(2, 'OBJETO DEL CONTRATO');
+    html += clauseText('El Prestador se obliga a prestar al Cliente los servicios digitales detallados en la cláusula siguiente, conforme a las especificaciones acordadas.');
+    html += clauseBold('Alcance incluido: ', 'Los servicios contratados se detallan en la cláusula CUARTA. Los entregables, plazos y especificaciones de cada servicio se describen en el Anexo A adjunto, que forma parte integrante de este contrato.');
+    html += clauseBold('Alcance excluido: ', 'Quedan excluidos: (a) servicios no listados; (b) modificaciones no acordadas por escrito; (c) licencias de software de terceros, costos de suscripción o infraestructura tecnológica, salvo que se incluyan expresamente como entregable en el Anexo A del presente contrato.');
+
+    // ── 4. SERVICIOS CONTRATADOS ──
+    html += clauseTitle(3, 'SERVICIOS CONTRATADOS');
+    html += '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:8px;">';
+    html += '<thead><tr style="background:#f9fafb;"><th style="text-align:left;padding:6px 8px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;font-size:10px;">SERVICIO</th><th style="text-align:right;padding:6px 8px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;font-size:10px;">VALOR</th></tr></thead><tbody>';
+    for (var si = 0; si < svcs.length; si++) {
+      var s = svcs[si];
+      html += '<tr><td style="padding:5px 8px;border-bottom:1px solid #f3f4f6;color:#111827;">' + (s.name || 'Servicio') + '</td><td style="padding:5px 8px;border-bottom:1px solid #f3f4f6;color:#374151;text-align:right;font-family:monospace;">' + fmt(s.price) + '</td></tr>';
+    }
+    html += '</tbody>';
+    html += '<tfoot><tr><td style="padding:6px 8px;font-weight:700;color:#111827;border-top:2px solid #e5e7eb;">TOTAL</td><td style="padding:6px 8px;font-weight:700;color:#4f46e5;text-align:right;font-family:monospace;border-top:2px solid #e5e7eb;font-size:13px;">' + fmt(total) + '</td></tr></tfoot>';
+    html += '</table>';
+
+    // ── 5. OBLIGACIONES DEL PRESTADOR ──
+    html += clauseTitle(4, 'OBLIGACIONES DEL PRESTADOR');
+    html += clauseItem('a', 'Ejecutar los servicios con estándar profesional y diligencia (Art. 1547 CC, culpa leve).');
+    html += clauseItem('b', 'Cumplir los plazos pactados (Art. 2009 CC).');
+    html += clauseItem('c', 'Mantener informado al Cliente del estado de avance.');
+    html += clauseItem('d', 'Entregar códigos fuentes, archivos editables y activos digitales. Los avances parciales se pondrán a disposición en entorno de pruebas (staging) o vista previa durante la ejecución para revisión y aprobación progresiva. La entrega definitiva se realizará al momento del pago total, mediante repositorio privado (GitHub/GitLab) o descarga directa, en formatos estándar de la industria.');
+    html += clauseItem('e', 'Emitir boleta electrónica por cada pago (Art. 88 Código Tributario).');
+    html += clauseItem('f', 'No usar información del Cliente fuera del objeto del contrato.');
+
+    // ── 6. OBLIGACIONES DEL CLIENTE ──
+    html += clauseTitle(5, 'OBLIGACIONES DEL CLIENTE');
+    html += clauseItem('a', 'Pagar los honorarios en la forma y plazo estipulados.');
+    html += clauseItem('b', 'Entregar oportunamente información, accesos y credenciales necesarias.');
+    html += clauseItem('c', 'Revisar los entregables en ' + revisionDays + ' días hábiles; el silencio constituirá aprobación tácita.');
+    html += clauseItem('d', 'No exigir conductas de subordinación laboral.');
+    html += clauseItem('e', 'Designar contraparte técnica para coordinación.');
+
+    // ── 7. HONORARIOS Y FORMA DE PAGO ──
+    html += clauseTitle(6, 'HONORARIOS Y FORMA DE PAGO');
+    html += clauseBold('Monto: ', 'El valor total asciende a ' + fmt(total) + ' CLP. El Prestador es persona natural que emite boleta de honorarios, por lo que estos servicios no están afectos a IVA. El valor corresponde al monto bruto de las boletas; la retención legal se descuenta de dicho monto.');
+    var payDetail = paymentMethod === 'contado' ? 'Pago único al contado contra aceptación del contrato.' : paymentMethod === '50_50' ? '50% al inicio y 50% a la entrega conforme.' : paymentMethod === 'hitos' ? (paymentTerms || 'Según hitos acordados.') : (paymentTerms || 'Según lo acordado.');
+    html += clauseBold('Modalidad: ', payDetail);
+    var hasMonthly = svcs.some(function(s) { return s.is_monthly; });
+    if (hasMonthly) {
+      html += clauseBold('Servicios recurrentes: ', 'Los servicios marcados como "(mensual)" en el Anexo A se facturan y pagan por mes adelantado, de forma independiente al pago de los servicios puntuales. El valor indicado corresponde al valor mensual de cada servicio recurrente.');
+    }
+    html += clauseBold('Medio de pago: ', 'Transferencia a cuenta del Prestador indicada en boleta de honorarios.');
+    html += clauseText('Boleta de honorarios: El Prestador emitirá boleta electrónica (Art. 88 CT). El Cliente, en su calidad de contribuyente con contabilidad completa, enterará retención 15,25% en SII, conforme a la tasa vigente a la fecha del presente contrato (Ley 21.133).');
+    html += clauseBold('Mora: ', 'Interés corriente para operaciones reajustables desde la exigibilidad (Art. 1559 CC).');
+
+    // ── 8. PLAZO, VIGENCIA Y TÉRMINO ──
+    html += clauseTitle(7, 'PLAZO, VIGENCIA Y TÉRMINO');
+    html += clauseBold('Duración: ', duration + ' mes(es) desde ' + (startDate || '—') + ' hasta ' + (endDate || '—') + '.');
+    html += clauseBold('Término anticipado: ', 'Por: (a) mutuo acuerdo escrito; (b) incumplimiento grave (Art. 1489 CC); (c) fuerza mayor; (d) aviso con 30 días de anticipación.');
+    html += clauseBold('Efectos del término: ', 'Pago de servicios ejecutados y recibidos conforme + entrega de avances de servicios no concluidos con pago proporcional según avance acreditado + devolución de información confidencial. En caso de desacuerdo sobre el avance, las partes se someterán a mediación.');
+
+    // ── 9. ENTREGABLES Y RECEPCIÓN ──
+    html += clauseTitle(8, 'ENTREGABLES Y RECEPCIÓN');
+    html += clauseText('El Prestador entregará los productos conforme a especificaciones. El Cliente dispone de ' + revisionDays + ' días hábiles para revisar y formular observaciones.');
+    html += clauseText('Correcciones menores (1 ronda) incluidas. Modificaciones sustanciales se rigen por la cláusula de Modificaciones.');
+    html += clauseBold('Aprobación tácita: ', 'Si el Cliente no formula observaciones en ' + revisionDays + ' días hábiles, se entiende recibido conforme.');
+
+    // ── 10. INDEPENDENCIA DEL PRESTADOR (CRÍTICA) ──
+    html += clauseTitle(9, 'INDEPENDENCIA DEL PRESTADOR');
+    html += clauseText('Las partes reconocen que el Prestador actúa como contratista independiente (Arts. 2006-2012 CC). NO existe relación laboral (Código del Trabajo).');
+    html += clauseItem('a', 'Organiza libremente sus métodos, horarios y lugar de trabajo.');
+    html += clauseItem('b', 'Puede prestar servicios a terceros simultáneamente.');
+    html += clauseItem('c', 'Asume el riesgo económico de su actividad.');
+    html += clauseItem('d', 'El Cliente no puede exigir jornada laboral ni subordinación.');
+    html += clauseItem('e', 'Responsable de sus obligaciones tributarias y previsionales (Ley 21.133).');
+
+    // ── 11. PROPIEDAD INTELECTUAL ──
+    html += clauseTitle(10, 'PROPIEDAD INTELECTUAL');
+    html += clauseText('El Prestador cede los derechos patrimoniales sobre códigos fuentes, diseños y activos creados (Ley 17.336).');
+    html += clauseBold('Transferencia efectiva: ', 'Contra el pago total de los honorarios. Mientras no se complete el pago total: (i) el uso de los entregables es licencia precaria y revocable, limitada a revisión y prueba, sin explotación comercial; (ii) los sistemas, automatizaciones o plataformas desarrolladas permanecerán en entorno de pruebas (staging) o acceso restringido, sin uso productivo. Las credenciales de administración y el acceso a entornos productivos se transfieren solo contra el pago total.');
+    html += clauseBold('Derechos morales: ', 'El Prestador los conserva (Art. 14 Ley 17.336).');
+    html += clauseBold('Portafolio: ', 'El Prestador puede usar los trabajos en su portafolio, salvo acuerdo en contrario.');
+
+    // ── 12. CONFIDENCIALIDAD ──
+    html += clauseTitle(11, 'CONFIDENCIALIDAD');
+    html += clauseText('Se considera Información Confidencial toda aquella comercial, técnica o financiera intercambiada entre las partes.');
+    html += clauseItem('a', 'La Parte Receptora mantendrá estricta reserva.');
+    html += clauseItem('b', 'Obligación vigente durante el contrato y 3 años después.');
+    html += clauseItem('c', 'Solo se usará para los fines del contrato.');
+    html += clauseItem('d', 'Excepciones: dominio público, orden judicial.');
+    html += clauseItem('e', 'Devolución o destrucción al término.');
+
+    // ── 13. PROTECCIÓN DE DATOS ──
+    html += clauseTitle(12, 'PROTECCIÓN DE DATOS PERSONALES');
+    html += clauseText('Ambas partes cumplirán la Ley 19.628 sobre Protección de la Vida Privada. Asimismo, tendrán presente lo dispuesto en la Ley 21.719 (publicada el 13-dic-2024), cuya entrada en vigencia está prevista para el 1-dic-2026.');
+    html += clauseItem('a', 'Datos usados solo para ejecución del contrato.');
+    html += clauseItem('b', 'Medidas de seguridad técnicas y organizativas.');
+    html += clauseItem('c', 'Notificar incidentes de seguridad en un plazo máximo de 72 hrs desde que se tome conocimiento, conforme al estándar de la Ley 21.719.');
+    html += clauseItem('d', 'Cuando acceda a bases de datos o contactos del Cliente (ej. integraciones CRM), el Prestador actúa como encargado de tratamiento: trata datos solo bajo instrucciones del Cliente, no los usa para fines propios, y al término del contrato los devuelve o elimina.');
+
+    // ── 14. MODIFICACIONES ──
+    html += clauseTitle(13, 'MODIFICACIONES');
+    html += clauseText('Los cambios al alcance deben solicitarse por escrito (email vale). El Prestador cotizará los servicios adicionales. No ejecutará modificaciones sin aprobación previa.');
+    html += clauseBold('Efecto: ', 'Las modificaciones aprobadas modifican el objeto (Art. 1545 CC).');
+
+    // ── 15. SUBCONTRATACIÓN ──
+    html += clauseTitle(14, 'SUBCONTRATACIÓN');
+    if (subcontracting) {
+      html += clauseText('El Prestador podrá subcontratar parcialmente con autorización del Cliente, respondiendo íntegramente por los subcontratistas.');
+    } else {
+      html += clauseText('El Prestador no podrá subcontratar sin autorización expresa y por escrito del Cliente.');
+    }
+
+    // ── 16. GARANTÍA Y RESPONSABILIDAD ──
+    html += clauseTitle(15, 'GARANTÍA Y RESPONSABILIDAD');
+    html += clauseBold('Período de garantía: ', warrantyDays + ' días corridos desde la entrega conforme.');
+    html += clauseBold('Cobertura: ', 'Defectos de implementación y no conformidad con especificaciones.');
+    html += clauseBold('Exclusiones: ', 'Modificaciones del Cliente, cambios de requerimiento, problemas de infraestructura.');
+    html += clauseBold('Límite: ', 'Responsabilidad total limitada al monto de honorarios pagados. Excluye daños indirectos y lucro cesante. No aplica a dolo o culpa grave (Art. 44 CC).');
+
+    // ── 17. FUERZA MAYOR ──
+    html += clauseTitle(16, 'FUERZA MAYOR');
+    html += clauseText('Ninguna parte será responsable por incumplimiento debido a caso fortuito o fuerza mayor (Arts. 45, 1545 CC).');
+    html += clauseItem('a', 'Causales: desastres naturales, guerra, pandemia, corte de servicios esenciales.');
+    html += clauseItem('b', 'Notificar en 24 hrs.');
+    html += clauseItem('c', 'Obligaciones suspendidas mientras dure la causal.');
+
+    // ── 18. JURISDICCIÓN ──
+    html += clauseTitle(17, 'JURISDICCIÓN Y LEGISLACIÓN APLICABLE');
+    html += clauseText('Se rige por las leyes de la República de Chile. Domicilio: Puerto Varas, Región de Los Lagos. Las partes se someten a sus tribunales ordinarios.');
+    html += clauseBold('Firma electrónica: ', 'La firma electrónica simple utilizada produce efectos jurídicos entre las partes conforme a la Ley 19.799. No cuenta con la presunción de integridad y autoría de la firma electrónica avanzada (certificada); su valor probatorio será apreciado por el tribunal según las reglas generales.');
+
+    // ── ANEXO A: ENTREGABLES Y PLAZOS ──
+    html += '<div style="margin-top:20px;padding-top:16px;border-top:2px solid #e5e7eb;">';
+    html += '<h3 style="font-size:13px;font-weight:700;color:#111827;margin:0 0 8px;">ANEXO A — ENTREGABLES Y PLAZOS</h3>';
+    html += clauseText('El presente anexo forma parte integrante del contrato y detalla los entregables, plazos y criterios de aceptación de cada servicio contratado.');
+    for (var ai = 0; ai < svcs.length; ai++) {
+      var asvc = svcs[ai];
+      var monthlyTag = asvc.is_monthly ? ' <span style="color:#6b7280;font-weight:400;font-size:10px;">(mensual)</span>' : '';
+      html += '<h4 style="font-size:12px;font-weight:600;color:#4f46e5;margin:12px 0 6px;">' + (ai + 1) + '. ' + asvc.name + ' — $' + (asvc.price || 0).toLocaleString('es-CL') + monthlyTag + '</h4>';
+      var plazoInicio = startDate || 'la fecha de inicio';
+      var plazoFin = endDate || 'la fecha de término';
+      if (asvc.is_monthly) {
+        html += clauseBold('Modalidad: ', 'Servicio recurrente mensual. El valor de $' + (asvc.price || 0).toLocaleString('es-CL') + ' corresponde a cada mes de servicio. Se factura y paga mensualmente por adelantado.');
+      } else {
+        html += clauseBold('Plazo de ejecución: ', 'Los entregables se liberarán de forma incremental entre el ' + plazoInicio + ' y el ' + plazoFin + '. Las partes podrán acordar hitos específicos por escrito, los que se entenderán incorporados al presente anexo.');
+      }
+      if (asvc.deliverables && asvc.deliverables.length > 0) {
+        html += '<strong style="font-size:11px;color:#111827;">Entregables:</strong>';
+        html += '<ul style="margin:4px 0 8px;padding-left:20px;font-size:11px;color:#374151;line-height:1.6;">';
+        for (var di = 0; di < asvc.deliverables.length; di++) {
+          html += '<li>' + asvc.deliverables[di] + '</li>';
         }
-        if (s.includes_maintenance) {
-          html += '<div style="margin-top:6px;padding:4px 8px;background:#f0fdf4;border-radius:4px;color:#166534;font-weight:500;display:inline-block;font-size:10px;">Incluye plan de mantenimiento: $' + Number(s.maintenance_price).toLocaleString("es-CL") + "/mes</div>";
-        }
-        html += "</td></tr>";
+        html += '</ul>';
+      } else {
+        html += '<p style="font-size:11px;color:#9ca3af;font-style:italic;margin:2px 0 8px;">Entregables y especificaciones por definir entre las partes. Se entenderán incorporados al presente anexo una vez acordados por escrito.</p>';
+      }
+      html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Criterio de aceptación:</strong> Cada entregable se considerará recibido conforme tras su revisión y aprobación por escrito del Cliente, o transcurrido el plazo de revisión sin observaciones (aprobación tácita).</p>';
+      if (asvc.deliverables && asvc.deliverables.some(function(d) { return d.toLowerCase().indexOf('hosting') !== -1 || d.toLowerCase().indexOf('cdn') !== -1; })) {
+        html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Nota sobre hosting:</strong> El servicio incluye alojamiento web con SSL y CDN por el período indicado en los entregables. Dicho período se contará desde la puesta en producción del sitio (una vez recibido el pago total). Transcurrido el período incluido, la renovación será por cuenta del Cliente. El Prestador no será responsable por caídas imputables al proveedor de infraestructura. El Cliente podrá solicitar migración a un proveedor de su elección. La titularidad del contenido alojado corresponde al Cliente desde el pago total de los honorarios.</p>';
       }
     }
-    html += "</tbody>";
-    html += '<tfoot><tr><td style="padding:10px;font-weight:700;color:#111827;border-top:2px solid #e5e7eb;">TOTAL</td><td style="padding:10px;font-weight:700;color:#4f46e5;text-align:right;font-family:monospace;border-top:2px solid #e5e7eb;font-size:15px;">' + fmt(total) + "</td></tr></tfoot>";
-    html += "</table>";
-    html += "</div>";
+    html += clauseText('Las partes declaran conocer y aceptar el contenido del presente Anexo A, que forma parte integrante del contrato para todos los efectos legales.');
+    html += '</div>';
 
-    html += '<div style="margin-bottom:20px;">';
-    html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">3. CONDICIONES</h2>';
-    html += '<table style="width:100%;font-size:12px;border-collapse:collapse;">';
-    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;width:120px;vertical-align:top;">DURACI\u00d3N:</td><td style="padding:4px 0;color:#111827;">' + duration + " meses</td></tr>";
-    if (startDate) html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">INICIO:</td><td style="padding:4px 0;color:#111827;">' + new Date(startDate + "T12:00:00").toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" }) + "</td></tr>";
-    if (endDate) html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">T\u00c9RMINO:</td><td style="padding:4px 0;color:#111827;">' + new Date(endDate + "T12:00:00").toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" }) + "</td></tr>";
-    if (paymentTerms) html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">FORMA DE PAGO:</td><td style="padding:4px 0;color:#111827;">' + paymentTerms + "</td></tr>";
-    if (selected && selected.value === "jornada_dedicada") html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">JORNADA:</td><td style="padding:4px 0;color:#111827;">' + (schedule || "Por definir") + "</td></tr>";
-    html += "</table>";
-    html += "</div>";
-
-    if (clauses) {
-      html += '<div style="margin-bottom:20px;">';
-      html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">4. CL\u00c1USULAS ESPECIALES</h2>';
-      html += '<p style="font-size:12px;color:#374151;margin:0;line-height:1.6;white-space:pre-wrap;">' + clauses + "</p>";
-      html += "</div>";
+    // ── CLAUSULAS ESPECIALES ──
+    if (specialClauses) {
+      html += clauseTitle(18, 'CLÁUSULAS ESPECIALES ADICIONALES');
+      html += '<p style="font-size:11px;color:#374151;margin:0;line-height:1.6;white-space:pre-wrap;">' + specialClauses + '</p>';
     }
 
-    html += '<div style="margin-top:28px;padding-top:20px;border-top:2px solid #e5e7eb;">';
-    html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 16px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">5. FIRMAS</h2>';
-    html += '<div style="display:flex;justify-content:space-between;gap:24px;">';
-    html += '<div style="flex:1;text-align:center;">';
-    html += '<div style="height:60px;border-bottom:1px solid #9ca3af;margin-bottom:6px;"></div>';
-    html += '<p style="font-size:11px;color:#6b7280;margin:0;">' + clientName + "</p>";
-    html += '<p style="font-size:10px;color:#9ca3af;margin:2px 0 0;">CLIENTE</p>';
-    html += "</div>";
-    html += '<div style="flex:1;text-align:center;">';
-    html += '<div style="height:60px;border-bottom:1px solid #9ca3af;margin-bottom:6px;"></div>';
-    html += '<p style="font-size:11px;color:#6b7280;margin:0;">Mat\u00edas P\u00e9rez Nauto</p>';
-    html += '<p style="font-size:10px;color:#9ca3af;margin:2px 0 0;">PRESTADOR — Mtsprz</p>';
-    html += "</div>";
-    html += "</div>";
-    html += "</div>";
+    // ── 19. FIRMAS ──
+    html += '<div style="margin-top:24px;padding-top:16px;border-top:2px solid #e5e7eb;">';
+    html += '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:0 0 12px;">DÉCIMA NOVENA. — FIRMAS</h3>';
+    html += '<p style="font-size:10px;color:#6b7280;margin:0 0 14px;font-style:italic;">"Las partes firman en señal de aprobación, aceptando todas y cada una de las cláusulas del presente contrato."</p>';
+    html += '<div style="display:flex;justify-content:space-between;gap:20px;">';
+    html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">Mtsprz — Soluciones Digitales</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">PRESTADOR</p></div>';
+    html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">' + clientName + '</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">CLIENTE</p></div>';
+    html += '</div></div>';
 
     document.getElementById("previewDocument").innerHTML = html;
   }
@@ -762,12 +1146,19 @@ import pricing from "../../../data/pricing.json";
       template_type: formData.get("templateType"),
       client_name: formData.get("client_name"),
       client_rut: formData.get("client_rut"),
+      client_nationality: formData.get("client_nationality") || "Chilena",
+      client_profession: formData.get("client_profession"),
       client_email: formData.get("client_email"),
       client_phone: formData.get("client_phone"),
       client_address: formData.get("client_address"),
+      prestador_rut: formData.get("prestador_rut") || undefined,
       services: services,
       total_amount: parseInt(formData.get("total_amount")) || total,
+      payment_method: formData.get("payment_method"),
       payment_terms: formData.get("payment_terms"),
+      warranty_days: parseInt(formData.get("warranty_days")) || 15,
+      revision_days: parseInt(formData.get("revision_days")) || 5,
+      subcontracting_allowed: formData.get("subcontracting_allowed") === "on",
       start_date: formData.get("start_date"),
       end_date: formData.get("end_date"),
       duration_months: parseInt(formData.get("duration_months")) || 1,

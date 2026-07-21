@@ -789,6 +789,53 @@ def export_emails(ctx: Context, rubro: Optional[str], comuna: Optional[str], min
 
 
 # ===================================================================
+# SEND-CAMPAIGN — Envío automatizado de emails vía Resend
+# ===================================================================
+
+@cli.command()
+@click.option("--rubro", default=None, help="Filtrar por rubro")
+@click.option("--comuna", default=None, help="Filtrar por comuna")
+@click.option("--limit", default=10, type=int, help="Máx a enviar (0 = todos)")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Previsualizar sin enviar")
+@click.option("--api-key", default=None, help="Resend API key (default: RESEND_API_KEY env)")
+@click.pass_obj
+def send_campaign(ctx: Context, rubro: Optional[str], comuna: Optional[str],
+                   limit: int, dry_run: bool, api_key: Optional[str]):
+    """Envía campaña de email a prospectos usando Resend API.
+
+    Ejemplos:
+        prospector send-campaign --dry-run                           # previsualizar 10
+        prospector send-campaign --rubro inmobiliaria --dry-run       # solo inmobiliarias
+        prospector send-campaign --limit 5 --send                     # enviar 5 reales
+        prospector send-campaign --rubro abogado --comuna "Puerto Varas" --limit 3
+    """
+    from prospector.outreach.email_campaign import EmailCampaign
+
+    prospects = ctx.db.all()
+
+    # Filtros
+    if rubro:
+        prospects = [p for p in prospects if p.rubro == rubro]
+    if comuna:
+        prospects = [p for p in prospects if p.comuna.lower() == comuna.lower()]
+
+    if dry_run:
+        log.info("🔸 MODO DRY-RUN: no se enviarán correos reales")
+    else:
+        log.info("⚠️  MODO REAL: se enviarán correos")
+        if not dry_run:
+            log.info("   Pulsa Ctrl+C para cancelar en los próximos 5 segundos...")
+            import time
+            time.sleep(5)
+
+    campaign = EmailCampaign(api_key=api_key)
+    result = campaign.run(prospects, rubro=rubro, limit=limit, dry_run=dry_run)
+
+    if dry_run:
+        log.info("Ejecuta sin --dry-run para enviar los correos mostrados.")
+
+
+# ===================================================================
 # MAIN
 # ===================================================================
 
