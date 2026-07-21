@@ -99,8 +99,11 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
   }
 };
 
-export const DELETE: APIRoute = async ({ params, locals }) => {
+export const DELETE: APIRoute = async ({ params, locals, request }) => {
+  console.log("[DELETE] id:", params.id, "user:", locals.user?.role ?? "none", "origin:", request.headers.get("origin"));
+
   if (!locals.user || locals.user.role !== "super_admin") {
+    console.log("[DELETE] auth fail — user:", JSON.stringify(locals.user));
     return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403, headers: JSON_HEADERS });
   }
 
@@ -108,6 +111,7 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
     await initDb();
     const existing = await query("SELECT id FROM contracts WHERE id = $1", [Number(id)]);
+    console.log("[DELETE] SELECT rows:", existing.rows.length, "for id:", id);
     if (existing.rows.length === 0) {
       return new Response(JSON.stringify({ error: "Contrato no encontrado" }), { status: 404, headers: JSON_HEADERS });
     }
@@ -116,6 +120,7 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
     await query("DELETE FROM id_verifications WHERE contract_id = $1", [Number(id)]);
     await query("DELETE FROM contracts WHERE id = $1", [Number(id)]);
 
+    console.log("[DELETE] success id:", id);
     return new Response(JSON.stringify({ success: true }), { status: 200, headers: JSON_HEADERS });
   } catch (err) {
     console.error("[Contracts] Delete error:", err);
