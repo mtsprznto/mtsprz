@@ -11,7 +11,7 @@ export default defineConfig({
   adapter: vercel({
     isr: {
       expiration: 60,
-      exclude: ["/admin", "/admin/*"],
+      exclude: ["/admin", "/admin/**", "/api", "/api/**"],
     },
   }),
   vite: {
