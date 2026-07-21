@@ -1,14 +1,16 @@
 ---
-const { text, as: Tag = "h1", className = "", staggerMs = 0.06 } = Astro.props;
-const chars = text.split("");
+const text = Astro.props.text as string;
+const Tag = (Astro.props.as || "h1") as "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+const className = (Astro.props.className || "") as string;
+const staggerMs = (Astro.props.staggerMs || 0.06) as number;
+const chars: string[] = text.split("");
+const staggerItems: { char: string; delay: number; isSpace: boolean }[] = chars.map(function(char: string, i: number) { return { char, delay: i * staggerMs, isSpace: char === " " }; });
 ---
 
 <Tag class={className}>
-  {chars.map((char, i) => (
-    <span class="stagger-char" style={`animation-delay: ${i * staggerMs}s`}>
-      {char === " " ? "\u00A0" : char}
-    </span>
-  ))}
+  {staggerItems.map(function(item) {
+    return <span class="stagger-char" style={`animation-delay: ${item.delay}s`}>{item.isSpace ? "\u00A0" : item.char}</span>;
+  })}
 </Tag>
 <script is:inline>
 (function() {

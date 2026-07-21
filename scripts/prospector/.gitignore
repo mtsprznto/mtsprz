@@ -1,0 +1,16 @@
+# Virtual environment
+.venv/
+
+# Logs
+logs/*.log
+
+# Data (auto-generated files)
+data/backups/
+data/checkpoints/
+data/exports/
+data/report.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo

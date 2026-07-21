@@ -1,0 +1,375 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+export const prerender = false;
+const { id } = Astro.params;
+---
+
+<AdminLayout title="Detalle Contrato" description="Ver y gestionar contrato">
+  <div id="loading" class="text-center py-16 text-sm text-white/30" data-contract-id={id}>Cargando contrato...</div>
+
+  <div id="contractView" class="hidden">
+    <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
+      <div>
+        <h1 class="font-heading text-2xl font-bold text-white tracking-tight" id="contractTitle">Contrato</h1>
+        <p class="mt-1 text-sm text-white/35 font-body" id="contractSubtitle">Cargando...</p>
+      </div>
+      <div class="flex gap-2">
+        <button id="downloadPdfBtn" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-white/60 border border-white/[0.08] transition-all duration-200 hover:border-white/20 hover:text-white">
+          <svg id="pdfBtnIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span id="pdfBtnText">Descargar PDF</span>
+        </button>
+        <button id="signBtn" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white bg-gradient-to-r from-accent to-violet-500 transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 hidden">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Firmar Contrato
+        </button>
+      </div>
+    </div>
+
+    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-4 flex items-center justify-between gap-3 mb-4">
+      <div class="flex items-center gap-3">
+        <span id="statusBadge"></span>
+        <span id="statusText" class="text-xs text-white/40"></span>
+      </div>
+      <button id="deleteBtn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium text-red-400/50 border border-red-400/10 transition-all duration-200 hover:border-red-400/30 hover:text-red-400">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18 M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        Eliminar
+      </button>
+    </div>
+
+    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4">
+      <div class="flex items-center gap-2.5 mb-4">
+        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-400/10 text-amber-400">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
+        <span class="font-heading text-sm font-semibold text-white tracking-tight">Datos del Cliente</span>
+      </div>
+      <div id="clientInfo" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm"></div>
+    </div>
+
+    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4">
+      <div class="flex items-center gap-2.5 mb-4">
+        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-400/10 text-emerald-400">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </span>
+        <span class="font-heading text-sm font-semibold text-white tracking-tight">Servicios</span>
+      </div>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr>
+            <th class="text-left text-[11px] font-medium text-white/25 uppercase tracking-wider px-4 py-3 border-b border-white/[0.06]">Servicio</th>
+            <th class="text-right text-[11px] font-medium text-white/25 uppercase tracking-wider px-4 py-3 border-b border-white/[0.06]">Valor</th>
+          </tr>
+        </thead>
+        <tbody id="servicesTable"></tbody>
+        <tfoot id="totalFooter"></tfoot>
+      </table>
+    </div>
+
+    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4">
+      <div class="flex items-center gap-2.5 mb-4">
+        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-sky-400/10 text-sky-400">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </span>
+        <span class="font-heading text-sm font-semibold text-white tracking-tight">Condiciones</span>
+      </div>
+      <div id="conditions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm"></div>
+    </div>
+
+    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4">
+      <div class="flex items-center gap-2.5 mb-4">
+        <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-400/10 text-violet-400">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </span>
+        <span class="font-heading text-sm font-semibold text-white tracking-tight">Estado de Firmas</span>
+      </div>
+      <div id="signaturesStatus" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+    </div>
+  </div>
+
+  <div id="deleteModal" class="hidden fixed inset-0 z-[1000] bg-black/80 items-center justify-center p-5">
+    <div class="rounded-xl bg-[#0a0a0b] border border-red-400/10 p-6 w-full" style="max-width:400px;">
+      <div class="text-center">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-red-400/10 flex items-center justify-center">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round"><path d="M3 6h18 M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </div>
+        <h3 class="text-base font-semibold text-white/90 mb-2">Eliminar Contrato</h3>
+        <p class="text-sm text-white/40 mb-1">Esta acci&oacute;n eliminar&aacute; permanentemente el contrato</p>
+        <p id="deleteContractRef" class="text-xs text-white/20 mb-5"></p>
+        <div class="flex gap-3 justify-center">
+          <button onclick="closeDeleteModal()" class="px-4 py-2 rounded-full text-xs font-medium text-white/50 border border-white/[0.08] transition-all duration-200 hover:border-white/20 hover:text-white">Cancelar</button>
+          <button id="confirmDeleteBtn" class="px-5 py-2 rounded-full text-xs font-medium text-white bg-red-500 transition-all duration-200 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed">S&iacute;, Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="signModal" class="hidden fixed inset-0 z-[1000] bg-black/80 items-center justify-center p-5">
+    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 w-full" style="max-width:520px;">
+      <div class="flex items-center justify-between mb-4">
+        <span class="font-heading text-sm font-semibold text-white tracking-tight">Firmar como Prestador</span>
+        <button onclick="closeSignModal()" class="text-white/40 hover:text-white/70 transition-colors text-lg leading-none" style="background:none;border:none;cursor:pointer;">✕</button>
+      </div>
+      <p class="text-xs text-white/40 mb-4">Dibuja tu firma en el recuadro</p>
+      <canvas id="sigCanvas" width="440" height="160" class="w-full h-auto border border-white/[0.06] rounded-xl bg-white cursor-crosshair" style="touch-action:none;"></canvas>
+      <div class="flex gap-2 mt-3 justify-between">
+        <button onclick="clearCanvas()" class="inline-flex items-center px-3.5 py-2 rounded-full text-xs font-medium text-white/50 border border-white/[0.08] transition-all duration-200 hover:border-white/20 hover:text-white">Limpiar</button>
+        <button id="confirmSignatureBtn" class="inline-flex items-center px-5 py-2 rounded-full text-xs font-medium text-white bg-gradient-to-r from-accent to-violet-500 transition-all duration-200 hover:opacity-90">Confirmar Firma</button>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script is:inline>
+  var contractId = Number(document.getElementById("loading").getAttribute("data-contract-id")) || null;
+  if (!contractId) { document.getElementById("loading").textContent = "ID de contrato inv\u00e1lido"; }
+  var contractData = null;
+  var isDrawing = false;
+  var sigCanvas, ctx;
+
+  var statusLabels = {
+    draft: "Borrador", pending: "Pendiente de Firma", client_signed: "Cliente Firm\u00f3 (espera tu firma)",
+    completed: "Completado", cancelled: "Cancelado",
+  };
+
+  var statusColors = {
+    draft: "bg-white/[0.06] text-white/50",
+    pending: "bg-indigo-500/15 text-indigo-400",
+    client_signed: "bg-emerald-500/15 text-emerald-400",
+    completed: "bg-emerald-500/15 text-emerald-400",
+    cancelled: "bg-red-500/15 text-red-400",
+  };
+
+  function statusBadge(status) {
+    var color = statusColors[status] || "";
+    return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium ' + color + '"><span class="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>' + (statusLabels[status] || status) + "</span>";
+  }
+
+  function formatCurrency(n) {
+    return "$" + n.toLocaleString("es-CL");
+  }
+
+  function formatDate(d) {
+    if (!d) return "\u2014";
+    return new Date(d).toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" });
+  }
+
+  async function loadContract() {
+    try {
+      var res = await fetch("/api/contracts/" + contractId);
+      var data = await res.json();
+      if (!data.contract) { document.getElementById("loading").textContent = "Contrato no encontrado"; return; }
+
+      contractData = data.contract;
+      var c = contractData;
+      document.getElementById("loading").classList.add("hidden");
+      document.getElementById("contractView").classList.remove("hidden");
+
+      document.getElementById("contractTitle").textContent = "Contrato " + c.contract_number;
+      document.getElementById("contractSubtitle").textContent = "Creado el " + formatDate(c.created_at);
+
+      document.getElementById("statusBadge").innerHTML = statusBadge(c.status);
+      document.getElementById("statusText").textContent = statusLabels[c.status] || c.status;
+
+      var pdfUrl = "/api/contracts/" + contractId + "/pdf";
+      document.getElementById("downloadPdfBtn").addEventListener("click", async function() {
+        var btn = this;
+        var icon = document.getElementById("pdfBtnIcon");
+        var text = document.getElementById("pdfBtnText");
+        btn.disabled = true;
+        icon.innerHTML = '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>';
+        icon.classList.add("animate-spin");
+        text.textContent = "Generando...";
+        try {
+          var res = await fetch(pdfUrl);
+          if (!res.ok) { alert("Error al generar PDF: " + res.status); return; }
+          var blob = await res.blob();
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = (contractData?.contract_number || "contrato") + ".pdf";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch(e) {
+          alert("Error al descargar PDF");
+        } finally {
+          btn.disabled = false;
+          icon.innerHTML = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>';
+          icon.classList.remove("animate-spin");
+          text.textContent = "Descargar PDF";
+        }
+      });
+
+      document.getElementById("clientInfo").innerHTML =
+        "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Cliente</span><span class='text-sm text-white/80'>" + c.client_name + "</span></div>" +
+        "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>RUT</span><span class='text-sm text-white/80'>" + (c.client_rut || "\u2014") + "</span></div>" +
+        "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Email</span><span class='text-sm text-white/80'>" + c.client_email + "</span></div>" +
+        "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Tel\u00e9fono</span><span class='text-sm text-white/80'>" + (c.client_phone || "\u2014") + "</span></div>" +
+        "<div class='sm:col-span-2'><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Direcci\u00f3n</span><span class='text-sm text-white/80'>" + (c.client_address || "\u2014") + "</span></div>";
+
+      var svcs = typeof c.services === "string" ? JSON.parse(c.services) : c.services;
+      var svcHtml = [];
+      if (svcs) {
+        for (var i = 0; i < svcs.length; i++) {
+          var s = svcs[i];
+          svcHtml.push("<tr class='border-b border-white/[0.04]'>");
+          svcHtml.push("<td class='px-4 py-3 text-sm text-white/70'>" + s.name + "</td>");
+          svcHtml.push("<td class='px-4 py-3 text-sm text-white/80 font-mono text-right'>" + formatCurrency(s.price) + "</td>");
+          svcHtml.push("</tr>");
+        }
+      }
+      document.getElementById("servicesTable").innerHTML = svcHtml.join("");
+
+      document.getElementById("totalFooter").innerHTML =
+        "<tr><td class='px-4 py-3 border-t border-white/[0.06] text-sm font-semibold text-white/60'>Total</td>" +
+        "<td class='px-4 py-3 border-t border-white/[0.06] text-lg font-bold text-accent font-mono text-right'>" + formatCurrency(c.total_amount) + "<\/td><\/tr>";
+
+      document.getElementById("conditions").innerHTML = [
+        "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Duraci\u00f3n</span><span class='text-sm text-white/80'>" + (c.duration_months || "\u2014") + " meses</span></div>",
+        "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Inicio</span><span class='text-sm text-white/80'>" + formatDate(c.start_date) + "</span></div>",
+        "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>T\u00e9rmino</span><span class='text-sm text-white/80'>" + formatDate(c.end_date) + "</span></div>",
+        "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Forma de Pago</span><span class='text-sm text-white/80'>" + (c.payment_terms || "\u2014") + "</span></div>",
+        c.schedule ? "<div class='sm:col-span-2'><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Jornada</span><span class='text-sm text-white/80'>" + c.schedule + "</span></div>" : "",
+        c.special_clauses ? "<div class='sm:col-span-2'><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Cl\u00e1usulas Especiales</span><span class='text-sm text-white/80'>" + c.special_clauses + "</span></div>" : "",
+      ].join("");
+
+      var adminSigned = !!c.admin_signature_data;
+      var clientSigned = !!c.client_signature_data;
+
+      document.getElementById("signaturesStatus").innerHTML =
+        "<div class='rounded-xl p-4 border transition-all' style='background:" + (adminSigned ? "rgba(16,185,129,0.06)" : "rgba(255,255,255,0.02)") + ";border-color:" + (adminSigned ? "rgba(16,185,129,0.15)" : "rgba(255,255,255,0.06)") + ";'>" +
+          "<div class='text-sm font-semibold' style='color:" + (adminSigned ? "#10b981" : "rgba(250,250,250,0.5)") + ";margin-bottom:4px;'>" +
+            (adminSigned ? "\u2713 Firmado por Prestador" : "\u25cb Pendiente \u2014 Prestador") +
+          "</div>" +
+          (adminSigned ? "<div class='text-xs text-white/35'>" + new Date(c.admin_signed_at).toLocaleString("es-CL") + "</div>" : "") +
+        "</div>" +
+        "<div class='rounded-xl p-4 border transition-all' style='background:" + (clientSigned ? "rgba(16,185,129,0.06)" : "rgba(255,255,255,0.02)") + ";border-color:" + (clientSigned ? "rgba(16,185,129,0.15)" : "rgba(255,255,255,0.06)") + ";'>" +
+          "<div class='text-sm font-semibold' style='color:" + (clientSigned ? "#10b981" : "rgba(250,250,250,0.5)") + ";margin-bottom:4px;'>" +
+            (clientSigned ? "\u2713 Firmado por Cliente" : "\u25cb Pendiente \u2014 Cliente") +
+          "</div>" +
+          (clientSigned ? "<div class='text-xs text-white-35'>" + new Date(c.client_signed_at).toLocaleString("es-CL") + "</div>" : "") +
+        "</div>";
+
+      if (!adminSigned) {
+        document.getElementById("signBtn").classList.remove("hidden");
+      }
+    } catch(e) {
+      document.getElementById("loading").textContent = "Error al cargar: " + e.message;
+    }
+  }
+
+  document.getElementById("signBtn").addEventListener("click", function() {
+    document.getElementById("signModal").classList.remove("hidden");
+    document.getElementById("signModal").classList.add("flex");
+    initCanvas();
+  });
+
+  function closeSignModal() {
+    document.getElementById("signModal").classList.add("hidden");
+    document.getElementById("signModal").classList.remove("flex");
+  }
+
+  function closeDeleteModal() {
+    document.getElementById("deleteModal").classList.add("hidden");
+    document.getElementById("deleteModal").classList.remove("flex");
+  }
+
+  document.getElementById("deleteBtn").addEventListener("click", function() {
+    document.getElementById("deleteContractRef").textContent = contractData ? contractData.contract_number : "";
+    document.getElementById("deleteModal").classList.remove("hidden");
+    document.getElementById("deleteModal").classList.add("flex");
+  });
+
+  document.getElementById("confirmDeleteBtn").addEventListener("click", async function() {
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = "Eliminando...";
+    try {
+      var res = await fetch("/api/contracts/" + contractId, { method: "DELETE" });
+      if (res.ok) {
+        window.location.href = "/admin/contratos";
+      } else {
+        var data = await res.json();
+        alert("Error: " + (data.error || "No se pudo eliminar"));
+        btn.disabled = false;
+        btn.textContent = "S\u00ed, Eliminar";
+      }
+    } catch(e) {
+      alert("Error de conexi\u00f3n");
+      btn.disabled = false;
+      btn.textContent = "S\u00ed, Eliminar";
+    }
+  });
+
+  function initCanvas() {
+    sigCanvas = document.getElementById("sigCanvas");
+    ctx = sigCanvas.getContext("2d");
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, sigCanvas.width, sigCanvas.height);
+
+    sigCanvas.onpointerdown = function(e) {
+      isDrawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    };
+    sigCanvas.onpointermove = function(e) {
+      if (!isDrawing) return;
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+    };
+    sigCanvas.onpointerup = function() { isDrawing = false; };
+    sigCanvas.onpointerleave = function() { isDrawing = false; };
+  }
+
+  function clearCanvas() {
+    if (!ctx) return;
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, sigCanvas.width, sigCanvas.height);
+  }
+
+  document.getElementById("confirmSignatureBtn").addEventListener("click", async function() {
+    if (!ctx) return;
+    var dataUrl = sigCanvas.toDataURL("image/png");
+
+    var imageData = ctx.getImageData(0, 0, sigCanvas.width, sigCanvas.height).data;
+    var empty = true;
+    for (var i = 0; i < imageData.length; i += 4) {
+      if (imageData[i] !== 255) { empty = false; break; }
+    }
+    if (empty) { alert("Dibuja tu firma primero"); return; }
+
+    var btn = document.getElementById("confirmSignatureBtn");
+    btn.disabled = true;
+    btn.textContent = "Firmando...";
+
+    try {
+      var res = await fetch("/api/contracts/" + contractId + "/sign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ signature_data: dataUrl }),
+      });
+
+      var data = await res.json();
+      if (!res.ok) {
+        alert("Error: " + (data.error || "No se pudo firmar"));
+        btn.disabled = false;
+        btn.textContent = "Confirmar Firma";
+        return;
+      }
+
+      closeSignModal();
+      await loadContract();
+    } catch(e) {
+      alert("Error de conexi\u00f3n");
+      btn.disabled = false;
+      btn.textContent = "Confirmar Firma";
+    }
+  });
+
+  loadContract();
+</script>

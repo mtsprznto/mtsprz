@@ -10,3 +10,8 @@ thoughts/
 AGENTS.md
 GBP-ASSETS.md
 GBP-IMAGE-PROMPTS.md
+.vscode/*
+CLAUDE.md
+scripts/prospector/.venv/
+scripts/prospector/__pycache__/
+.claude/

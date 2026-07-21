@@ -1,0 +1,280 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+export const prerender = false;
+const { id } = Astro.params;
+---
+
+<BaseLayout title="Contrato" description="Revisar y firmar contrato">
+  <main class="min-h-screen bg-[#010101] px-4 py-8">
+    <div class="mx-auto max-w-4xl">
+      <div id="loadingSign" style="text-align:center;padding:64px;color:rgba(250,250,250,0.3);">Cargando contrato...</div>
+
+      <div id="signContractView" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h1 id="signContractTitle" class="text-2xl font-heading font-bold text-white tracking-[-1px]">Contrato</h1>
+            <p id="signContractStatus" class="text-sm text-white/40 font-body mt-1"></p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <a id="signDownloadBtn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9999px;font-size:12px;color:rgba(250,250,250,0.7);text-decoration:none;border:1px solid rgba(255,255,255,0.1);">Descargar PDF</a>
+            <a href="/contratos" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9999px;font-size:12px;color:rgba(250,250,250,0.5);text-decoration:none;">← Volver</a>
+          </div>
+        </div>
+
+        <div id="signContractContent" class="liquid-glass" style="border-radius:1.375rem;padding:32px;margin-bottom:24px;">
+        </div>
+
+        <div id="signingArea" style="display:none;">
+          <div class="liquid-glass" style="border-radius:1.375rem;padding:32px;margin-bottom:16px;">
+            <h2 style="font-size:18px;font-weight:700;color:#fafafa;margin-bottom:8px;">Firma Electrónica</h2>
+            <p style="font-size:13px;color:rgba(250,250,250,0.5);margin-bottom:20px;">Dibuja tu firma en el recuadro usando el mouse o tu dedo (si estás en móvil).</p>
+            <canvas id="clientSigCanvas" width="600" height="180" style="width:100%;height:auto;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:#fff;cursor:crosshair;touch-action:none;"></canvas>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+              <button onclick="clearClientSig()" style="padding:8px 16px;border-radius:9999px;font-size:12px;color:rgba(250,250,250,0.5);border:1px solid rgba(255,255,255,0.1);background:transparent;cursor:pointer;">Limpiar</button>
+            </div>
+          </div>
+
+          <div class="liquid-glass" style="border-radius:1.375rem;padding:32px;margin-bottom:16px;">
+            <h2 style="font-size:18px;font-weight:700;color:#fafafa;margin-bottom:8px;">Verificación de Identidad</h2>
+            <p style="font-size:13px;color:rgba(250,250,250,0.5);margin-bottom:20px;">Sube fotos de tu cédula de identidad para verificar tu identidad.</p>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+              <div>
+                <label style="font-size:11px;color:rgba(250,250,250,0.4);display:block;margin-bottom:6px;">Cédula Frontal</label>
+                <div style="border:1px dashed rgba(255,255,255,0.1);border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:rgba(255,255,255,0.02);" onclick="document.getElementById('idFrontInput').click()">
+                  <input id="idFrontInput" type="file" accept="image/*" capture="environment" style="display:none;" onchange="previewImage(this, 'idFrontPreview')" />
+                  <div id="idFrontPreview" style="font-size:12px;color:rgba(250,250,250,0.3);">Tocar para subir</div>
+                </div>
+              </div>
+              <div>
+                <label style="font-size:11px;color:rgba(250,250,250,0.4);display:block;margin-bottom:6px;">Cédula Trasera</label>
+                <div style="border:1px dashed rgba(255,255,255,0.1);border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:rgba(255,255,255,0.02);" onclick="document.getElementById('idBackInput').click()">
+                  <input id="idBackInput" type="file" accept="image/*" capture="environment" style="display:none;" onchange="previewImage(this, 'idBackPreview')" />
+                  <div id="idBackPreview" style="font-size:12px;color:rgba(250,250,250,0.3);">Tocar para subir</div>
+                </div>
+              </div>
+              <div>
+                <label style="font-size:11px;color:rgba(250,250,250,0.4);display:block;margin-bottom:6px;">Selfie</label>
+                <div id="selfieCapture" style="border:1px dashed rgba(255,255,255,0.1);border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:rgba(255,255,255,0.02);" onclick="captureSelfie()">
+                  <div id="selfiePreview" style="font-size:12px;color:rgba(250,250,250,0.3);">Tocar para selfie</div>
+                </div>
+                <video id="selfieVideo" style="display:none;width:100%;border-radius:12px;" autoplay playsinline></video>
+                <canvas id="selfieCanvas" style="display:none;"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <button id="submitSignatureBtn" style="width:100%;padding:14px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;border:none;cursor:pointer;background:linear-gradient(135deg,#6366f1,#8b5cf6);transition:opacity 0.2s;" onclick="submitClientSignature()">
+            Firmar Contrato
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  var contractId = {id};
+  var contractData = null;
+  var isClientDrawing = false;
+  var clientCtx = null;
+  var idFrontData = "", idBackData = "", selfieData = "";
+  var selfieStream = null;
+
+  function formatCurrency(n) {
+    return "$" + n.toLocaleString("es-CL");
+  }
+
+  function formatDate(d) {
+    if (!d) return "\u2014";
+    return new Date(d).toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" });
+  }
+
+  async function loadContract() {
+    try {
+      var res = await fetch("/api/contracts/" + contractId);
+      var data = await res.json();
+      if (!data.contract) {
+        document.getElementById("loadingSign").innerHTML = '<p style="color:#ef4444;">Contrato no encontrado</p>';
+        return;
+      }
+
+      contractData = data.contract;
+      var c = contractData;
+      document.getElementById("loadingSign").style.display = "none";
+      document.getElementById("signContractView").style.display = "block";
+
+      document.getElementById("signContractTitle").textContent = "Contrato " + c.contract_number;
+      var statusLabels = {
+        draft: "Borrador", pending: "Pendiente de tu firma", client_signed: "Firmado por ti, esperando firma de Mtsprz",
+        completed: "\u2713 Completado \u2014 Este contrato est\u00e1 totalmente firmado", cancelled: "Cancelado",
+      };
+      document.getElementById("signContractStatus").textContent = statusLabels[c.status] || c.status;
+      document.getElementById("signDownloadBtn").href = "/api/contracts/" + contractId + "/pdf";
+
+      var svcs = typeof c.services === "string" ? JSON.parse(c.services) : (c.services || []);
+
+      var servicesHtml = svcs.map(function(s) {
+        return '<tr><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;color:rgba(250,250,250,0.7);">' + s.name + '</td><td style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;font-family:monospace;color:#6366f1;text-align:right;">' + formatCurrency(s.price) + '</td></tr>';
+      }).join("");
+
+      var scheduleHtml = c.schedule ? '<p style="color:rgba(250,250,250,0.6);font-size:13px;margin-bottom:12px;"><strong style="color:#fafafa;">Jornada:</strong> ' + c.schedule + '</p>' : "";
+
+      document.getElementById("signContractContent").innerHTML =
+        '<div style="text-align:center;margin-bottom:24px;">' +
+          '<div style="font-size:20px;font-weight:700;color:#6366f1;font-family:var(--font-heading);">CONTRATO DE PRESTACI\u00d3N DE SERVICIOS</div>' +
+          '<div style="font-size:13px;color:rgba(250,250,250,0.3);font-family:monospace;margin-top:4px;">N\u00b0 ' + c.contract_number + '</div>' +
+        '</div>' +
+        '<div style="margin-bottom:20px;">' +
+          '<div style="font-size:11px;font-weight:600;color:#6366f1;text-transform:uppercase;margin-bottom:8px;">Identificaci\u00f3n de las Partes</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:13px;">' +
+            '<div style="color:rgba(250,250,250,0.4);">Prestador:</div><div style="color:rgba(250,250,250,0.8);">Mtsprz - Soluciones Digitales</div>' +
+            '<div style="color:rgba(250,250,250,0.4);">Cliente:</div><div style="color:rgba(250,250,250,0.8);">' + c.client_name + '</div>' +
+            (c.client_rut ? '<div style="color:rgba(250,250,250,0.4);">RUT:</div><div style="color:rgba(250,250,250,0.8);">' + c.client_rut + '</div>' : "") +
+          '</div>' +
+        '</div>' +
+        '<div style="margin-bottom:20px;">' +
+          '<div style="font-size:11px;font-weight:600;color:#6366f1;text-transform:uppercase;margin-bottom:8px;">Servicios Contratados</div>' +
+          '<table style="width:100%;">' + servicesHtml + '</table>' +
+          '<div style="text-align:right;margin-top:8px;font-size:15px;font-weight:700;color:#6366f1;font-family:monospace;">Total: ' + formatCurrency(c.total_amount) + '</div>' +
+        '</div>' +
+        '<div style="margin-bottom:20px;">' +
+          '<div style="font-size:11px;font-weight:600;color:#6366f1;text-transform:uppercase;margin-bottom:8px;">Condiciones</div>' +
+          '<p style="color:rgba(250,250,250,0.6);font-size:13px;margin-bottom:4px;"><strong style="color:#fafafa;">Duraci\u00f3n:</strong> ' + (c.duration_months || "\u2014") + ' meses</p>' +
+          '<p style="color:rgba(250,250,250,0.6);font-size:13px;margin-bottom:4px;"><strong style="color:#fafafa;">Inicio:</strong> ' + formatDate(c.start_date) + '</p>' +
+          '<p style="color:rgba(250,250,250,0.6);font-size:13px;margin-bottom:4px;"><strong style="color:#fafafa;">T\u00e9rmino:</strong> ' + formatDate(c.end_date) + '</p>' +
+          '<p style="color:rgba(250,250,250,0.6);font-size:13px;margin-bottom:4px;"><strong style="color:#fafafa;">Forma de Pago:</strong> ' + (c.payment_terms || "\u2014") + '</p>' +
+          scheduleHtml +
+          (c.special_clauses ? '<p style="color:rgba(250,250,250,0.6);font-size:13px;margin-top:12px;"><strong style="color:#fafafa;">Cl\u00e1usulas Especiales:</strong><br>' + c.special_clauses + '</p>' : "") +
+        '</div>' +
+        '<div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">' +
+          '<p style="font-size:11px;color:rgba(250,250,250,0.3);">Al firmar este documento, aceptas los t\u00e9rminos y condiciones descritos en este contrato de prestaci\u00f3n de servicios, de conformidad con la legislaci\u00f3n chilena vigente.</p>' +
+        '</div>';
+
+      if (c.status === "pending" || c.status === "draft") {
+        document.getElementById("signingArea").style.display = "block";
+        initClientCanvas();
+      }
+    } catch(e) {
+      document.getElementById("loadingSign").innerHTML = '<p style="color:#ef4444;">Error al cargar contrato</p>';
+    }
+  }
+
+  function initClientCanvas() {
+    var canvas = document.getElementById("clientSigCanvas");
+    clientCtx = canvas.getContext("2d");
+    clientCtx.strokeStyle = "#000";
+    clientCtx.lineWidth = 2.5;
+    clientCtx.lineCap = "round";
+    clientCtx.lineJoin = "round";
+    clientCtx.fillStyle = "#fff";
+    clientCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+    canvas.onpointerdown = function(e) { isClientDrawing = true; clientCtx.beginPath(); clientCtx.moveTo(e.offsetX, e.offsetY); };
+    canvas.onpointermove = function(e) { if (!isClientDrawing) return; clientCtx.lineTo(e.offsetX, e.offsetY); clientCtx.stroke(); };
+    canvas.onpointerup = function() { isClientDrawing = false; };
+    canvas.onpointerleave = function() { isClientDrawing = false; };
+  }
+
+  function clearClientSig() {
+    var canvas = document.getElementById("clientSigCanvas");
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function previewImage(input, previewId) {
+    var file = input.files ? input.files[0] : null;
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var dataUrl = e.target.result;
+      var preview = document.getElementById(previewId);
+      if (preview) {
+        preview.innerHTML = '<img src="' + dataUrl + '" style="max-width:100%;max-height:80px;border-radius:8px;" />';
+      }
+      if (previewId === "idFrontPreview") idFrontData = dataUrl;
+      if (previewId === "idBackPreview") idBackData = dataUrl;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function captureSelfie() {
+    var video = document.getElementById("selfieVideo");
+    var captureDiv = document.getElementById("selfieCapture");
+    var preview = document.getElementById("selfiePreview");
+
+    captureDiv.style.display = "none";
+    video.style.display = "block";
+
+    try {
+      selfieStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: 640, height: 480 } });
+      video.srcObject = selfieStream;
+
+      await new Promise(function(r) { video.onloadedmetadata = r; });
+
+      var canvas = document.getElementById("selfieCanvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0);
+      selfieData = canvas.toDataURL("image/jpeg", 0.8);
+
+      video.style.display = "none";
+      captureDiv.style.display = "block";
+      preview.innerHTML = '<img src="' + selfieData + '" style="max-width:100%;max-height:80px;border-radius:8px;" />';
+
+      selfieStream.getTracks().forEach(function(t) { t.stop(); });
+      selfieStream = null;
+    } catch(e) {
+      captureDiv.style.display = "block";
+      preview.textContent = "No se pudo acceder a la c\u00e1mara. Puedes omitir este paso.";
+    }
+  }
+
+  async function submitClientSignature() {
+    if (!clientCtx) return;
+    var signatureData = document.getElementById("clientSigCanvas").toDataURL("image/png");
+    var imageData = clientCtx.getImageData(0, 0, 600, 180).data;
+    var empty = true;
+    for (var i = 0; i < imageData.length; i++) {
+      if (imageData[i] !== 255) { empty = false; break; }
+    }
+    if (empty) { alert("Debes dibujar tu firma primero"); return; }
+
+    var btn = document.getElementById("submitSignatureBtn");
+    btn.disabled = true;
+    btn.textContent = "Firmando...";
+
+    try {
+      var res = await fetch("/api/contracts/" + contractId + "/sign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          signature_data: signatureData,
+          id_front_data: idFrontData || undefined,
+          id_back_data: idBackData || undefined,
+          selfie_data: selfieData || undefined,
+        }),
+      });
+
+      var data = await res.json();
+      if (!res.ok) {
+        alert("Error: " + (data.error || "No se pudo firmar"));
+        btn.disabled = false;
+        btn.textContent = "Firmar Contrato";
+        return;
+      }
+
+      document.getElementById("signingArea").style.display = "none";
+      document.getElementById("signContractStatus").textContent = "\u2713 Firma recibida. Espera la confirmaci\u00f3n de Mtsprz.";
+      btn.textContent = "\u2713 Contrato Firmado Exitosamente";
+    } catch(e) {
+      alert("Error de conexi\u00f3n. Intenta de nuevo.");
+      btn.disabled = false;
+      btn.textContent = "Firmar Contrato";
+    }
+  }
+
+  loadContract();
+</script>

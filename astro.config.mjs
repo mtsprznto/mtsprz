@@ -7,8 +7,12 @@ import vercel from "@astrojs/vercel";
 export default defineConfig({
   site: "https://mtsprz.org",
   integrations: [mdx(), sitemap()],
-  output: "static",
-  adapter: vercel(),
+  output: "server",
+  adapter: vercel({
+    isr: {
+      expiration: 60,
+    },
+  }),
   vite: {
     plugins: [tailwindcss()],
   },

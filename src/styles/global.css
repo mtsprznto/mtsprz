@@ -73,6 +73,15 @@ code, pre, kbd, samp {
   font-family: var(--font-alt);
 }
 
+input, select, textarea {
+  color-scheme: dark;
+}
+
+select option {
+  background-color: #141416;
+  color: #fafafa;
+}
+
 ::selection {
   background-color: var(--color-accent);
   color: white;

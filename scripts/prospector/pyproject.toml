@@ -1,0 +1,40 @@
+[project]
+name = "prospector"
+version = "0.1.0"
+description = "Sistema modular de prospección y base de datos de prospectos para Mtsprz — Región de Los Lagos, Chile"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.1",
+    "httpx>=0.27",
+    "playwright>=1.48",
+    "tomli>=2.0",
+    "pydantic>=2.0",
+    "thefuzz>=0.22",
+    "python-Levenshtein>=0.26",
+    "rich>=13.0",
+    "beautifulsoup4>=4.15.0",
+    "lxml>=6.1.1",
+]
+
+[project.scripts]
+prospector = "prospector.main:cli"
+
+[build-system]
+requires = ["uv_build>=0.11.29,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.prospector]
+data_dir = "data"
+log_dir = "logs"
+default_region = "Los Lagos"
+
+[tool.prospector.scraping]
+delay = 2.0
+timeout = 30
+max_retries = 3
+
+[tool.prospector.logging]
+level = "INFO"
+max_size_mb = 10
+backup_count = 5

@@ -10,16 +10,20 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "sync": "astro sync"
+    "sync": "astro sync",
+    "migrate": "node scripts/migrate.mjs"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.9",
     "@astrojs/mdx": "^7.0.0",
     "@astrojs/sitemap": "^3.7.0",
     "@astrojs/vercel": "^11.0.3",
     "@lucide/astro": "^1.25.0",
+    "@neondatabase/serverless": "^1.1.0",
     "@rolldown/binding-linux-x64-gnu": "^1.2.0",
     "@tailwindcss/vite": "^4.1.0",
     "astro": "^7.1.0",
+    "pdf-lib": "^1.17.1",
     "resend": "^6.17.2",
     "tailwindcss": "^4.1.0"
   },

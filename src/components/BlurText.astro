@@ -1,13 +1,16 @@
 ---
-const { text, as: Tag = "h1", className = "" } = Astro.props;
-const words = text.split(" ");
+const text = Astro.props.text as string;
+const Tag = (Astro.props.as || "h1") as "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+const className = (Astro.props.className || "") as string;
+const words: string[] = text.split(" ");
 const id = `bt-${Math.random().toString(36).slice(2, 8)}`;
+const blurItems: { word: string; delay: number; space: string }[] = words.map(function(word: string, i: number) { return { word, delay: i * 0.1, space: i < words.length - 1 ? " " : "" }; });
 ---
 
 <Tag class={className} id={id}>
-  {words.map((word, i) => (
-    <span class="blur-word" style={`animation-delay: ${i * 0.1}s`}>{word}{i < words.length - 1 ? ' ' : ''}</span>
-  ))}
+  {blurItems.map(function(item) {
+    return <span class="blur-word" style={`animation-delay: ${item.delay}s`}>{item.word}{item.space}</span>;
+  })}
 </Tag>
 <script data-id={id} is:inline>
 (function() {

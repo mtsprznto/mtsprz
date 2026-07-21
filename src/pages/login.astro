@@ -1,0 +1,99 @@
+---
+export const prerender = true;
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const redirect = Astro.url.searchParams.get("redirect") || "/contratos";
+---
+
+<BaseLayout title="Iniciar Sesión — Mtsprz" description="Accede a tu portal de contratos">
+  <main class="min-h-screen bg-[#010101] flex items-center justify-center px-4">
+    <div class="w-full max-w-md">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-heading font-bold text-white tracking-[-1px]">MTSPRZ</h1>
+        <p class="text-white/40 font-body text-sm mt-2">Portal de Contratos</p>
+      </div>
+
+      <div class="liquid-glass rounded-[1.375rem] p-8">
+        <form id="loginForm" class="space-y-4">
+          <input type="hidden" name="redirect" value={redirect} />
+
+          <div>
+            <label for="email" class="block text-xs font-medium text-white/50 font-body mb-1.5 tracking-wide uppercase">Email</label>
+            <input
+              id="email" name="email" type="email" required
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 font-body outline-none focus:border-[#6366f1]/50 transition-colors"
+              placeholder="tu@correo.cl"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="block text-xs font-medium text-white/50 font-body mb-1.5 tracking-wide uppercase">Contraseña</label>
+            <input
+              id="password" name="password" type="password" required
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 font-body outline-none focus:border-[#6366f1]/50 transition-colors"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <div id="errorMsg" class="text-red-400 text-xs font-body hidden"></div>
+
+          <button
+            type="submit"
+            class="w-full rounded-xl px-4 py-3 text-sm font-medium text-white transition-all duration-300"
+            style="background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+          >
+            Iniciar Sesión
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const errorMsg = document.getElementById("errorMsg");
+    const btn = form.querySelector("button");
+
+    btn.disabled = true;
+    btn.textContent = "Ingresando...";
+    errorMsg.classList.add("hidden");
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorMsg.textContent = data.error || "Error al iniciar sesión";
+        errorMsg.classList.remove("hidden");
+        btn.disabled = false;
+        btn.textContent = "Iniciar Sesión";
+        return;
+      }
+
+      const redirect = formData.get("redirect") || "/contratos";
+      if (data.user?.role === "super_admin") {
+        window.location.href = "/admin/contratos";
+      } else {
+        window.location.href = redirect;
+      }
+    } catch {
+      errorMsg.textContent = "Error de conexión";
+      errorMsg.classList.remove("hidden");
+      btn.disabled = false;
+      btn.textContent = "Iniciar Sesión";
+    }
+  });
+</script>

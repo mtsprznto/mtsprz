@@ -1,0 +1,128 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+export const prerender = false;
+---
+
+<AdminLayout title="Nuevo Servicio — Admin Mtsprz">
+  <div class="mb-6">
+    <a href="/admin/servicios" class="inline-flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 transition-colors mb-3">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5 M12 19l-7-7 7-7"/></svg>
+      Volver a Servicios
+    </a>
+    <h1 class="font-heading text-2xl font-bold text-white tracking-tight">Nuevo Servicio</h1>
+    <p class="text-sm text-white/30 mt-0.5">Define un nuevo servicio para incluir en contratos</p>
+  </div>
+
+  <form id="serviceForm" class="max-w-3xl">
+    <div class="rounded-xl border border-white/[0.06] bg-[#0a0a0b] p-5 mb-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="sm:col-span-2">
+          <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Slug <span class="text-red-400">*</span></label>
+          <input name="slug" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-mono" placeholder="mi-servicio" maxlength="100" required />
+          <p class="text-[10px] text-white/25 mt-1">Identificador único para la URL. Sin espacios, usa guiones.</p>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Nombre <span class="text-red-400">*</span></label>
+          <input name="name" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Landing Page Profesional" maxlength="255" required />
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Categoría</label>
+          <input name="category" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Desarrollo Web" maxlength="100" />
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Precio CLP <span class="text-red-400">*</span></label>
+          <input name="price" type="number" min="0" max="2147483647" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-mono" placeholder="350000" required />
+        </div>
+        <div>
+          <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Precio Promocional</label>
+          <input name="promo_price" type="number" min="0" max="2147483647" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-mono" placeholder="290000" />
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Descripción Detallada</label>
+        <textarea name="description" rows="5" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body resize-y" placeholder="Describe en detalle qué incluye este servicio..."></textarea>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Entregables (uno por línea)</label>
+        <textarea name="deliverables" rows="4" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body resize-y" placeholder="Sesión de discovery&#10;1 propuesta de diseño&#10;Landing page responsive&#10;SEO básico"></textarea>
+      </div>
+    </div>
+
+    <div class="rounded-xl border border-white/[0.06] bg-[#0a0a0b] p-5 mb-4">
+      <h2 class="font-heading text-sm font-semibold text-white tracking-tight mb-4">Mantenimiento</h2>
+      <div class="flex items-center gap-3 mb-4">
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" name="includes_maintenance" class="sr-only peer" />
+          <div class="w-9 h-5 bg-white/[0.08] rounded-full peer peer-checked:bg-accent/50 transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+        </label>
+        <span class="text-sm text-white/60">Incluye plan de mantenimiento recomendado</span>
+      </div>
+      <div id="maintenanceFields" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Precio Mantenimiento (CLP/mes)</label>
+          <input name="maintenance_price" type="number" min="0" max="2147483647" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-mono" placeholder="45000" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Descripción Mantenimiento</label>
+          <textarea name="maintenance_description" rows="3" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body resize-y" placeholder="Hosting, SSL, monitoreo 24/7, backups semanales..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 pt-2">
+      <a href="/admin/servicios" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white/50 border border-white/[0.1] transition-all duration-200 hover:border-white/20 hover:text-white/70">Cancelar</a>
+      <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium text-white bg-gradient-to-r from-accent to-violet-500 transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg>
+        Crear Servicio
+      </button>
+    </div>
+  </form>
+</AdminLayout>
+
+<script is:inline>
+  document.querySelector("[name='includes_maintenance']").addEventListener("change", function() {
+    document.getElementById("maintenanceFields").classList.toggle("hidden", !this.checked);
+  });
+
+  document.getElementById("serviceForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    var form = this;
+    var data = new FormData(form);
+    var deliverables = (data.get("deliverables") || "").split("\n").map(function(s) { return s.trim(); }).filter(Boolean);
+
+    var body = {
+      slug: data.get("slug"),
+      name: data.get("name"),
+      description: data.get("description"),
+      price: parseInt(data.get("price")) || 0,
+      promo_price: data.get("promo_price") ? parseInt(data.get("promo_price")) : null,
+      category: data.get("category"),
+      deliverable: deliverables,
+      includes_maintenance: data.has("includes_maintenance"),
+      maintenance_price: data.has("includes_maintenance") ? (parseInt(data.get("maintenance_price")) || 0) : 0,
+      maintenance_description: data.has("includes_maintenance") ? data.get("maintenance_description") : null,
+    };
+
+    var btn = form.querySelector("button[type='submit']");
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Creando...';
+
+    try {
+      var res = await fetch("/api/services", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      var json = await res.json();
+      if (res.ok) {
+        window.location.href = "/admin/servicios/" + json.service.slug;
+      } else {
+        alert("Error: " + (json.error || "Desconocido"));
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> Crear Servicio';
+      }
+    } catch (err) {
+      alert("Error de red: " + err.message);
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg> Crear Servicio';
+    }
+  });
+</script>

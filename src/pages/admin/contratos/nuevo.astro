@@ -1,0 +1,798 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+import pricing from "../../../data/pricing.json";
+---
+
+<AdminLayout title="Nuevo Contrato" description="Crear nuevo contrato">
+  <div class="mb-6">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <h1 class="font-heading text-2xl font-bold text-white tracking-tight">Nuevo Contrato</h1>
+        <p class="mt-1 text-sm text-white/35 font-body">Completa los datos para generar el contrato</p>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs text-white/25 font-medium">
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-accent"></span> paso 1</span>
+        <span class="text-white/10">—</span>
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-white/20"></span> paso 2</span>
+        <span class="text-white/10">—</span>
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-white/20"></span> paso 3</span>
+        <span class="text-white/10">—</span>
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-white/20"></span> paso 4</span>
+      </div>
+    </div>
+  </div>
+
+  <form id="contractForm">
+    <div class="lg:grid lg:grid-cols-5 lg:gap-6">
+      <div class="lg:col-span-3">
+
+        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="1">
+          <div class="flex items-center gap-2.5 mb-5">
+            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-accent/10 text-accent">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </span>
+            <div>
+              <span class="font-heading text-sm font-semibold text-white tracking-tight">Tipo de Contrato</span>
+              <p class="text-[11px] text-white/30">Selecciona la modalidad del servicio</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <label class="template-card relative cursor-pointer rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-200 has-checked:border-accent/40 has-checked:bg-accent/[0.04] hover:border-white/15" onclick="selectTemplate('proyecto_unico')" data-template="proyecto_unico">
+              <input type="radio" name="templateType" value="proyecto_unico" class="sr-only" checked required />
+              <div class="flex flex-col items-center text-center gap-2">
+                <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04]">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/50"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </span>
+                <span class="text-sm font-medium text-white/80">Proyecto Único</span>
+                <span class="text-[10px] text-white/30 leading-relaxed">Alcance definido, entrega pactada</span>
+                <span class="inline-flex px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider bg-accent/10 text-accent">Recomendado</span>
+              </div>
+            </label>
+            <label class="template-card relative cursor-pointer rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-200 has-checked:border-accent/40 has-checked:bg-accent/[0.04] hover:border-white/15" onclick="selectTemplate('recurrente')" data-template="recurrente">
+              <input type="radio" name="templateType" value="recurrente" class="sr-only" />
+              <div class="flex flex-col items-center text-center gap-2">
+                <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04]">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/50"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </span>
+                <span class="text-sm font-medium text-white/80">Servicio Recurrente</span>
+                <span class="text-[10px] text-white/30 leading-relaxed">Mensual, facturación periódica</span>
+              </div>
+            </label>
+            <label class="template-card relative cursor-pointer rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-200 has-checked:border-accent/40 has-checked:bg-accent/[0.04] hover:border-white/15" onclick="selectTemplate('jornada_dedicada')" data-template="jornada_dedicada">
+              <input type="radio" name="templateType" value="jornada_dedicada" class="sr-only" />
+              <div class="flex flex-col items-center text-center gap-2">
+                <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04]">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/50"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </span>
+                <span class="text-sm font-medium text-white/80">Jornada Dedicada</span>
+                <span class="text-[10px] text-white/30 leading-relaxed">Horario fijo, disponibilidad</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="2">
+          <div class="flex items-center gap-2.5 mb-5">
+            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-400/10 text-amber-400">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <div>
+              <span class="font-heading text-sm font-semibold text-white tracking-tight">Datos del Cliente</span>
+              <p class="text-[11px] text-white/30">Información del contratante</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Nombre / Empresa <span class="text-red-400/60">*</span></label>
+              <input name="client_name" maxlength="255" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" required placeholder="Blast-up Consulting Spa" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">RUT</label>
+              <input name="client_rut" maxlength="20" pattern="\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]" title="Formato: 77.670.736-8" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="77.670.736-8" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Email <span class="text-red-400/60">*</span></label>
+              <input name="client_email" type="email" maxlength="255" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" required placeholder="contacto@blast-up.cl" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Teléfono</label>
+              <input name="client_phone" maxlength="50" pattern="[\+\d\s\-\(\)]{8,20}" title="Formato: +56 9 7547 5781" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="+56 9 7547 5781" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Dirección</label>
+              <input name="client_address" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Av. Bosques de Montemar 30, Of. 316" />
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="3">
+          <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center gap-2.5">
+              <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-400/10 text-emerald-400">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </span>
+              <div>
+                <span class="font-heading text-sm font-semibold text-white tracking-tight">Servicios</span>
+                <p class="text-[11px] text-white/30">Ítems y valores del contrato</p>
+              </div>
+            </div>
+            <button type="button" id="addServiceBtn" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-accent border border-accent/20 transition-all duration-200 hover:bg-accent/10 hover:border-accent/30">+ Agregar Servicio</button>
+          </div>
+          <div id="servicesContainer" class="space-y-3">
+            <div class="service-row rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4 transition-all duration-200">
+              <div class="flex flex-col sm:flex-row gap-3">
+                <div class="w-full sm:flex-[3]">
+                  <label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Servicio</label>
+                  <select class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body service-select" onchange="updateServicePrice(this)">
+                    <option value="">Personalizado...</option>
+                    {pricing.services.map(s => (
+                      <option value={s.id} data-price={s.promoPrice || s.price}>{s.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div class="w-full sm:flex-[2]">
+                  <label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Nombre</label>
+                  <input class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body service-name" maxlength="255" placeholder="Desarrollo Web" />
+                </div>
+                <div class="w-full sm:flex-[2]">
+                  <label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Valor CLP</label>
+                  <input type="number" min="0" max="2147483647" step="1" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-mono service-price" placeholder="290000" oninput="updateTotal()" />
+                </div>
+                <div class="flex sm:items-end gap-2 pt-1 sm:pt-0 sm:pb-[1px]">
+                  <div class="hidden sm:block w-px h-8 bg-white/[0.06] self-center"></div>
+                  <button type="button" class="inline-flex items-center justify-center w-9 h-9 rounded-xl text-sm text-white/30 border border-white/[0.06] transition-all duration-200 hover:border-red-400/30 hover:text-red-400 remove-service" onclick="this.closest('.service-row').remove(); updateTotal();">✕</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/[0.06]">
+            <span class="text-xs text-white/30"><span id="serviceCount">1</span> servicio(s)</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-white/40">Total estimado</span>
+              <span id="totalDisplay" class="text-xl font-bold text-accent font-mono tracking-tight">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="4">
+          <div class="flex items-center gap-2.5 mb-5">
+            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-sky-400/10 text-sky-400">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            <div>
+              <span class="font-heading text-sm font-semibold text-white tracking-tight">Condiciones</span>
+              <p class="text-[11px] text-white/30">Plazos, montos y modalidad de pago</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Duración</label>
+              <div class="flex gap-2">
+                <input name="duration_months" type="number" min="1" max="1200" class="w-24 bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" value="3" />
+                <span class="inline-flex items-center text-xs text-white/30">meses</span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Valor Total (CLP)</label>
+              <input name="total_amount" type="number" min="0" max="2147483647" step="1" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body font-mono" required placeholder="0" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Fecha de Inicio</label>
+              <input name="start_date" type="date" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Fecha de Término</label>
+              <input name="end_date" type="date" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Forma de Pago</label>
+              <input name="payment_terms" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Transferencia mensual anticipada" />
+            </div>
+            <div id="scheduleGroup" style="display:none;" class="sm:col-span-2">
+              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-2">Jornada / Horario</label>
+              <div class="flex flex-wrap items-center gap-1.5 mb-2">
+                <span class="text-[10px] font-medium text-white/30 uppercase tracking-wider mr-1">Días:</span>
+                <button type="button" onclick="toggleDay(1)" id="day1" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Lun</button>
+                <button type="button" onclick="toggleDay(2)" id="day2" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Mar</button>
+                <button type="button" onclick="toggleDay(3)" id="day3" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Mié</button>
+                <button type="button" onclick="toggleDay(4)" id="day4" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Jue</button>
+                <button type="button" onclick="toggleDay(5)" id="day5" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Vie</button>
+                <button type="button" onclick="toggleDay(6)" id="day6" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 text-white/40 border-white/[0.06]">Sáb</button>
+                <button type="button" onclick="toggleDay(0)" id="day0" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 text-white/40 border-white/[0.06]">Dom</button>
+              </div>
+              <div class="flex flex-wrap gap-1.5 mb-3">
+                <span class="text-[10px] font-medium text-white/25 uppercase tracking-wider mr-1 self-center">Predefinido:</span>
+                <button type="button" onclick="presetDays('lun-vie')" id="preset-lun-vie" class="preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 bg-accent/10 border-accent/20 text-accent">Lun-Vie</button>
+                <button type="button" onclick="presetDays('lun-sab')" id="preset-lun-sab" class="preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 text-white/35 border-white/[0.06]">Lun-Sáb</button>
+                <button type="button" onclick="presetDays('lun-dom')" id="preset-lun-dom" class="preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 text-white/35 border-white/[0.06]">Lun-Dom</button>
+                <button type="button" onclick="presetDays('finde')" id="preset-finde" class="preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 text-white/35 border-white/[0.06]">Sáb-Dom</button>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:items-end gap-3">
+                <div class="flex items-center gap-2">
+                  <div>
+                    <span class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Desde</span>
+                    <input type="time" id="scheduleFrom" value="09:00" onchange="updateScheduleDisplay()" class="w-28 bg-white/[0.04] border border-white/[0.08] rounded-xl py-2 px-3 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+                  </div>
+                  <span class="text-white/20 text-sm pt-5">—</span>
+                  <div>
+                    <span class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Hasta</span>
+                    <input type="time" id="scheduleTo" value="13:00" onchange="updateScheduleDisplay()" class="w-28 bg-white/[0.04] border border-white/[0.08] rounded-xl py-2 px-3 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+                  </div>
+                </div>
+                <span id="schedulePreview" class="text-xs text-accent font-mono">Lun-Vie 09:00–13:00</span>
+              </div>
+              <input type="hidden" name="schedule" id="scheduleInput" value="Lun-Vie 09:00-13:00" />
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4" data-section="5">
+          <div class="flex items-center gap-2.5 mb-5">
+            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-400/10 text-violet-400">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </span>
+            <div>
+              <span class="font-heading text-sm font-semibold text-white tracking-tight">Cláusulas Especiales</span>
+              <p class="text-[11px] text-white-30">Términos adicionales (opcional)</p>
+            </div>
+          </div>
+          <div>
+            <textarea name="special_clauses" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" rows="4" placeholder="Cualquier cláusula especial que quieras agregar..." oninput="updateClauseCount()"></textarea>
+            <div class="flex justify-end mt-1"><span id="clauseCount" class="text-[10px] text-white/20 font-mono">0 caracteres</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="lg:sticky lg:top-6 space-y-4">
+          <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5">
+            <h3 class="font-heading text-xs font-semibold text-white/50 uppercase tracking-wider mb-4">Resumen</h3>
+            <div id="previewContent" class="space-y-3 text-sm">
+              <div class="flex justify-between py-2 border-b border-white/[0.04]">
+                <span class="text-white/35">Tipo</span>
+                <span class="text-white/60 text-right" id="previewType">—</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-white/[0.04]">
+                <span class="text-white/35">Cliente</span>
+                <span class="text-white/60 text-right" id="previewClient">—</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-white/[0.04]">
+                <span class="text-white/35">Servicios</span>
+                <span class="text-white/60 text-right" id="previewServices">—</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-white/[0.04]">
+                <span class="text-white/35">Duración</span>
+                <span class="text-white/60 text-right" id="previewDuration">—</span>
+              </div>
+              <div class="flex justify-between py-2">
+                <span class="text-white/50 font-medium">Total</span>
+                <span class="text-lg font-bold text-accent font-mono" id="previewTotal">$0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-accent/[0.04] border border-accent/10 p-4 hidden lg:block">
+            <div class="flex items-start gap-3">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <div>
+                <p class="text-xs text-white/50 leading-relaxed">El contrato se generará automáticamente con los datos ingresados y se enviará al cliente para su firma electrónica.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sticky bottom-0 z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#010101]/95 backdrop-blur-lg border-t border-white/[0.06] mt-2">
+      <div class="flex items-center justify-between max-w-full">
+        <div class="hidden sm:flex items-center gap-3">
+          <span class="text-xs text-white/30">Total:</span>
+          <span class="text-lg font-bold text-accent font-mono" id="stickyTotal">$0</span>
+        </div>
+        <div class="flex gap-3 w-full sm:w-auto">
+          <a href="/admin/contratos" class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium text-white/50 border border-white/[0.06] no-underline transition-all duration-200 hover:border-white/15 hover:text-white/70">Cancelar</a>
+          <button type="button" id="previewBtn" onclick="openPreview()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white/70 border border-white/[0.1] transition-all duration-200 hover:border-white/20 hover:text-white">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Vista Previa
+          </button>
+          <button type="submit" id="submitBtn" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium text-white bg-gradient-to-r from-accent to-violet-500 transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Crear y Enviar Contrato
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div id="previewModal" class="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-6" onclick="if (event.target===this) closePreview()">
+    <div class="bg-[#0a0a0b] border border-white/[0.06] rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-5 sm:px-7 py-4 border-b border-white/[0.06] shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-accent/10 text-accent">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </span>
+          <div>
+            <span class="font-heading text-sm font-semibold text-white tracking-tight">Vista Previa del Contrato</span>
+            <p class="text-[11px] text-white/30">Revisa el documento antes de enviarlo</p>
+          </div>
+        </div>
+        <button onclick="closePreview()" class="text-white/30 hover:text-white/70 transition-colors p-1">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto px-5 sm:px-7 py-6">
+        <div id="previewDocument" class="bg-white text-black rounded-xl p-6 sm:p-8 font-body text-sm leading-relaxed max-w-4xl mx-auto">
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-3 px-5 sm:px-7 py-4 border-t border-white/[0.06] shrink-0">
+        <button onclick="closePreview()" class="px-4 py-2 rounded-full text-sm font-medium text-white/50 border border-white/[0.08] transition-all duration-200 hover:border-white/20 hover:text-white/70">Cerrar</button>
+        <button id="previewSubmitBtn" class="px-5 py-2 rounded-full text-sm font-medium text-white bg-gradient-to-r from-accent to-violet-500 transition-all duration-200 hover:opacity-90">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="inline mr-1.5 -mt-0.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Enviar Contrato
+        </button>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script id="pricing-data" type="application/json">{JSON.stringify(pricing.services)}</script>
+
+<script is:inline>
+  var pricingServices = {};
+  var allServices = [];
+  try {
+    allServices = JSON.parse(document.getElementById("pricing-data").textContent);
+    allServices.forEach(function(s) {
+      pricingServices[s.id] = {
+        name: s.name,
+        price: s.promoPrice || s.price,
+        description: s.description || "",
+        deliverables: s.features || [],
+        includes_maintenance: false,
+        maintenance_price: 0,
+        maintenance_description: "",
+      };
+    });
+  } catch(e) { console.warn("Error loading pricing data:", e); }
+
+  async function loadServiceDescriptions() {
+    try {
+      var res = await fetch("/api/services?active=true");
+      var json = await res.json();
+      if (json.services) {
+        allServices = json.services;
+        pricingServices = {};
+        var opts = '<option value="">Personalizado...</option>';
+        json.services.forEach(function(s) {
+          var p = s.promo_price || s.price;
+          pricingServices[s.slug] = {
+            name: s.name,
+            price: p,
+            description: s.description || "",
+            deliverables: s.deliverables || [],
+            includes_maintenance: s.includes_maintenance || false,
+            maintenance_price: s.maintenance_price || 0,
+            maintenance_description: s.maintenance_description || "",
+          };
+          opts += '<option value="' + s.slug + '" data-price="' + p + '">' + s.name + "</option>";
+        });
+        document.querySelectorAll(".service-select").forEach(function(sel) {
+          var currentVal = sel.value;
+          sel.innerHTML = opts;
+          sel.value = currentVal;
+        });
+      }
+    } catch(e) { console.warn("No se pudieron cargar servicios desde DB:", e); }
+  }
+
+  function getServiceRows() {
+    return document.querySelectorAll(".service-row");
+  }
+
+  function updateServicePrice(select) {
+    var row = select.closest(".service-row");
+    var priceInput = row.querySelector(".service-price");
+    var nameInput = row.querySelector(".service-name");
+    var selected = select.options[select.selectedIndex];
+    var dataPrice = selected.getAttribute("data-price");
+    if (dataPrice) {
+      priceInput.value = dataPrice;
+      nameInput.value = selected.text;
+      nameInput.readOnly = true;
+    } else {
+      nameInput.readOnly = false;
+    }
+    updateTotal();
+    updatePreview();
+  }
+
+  function getServices() {
+    var rows = getServiceRows();
+    return Array.from(rows).map(function(row) {
+      var select = row.querySelector(".service-select");
+      var nameInput = row.querySelector(".service-name");
+      var priceInput = row.querySelector(".service-price");
+      var id = select.value || "custom";
+      var svc = pricingServices[id] || {};
+      return {
+        id: id,
+        name: nameInput.value || "Servicio personalizado",
+        price: parseInt(priceInput.value) || 0,
+        description: svc.description || "",
+        deliverables: svc.deliverables || [],
+        includes_maintenance: svc.includes_maintenance || false,
+        maintenance_price: svc.maintenance_price || 0,
+        maintenance_description: svc.maintenance_description || "",
+      };
+    });
+  }
+
+  function updateTotal() {
+    var svcs = getServices();
+    var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
+    var formatted = "$" + total.toLocaleString("es-CL");
+    document.getElementById("totalDisplay").textContent = formatted;
+    document.getElementById("stickyTotal").textContent = formatted;
+    document.getElementById("serviceCount").textContent = svcs.length + (svcs.length === 1 ? "" : "");
+    var totalInput = document.querySelector("[name='total_amount']");
+    if (!totalInput.value) totalInput.value = String(total);
+    updatePreview();
+  }
+
+  function updatePreview() {
+    var templateLabels = { proyecto_unico: "Proyecto \u00danico", recurrente: "Servicio Recurrente", jornada_dedicada: "Jornada Dedicada" };
+    var selected = document.querySelector("input[name='templateType']:checked");
+    var typeEl = document.getElementById("previewType");
+    if (selected && selected.value) {
+      typeEl.textContent = templateLabels[selected.value] || selected.value;
+    } else {
+      typeEl.textContent = "—";
+    }
+
+    var clientName = document.querySelector("[name='client_name']").value || "—";
+    document.getElementById("previewClient").textContent = clientName;
+
+    var svcs = getServices();
+    var svcCount = svcs.filter(function(s) { return s.name; }).length;
+    document.getElementById("previewServices").textContent = svcCount > 0 ? svcCount + " servicio(s)" : "—";
+
+    var duration = document.querySelector("[name='duration_months']").value;
+    document.getElementById("previewDuration").textContent = duration ? duration + " meses" : "—";
+
+    var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
+    document.getElementById("previewTotal").textContent = "$" + total.toLocaleString("es-CL");
+  }
+
+  function updateClauseCount() {
+    var val = document.querySelector("[name='special_clauses']").value;
+    document.getElementById("clauseCount").textContent = val.length + " caracteres";
+  }
+
+  function createServiceRow() {
+    var opts = "";
+    for (var si = 0; si < allServices.length; si++) {
+      var s = allServices[si];
+      opts += '<option value="' + s.id + '" data-price="' + (s.promoPrice || s.price) + '">' + s.name + "</option>";
+    }
+    var div = document.createElement("div");
+    div.className = "service-row rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4 transition-all duration-200";
+    div.innerHTML =
+      '<div class="flex flex-col sm:flex-row gap-3">' +
+        '<div class="w-full sm:flex-[3]">' +
+          '<label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Servicio</label>' +
+          '<select class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body service-select" onchange="updateServicePrice(this)">' +
+            '<option value="">Personalizado...</option>' + opts +
+          "</select>" +
+        "</div>" +
+        '<div class="w-full sm:flex-[2]">' +
+          '<label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Nombre</label>' +
+          '<input class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body service-name" maxlength="255" placeholder="Desarrollo Web" />' +
+        "</div>" +
+        '<div class="w-full sm:flex-[2]">' +
+          '<label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Valor CLP</label>' +
+          '<input type="number" min="0" max="2147483647" step="1" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-mono service-price" placeholder="290000" oninput="updateTotal()" />' +
+        "</div>" +
+        '<div class="flex sm:items-end gap-2 pt-1 sm:pt-0 sm:pb-[1px]">' +
+          '<div class="hidden sm:block w-px h-8 bg-white/[0.06] self-center"></div>' +
+          '<button type="button" class="inline-flex items-center justify-center w-9 h-9 rounded-xl text-sm text-white/30 border border-white/[0.06] transition-all duration-200 hover:border-red-400/30 hover:text-red-400 remove-service">✕</button>' +
+        "</div>" +
+      "</div>";
+    div.querySelector(".remove-service").onclick = function() { div.remove(); updateTotal(); };
+    return div;
+  }
+
+  document.getElementById("addServiceBtn").addEventListener("click", function() {
+    document.getElementById("servicesContainer").appendChild(createServiceRow());
+    updateTotal();
+  });
+
+  var dayNames = { 0: "Dom", 1: "Lun", 2: "Mar", 3: "Mi\u00e9", 4: "Jue", 5: "Vie", 6: "S\u00e1b" };
+  var scheduleDays = [1, 2, 3, 4, 5];
+
+  function updateScheduleDisplay() {
+    var from = document.getElementById("scheduleFrom").value;
+    var to = document.getElementById("scheduleTo").value;
+    if (scheduleDays.length === 0) {
+      document.getElementById("schedulePreview").textContent = "Sin d\u00edas seleccionados";
+      document.getElementById("scheduleInput").value = "";
+      return;
+    }
+    var sorted = scheduleDays.slice().sort();
+    var ranges = [];
+    var start = sorted[0], end = sorted[0];
+    for (var i = 1; i < sorted.length; i++) {
+      if (sorted[i] === end + 1 || (end === 6 && sorted[i] === 0)) { end = sorted[i]; }
+      else { ranges.push({ s: start, e: end }); start = sorted[i]; end = sorted[i]; }
+    }
+    ranges.push({ s: start, e: end });
+    var dayStr = ranges.map(function(r) { return r.s === r.e ? dayNames[r.s] : dayNames[r.s] + "-" + dayNames[r.e]; }).join(", ");
+    var full = dayStr + " " + from + "\u2013" + to;
+    document.getElementById("schedulePreview").textContent = full;
+    document.getElementById("scheduleInput").value = full;
+    updatePreview();
+  }
+
+  function toggleDay(d) {
+    var idx = scheduleDays.indexOf(d);
+    if (idx !== -1) { if (scheduleDays.length > 1) scheduleDays.splice(idx, 1); }
+    else { scheduleDays.push(d); }
+    for (var i = 0; i <= 6; i++) {
+      var el = document.getElementById("day" + i);
+      if (!el) continue;
+      var active = scheduleDays.indexOf(i) !== -1;
+      el.className = "day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 " + (active ? "bg-accent/15 border-accent/30 text-accent" : "text-white/40 border-white/[0.06]");
+    }
+    var presetMap = { "1,2,3,4,5": "lun-vie", "1,2,3,4,5,6": "lun-sab", "0,1,2,3,4,5,6": "lun-dom", "0,6": "finde" };
+    var key = scheduleDays.slice().sort().join(",");
+    ["lun-vie", "lun-sab", "lun-dom", "finde"].forEach(function(p) {
+      var el = document.getElementById("preset-" + p);
+      if (!el) return;
+      el.className = "preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 " + (p === presetMap[key] ? "bg-accent/10 border-accent/20 text-accent" : "text-white/35 border-white/[0.06]");
+    });
+    updateScheduleDisplay();
+  }
+
+  function presetDays(preset) {
+    var map = { "lun-vie": [1, 2, 3, 4, 5], "lun-sab": [1, 2, 3, 4, 5, 6], "lun-dom": [1, 2, 3, 4, 5, 6, 0], "finde": [0, 6] };
+    scheduleDays = (map[preset] || []).slice();
+    for (var i = 0; i <= 6; i++) {
+      var el = document.getElementById("day" + i);
+      if (!el) continue;
+      var active = scheduleDays.indexOf(i) !== -1;
+      el.className = "day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 " + (active ? "bg-accent/15 border-accent/30 text-accent" : "text-white/40 border-white/[0.06]");
+    }
+    ["lun-vie", "lun-sab", "lun-dom", "finde"].forEach(function(p) {
+      var el = document.getElementById("preset-" + p);
+      if (!el) return;
+      el.className = "preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 " + (p === preset ? "bg-accent/10 border-accent/20 text-accent" : "text-white/35 border-white/[0.06]");
+    });
+    updateScheduleDisplay();
+  }
+
+  function selectTemplate(type) {
+    var radio = document.querySelector("input[name='templateType'][value='" + type + "']");
+    if (radio) radio.checked = true;
+    var isJornada = type === "jornada_dedicada";
+    var sg = document.getElementById("scheduleGroup");
+    if (sg) {
+      sg.style.display = isJornada ? "block" : "none";
+    }
+    updatePreview();
+  }
+
+  document.querySelector("[name='client_name']").addEventListener("input", updatePreview);
+  document.querySelector("[name='duration_months']").addEventListener("input", updatePreview);
+
+  presetDays("lun-vie");
+  updateTotal();
+  updatePreview();
+  loadServiceDescriptions();
+
+  function renderContractPreview() {
+    var templateLabels = { proyecto_unico: "Proyecto \u00danico", recurrente: "Servicio Recurrente (Mensual)", jornada_dedicada: "Jornada Dedicada (Horario Fijo)" };
+    var selected = document.querySelector("input[name='templateType']:checked");
+    var templateType = selected ? (templateLabels[selected.value] || selected.value) : "—";
+
+    var clientName = document.querySelector("[name='client_name']").value || "—";
+    var clientRut = document.querySelector("[name='client_rut']").value || "—";
+    var clientEmail = document.querySelector("[name='client_email']").value || "—";
+    var clientPhone = document.querySelector("[name='client_phone']").value || "—";
+    var clientAddress = document.querySelector("[name='client_address']").value || "—";
+
+    var svcs = getServices();
+    var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
+    var duration = document.querySelector("[name='duration_months']").value || "—";
+    var paymentTerms = document.querySelector("[name='payment_terms']").value || "";
+    var startDate = document.querySelector("[name='start_date']").value || "";
+    var endDate = document.querySelector("[name='end_date']").value || "";
+    var schedule = "";
+    try {
+      var selTpl = document.querySelector("input[name='templateType']:checked");
+      if (selTpl && selTpl.value === "jornada_dedicada") {
+        var fEl = document.getElementById("scheduleFrom");
+        var tEl = document.getElementById("scheduleTo");
+        if (fEl && tEl) {
+          var active = [];
+          for (var d = 0; d <= 6; d++) {
+            var chip = document.getElementById("day" + d);
+            if (chip && chip.className.indexOf("bg-accent") !== -1) active.push(d);
+          }
+          if (active.length > 0) {
+            active.sort();
+            var rngs = [];
+            var st = active[0], en = active[0];
+            for (var i = 1; i < active.length; i++) {
+              if (active[i] === en + 1 || (en === 6 && active[i] === 0)) en = active[i];
+              else { rngs.push({ s: st, e: en }); st = active[i]; en = active[i]; }
+            }
+            rngs.push({ s: st, e: en });
+            var dN = {0:"Dom",1:"Lun",2:"Mar",3:"Mi\u00e9",4:"Jue",5:"Vie",6:"S\u00e1b"};
+            var ds = rngs.map(function(r) { return r.s === r.e ? dN[r.s] : dN[r.s] + "-" + dN[r.e]; }).join(", ");
+            schedule = ds + " " + fEl.value + "\u2013" + tEl.value;
+          }
+        }
+      }
+    } catch(e) { schedule = "Error: " + e.message; }
+    var clauses = document.querySelector("[name='special_clauses']").value || "";
+
+    var dateStr = new Date().toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" });
+
+    function fmt(n) { return "$" + n.toLocaleString("es-CL"); }
+
+    var html = "";
+
+    html += '<div style="text-align:center;margin-bottom:24px;padding-bottom:20px;border-bottom:2px solid #e5e7eb;">';
+    html += '<h1 style="font-size:20px;font-weight:700;color:#111827;letter-spacing:-0.02em;margin:0 0 4px;">CONTRATO DE PRESTACI\u00d3N DE SERVICIOS</h1>';
+    html += '<p style="font-size:12px;color:#6b7280;margin:0;">Mtsprz &mdash; Tecnolog\u00eda y Desarrollo Web</p>';
+    html += '<p style="font-size:11px;color:#9ca3af;margin:8px 0 0;">Fecha: ' + dateStr + " | N\u00b0 Contrato: (se generar\u00e1 al crear)</p>";
+    html += "</div>";
+
+    html += '<div style="margin-bottom:20px;">';
+    html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">1. IDENTIFICACI\u00d3N DE LAS PARTES</h2>';
+    html += '<table style="width:100%;font-size:12px;border-collapse:collapse;">';
+    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;width:120px;vertical-align:top;">PRESTADOR:</td><td style="padding:4px 0;color:#111827;">Mat\u00edas P\u00e9rez Nauto — Mtsprz</td></tr>';
+    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;width:120px;vertical-align:top;">CLIENTE:</td><td style="padding:4px 0;color:#111827;">' + clientName + "</td></tr>";
+    if (clientRut !== "—") html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">RUT:</td><td style="padding:4px 0;color:#111827;">' + clientRut + "</td></tr>";
+    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">EMAIL:</td><td style="padding:4px 0;color:#111827;">' + clientEmail + "</td></tr>";
+    if (clientPhone !== "—") html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">TEL\u00c9FONO:</td><td style="padding:4px 0;color:#111827;">' + clientPhone + "</td></tr>";
+    if (clientAddress !== "—") html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">DIRECCI\u00d3N:</td><td style="padding:4px 0;color:#111827;">' + clientAddress + "</td></tr>";
+    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">TIPO:</td><td style="padding:4px 0;color:#111827;font-weight:600;">' + templateType + "</td></tr>";
+    html += "</table>";
+    html += "</div>";
+
+    html += '<div style="margin-bottom:20px;">';
+    html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">2. SERVICIOS Y VALORES</h2>';
+    html += '<table style="width:100%;font-size:12px;border-collapse:collapse;">';
+    html += '<thead><tr style="background:#f9fafb;"><th style="text-align:left;padding:8px 10px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Servicio</th><th style="text-align:right;padding:8px 10px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;">Valor</th></tr></thead>';
+    html += "<tbody>";
+    for (var i = 0; i < svcs.length; i++) {
+      var s = svcs[i];
+      html += '<tr><td style="padding:8px 10px;border-bottom:1px solid #f3f4f6;color:#111827;font-weight:600;">' + (s.name || "Servicio personalizado") + '</td><td style="padding:8px 10px;border-bottom:1px solid #f3f4f6;color:#374151;text-align:right;font-family:monospace;font-weight:600;">' + fmt(s.price) + "</td></tr>";
+      if (s.description) {
+        html += '<tr><td colspan="2" style="padding:2px 10px 8px 10px;color:#6b7280;font-size:11px;line-height:1.5;border-bottom:1px solid #f3f4f6;">';
+        html += s.description;
+        if (s.deliverables && s.deliverables.length > 0) {
+          html += '<div style="margin-top:6px;font-weight:600;color:#374151;">Entregables:</div><ul style="margin:4px 0 0 14px;padding:0;">';
+          for (var d = 0; d < s.deliverables.length; d++) {
+            html += '<li style="margin-bottom:2px;">' + s.deliverables[d] + "</li>";
+          }
+          html += "</ul>";
+        }
+        if (s.includes_maintenance) {
+          html += '<div style="margin-top:6px;padding:4px 8px;background:#f0fdf4;border-radius:4px;color:#166534;font-weight:500;display:inline-block;font-size:10px;">Incluye plan de mantenimiento: $' + Number(s.maintenance_price).toLocaleString("es-CL") + "/mes</div>";
+        }
+        html += "</td></tr>";
+      }
+    }
+    html += "</tbody>";
+    html += '<tfoot><tr><td style="padding:10px;font-weight:700;color:#111827;border-top:2px solid #e5e7eb;">TOTAL</td><td style="padding:10px;font-weight:700;color:#4f46e5;text-align:right;font-family:monospace;border-top:2px solid #e5e7eb;font-size:15px;">' + fmt(total) + "</td></tr></tfoot>";
+    html += "</table>";
+    html += "</div>";
+
+    html += '<div style="margin-bottom:20px;">';
+    html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">3. CONDICIONES</h2>';
+    html += '<table style="width:100%;font-size:12px;border-collapse:collapse;">';
+    html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;width:120px;vertical-align:top;">DURACI\u00d3N:</td><td style="padding:4px 0;color:#111827;">' + duration + " meses</td></tr>";
+    if (startDate) html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">INICIO:</td><td style="padding:4px 0;color:#111827;">' + new Date(startDate + "T12:00:00").toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" }) + "</td></tr>";
+    if (endDate) html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">T\u00c9RMINO:</td><td style="padding:4px 0;color:#111827;">' + new Date(endDate + "T12:00:00").toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" }) + "</td></tr>";
+    if (paymentTerms) html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">FORMA DE PAGO:</td><td style="padding:4px 0;color:#111827;">' + paymentTerms + "</td></tr>";
+    if (selected && selected.value === "jornada_dedicada") html += '<tr><td style="padding:4px 8px 4px 0;color:#6b7280;">JORNADA:</td><td style="padding:4px 0;color:#111827;">' + (schedule || "Por definir") + "</td></tr>";
+    html += "</table>";
+    html += "</div>";
+
+    if (clauses) {
+      html += '<div style="margin-bottom:20px;">';
+      html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">4. CL\u00c1USULAS ESPECIALES</h2>';
+      html += '<p style="font-size:12px;color:#374151;margin:0;line-height:1.6;white-space:pre-wrap;">' + clauses + "</p>";
+      html += "</div>";
+    }
+
+    html += '<div style="margin-top:28px;padding-top:20px;border-top:2px solid #e5e7eb;">';
+    html += '<h2 style="font-size:14px;font-weight:600;color:#111827;margin:0 0 16px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;">5. FIRMAS</h2>';
+    html += '<div style="display:flex;justify-content:space-between;gap:24px;">';
+    html += '<div style="flex:1;text-align:center;">';
+    html += '<div style="height:60px;border-bottom:1px solid #9ca3af;margin-bottom:6px;"></div>';
+    html += '<p style="font-size:11px;color:#6b7280;margin:0;">' + clientName + "</p>";
+    html += '<p style="font-size:10px;color:#9ca3af;margin:2px 0 0;">CLIENTE</p>';
+    html += "</div>";
+    html += '<div style="flex:1;text-align:center;">';
+    html += '<div style="height:60px;border-bottom:1px solid #9ca3af;margin-bottom:6px;"></div>';
+    html += '<p style="font-size:11px;color:#6b7280;margin:0;">Mat\u00edas P\u00e9rez Nauto</p>';
+    html += '<p style="font-size:10px;color:#9ca3af;margin:2px 0 0;">PRESTADOR — Mtsprz</p>';
+    html += "</div>";
+    html += "</div>";
+    html += "</div>";
+
+    document.getElementById("previewDocument").innerHTML = html;
+  }
+
+  function openPreview() {
+    renderContractPreview();
+    document.getElementById("previewModal").classList.remove("hidden");
+    document.getElementById("previewModal").classList.add("flex");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closePreview() {
+    document.getElementById("previewModal").classList.add("hidden");
+    document.getElementById("previewModal").classList.remove("flex");
+    document.body.style.overflow = "";
+  }
+
+  document.getElementById("previewBtn").addEventListener("click", openPreview);
+  document.getElementById("previewSubmitBtn").addEventListener("click", function() {
+    closePreview();
+    document.getElementById("submitBtn").click();
+  });
+
+  document.getElementById("contractForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    var form = this;
+    var formData = new FormData(form);
+    var btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Creando...';
+
+    var services = getServices();
+    var total = services.reduce(function(sum, s) { return sum + s.price; }, 0);
+
+    var body = {
+      template_type: formData.get("templateType"),
+      client_name: formData.get("client_name"),
+      client_rut: formData.get("client_rut"),
+      client_email: formData.get("client_email"),
+      client_phone: formData.get("client_phone"),
+      client_address: formData.get("client_address"),
+      services: services,
+      total_amount: parseInt(formData.get("total_amount")) || total,
+      payment_terms: formData.get("payment_terms"),
+      start_date: formData.get("start_date"),
+      end_date: formData.get("end_date"),
+      duration_months: parseInt(formData.get("duration_months")) || 1,
+      schedule: formData.get("schedule"),
+      special_clauses: formData.get("special_clauses"),
+    };
+
+    try {
+      var res = await fetch("/api/contracts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      var data = await res.json();
+      if (!res.ok) {
+        alert("Error: " + (data.error || "No se pudo crear"));
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Crear y Enviar Contrato';
+        return;
+      }
+      window.location.href = "/admin/contratos/" + data.contract.id;
+    } catch (_e) {
+      alert("Error de conexión");
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Crear y Enviar Contrato';
+    }
+  });
+</script>
