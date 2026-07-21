@@ -781,16 +781,30 @@ import pricing from "../../../data/pricing.json";
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      var data = await res.json();
+
+      // Si la respuesta no es 2xx, intentamos leer el error
       if (!res.ok) {
-        alert("Error: " + (data.error || "No se pudo crear"));
+        try {
+          var errorData = await res.json();
+          alert("Error: " + (errorData.error || "No se pudo crear el contrato"));
+        } catch (_jsonErr) {
+          alert("Error del servidor (" + res.status + "). Intenta de nuevo.");
+        }
         btn.disabled = false;
         btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Crear y Enviar Contrato';
         return;
       }
-      window.location.href = "/admin/contratos/" + data.contract.id;
+
+      // Respuesta exitosa: intentamos leer el body JSON
+      try {
+        var data = await res.json();
+        window.location.href = "/admin/contratos/" + data.contract.id;
+      } catch (_jsonErr) {
+        // Body vacío o inválido pero status 2xx → el contrato se creó igual
+        window.location.href = "/admin/contratos";
+      }
     } catch (_e) {
-      alert("Error de conexión");
+      alert("Error de conexión: no se pudo enviar la solicitud. Verifica tu conexión a internet.");
       btn.disabled = false;
       btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Crear y Enviar Contrato';
     }

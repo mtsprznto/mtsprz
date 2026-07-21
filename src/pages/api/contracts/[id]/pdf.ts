@@ -5,11 +5,13 @@ import crypto from "node:crypto";
 
 export const prerender = false;
 
+const JSON_HEADERS = { "Content-Type": "application/json" };
+
 export const GET: APIRoute = async ({ params, locals }) => {
   const { id } = params;
 
   if (!locals.user) {
-    return new Response(JSON.stringify({ error: "No autenticado" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "No autenticado" }), { status: 401, headers: JSON_HEADERS });
   }
 
   try {
@@ -17,13 +19,13 @@ export const GET: APIRoute = async ({ params, locals }) => {
     const result = await query("SELECT * FROM contracts WHERE id = $1", [Number(id)]);
 
     if (result.rows.length === 0) {
-      return new Response(JSON.stringify({ error: "Contrato no encontrado" }), { status: 404 });
+      return new Response(JSON.stringify({ error: "Contrato no encontrado" }), { status: 404, headers: JSON_HEADERS });
     }
 
     const c = result.rows[0] as Record<string, unknown>;
 
     if (locals.user.role !== "super_admin" && c.user_id !== locals.user.id) {
-      return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403 });
+      return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403, headers: JSON_HEADERS });
     }
 
     const services = (c.services as any[]) || [];
@@ -81,6 +83,6 @@ export const GET: APIRoute = async ({ params, locals }) => {
     });
   } catch (err) {
     console.error("[Contracts] PDF error:", err);
-    return new Response(JSON.stringify({ error: "Error al generar PDF" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al generar PDF" }), { status: 500, headers: JSON_HEADERS });
   }
 };

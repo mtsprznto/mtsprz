@@ -6,12 +6,14 @@ import { decodeVerificationToken } from "../../../lib/biometric";
 
 export const prerender = false;
 
+const JSON_HEADERS = { "Content-Type": "application/json" };
+
 export const POST: APIRoute = async ({ request }) => {
   let body: Record<string, unknown>;
   try {
     body = await request.json();
   } catch {
-    return new Response(JSON.stringify({ error: "JSON inv\u00e1lido" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "JSON inv\u00e1lido" }), { status: 400, headers: JSON_HEADERS });
   }
 
   const { signing_token, signature_data, client_name, client_rut, client_phone, client_address, id_front_data, id_back_data, selfie_data, verification_token } = body as any;
@@ -20,20 +22,20 @@ export const POST: APIRoute = async ({ request }) => {
   if (!verification_token) {
     return new Response(
       JSON.stringify({ error: "Verificaci\u00f3n biom\u00e9trica requerida. Completa la verificaci\u00f3n antes de firmar." }),
-      { status: 400 }
+      { status: 400, headers: JSON_HEADERS }
     );
   }
   const bioClaims = decodeVerificationToken(verification_token as string);
   if (!bioClaims) {
     return new Response(
       JSON.stringify({ error: "Token de verificaci\u00f3n inv\u00e1lido o expirado. Repite la verificaci\u00f3n biom\u00e9trica." }),
-      { status: 400 }
+      { status: 400, headers: JSON_HEADERS }
     );
   }
   if (bioClaims.signing_token !== signing_token) {
     return new Response(
       JSON.stringify({ error: "Token de verificaci\u00f3n no corresponde a este contrato." }),
-      { status: 400 }
+      { status: 400, headers: JSON_HEADERS }
     );
   }
 
@@ -48,18 +50,18 @@ export const POST: APIRoute = async ({ request }) => {
       : "pending";
 
   if (!signing_token) {
-    return new Response(JSON.stringify({ error: "Token requerido" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Token requerido" }), { status: 400, headers: JSON_HEADERS });
   }
 
   if (!signature_data) {
-    return new Response(JSON.stringify({ error: "Firma requerida" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Firma requerida" }), { status: 400, headers: JSON_HEADERS });
   }
 
   try {
     await initDb();
     const result = await query("SELECT * FROM contracts WHERE signing_token = $1", [signing_token]);
     if (result.rows.length === 0) {
-      return new Response(JSON.stringify({ error: "Enlace inv\u00e1lido" }), { status: 404 });
+      return new Response(JSON.stringify({ error: "Enlace inv\u00e1lido" }), { status: 404, headers: JSON_HEADERS });
     }
 
     const contract = result.rows[0] as Record<string, unknown>;
@@ -67,15 +69,15 @@ export const POST: APIRoute = async ({ request }) => {
 
     const expiresAt = contract.token_expires_at as string;
     if (expiresAt && new Date(expiresAt) < new Date()) {
-      return new Response(JSON.stringify({ error: "Este enlace ha expirado (v\u00e1lido por 7 d\u00edas)" }), { status: 410 });
+      return new Response(JSON.stringify({ error: "Este enlace ha expirado (v\u00e1lido por 7 d\u00edas)" }), { status: 410, headers: JSON_HEADERS });
     }
 
     if (contract.status === "completed") {
-      return new Response(JSON.stringify({ error: "Contrato ya est\u00e1 completamente firmado" }), { status: 400 });
+      return new Response(JSON.stringify({ error: "Contrato ya est\u00e1 completamente firmado" }), { status: 400, headers: JSON_HEADERS });
     }
 
     if (contract.client_signature_data) {
-      return new Response(JSON.stringify({ error: "Ya has firmado este contrato" }), { status: 400 });
+      return new Response(JSON.stringify({ error: "Ya has firmado este contrato" }), { status: 400, headers: JSON_HEADERS });
     }
 
     const sigBase64 = dataUrlToBase64(signature_data);
@@ -165,9 +167,9 @@ export const POST: APIRoute = async ({ request }) => {
       console.error("[SignByToken] Email error:", emailErr);
     }
 
-    return new Response(JSON.stringify({ success: true, contract: updatedContract }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, contract: updatedContract }), { status: 200, headers: JSON_HEADERS });
   } catch (err) {
     console.error("[Contracts] Sign by token error:", err);
-    return new Response(JSON.stringify({ error: "Error al firmar contrato" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al firmar contrato" }), { status: 500, headers: JSON_HEADERS });
   }
 };

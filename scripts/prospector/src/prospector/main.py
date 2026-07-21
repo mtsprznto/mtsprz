@@ -685,25 +685,18 @@ def dedup(ctx: Context, auto_remove: bool):
                  others=", ".join(p.empresa for p in others))
 
     if auto_remove and not ctx.dry_run:
-        # Reconstruir DB sin duplicados
-        keep_ids = set()
-        for grupo in groups:
-            keep_ids.add(grupo.mejor.id)
-        all_ids = {p.id for p in prospects}
-        remove_ids = all_ids - keep_ids - {p.id for g in groups for p in g.prospects if p.id == g.mejor.id}
-        # Actually simpler: keep all best, remove the rest in each group
-        remove_ids = set()
+        # IDs a eliminar (todo excepto el mejor de cada grupo)
+        remove_ids: set[str] = set()
         for grupo in groups:
             for p in grupo.prospects:
                 if p.id != grupo.mejor.id:
                     remove_ids.add(p.id)
 
-        nuevos = [p for p in prospects if p.id not in remove_ids]
-        # Hard replace
-        for p in list(ctx.db.all()):
-            if p.id in remove_ids:
-                ctx.db.delete(p.id)
-        log.info("Eliminados {n} duplicados", n=len(remove_ids))
+        if remove_ids:
+            # Eliminar en batch (un solo flush al final)
+            ctx.db._prospects = [p for p in ctx.db._prospects if p.id not in remove_ids]
+            ctx.db.flush()
+            log.info("Eliminados {n} duplicados", n=len(remove_ids))
 
 
 # ===================================================================

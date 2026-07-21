@@ -4,11 +4,13 @@ import { dataUrlToBase64 } from "../../../../lib/storage";
 
 export const prerender = false;
 
+const JSON_HEADERS = { "Content-Type": "application/json" };
+
 export const POST: APIRoute = async ({ params, request, locals }) => {
   const { id } = params;
 
   if (!locals.user) {
-    return new Response(JSON.stringify({ error: "No autenticado" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "No autenticado" }), { status: 401, headers: JSON_HEADERS });
   }
 
   let body: {
@@ -20,11 +22,11 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
   try {
     body = await request.json();
   } catch {
-    return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400, headers: JSON_HEADERS });
   }
 
   if (!body.signature_data) {
-    return new Response(JSON.stringify({ error: "Firma requerida" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Firma requerida" }), { status: 400, headers: JSON_HEADERS });
   }
 
   try {
@@ -32,17 +34,17 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
 
     const contractResult = await query("SELECT * FROM contracts WHERE id = $1", [Number(id)]);
     if (contractResult.rows.length === 0) {
-      return new Response(JSON.stringify({ error: "Contrato no encontrado" }), { status: 404 });
+      return new Response(JSON.stringify({ error: "Contrato no encontrado" }), { status: 404, headers: JSON_HEADERS });
     }
 
     const contract = contractResult.rows[0] as Record<string, unknown>;
 
     if (locals.user.role !== "super_admin" && contract.user_id !== locals.user.id) {
-      return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403 });
+      return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403, headers: JSON_HEADERS });
     }
 
     if (contract.status === "completed") {
-      return new Response(JSON.stringify({ error: "Contrato ya está completamente firmado" }), { status: 400 });
+      return new Response(JSON.stringify({ error: "Contrato ya está completamente firmado" }), { status: 400, headers: JSON_HEADERS });
     }
 
     if (locals.user.role === "super_admin") {
@@ -87,9 +89,9 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     }
 
     const updated = await query("SELECT * FROM contracts WHERE id = $1", [Number(id)]);
-    return new Response(JSON.stringify({ success: true, contract: updated.rows[0] }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, contract: updated.rows[0] }), { status: 200, headers: JSON_HEADERS });
   } catch (err) {
     console.error("[Contracts] Sign error:", err);
-    return new Response(JSON.stringify({ error: "Error al firmar contrato" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al firmar contrato" }), { status: 500, headers: JSON_HEADERS });
   }
 };

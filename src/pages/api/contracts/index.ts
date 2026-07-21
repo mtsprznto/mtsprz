@@ -7,9 +7,11 @@ import { sendEmail, contractCreatedEmail, adminNewContractNotification } from ".
 
 export const prerender = false;
 
+const JSON_HEADERS = { "Content-Type": "application/json" };
+
 export const GET: APIRoute = async ({ locals, url }) => {
   if (!locals.user) {
-    return new Response(JSON.stringify({ error: "No autenticado" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "No autenticado" }), { status: 401, headers: JSON_HEADERS });
   }
 
   try {
@@ -45,23 +47,23 @@ export const GET: APIRoute = async ({ locals, url }) => {
     sql += " ORDER BY created_at DESC";
 
     const result = await query(sql, params);
-    return new Response(JSON.stringify({ contracts: result.rows }), { status: 200 });
+    return new Response(JSON.stringify({ contracts: result.rows }), { status: 200, headers: JSON_HEADERS });
   } catch (err) {
     console.error("[Contracts] List error:", err);
-    return new Response(JSON.stringify({ error: "Error al listar contratos" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al listar contratos" }), { status: 500, headers: JSON_HEADERS });
   }
 };
 
 export const POST: APIRoute = async ({ request, locals }) => {
   if (!locals.user || locals.user.role !== "super_admin") {
-    return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403 });
+    return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403, headers: JSON_HEADERS });
   }
 
   let body: Record<string, unknown>;
   try {
     body = await request.json();
   } catch {
-    return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400, headers: JSON_HEADERS });
   }
 
   const {
@@ -84,11 +86,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
   } = body as any;
 
   if (!client_name || !client_email || !services || !total_amount) {
-    return new Response(JSON.stringify({ error: "Nombre, email, servicios y total requeridos" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Nombre, email, servicios y total requeridos" }), { status: 400, headers: JSON_HEADERS });
   }
 
   if (!validateEmail(client_email)) {
-    return new Response(JSON.stringify({ error: "Email inválido" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "Email inválido" }), { status: 400, headers: JSON_HEADERS });
   }
 
   try {
@@ -151,9 +153,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
       html: adminNewContractNotification(client_name, contractNumber as string, adminLink),
     });
 
-    return new Response(JSON.stringify({ success: true, contract }), { status: 201 });
+    return new Response(JSON.stringify({ success: true, contract }), { status: 201, headers: JSON_HEADERS });
   } catch (err) {
     console.error("[Contracts] Create error:", err);
-    return new Response(JSON.stringify({ error: "Error al crear contrato" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al crear contrato" }), { status: 500, headers: JSON_HEADERS });
   }
 };

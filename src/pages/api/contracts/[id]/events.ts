@@ -3,11 +3,13 @@ import { query, initDb } from "../../../../lib/db";
 
 export const prerender = false;
 
+const JSON_HEADERS = { "Content-Type": "application/json" };
+
 export const GET: APIRoute = async ({ params, locals }) => {
   const { id } = params;
 
   if (!locals.user) {
-    return new Response(JSON.stringify({ error: "No autenticado" }), { status: 401 });
+    return new Response(JSON.stringify({ error: "No autenticado" }), { status: 401, headers: JSON_HEADERS });
   }
 
   try {
@@ -15,11 +17,11 @@ export const GET: APIRoute = async ({ params, locals }) => {
     const contract = await query("SELECT user_id FROM contracts WHERE id = $1", [Number(id)]);
 
     if (contract.rows.length === 0) {
-      return new Response(JSON.stringify({ error: "Contrato no encontrado" }), { status: 404 });
+      return new Response(JSON.stringify({ error: "Contrato no encontrado" }), { status: 404, headers: JSON_HEADERS });
     }
 
     if (locals.user.role !== "super_admin" && contract.rows[0].user_id !== locals.user.id) {
-      return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403 });
+      return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403, headers: JSON_HEADERS });
     }
 
     const events = await query(
@@ -27,9 +29,9 @@ export const GET: APIRoute = async ({ params, locals }) => {
       [Number(id)]
     );
 
-    return new Response(JSON.stringify({ events: events.rows }), { status: 200 });
+    return new Response(JSON.stringify({ events: events.rows }), { status: 200, headers: JSON_HEADERS });
   } catch (err) {
     console.error("[Contracts] Events error:", err);
-    return new Response(JSON.stringify({ error: "Error al obtener eventos" }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al obtener eventos" }), { status: 500, headers: JSON_HEADERS });
   }
 };
