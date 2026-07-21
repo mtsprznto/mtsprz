@@ -54,11 +54,22 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
-  const page = doc.addPage([612, 792]);
+  let page = doc.addPage([612, 792]);
   const { width, height } = page.getSize();
   const margin = 56;
   const contentWidth = width - margin * 2;
   let y = height - margin;
+
+  function addNewPage() {
+    page = doc.addPage([612, 792]);
+    y = height - margin;
+  }
+
+  function ensureSpace(needed: number) {
+    if (y - needed < margin + 40) {
+      addNewPage();
+    }
+  }
 
   const primaryColor = rgb(0.39, 0.4, 0.95);
   const textColor = rgb(0.15, 0.15, 0.15);
@@ -246,6 +257,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
 
   let totalCalc = 0;
   for (const svc of data.services) {
+    ensureSpace(26);
     const rectY = y - 2;
     page.drawRectangle({
       x: margin,
@@ -272,6 +284,8 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
     totalCalc += svc.price || 0;
     y -= 22;
   }
+
+  ensureSpace(60);
 
   y -= 8;
 
@@ -301,6 +315,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
   y -= 24;
 
   if (data.schedule) {
+    ensureSpace(80);
     y -= 8;
     page.drawText("JORNADA DE TRABAJO", {
       x: margin,
@@ -314,6 +329,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
     y -= 16;
   }
 
+  ensureSpace(200);
   page.drawLine({
     start: { x: margin, y },
     end: { x: width - margin, y },
@@ -360,6 +376,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
   }
 
   if (data.specialClauses) {
+    ensureSpace(120);
     y -= 8;
     page.drawLine({
       start: { x: margin, y },
@@ -382,10 +399,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
     y -= 16;
   }
 
-  if (y < 280) {
-    const newPage = doc.addPage([612, 792]);
-    return (await generateContractPdf(data)).slice(); // start new page
-  }
+  ensureSpace(360);
 
   y -= 16;
 

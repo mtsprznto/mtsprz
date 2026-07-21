@@ -90,6 +90,46 @@ export function contractSignedEmail(clientName: string, contractNumber: string, 
   `;
 }
 
+export function adminContractCompletedEmail(
+  clientName: string,
+  contractNumber: string,
+  adminLink: string,
+  pdfLink: string,
+  clientEmail: string
+): string {
+  return `
+    <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="width:48px;height:48px;margin:0 auto 12px;background:rgba(16,185,129,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 style="margin:0;font-size:18px;font-weight:700">Contrato Completado</h2>
+      </div>
+      <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6">
+        El contrato <strong style="color:#fafafa">${contractNumber}</strong> ha sido firmado por ambas partes.
+      </p>
+      <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 6px;line-height:1.6">
+        <strong style="color:#fafafa">Cliente:</strong> ${clientName}
+      </p>
+      <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 24px;line-height:1.6">
+        <strong style="color:#fafafa">Email:</strong> ${clientEmail}
+      </p>
+      <div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="${adminLink}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+          Ver en Panel
+        </a>
+        <a href="${pdfLink}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#10b981,#059669)">
+          Descargar PDF
+        </a>
+      </div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:24px 0" />
+      <p style="font-size:11px;color:rgba(250,250,250,0.3);margin:0;text-align:center">
+        Contrato generado desde mtsprz.org
+      </p>
+    </div>
+  `;
+}
+
 export function adminNewContractNotification(clientName: string, contractNumber: string, link: string): string {
   return `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">

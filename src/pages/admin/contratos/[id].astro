@@ -170,37 +170,6 @@ const { id } = Astro.params;
       document.getElementById("statusBadge").innerHTML = statusBadge(c.status);
       document.getElementById("statusText").textContent = statusLabels[c.status] || c.status;
 
-      var pdfUrl = "/api/contracts/" + contractId + "/pdf?_=" + Date.now();
-      document.getElementById("downloadPdfBtn").addEventListener("click", async function() {
-        var btn = this;
-        var icon = document.getElementById("pdfBtnIcon");
-        var text = document.getElementById("pdfBtnText");
-        btn.disabled = true;
-        icon.innerHTML = '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>';
-        icon.classList.add("animate-spin");
-        text.textContent = "Generando...";
-        try {
-          var res = await fetch(pdfUrl);
-          if (!res.ok) { alert("Error al generar PDF: " + res.status); return; }
-          var blob = await res.blob();
-          var url = URL.createObjectURL(blob);
-          var a = document.createElement("a");
-          a.href = url;
-          a.download = (contractData?.contract_number || "contrato") + ".pdf";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        } catch(e) {
-          alert("Error al descargar PDF");
-        } finally {
-          btn.disabled = false;
-          icon.innerHTML = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>';
-          icon.classList.remove("animate-spin");
-          text.textContent = "Descargar PDF";
-        }
-      });
-
       document.getElementById("clientInfo").innerHTML =
         "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>Cliente</span><span class='text-sm text-white/80'>" + c.client_name + "</span></div>" +
         "<div><span class='text-[10px] text-white/30 uppercase tracking-wider block mb-1'>RUT</span><span class='text-sm text-white/80'>" + (c.client_rut || "\u2014") + "</span></div>" +
@@ -368,6 +337,39 @@ const { id } = Astro.params;
       alert("Error de conexi\u00f3n");
       btn.disabled = false;
       btn.textContent = "Confirmar Firma";
+    }
+  });
+
+  // Download PDF — single listener, not inside loadContract (avoid duplicates)
+  document.getElementById("downloadPdfBtn").addEventListener("click", async function() {
+    if (!contractData) return;
+    var btn = this;
+    var icon = document.getElementById("pdfBtnIcon");
+    var text = document.getElementById("pdfBtnText");
+    btn.disabled = true;
+    icon.innerHTML = '<path d="M21 12a9 9 0 1 1-6.219-8.56"/>';
+    icon.classList.add("animate-spin");
+    text.textContent = "Generando...";
+    try {
+      var pdfUrl = "/api/contracts/" + contractId + "/pdf?_=" + Date.now();
+      var res = await fetch(pdfUrl);
+      if (!res.ok) { alert("Error al generar PDF: " + res.status); return; }
+      var blob = await res.blob();
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = (contractData?.contract_number || "contrato") + ".pdf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch(e) {
+      alert("Error al descargar PDF");
+    } finally {
+      btn.disabled = false;
+      icon.innerHTML = '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>';
+      icon.classList.remove("animate-spin");
+      text.textContent = "Descargar PDF";
     }
   });
 

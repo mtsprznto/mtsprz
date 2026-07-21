@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { query, initDb } from "../../../../lib/db";
 import { dataUrlToBase64 } from "../../../../lib/storage";
+import { sendEmail, contractSignedEmail, adminContractCompletedEmail } from "../../../../lib/mail";
 
 export const prerender = false;
 
@@ -92,7 +93,54 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
     }
 
     const updated = await query("SELECT * FROM contracts WHERE id = $1", [Number(id)]);
-    return new Response(JSON.stringify({ success: true, contract: updated.rows[0] }), { status: 200, headers: JSON_HEADERS });
+    const signedContract = updated.rows?.[0] as Record<string, unknown> | undefined;
+
+    // Send completion emails when admin sign triggers completed status
+    if (signedContract?.status === "completed" && locals.user.role === "super_admin") {
+      const pdfLink =
+        (import.meta.env.SITE || "https://mtsprz.org") +
+        "/api/contracts/" +
+        id +
+        "/pdf";
+      const clientEmail = signedContract.client_email as string;
+      const clientName = signedContract.client_name as string;
+      const contractNumber = signedContract.contract_number as string;
+      const adminEmail =
+        (import.meta.env.RESEND_TO as string) || "contacto@mtsprz.org";
+      const adminLink =
+        (import.meta.env.SITE || "https://mtsprz.org") +
+        "/admin/contratos/" +
+        id;
+
+      try {
+        if (clientEmail) {
+          await sendEmail({
+            to: clientEmail,
+            subject: `Contrato ${contractNumber} firmado — Mtsprz`,
+            html: contractSignedEmail(clientName, contractNumber, pdfLink),
+          });
+        }
+
+        await sendEmail({
+          to: adminEmail,
+          subject: `Contrato ${contractNumber} completado — Mtsprz`,
+          html: adminContractCompletedEmail(
+            clientName,
+            contractNumber,
+            adminLink,
+            pdfLink,
+            clientEmail
+          ),
+        });
+      } catch (emailErr) {
+        console.error("[Sign] Completion email error:", emailErr);
+      }
+    }
+
+    return new Response(JSON.stringify({ success: true, contract: signedContract }), {
+      status: 200,
+      headers: JSON_HEADERS,
+    });
   } catch (err) {
     console.error("[Contracts] Sign error:", err);
     return new Response(JSON.stringify({ error: "Error al firmar contrato" }), { status: 500, headers: JSON_HEADERS });

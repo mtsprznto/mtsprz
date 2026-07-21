@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { query, initDb } from "../../../lib/db";
 import { dataUrlToBase64 } from "../../../lib/storage";
-import { sendEmail, contractSignedEmail } from "../../../lib/mail";
+import { sendEmail, contractSignedEmail, adminContractCompletedEmail } from "../../../lib/mail";
 import { decodeVerificationToken } from "../../../lib/biometric";
 
 export const prerender = false;
@@ -152,20 +152,38 @@ export const POST: APIRoute = async ({ request }) => {
       var clientEmail = updatedContract.client_email as string;
       var clientName = updatedContract.client_name as string;
       var contractNumber = updatedContract.contract_number as string;
-      if (clientEmail) {
-        await sendEmail({
-          to: clientEmail,
-          subject: "Contrato " + contractNumber + " firmado — Mtsprz",
-          html: contractSignedEmail(clientName, contractNumber, pdfLink),
-        });
-      }
       var adminEmail = import.meta.env.RESEND_TO || "contacto@mtsprz.org";
       var adminLink = (import.meta.env.SITE || "https://mtsprz.org") + "/admin/contratos/" + contractId;
-      await sendEmail({
-        to: adminEmail,
-        subject: "Cliente firm\u00f3 contrato " + contractNumber + " — Mtsprz",
-        html: '<div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;"><h2 style="margin:0 0 16px;">Cliente Firm\u00f3 Contrato</h2><p style="font-size:14px;color:rgba(250,250,250,0.7);">' + clientName + " ha firmado el contrato <strong>" + contractNumber + '</strong>.</p><div style="text-align:center;margin-top:24px;"><a href="' + adminLink + '" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6);">Ver Contrato</a></div></div>',
-      });
+
+      if (updatedContract.status === "completed") {
+        // Both parties signed — send completed template to both
+        if (clientEmail) {
+          await sendEmail({
+            to: clientEmail,
+            subject: "Contrato " + contractNumber + " firmado — Mtsprz",
+            html: contractSignedEmail(clientName, contractNumber, pdfLink),
+          });
+        }
+        await sendEmail({
+          to: adminEmail,
+          subject: "Contrato " + contractNumber + " completado — Mtsprz",
+          html: adminContractCompletedEmail(clientName, contractNumber, adminLink, pdfLink, clientEmail),
+        });
+      } else {
+        // Only client signed — notify admin, confirm to client
+        if (clientEmail) {
+          await sendEmail({
+            to: clientEmail,
+            subject: "Contrato " + contractNumber + " firmado — Mtsprz",
+            html: contractSignedEmail(clientName, contractNumber, pdfLink),
+          });
+        }
+        await sendEmail({
+          to: adminEmail,
+          subject: "Cliente firm\u00f3 contrato " + contractNumber + " — Mtsprz",
+          html: '<div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)"><div style="text-align:center;margin-bottom:24px"><div style="width:48px;height:48px;margin:0 auto 12px;background:rgba(99,102,241,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><h2 style="margin:0;font-size:18px;font-weight:700">Cliente Firm\u00f3 Contrato</h2></div><p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6"><strong style="color:#fafafa">' + clientName + '</strong> ha firmado el contrato <strong style="color:#fafafa">' + contractNumber + '</strong>.</p><p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 24px;line-height:1.6">Firma pendiente del prestador para completar el proceso.</p><div style="text-align:center"><a href="' + adminLink + '" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6)">Firmar Contrato</a></div><hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:24px 0" /><p style="font-size:11px;color:rgba(250,250,250,0.3);margin:0;text-align:center">Contrato generado desde mtsprz.org</p></div>',
+        });
+      }
     } catch (emailErr) {
       console.error("[SignByToken] Email error:", emailErr);
     }
