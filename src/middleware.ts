@@ -8,6 +8,7 @@ const PUBLIC_API_ROUTES: string[] = [
   "/api/verify-code",
   "/api/contracts/find-by-token/",
   "/api/contracts/sign-by-token",
+  "/api/biometric/verify",
   "/api/contact",
 ];
 
