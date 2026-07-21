@@ -7,7 +7,10 @@ import { sendEmail, contractCreatedEmail, adminNewContractNotification } from ".
 
 export const prerender = false;
 
-const JSON_HEADERS = { "Content-Type": "application/json" };
+const JSON_HEADERS = {
+  "Content-Type": "application/json",
+  "Cache-Control": "private, no-store",
+};
 
 export const GET: APIRoute = async ({ locals, url }) => {
   if (!locals.user) {

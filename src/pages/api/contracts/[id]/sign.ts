@@ -4,7 +4,10 @@ import { dataUrlToBase64 } from "../../../../lib/storage";
 
 export const prerender = false;
 
-const JSON_HEADERS = { "Content-Type": "application/json" };
+const JSON_HEADERS = {
+  "Content-Type": "application/json",
+  "Cache-Control": "private, no-store",
+};
 
 export const POST: APIRoute = async ({ params, request, locals }) => {
   const { id } = params;

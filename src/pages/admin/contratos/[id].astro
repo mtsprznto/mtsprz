@@ -155,7 +155,7 @@ const { id } = Astro.params;
 
   async function loadContract() {
     try {
-      var res = await fetch("/api/contracts/" + contractId);
+      var res = await fetch("/api/contracts/" + contractId + "?_=" + Date.now());
       var data = await res.json();
       if (!data.contract) { document.getElementById("loading").textContent = "Contrato no encontrado"; return; }
 
@@ -170,7 +170,7 @@ const { id } = Astro.params;
       document.getElementById("statusBadge").innerHTML = statusBadge(c.status);
       document.getElementById("statusText").textContent = statusLabels[c.status] || c.status;
 
-      var pdfUrl = "/api/contracts/" + contractId + "/pdf";
+      var pdfUrl = "/api/contracts/" + contractId + "/pdf?_=" + Date.now();
       document.getElementById("downloadPdfBtn").addEventListener("click", async function() {
         var btn = this;
         var icon = document.getElementById("pdfBtnIcon");

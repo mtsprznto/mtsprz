@@ -123,7 +123,10 @@ class BaseScraper(ABC):
     def _fetch(
         self, url: str, retry_on: Optional[list[int]] = None, **kwargs
     ) -> Optional[httpx.Response]:
-        """GET con retry + backoff exponencial."""
+        """GET con retry + backoff exponencial.
+
+        NO reintenta errores 4xx (excepto 429 rate-limit) — son permanentes.
+        """
         retry_on = retry_on or [429, 500, 502, 503, 504]
         last_error: Optional[Exception] = None
 
@@ -138,10 +141,22 @@ class BaseScraper(ABC):
                     )
                     time.sleep(wait)
                     continue
+                # No reintentar 4xx (excepto 429 ya manejado arriba)
+                if 400 <= resp.status_code < 500:
+                    log.warning("Error {code} en {url} — saltando (error cliente)", code=resp.status_code, url=url)
+                    self._stats["errores"] += 1
+                    return None
                 resp.raise_for_status()
                 return resp
             except (httpx.HTTPError, httpx.TimeoutException) as e:
                 last_error = e
+                # No reintentar si es error 4xx (el raise_for_status lo convierte)
+                if isinstance(e, httpx.HTTPStatusError):
+                    status = e.response.status_code
+                    if 400 <= status < 500 and status != 429:
+                        log.warning("Error {code} en {url} — saltando (error cliente)", code=status, url=url)
+                        self._stats["errores"] += 1
+                        return None
                 wait = 2 ** attempt * self.delay
                 log.warning(
                     "Error en {url} (intento {a}/{m}): {e} — espera {w}s",

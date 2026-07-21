@@ -6,7 +6,10 @@ import { decodeVerificationToken } from "../../../lib/biometric";
 
 export const prerender = false;
 
-const JSON_HEADERS = { "Content-Type": "application/json" };
+const JSON_HEADERS = {
+  "Content-Type": "application/json",
+  "Cache-Control": "private, no-store",
+};
 
 export const POST: APIRoute = async ({ request }) => {
   let body: Record<string, unknown>;
