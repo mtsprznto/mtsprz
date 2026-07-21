@@ -8,12 +8,7 @@ export default defineConfig({
   site: "https://mtsprz.org",
   integrations: [mdx(), sitemap()],
   output: "server",
-  adapter: vercel({
-    isr: {
-      expiration: 60,
-      exclude: ["/admin", "/admin/**", "/api", "/api/**"],
-    },
-  }),
+  adapter: vercel(),
   vite: {
     plugins: [tailwindcss()],
   },
