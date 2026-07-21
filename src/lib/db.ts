@@ -2,10 +2,10 @@ import { neon } from "@neondatabase/serverless";
 
 export interface DbResult {
   rows: Record<string, unknown>[];
-  error?: string;
 }
 
 let db: ReturnType<typeof neon> | null = null;
+let migrationsRan = false;
 
 function getDb() {
   if (!db) {
@@ -17,17 +17,14 @@ function getDb() {
 }
 
 export async function query(sql: string, params?: (string | number | boolean | null)[]): Promise<DbResult> {
-  try {
-    const rows = await getDb().query(sql, params ?? []);
-    return { rows: rows as Record<string, unknown>[] };
-  } catch (err) {
-    console.error("[DB] Query error:", err);
-    return { rows: [], error: String(err) };
-  }
+  const rows = await getDb().query(sql, params ?? []);
+  return { rows: rows as Record<string, unknown>[] };
 }
 
 export async function initDb(): Promise<void> {
-  await query(`
+  if (migrationsRan) return;
+
+  await getDb().query(`
     CREATE TABLE IF NOT EXISTS _migrations (
       id SERIAL PRIMARY KEY,
       name VARCHAR(255) UNIQUE NOT NULL,
@@ -38,4 +35,5 @@ export async function initDb(): Promise<void> {
 
   const { runMigrations } = await import("./migrate");
   await runMigrations();
+  migrationsRan = true;
 }
