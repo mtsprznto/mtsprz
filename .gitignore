@@ -15,3 +15,4 @@ CLAUDE.md
 scripts/prospector/.venv/
 scripts/prospector/__pycache__/
 .claude/
+scripts/prospector/evolution-api/*

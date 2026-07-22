@@ -22,6 +22,7 @@ Modo dry-run (sin modificar datos):
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -833,6 +834,149 @@ def send_campaign(ctx: Context, rubro: Optional[str], comuna: Optional[str],
 
     if dry_run:
         log.info("Ejecuta sin --dry-run para enviar los correos mostrados.")
+
+
+# ===================================================================
+# WHATSAPP — Campaña vía Evolution API
+# ===================================================================
+
+@cli.group()
+def whatsapp():
+    """Envía WhatsApp a prospectos vía Evolution API.
+
+    Requiere Evolution API corriendo (docker compose up -d
+    en scripts/prospector/evolution-api/).
+    """
+
+
+@whatsapp.command("setup")
+@click.option("--base-url", default="http://localhost:8080", help="URL de Evolution API")
+@click.option("--api-key", default=None, help="API key de Evolution API")
+@click.option("--instance", default="mtsprz-bot", help="Nombre de instancia")
+@click.pass_obj
+def whatsapp_setup(ctx: Context, base_url: str, api_key: Optional[str], instance: str):
+    """Configura instancia de Evolution API y muestra QR para escanear.
+
+    1. Crea instancia en Evolution API
+    2. Muestra URL del QR para escanear con WhatsApp
+    3. Espera que se conecte
+    """
+    from prospector.outreach.whatsapp_campaign import WhatsAppCampaign
+
+    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, instance=instance)
+    ok = wa.setup()
+    if not ok:
+        sys.exit(1)
+
+
+@whatsapp.command("send")
+@click.option("--rubro", default=None, help="Filtrar por rubro")
+@click.option("--comuna", default=None, help="Filtrar por comuna")
+@click.option("--limit", default=10, type=int, help="Máx a enviar (0 = todos)")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Previsualizar sin enviar")
+@click.option("--delay-min", default=30, type=int, help="Delay mínimo entre mensajes (segundos)")
+@click.option("--delay-max", default=90, type=int, help="Delay máximo entre mensajes (segundos)")
+@click.option("--base-url", default="http://localhost:8080", help="URL de Evolution API")
+@click.option("--api-key", default=None, help="API key de Evolution API")
+@click.option("--instance", default="mtsprz-bot", help="Nombre de instancia")
+@click.pass_obj
+def whatsapp_send(ctx: Context, rubro: Optional[str], comuna: Optional[str],
+                  limit: int, dry_run: bool,
+                  delay_min: int, delay_max: int,
+                  base_url: str, api_key: Optional[str], instance: str):
+    """Envía campaña de WhatsApp a prospectos.
+
+    Ejemplos:
+        prospector whatsapp send --dry-run                           # previsualizar 10
+        prospector whatsapp send --rubro inmobiliaria --limit 5       # enviar 5 inmobiliarias
+        prospector whatsapp send --rubro abogado --comuna "Puerto Varas" --limit 3
+    """
+    from prospector.outreach.whatsapp_campaign import WhatsAppCampaign
+
+    prospects = ctx.db.all()
+
+    # Filtros
+    if rubro:
+        prospects = [p for p in prospects if p.rubro == rubro]
+    if comuna:
+        prospects = [p for p in prospects if p.comuna.lower() == comuna.lower()]
+
+    # Filtrar solo los que tienen teléfono
+    prospects = [p for p in prospects if p.telefonos]
+    if not prospects:
+        log.warning("No hay prospectos con teléfono para los filtros dados")
+        return
+
+    log.info("Prospectos con teléfono: {n}", n=len(prospects))
+
+    if dry_run:
+        log.info("🔸 MODO DRY-RUN: no se enviarán mensajes reales")
+    else:
+        log.info("⚠️  MODO REAL: se enviarán WhatsApps")
+        log.info("   Pulsa Ctrl+C para cancelar en los próximos 5 segundos...")
+        import time
+        time.sleep(5)
+
+    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, instance=instance)
+    result = wa.run(prospects, rubro=rubro, limit=limit, dry_run=dry_run,
+                    delay_range=(delay_min, delay_max))
+
+    if dry_run:
+        log.info("Ejecuta sin --dry-run para enviar los mensajes mostrados.")
+
+
+# ===================================================================
+# SEND-WHATSAPP — Alias directo (sin subgrupo)
+# ===================================================================
+
+@cli.command()
+@click.option("--rubro", default=None, help="Filtrar por rubro")
+@click.option("--comuna", default=None, help="Filtrar por comuna")
+@click.option("--limit", default=10, type=int, help="Máx a enviar (0 = todos)")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Previsualizar sin enviar")
+@click.option("--delay-min", default=30, type=int)
+@click.option("--delay-max", default=90, type=int)
+@click.option("--base-url", default="http://localhost:8080")
+@click.option("--api-key", default=None)
+@click.option("--instance", default="mtsprz-bot")
+@click.pass_obj
+def send_whatsapp(ctx: Context, rubro: Optional[str], comuna: Optional[str],
+                   limit: int, dry_run: bool,
+                   delay_min: int, delay_max: int,
+                   base_url: str, api_key: Optional[str], instance: str):
+    """Envía campaña de WhatsApp a prospectos (alias directo).
+
+    Es lo mismo que 'whatsapp send'. Útil para scripting.
+
+    Ejemplo:
+        prospector send-whatsapp --rubro inmobiliaria --limit 5
+    """
+    from prospector.outreach.whatsapp_campaign import WhatsAppCampaign
+
+    prospects = ctx.db.all()
+
+    if rubro:
+        prospects = [p for p in prospects if p.rubro == rubro]
+    if comuna:
+        prospects = [p for p in prospects if p.comuna.lower() == comuna.lower()]
+
+    prospects = [p for p in prospects if p.telefonos]
+    if not prospects:
+        log.warning("No hay prospectos con teléfono")
+        return
+
+    log.info("Prospectos con teléfono: {n}", n=len(prospects))
+
+    if dry_run:
+        log.info("🔸 MODO DRY-RUN")
+    else:
+        log.info("⚠️  MODO REAL")
+        import time
+        time.sleep(5)
+
+    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, instance=instance)
+    result = wa.run(prospects, rubro=rubro, limit=limit, dry_run=dry_run,
+                    delay_range=(delay_min, delay_max))
 
 
 # ===================================================================
