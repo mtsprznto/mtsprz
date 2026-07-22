@@ -2,11 +2,13 @@ import { query } from "./db";
 
 export async function generateContractNumber(): Promise<string> {
   const year = new Date().getFullYear();
+  // Find the max existing suffix to avoid collisions
   const result = await query(
-    "SELECT COUNT(*) as count FROM contracts WHERE contract_number LIKE $1",
-    [`MTS-CON-${year}-%`]
+    `SELECT MAX(CAST(RIGHT(contract_number, 4) AS INTEGER)) as max_seq
+     FROM contracts
+     WHERE contract_number LIKE 'MTS-CON-${year}-%'`
   );
-  const count = (result.rows[0]?.count as number) ?? 0;
-  const seq = String(count + 1).padStart(4, "0");
+  const maxSeq = (result.rows[0]?.max_seq as number) ?? 0;
+  const seq = String(maxSeq + 1).padStart(4, "0");
   return `MTS-CON-${year}-${seq}`;
 }

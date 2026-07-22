@@ -1,0 +1,415 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Clientes" description="Gestionar clientes recurrentes">
+  <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
+    <div>
+      <p class="text-[11px] font-medium text-accent tracking-[0.15em] uppercase mb-2">Gestión</p>
+      <h1 class="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight">Clientes</h1>
+      <p class="mt-2 text-sm text-white/30 font-body">Administra los clientes recurrentes guardados</p>
+    </div>
+  </div>
+
+  <!-- Stats: visual summary -->
+  <div class="flex flex-wrap gap-px bg-white/[0.04] mb-8">
+    <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
+      <div class="font-heading text-xl font-bold text-white" id="statTotal">—</div>
+      <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Total</div>
+    </div>
+    <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
+      <div class="font-heading text-xl font-bold text-indigo-300" id="statCompany">—</div>
+      <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Con Empresa</div>
+    </div>
+    <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
+      <div class="font-heading text-xl font-bold text-emerald-400" id="statRut">—</div>
+      <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Con RUT</div>
+    </div>
+  </div>
+
+  <!-- Search bar -->
+  <div class="relative mb-8">
+    <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/15 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input
+      id="clientSearch"
+      type="text"
+      placeholder="Buscar por nombre, RUT, email o empresa..."
+      class="w-full bg-white/[0.03] border border-white/[0.06] py-3 pl-10 pr-4 text-sm text-white/60 font-body placeholder:text-white/15 focus:outline-none focus:border-accent/30 focus:bg-white/[0.04] transition-all duration-200"
+    />
+  </div>
+
+  <!-- Loading skeleton -->
+  <div id="clientsLoading">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.04]">
+      <div class="bg-[#010101] p-6 min-h-[180px] animate-pulse">
+        <div class="h-4 w-3/5 bg-white/[0.06] mb-3"></div>
+        <div class="h-3 w-2/5 bg-white/[0.04] mb-2"></div>
+        <div class="h-3 w-4/5 bg-white/[0.04] mb-1"></div>
+        <div class="h-3 w-3/5 bg-white/[0.04] mb-4"></div>
+        <div class="flex gap-2 mt-auto">
+          <div class="h-3 w-14 bg-white/[0.06]"></div>
+          <div class="h-3 w-14 bg-white/[0.06]"></div>
+        </div>
+      </div>
+      <div class="bg-[#010101] p-6 min-h-[180px] animate-pulse hidden sm:block">
+        <div class="h-4 w-4/5 bg-white/[0.06] mb-3"></div>
+        <div class="h-3 w-3/5 bg-white/[0.04] mb-2"></div>
+        <div class="h-3 w-3/4 bg-white/[0.04] mb-1"></div>
+        <div class="h-3 w-1/2 bg-white/[0.04] mb-4"></div>
+        <div class="flex gap-2">
+          <div class="h-3 w-14 bg-white/[0.06]"></div>
+          <div class="h-3 w-14 bg-white/[0.06]"></div>
+        </div>
+      </div>
+      <div class="bg-[#010101] p-6 min-h-[180px] animate-pulse hidden lg:block">
+        <div class="h-4 w-7/10 bg-white/[0.06] mb-3"></div>
+        <div class="h-3 w-1/2 bg-white/[0.04] mb-2"></div>
+        <div class="h-3 w-5/6 bg-white/[0.04] mb-1"></div>
+        <div class="h-3 w-2/3 bg-white/[0.04] mb-4"></div>
+        <div class="flex gap-2">
+          <div class="h-3 w-14 bg-white/[0.06]"></div>
+          <div class="h-3 w-14 bg-white/[0.06]"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client cards grid -->
+  <div id="clientsGrid" class="hidden"></div>
+
+  <!-- Empty state -->
+  <div id="emptyState" class="hidden">
+    <div class="border border-white/[0.04] py-16 px-6 text-center">
+      <svg class="w-12 h-12 text-white/[0.06] mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <p class="text-sm text-white/25 font-body mb-1">No hay clientes recurrentes</p>
+      <p class="text-xs text-white/15 font-body">Los clientes aparecerán aquí cuando guardes uno desde el formulario de contratos</p>
+    </div>
+  </div>
+</AdminLayout>
+
+<!-- Edit modal (hidden by default) -->
+<div id="editModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+  <div id="editOverlay" class="absolute inset-0 bg-[#010101]/80 backdrop-blur-sm"></div>
+  <div class="relative w-full max-w-lg mx-4 bg-[#070708] border border-white/[0.06] shadow-2xl">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/[0.04]">
+      <h3 class="text-xs font-heading font-semibold text-white/70 tracking-wider uppercase">Editar Cliente</h3>
+      <button id="editModalClose" class="text-white/20 hover:text-white/50 transition-colors">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <form id="editForm" class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+      <input type="hidden" id="editId" />
+
+      <div>
+        <label class="block text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1.5 font-medium">Nombre *</label>
+        <input id="editName" required class="w-full bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-sm text-white/60 font-body focus:outline-none focus:border-accent/30 transition-colors" />
+      </div>
+      <div>
+        <label class="block text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1.5 font-medium">Empresa</label>
+        <input id="editCompany" class="w-full bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-sm text-white/60 font-body focus:outline-none focus:border-accent/30 transition-colors" />
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1.5 font-medium">RUT</label>
+          <input id="editRut" class="w-full bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-sm text-white/60 font-body focus:outline-none focus:border-accent/30 transition-colors" />
+        </div>
+        <div>
+          <label class="block text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1.5 font-medium">Teléfono</label>
+          <input id="editPhone" class="w-full bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-sm text-white/60 font-body focus:outline-none focus:border-accent/30 transition-colors" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1.5 font-medium">Email</label>
+        <input id="editEmail" type="email" class="w-full bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-sm text-white/60 font-body focus:outline-none focus:border-accent/30 transition-colors" />
+      </div>
+      <div>
+        <label class="block text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1.5 font-medium">Dirección</label>
+        <input id="editAddress" class="w-full bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-sm text-white/60 font-body focus:outline-none focus:border-accent/30 transition-colors" />
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1.5 font-medium">Nacionalidad</label>
+          <input id="editNationality" class="w-full bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-sm text-white/60 font-body focus:outline-none focus:border-accent/30 transition-colors" />
+        </div>
+        <div>
+          <label class="block text-[10px] text-white/30 uppercase tracking-[0.12em] mb-1.5 font-medium">Profesión / Giro</label>
+          <input id="editProfession" class="w-full bg-white/[0.03] border border-white/[0.06] px-3 py-2 text-sm text-white/60 font-body focus:outline-none focus:border-accent/30 transition-colors" />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2 border-t border-white/[0.04]">
+        <button type="submit" class="flex-1 py-2.5 bg-accent/20 hover:bg-accent/30 text-accent text-[11px] font-medium tracking-wider uppercase transition-all duration-200 border border-accent/20 hover:border-accent/40">
+          Guardar Cambios
+        </button>
+        <button type="button" id="editCancel" class="flex-1 py-2.5 bg-white/[0.03] hover:bg-white/[0.06] text-white/30 hover:text-white/50 text-[11px] font-medium tracking-wider uppercase transition-all duration-200">
+          Cancelar
+        </button>
+      </div>
+      <p id="editError" class="text-[10px] text-red-400/60 hidden"></p>
+    </form>
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+  <div id="deleteOverlay" class="absolute inset-0 bg-[#010101]/80 backdrop-blur-sm"></div>
+  <div class="relative w-full max-w-sm mx-4 bg-[#070708] border border-white/[0.06] shadow-2xl p-6 text-center">
+    <svg class="w-10 h-10 text-red-400/40 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    <p class="text-sm text-white/50 font-body mb-1">¿Eliminar cliente?</p>
+    <p id="deleteClientName" class="text-xs text-white/20 font-body mb-5">—</p>
+    <div class="flex items-center gap-3">
+      <button id="deleteConfirm" class="flex-1 py-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-[11px] font-medium tracking-wider uppercase transition-all border border-red-500/20 hover:border-red-500/40">
+        Eliminar
+      </button>
+      <button id="deleteCancel" class="flex-1 py-2.5 bg-white/[0.03] hover:bg-white/[0.06] text-white/30 hover:text-white/50 text-[11px] font-medium tracking-wider uppercase transition-all">
+        Cancelar
+      </button>
+    </div>
+    <p id="deleteError" class="text-[10px] text-red-400/60 hidden mt-3"></p>
+  </div>
+</div>
+
+<script is:inline>
+  var searchTimeout = null;
+  var clientsData = [];
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode(String(str)));
+    return div.innerHTML;
+  }
+
+  function formatDate(d) {
+    if (!d) return "—";
+    try {
+      var dt = new Date(d);
+      return dt.toLocaleDateString("es-CL", { year: "numeric", month: "short", day: "numeric" });
+    } catch(e) { return String(d); }
+  }
+
+  function updateStats(clients) {
+    document.getElementById("statTotal").textContent = clients.length;
+    document.getElementById("statCompany").textContent = clients.filter(function(c) { return c.company_name; }).length;
+    document.getElementById("statRut").textContent = clients.filter(function(c) { return c.rut; }).length;
+  }
+
+  function renderClients(clients) {
+    clientsData = clients;
+    var loading = document.getElementById("clientsLoading");
+    var grid = document.getElementById("clientsGrid");
+    var empty = document.getElementById("emptyState");
+
+    loading.classList.add("hidden");
+
+    if (clients.length === 0) {
+      grid.classList.add("hidden");
+      empty.classList.remove("hidden");
+      updateStats([]);
+      return;
+    }
+
+    empty.classList.add("hidden");
+    grid.classList.remove("hidden");
+    updateStats(clients);
+
+    var html = [];
+    html.push('<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.04]">');
+
+    for (var i = 0; i < clients.length; i++) {
+      var c = clients[i];
+
+      html.push('<div class="bg-[#010101] p-6 flex flex-col group transition-all duration-300 hover:bg-white/[0.015]">');
+
+      // Name + badge row
+      html.push('<div class="flex items-start justify-between gap-2 mb-3">');
+      html.push('<h3 class="font-heading text-base font-bold text-white/80 leading-snug">' + escapeHtml(c.name) + '</h3>');
+      html.push('<span class="shrink-0 w-8 h-8 flex items-center justify-center border border-white/[0.06] text-white/20">');
+      html.push('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>');
+      html.push('</span>');
+      html.push('</div>');
+
+      // Company
+      if (c.company_name) {
+        html.push('<p class="text-xs text-white/40 font-body mb-2">' + escapeHtml(c.company_name) + '</p>');
+      } else {
+        html.push('<div class="mb-2"></div>');
+      }
+
+      // Detail rows
+      html.push('<div class="space-y-1.5 text-[10px] text-white/20 font-body mb-4">');
+      if (c.rut) {
+        html.push('<div class="flex items-center gap-2"><span class="w-16 shrink-0 text-white/15">RUT</span><span class="text-white/30">' + escapeHtml(c.rut) + '</span></div>');
+      }
+      if (c.email) {
+        html.push('<div class="flex items-center gap-2"><span class="w-16 shrink-0 text-white/15">Email</span><span class="text-white/30">' + escapeHtml(c.email) + '</span></div>');
+      }
+      if (c.phone) {
+        html.push('<div class="flex items-center gap-2"><span class="w-16 shrink-0 text-white/15">Tel</span><span class="text-white/30">' + escapeHtml(c.phone) + '</span></div>');
+      }
+      html.push('<div class="flex items-center gap-2"><span class="w-16 shrink-0 text-white/15">Creado</span><span class="text-white/30">' + formatDate(c.created_at) + '</span></div>');
+      html.push('</div>');
+
+      // Divider
+      html.push('<div class="border-t border-white/[0.03] mb-3"></div>');
+
+      // Action buttons
+      html.push('<div class="flex items-center gap-2 mt-auto">');
+      html.push('<button onclick="openEditModal(' + c.id + ')" class="flex-1 py-2 border border-white/[0.06] hover:border-accent/30 text-[10px] font-medium text-white/20 hover:text-accent tracking-wider uppercase transition-all duration-200">Editar</button>');
+      html.push('<button onclick="openDeleteModal(' + c.id + ',\'' + escapeHtml(c.name).replace(/'/g, "\\'") + '\')" class="flex-1 py-2 border border-white/[0.06] hover:border-red-400/30 text-[10px] font-medium text-white/20 hover:text-red-400/60 tracking-wider uppercase transition-all duration-200">Eliminar</button>');
+      html.push('</div>');
+
+      html.push('</div>');
+    }
+
+    html.push('</div>');
+    grid.innerHTML = html.join("");
+  }
+
+  async function loadClients(q) {
+    try {
+      var url = "/api/clients";
+      if (q && q.trim().length > 0) {
+        url += "?search=" + encodeURIComponent(q.trim());
+      }
+      var res = await fetch(url);
+      var data = await res.json();
+      renderClients(data.clients || []);
+    } catch(e) {
+      document.getElementById("clientsLoading").innerHTML =
+        '<div class="text-center py-12"><p class="text-sm text-red-400/60 font-body">Error al cargar clientes</p></div>';
+    }
+  }
+
+  // Search handler
+  document.addEventListener("DOMContentLoaded", function() {
+    var searchInput = document.getElementById("clientSearch");
+    if (searchInput) {
+      searchInput.addEventListener("input", function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+          loadClients(searchInput.value);
+        }, 250);
+      });
+    }
+
+    loadClients("");
+  });
+
+  // ── Edit Modal ──
+  function openEditModal(id) {
+    var client = clientsData.find(function(c) { return c.id === id; });
+    if (!client) return;
+
+    document.getElementById("editId").value = client.id;
+    document.getElementById("editName").value = client.name || "";
+    document.getElementById("editCompany").value = client.company_name || "";
+    document.getElementById("editRut").value = client.rut || "";
+    document.getElementById("editPhone").value = client.phone || "";
+    document.getElementById("editEmail").value = client.email || "";
+    document.getElementById("editAddress").value = client.address || "";
+    document.getElementById("editNationality").value = client.nationality || "";
+    document.getElementById("editProfession").value = client.profession || "";
+
+    document.getElementById("editError").classList.add("hidden");
+    document.getElementById("editModal").classList.remove("hidden");
+  }
+
+  function closeEditModal() {
+    document.getElementById("editModal").classList.add("hidden");
+  }
+
+  document.getElementById("editModalClose")?.addEventListener("click", closeEditModal);
+  document.getElementById("editOverlay")?.addEventListener("click", closeEditModal);
+  document.getElementById("editCancel")?.addEventListener("click", closeEditModal);
+
+  document.getElementById("editForm")?.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    var id = document.getElementById("editId").value;
+    var errorEl = document.getElementById("editError");
+
+    var body = {
+      name: document.getElementById("editName").value.trim(),
+      company_name: document.getElementById("editCompany").value.trim() || null,
+      rut: document.getElementById("editRut").value.trim() || null,
+      phone: document.getElementById("editPhone").value.trim() || null,
+      email: document.getElementById("editEmail").value.trim() || null,
+      address: document.getElementById("editAddress").value.trim() || null,
+      nationality: document.getElementById("editNationality").value.trim() || null,
+      profession: document.getElementById("editProfession").value.trim() || null,
+    };
+
+    if (!body.name) {
+      errorEl.textContent = "El nombre es requerido";
+      errorEl.classList.remove("hidden");
+      return;
+    }
+
+    try {
+      var res = await fetch("/api/clients/" + id, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      var data = await res.json();
+
+      if (data.error) {
+        errorEl.textContent = data.error;
+        errorEl.classList.remove("hidden");
+        return;
+      }
+
+      closeEditModal();
+      loadClients(document.getElementById("clientSearch").value);
+    } catch(e) {
+      errorEl.textContent = "Error al guardar";
+      errorEl.classList.remove("hidden");
+    }
+  });
+
+  // ── Delete Modal ──
+  var deleteId = null;
+
+  function openDeleteModal(id, name) {
+    deleteId = id;
+    document.getElementById("deleteClientName").textContent = name;
+    document.getElementById("deleteError").classList.add("hidden");
+    document.getElementById("deleteModal").classList.remove("hidden");
+  }
+
+  function closeDeleteModal() {
+    deleteId = null;
+    document.getElementById("deleteModal").classList.add("hidden");
+  }
+
+  document.getElementById("deleteOverlay")?.addEventListener("click", closeDeleteModal);
+  document.getElementById("deleteCancel")?.addEventListener("click", closeDeleteModal);
+
+  document.getElementById("deleteConfirm")?.addEventListener("click", async function() {
+    if (deleteId === null) return;
+
+    try {
+      var res = await fetch("/api/clients/" + deleteId, {
+        method: "DELETE",
+      });
+      var data = await res.json();
+
+      if (data.error) {
+        document.getElementById("deleteError").textContent = data.error;
+        document.getElementById("deleteError").classList.remove("hidden");
+        return;
+      }
+
+      closeDeleteModal();
+      loadClients(document.getElementById("clientSearch").value);
+    } catch(e) {
+      document.getElementById("deleteError").textContent = "Error al eliminar";
+      document.getElementById("deleteError").classList.remove("hidden");
+    }
+  });
+</script>

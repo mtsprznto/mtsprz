@@ -136,6 +136,30 @@ ALTER TABLE contracts ADD COLUMN IF NOT EXISTS special_clauses TEXT`,
 ALTER TABLE services ADD COLUMN IF NOT EXISTS is_popular BOOLEAN DEFAULT false;
 ALTER TABLE services ADD COLUMN IF NOT EXISTS is_monthly BOOLEAN DEFAULT false`,
   },
+  {
+    name: "006_clients",
+    sql: `
+CREATE TABLE IF NOT EXISTS clients (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  company_name VARCHAR(255),
+  rut VARCHAR(20),
+  email VARCHAR(255),
+  phone VARCHAR(50),
+  address TEXT,
+  nationality VARCHAR(100) DEFAULT 'Chilena',
+  profession VARCHAR(255),
+  notes TEXT,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS search_vector tsvector
+  GENERATED ALWAYS AS (
+    to_tsvector('spanish', coalesce(name,'') || ' ' || coalesce(company_name,'') || ' ' || coalesce(rut,'') || ' ' || coalesce(email,''))
+  ) STORED;
+CREATE INDEX IF NOT EXISTS idx_clients_search ON clients USING GIN(search_vector)`,
+  },
 ];
 
 let _sql: ReturnType<typeof neon> | null = null;

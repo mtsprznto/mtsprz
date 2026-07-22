@@ -20,6 +20,7 @@ const navItems = [
   { href: "/admin/contratos/nuevo", label: "Nuevo Contrato", icon: "M12 5v14 M5 12h14" },
   { href: "/admin/servicios", label: "Servicios", icon: "M22 12h-4l-3 9L9 3l-3 9H2" },
   { href: "/admin/plantillas", label: "Plantillas", icon: "M4 6h16 M4 10h16 M4 14h16 M4 18h16" },
+  { href: "/admin/clientes", label: "Clientes", icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2 M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M23 21v-2a4 4 0 0 0-3-3.87 M16 3.13a4 4 0 0 1 0 7.75" },
 ];
 ---
 
@@ -33,45 +34,49 @@ const navItems = [
     <link rel="icon" type="image/jpeg" href="/logo.jpg" />
     <link rel="apple-touch-icon" href="/logo.jpg" />
   </head>
-  <body>
+  <body class="bg-[#010101]">
     <!-- Mobile top bar -->
-    <header class="md:hidden flex items-center justify-between px-4 h-14 bg-[#0a0a0b] border-b border-white/[0.06] sticky top-0 z-40">
-      <a href="/admin" class="flex items-center gap-2.5">
+    <header class="md:hidden flex items-center justify-between px-4 h-14 bg-[#070708] border-b border-white/[0.04] sticky top-0 z-40">
+      <a href="/admin" class="flex items-center gap-2.5 no-underline">
         <picture>
           <source srcset="/logo.webp" type="image/webp" />
-          <img src="/logo.jpg" alt="Mtsprz" width="28" height="28" class="w-7 h-7 rounded-lg object-cover shrink-0" />
+          <img src="/logo.jpg" alt="Mtsprz" width="28" height="28" class="w-7 h-7 rounded object-cover shrink-0" />
         </picture>
-        <span class="font-heading text-sm font-bold text-white tracking-tight">Mtsprz <span class="text-accent">Admin</span></span>
+        <span class="font-heading text-xs font-semibold text-white/70 tracking-[0.08em] uppercase">Mtsprz <span class="text-accent">Admin</span></span>
       </a>
-      <button id="mobile-menu-btn" aria-label="Abrir menú" class="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/[0.06] transition-colors">
-        <svg id="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
-        <svg id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 hidden"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+      <button id="mobile-menu-btn" aria-label="Abrir menú" class="p-2 text-white/30 hover:text-white/60 transition-colors">
+        <svg id="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="w-5 h-5"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+        <svg id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="w-5 h-5 hidden"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
       </button>
     </header>
 
     <!-- Mobile drawer overlay -->
-    <div id="mobile-overlay" class="md:hidden fixed inset-0 z-30 bg-black/60 backdrop-blur-sm hidden"></div>
+    <div id="mobile-overlay" class="md:hidden fixed inset-0 z-30 bg-[#010101]/80 backdrop-blur-sm hidden"></div>
 
     <!-- Mobile drawer -->
-    <div id="mobile-drawer" class="md:hidden fixed top-14 left-0 bottom-0 w-64 z-40 bg-[#0a0a0b] border-r border-white/[0.06] flex flex-col translate-x-[-100%] transition-transform duration-300 ease-in-out">
-      <nav class="flex-1 flex flex-col gap-0.5 p-3 overflow-y-auto">
+    <div id="mobile-drawer" class="md:hidden fixed top-14 left-0 bottom-0 w-64 z-40 bg-[#070708] border-r border-white/[0.04] flex flex-col translate-x-[-100%] transition-transform duration-300 ease-in-out">
+      <nav class="flex-1 flex flex-col gap-[1px] p-3 overflow-y-auto">
         {navItems.map((item) => (
           <a
             href={item.href}
-            class={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-body font-normal transition-all duration-200 no-underline ${isActive(item.href) ? "bg-accent-subtle text-accent font-medium" : "text-white/45 hover:bg-accent-subtle hover:text-white/80"}`}
+            class={`flex items-center gap-3 px-3 py-2.5 text-[11px] font-medium tracking-wider uppercase transition-all duration-200 no-underline ${
+              isActive(item.href)
+                ? "text-accent bg-accent/[0.06]"
+                : "text-white/30 hover:text-white/60 hover:bg-white/[0.02]"
+            }`}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px] shrink-0"><path d={item.icon} /></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0"><path d={item.icon} /></svg>
             {item.label}
           </a>
         ))}
       </nav>
-      <div class="p-3 border-t border-white/[0.06] flex flex-col gap-1">
-        <a href="/" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-white/30 no-underline transition-all duration-200 hover:text-white/60 hover:bg-white/[0.04]">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px] shrink-0"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+      <div class="p-3 border-t border-white/[0.04] flex flex-col gap-1">
+        <a href="/" class="flex items-center gap-3 px-3 py-2.5 text-[10px] font-medium text-white/20 tracking-wider uppercase no-underline transition-all duration-200 hover:text-white/40 hover:bg-white/[0.02]">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
           Volver al Sitio
         </a>
-        <button id="logout-btn-mobile" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-red-400/60 hover:text-red-400 hover:bg-red-500/[0.08] transition-all duration-200 w-full text-left">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px] shrink-0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+        <button id="logout-btn-mobile" class="flex items-center gap-3 px-3 py-2.5 text-[10px] font-medium text-red-400/30 tracking-wider uppercase transition-all duration-200 hover:text-red-400/60 hover:bg-red-500/[0.04] w-full text-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
           Cerrar Sesión
         </button>
       </div>
@@ -79,41 +84,47 @@ const navItems = [
 
     <div class="flex min-h-screen">
       <!-- Desktop sidebar -->
-      <aside class="hidden md:flex md:flex-col w-64 bg-[#0a0a0b] border-r border-white/[0.06] sticky top-0 h-screen shrink-0">
-        <a href="/admin" class="flex items-center gap-3 px-6 pt-5 pb-6 border-b border-white/[0.06]">
+      <aside class="hidden md:flex md:flex-col w-56 bg-[#070708] border-r border-white/[0.04] sticky top-0 h-screen shrink-0">
+        <a href="/admin" class="flex items-center gap-3 px-6 pt-6 pb-5 border-b border-white/[0.04] no-underline">
           <picture>
             <source srcset="/logo.webp" type="image/webp" />
-            <img src="/logo.jpg" alt="Mtsprz" width="32" height="32" class="w-8 h-8 rounded-lg object-cover shrink-0" />
+            <img src="/logo.jpg" alt="Mtsprz" width="28" height="28" class="w-7 h-7 rounded object-cover shrink-0" />
           </picture>
-          <span class="font-heading text-base font-bold text-white tracking-tight">Mtsprz <span class="text-accent">Admin</span></span>
+          <span class="font-heading text-[11px] font-semibold text-white/60 tracking-[0.1em] uppercase">Mtsprz <span class="text-accent">Admin</span></span>
         </a>
 
-        <nav class="flex-1 flex flex-col gap-0.5 p-3 overflow-y-auto">
+        <nav class="flex-1 flex flex-col gap-[1px] p-2 overflow-y-auto">
           {navItems.map((item) => (
             <a
               href={item.href}
-              class={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-body font-normal transition-all duration-200 no-underline ${isActive(item.href) ? "bg-accent-subtle text-accent font-medium" : "text-white/45 hover:bg-accent-subtle hover:text-white/80"}`}
+              class={`flex items-center gap-3 px-3 py-2.5 text-[11px] font-medium tracking-wider uppercase transition-all duration-200 no-underline ${
+                isActive(item.href)
+                  ? "text-accent bg-accent/[0.06]"
+                  : "text-white/30 hover:text-white/60 hover:bg-white/[0.02]"
+              }`}
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px] shrink-0"><path d={item.icon} /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0"><path d={item.icon} /></svg>
               {item.label}
             </a>
           ))}
         </nav>
 
-        <div class="p-3 border-t border-white/[0.06] flex flex-col gap-1">
-          <a href="/" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-white/30 no-underline transition-all duration-200 hover:text-white/60 hover:bg-white/[0.04]">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px] shrink-0"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+        <div class="p-2 border-t border-white/[0.04] flex flex-col gap-[1px]">
+          <a href="/" class="flex items-center gap-3 px-3 py-2.5 text-[10px] font-medium text-white/20 tracking-wider uppercase no-underline transition-all duration-200 hover:text-white/40 hover:bg-white/[0.02]">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
             Volver al Sitio
           </a>
-          <button id="logout-btn-desktop" class="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs text-red-400/60 hover:text-red-400 hover:bg-red-500/[0.08] transition-all duration-200 w-full text-left">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-[18px] h-[18px] shrink-0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+          <button id="logout-btn-desktop" class="flex items-center gap-3 px-3 py-2.5 text-[10px] font-medium text-red-400/30 tracking-wider uppercase transition-all duration-200 hover:text-red-400/60 hover:bg-red-500/[0.04] w-full text-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
             Cerrar Sesión
           </button>
         </div>
       </aside>
 
-      <main class="flex-1 w-full p-4 sm:p-6 lg:p-8 xl:p-10 min-w-0">
-        <slot />
+      <main class="flex-1 w-full min-w-0">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-8 sm:py-10 lg:py-12">
+          <slot />
+        </div>
       </main>
     </div>
 

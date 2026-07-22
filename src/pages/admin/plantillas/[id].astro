@@ -1,0 +1,363 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+export const prerender = false;
+const { id } = Astro.params;
+---
+
+<AdminLayout title="Detalle Plantilla" description="Vista previa de plantilla de contrato">
+  <div id="loading" class="text-center py-16 text-sm text-white/30 font-body" data-template-id={id}>Cargando plantilla...</div>
+
+  <div id="templateView" class="hidden">
+    <!-- Header with back link -->
+    <div class="mb-6">
+      <a href="/admin/plantillas" class="inline-flex items-center gap-1.5 text-[10px] font-medium text-white/20 hover:text-white/40 tracking-wider uppercase transition-colors duration-200 no-underline">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        Volver a Plantillas
+      </a>
+    </div>
+
+    <div class="lg:grid lg:grid-cols-5 lg:gap-6">
+      <!-- Main content -->
+      <div class="lg:col-span-3">
+        <!-- Title block -->
+        <div class="border-b border-white/[0.04] pb-6 mb-6">
+          <div class="flex items-center gap-3 mb-2">
+            <span id="typeBadge"></span>
+          </div>
+          <h1 class="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight" id="templateName">—</h1>
+          <p class="mt-2 text-sm text-white/30 font-body leading-relaxed" id="templateDescription"></p>
+        </div>
+
+        <!-- Config detail: content_json fields -->
+        <div class="border-b border-white/[0.04] pb-6 mb-6">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+            <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Configuración de Plantilla</span>
+          </div>
+          <div id="contentConfig" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- Contract preview: visual simulation -->
+        <div class="border-b border-white/[0.04] pb-6 mb-6">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+            <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Preview del Contrato</span>
+          </div>
+          <div id="contractPreview" class="border border-white/[0.04] p-5">
+            <div class="text-[10px] text-white/15 uppercase tracking-[0.12em] mb-4">Vista previa estimada</div>
+            <div class="space-y-3 text-sm" id="previewContent"></div>
+          </div>
+        </div>
+
+        <!-- Contracts using this template -->
+        <div id="contractsSection">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+            <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Contratos Creados</span>
+            <span id="contractCountBadge" class="px-2 py-0.5 text-[9px] font-medium text-white/30 border border-white/[0.06]">0</span>
+          </div>
+          <div id="contractsList"><div class="text-center py-8 text-sm text-white/15 font-body">Sin contratos creados con esta plantilla</div></div>
+        </div>
+      </div>
+
+      <!-- Sidebar: metadata + actions -->
+      <div class="lg:col-span-2">
+        <div class="border border-white/[0.04] p-5 sticky top-6">
+          <div class="text-[10px] font-medium text-white/20 uppercase tracking-[0.15em] mb-4">Información</div>
+
+          <!-- Metadata rows -->
+          <div class="divide-y divide-white/[0.03]" id="metaSidebar"></div>
+
+          <!-- Actions -->
+          <div class="mt-6 pt-5 border-t border-white/[0.04] space-y-2">
+            <a id="createContractBtn" href="/admin/contratos/nuevo" class="flex items-center justify-center gap-2.5 px-4 py-3 bg-accent/10 hover:bg-accent/20 transition-all duration-300 text-[11px] font-medium text-accent tracking-wider uppercase no-underline">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Crear Contrato
+            </a>
+            <a href="/admin/plantillas" class="flex items-center justify-center px-4 py-2.5 text-[10px] font-medium text-white/20 hover:text-white/40 tracking-wider uppercase transition-colors no-underline">
+              Volver
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script is:inline>
+  var typeMeta = {
+    proyecto_unico: {
+      label: "Proyecto Único",
+      color: "text-indigo-300",
+      border: "border-indigo-400/20",
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+    },
+    recurrente: {
+      label: "Servicio Recurrente",
+      color: "text-emerald-400",
+      border: "border-emerald-400/20",
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+    },
+    jornada_dedicada: {
+      label: "Jornada Dedicada",
+      color: "text-amber-400",
+      border: "border-amber-400/20",
+      icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    },
+  };
+
+  var statusLabels = {
+    draft: "Borrador", pending: "Pendiente", client_signed: "Cliente Firmó", completed: "Completado", cancelled: "Cancelado",
+  };
+
+  var statusColors = {
+    draft: "text-white/30", pending: "text-indigo-300", client_signed: "text-emerald-400", completed: "text-emerald-400", cancelled: "text-red-400/70",
+  };
+
+  function getMeta(type) {
+    return typeMeta[type] || { label: type || "—", color: "text-white/30", border: "border-white/[0.06]", icon: "" };
+  }
+
+  function safeJson(raw) {
+    if (!raw) return {};
+    if (typeof raw === "object") return raw;
+    try { return JSON.parse(raw); } catch(e) { return {}; }
+  }
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    var d = document.createElement("div");
+    d.appendChild(document.createTextNode(String(str)));
+    return d.innerHTML;
+  }
+
+  function formatCurrency(n) {
+    return "$" + Number(n).toLocaleString("es-CL");
+  }
+
+  function statusDot(status) {
+    var color = statusColors[status] || "text-white/30";
+    return '<span class="inline-flex items-center gap-1.5 text-xs font-medium ' + color + '"><span class="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>' + (statusLabels[status] || status) + "</span>";
+  }
+
+  async function loadTemplate() {
+    var id = document.getElementById("loading").getAttribute("data-template-id");
+    try {
+      var res = await fetch("/api/templates/" + id);
+      if (!res.ok) throw new Error("Not found");
+      var data = await res.json();
+      var t = data.template;
+      if (!t) throw new Error("No template");
+
+      document.getElementById("loading").classList.add("hidden");
+      document.getElementById("templateView").classList.remove("hidden");
+
+      var meta = getMeta(t.type);
+      var content = safeJson(t.content_json);
+
+      // Type badge
+      document.getElementById("typeBadge").innerHTML =
+        '<span class="inline-flex items-center gap-2 px-2.5 py-1 text-[10px] font-medium ' + meta.color + ' ' + meta.border + '">' +
+        meta.icon +
+        '<span class="uppercase tracking-[0.12em]">' + meta.label + '</span></span>';
+
+      // Name
+      document.getElementById("templateName").textContent = t.name;
+
+      // Description
+      var descEl = document.getElementById("templateDescription");
+      descEl.textContent = t.description || "Sin descripción";
+
+      // Content config fields
+      renderConfig(content, meta);
+
+      // Contract preview
+      renderPreview(t, content, meta);
+
+      // Sidebar metadata (pass contract count)
+      renderSidebar(t, content, meta, data.contractCount || 0);
+
+      // Contracts list
+      renderContracts(data.contracts || [], meta);
+
+      // Create contract button
+      document.getElementById("createContractBtn").href = "/admin/contratos/nuevo";
+
+    } catch(e) {
+      document.getElementById("loading").innerHTML =
+        '<div><p class="text-sm text-red-400/60 font-body mb-1">Error al cargar plantilla</p>' +
+        '<p class="text-xs text-white/20 font-body">Verifica que la plantilla exista</p>' +
+        '<a href="/admin/plantillas" class="inline-block mt-4 text-[10px] font-medium text-accent tracking-wider uppercase">Volver</a></div>';
+    }
+  }
+
+  function renderConfig(content, meta) {
+    var html = [];
+    var fields = [
+      { label: "Categoría", value: content.category, color: meta.color },
+      { label: "Duración por Defecto", value: content.defaultDurationMonths ? content.defaultDurationMonths + " mes" + (content.defaultDurationMonths > 1 ? "es" : "") : "No definido" },
+      { label: "Requiere Horario", value: content.hasSchedule ? "Sí" : "No", color: content.hasSchedule ? "text-amber-400/70" : "text-white/20" },
+    ];
+    if (content.renewable !== undefined) {
+      fields.push({ label: "Renovable", value: content.renewable ? "Sí" : "No", color: content.renewable ? "text-emerald-400/70" : "text-white/20" });
+    }
+    for (var i = 0; i < fields.length; i++) {
+      var f = fields[i];
+      html.push('<div class="border border-white/[0.04] p-4">');
+      html.push('<div class="text-[9px] text-white/20 uppercase tracking-[0.12em] mb-1.5">' + f.label + '</div>');
+      html.push('<div class="text-sm font-medium ' + (f.color || "text-white/70") + '">' + escapeHtml(String(f.value)) + '</div>');
+      html.push('</div>');
+    }
+    document.getElementById("contentConfig").innerHTML = html.join("");
+  }
+
+  function renderPreview(t, content, meta) {
+    var html = [];
+
+    // Contract header simulation
+    html.push('<div class="border-b border-white/[0.06] pb-3 mb-3">');
+    html.push('<div class="text-[9px] text-white/15 uppercase tracking-[0.12em]">CONTRATO DE PRESTACIÓN DE SERVICIOS</div>');
+    html.push('<div class="text-xs text-white/40 font-mono mt-1">MTSPRZ-XXXX</div>');
+    html.push('</div>');
+
+    // Services section
+    html.push('<div class="text-xs text-white/60 font-medium mb-2">Servicios Incluidos:</div>');
+    html.push('<ul class="list-none space-y-1.5 mb-3">');
+    html.push('<li class="flex items-start gap-2 text-xs text-white/30"><span class="w-1 h-1 rounded-full bg-white/20 mt-1.5 shrink-0"></span>Servicios categoría <span class="text-white/50">' + escapeHtml(content.category || t.type) + '</span></li>');
+
+    if (content.defaultDurationMonths) {
+      html.push('<li class="flex items-start gap-2 text-xs text-white/30"><span class="w-1 h-1 rounded-full bg-white/20 mt-1.5 shrink-0"></span>Duración estimada: <span class="text-white/50">' + content.defaultDurationMonths + ' meses</span></li>');
+    }
+
+    if (content.renewable) {
+      html.push('<li class="flex items-start gap-2 text-xs text-white/30"><span class="w-1 h-1 rounded-full bg-emerald-400/30 mt-1.5 shrink-0"></span>Contrato renovable automáticamente</li>');
+    }
+
+    if (content.hasSchedule) {
+      html.push('<li class="flex items-start gap-2 text-xs text-white/30"><span class="w-1 h-1 rounded-full bg-amber-400/30 mt-1.5 shrink-0"></span>Incluye horario fijo (Lun-Vie)</li>');
+    }
+    html.push('</ul>');
+
+    // Footer
+    html.push('<div class="border-t border-white/[0.06] pt-3 mt-3 flex items-center justify-between">');
+    html.push('<span class="text-[9px] text-white/15">Generado desde plantilla: ' + escapeHtml(t.name) + '</span>');
+    html.push('<span class="text-[9px] text-white/10 font-mono">#' + t.id + '</span>');
+    html.push('</div>');
+
+    document.getElementById("previewContent").innerHTML = html.join("");
+  }
+
+  function renderSidebar(t, content, meta, contractCount) {
+    var html = [];
+
+    // ID row
+    html.push('<div class="py-3 flex items-center justify-between">');
+    html.push('<span class="text-[10px] text-white/20">ID</span>');
+    html.push('<span class="text-xs text-white/50 font-mono">#' + t.id + '</span>');
+    html.push('</div>');
+
+    // Type row
+    html.push('<div class="py-3 flex items-center justify-between">');
+    html.push('<span class="text-[10px] text-white/20">Tipo</span>');
+    html.push('<span class="inline-flex items-center gap-1.5 text-xs font-medium ' + meta.color + '">');
+    html.push('<span class="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>');
+    html.push(meta.label);
+    html.push('</span>');
+    html.push('</div>');
+
+    // Usage count (most important metric)
+    html.push('<div class="py-3 flex items-center justify-between">');
+    html.push('<span class="text-[10px] text-white/20">Contratos Creados</span>');
+    if (contractCount > 0) {
+      html.push('<span class="inline-flex items-center gap-1.5 text-xs font-medium text-accent">');
+      html.push('<span class="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>');
+      html.push(contractCount);
+      html.push('</span>');
+    } else {
+      html.push('<span class="text-xs text-white/20">0</span>');
+    }
+    html.push('</div>');
+
+    // Created date
+    if (t.created_at) {
+      var d = new Date(t.created_at);
+      html.push('<div class="py-3 flex items-center justify-between">');
+      html.push('<span class="text-[10px] text-white/20">Creado</span>');
+      html.push('<span class="text-xs text-white/40">' + d.toLocaleDateString("es-CL") + '</span>');
+      html.push('</div>');
+    }
+
+    // Category
+    if (content.category) {
+      html.push('<div class="py-3 flex items-center justify-between">');
+      html.push('<span class="text-[10px] text-white/20">Categoría</span>');
+      html.push('<span class="text-xs text-white/50">' + escapeHtml(content.category) + '</span>');
+      html.push('</div>');
+    }
+
+    // Duration
+    if (content.defaultDurationMonths) {
+      html.push('<div class="py-3 flex items-center justify-between">');
+      html.push('<span class="text-[10px] text-white/20">Duración</span>');
+      html.push('<span class="text-xs text-white/50">' + content.defaultDurationMonths + ' mes' + (content.defaultDurationMonths > 1 ? "es" : "") + '</span>');
+      html.push('</div>');
+    }
+
+    // Active status
+    html.push('<div class="py-3 flex items-center justify-between">');
+    html.push('<span class="text-[10px] text-white/20">Estado</span>');
+    html.push('<span class="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400/70">');
+    html.push('<span class="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>');
+    html.push(t.is_active ? "Activa" : "Inactiva");
+    html.push('</span>');
+    html.push('</div>');
+
+    document.getElementById("metaSidebar").innerHTML = html.join("");
+  }
+
+  function renderContracts(contracts, meta) {
+    var badge = document.getElementById("contractCountBadge");
+    var list = document.getElementById("contractsList");
+
+    badge.textContent = contracts.length;
+
+    if (contracts.length === 0) {
+      list.innerHTML = '<div class="text-center py-8 px-6 border border-white/[0.04]">' +
+        '<svg class="w-8 h-8 text-white/[0.06] mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>' +
+        '</svg>' +
+        '<p class="text-sm text-white/15 font-body">Sin contratos creados con esta plantilla</p>' +
+        '<a href="/admin/contratos/nuevo" class="inline-block mt-3 text-[10px] font-medium text-accent/60 hover:text-accent tracking-wider uppercase transition-colors">Crear Contrato →</a>' +
+        '</div>';
+      return;
+    }
+
+    var html = [];
+    html.push('<div class="overflow-x-auto border border-white/[0.04]">');
+    html.push('<table class="w-full border-collapse">');
+    html.push('<thead><tr class="border-b border-white/[0.04]">');
+    html.push('<th class="text-left text-[9px] font-medium text-white/15 uppercase tracking-[0.12em] px-3 py-2.5">Contrato</th>');
+    html.push('<th class="text-left text-[9px] font-medium text-white/15 uppercase tracking-[0.12em] px-3 py-2.5">Cliente</th>');
+    html.push('<th class="text-right text-[9px] font-medium text-white/15 uppercase tracking-[0.12em] px-3 py-2.5">Monto</th>');
+    html.push('<th class="text-center text-[9px] font-medium text-white/15 uppercase tracking-[0.12em] px-3 py-2.5">Estado</th>');
+    html.push('<th class="text-right text-[9px] font-medium text-white/15 uppercase tracking-[0.12em] px-3 py-2.5">Creado</th>');
+    html.push('</tr></thead>');
+    html.push('<tbody>');
+
+    for (var i = 0; i < contracts.length; i++) {
+      var c = contracts[i];
+      html.push('<tr class="border-b border-white/[0.03] hover:bg-white/[0.015] transition-colors">');
+      html.push('<td class="px-3 py-3"><a href="/admin/contratos/' + c.id + '" class="text-accent no-underline font-mono text-[11px] tracking-wider">' + escapeHtml(c.contract_number) + '</a></td>');
+      html.push('<td class="px-3 py-3 text-xs text-white/60 font-medium">' + escapeHtml(c.client_name) + '</td>');
+      html.push('<td class="px-3 py-3 text-xs text-white/40 font-mono text-right">' + formatCurrency(c.total_amount) + '</td>');
+      html.push('<td class="px-3 py-3 text-center">' + statusDot(c.status) + '</td>');
+      html.push('<td class="px-3 py-3 text-[10px] text-white/25 text-right">' + new Date(c.created_at).toLocaleDateString("es-CL") + '</td>');
+      html.push('</tr>');
+    }
+
+    html.push('</tbody></table></div>');
+    list.innerHTML = html.join("");
+  }
+
+  loadTemplate();
+</script>

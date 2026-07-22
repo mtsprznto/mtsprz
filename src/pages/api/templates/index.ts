@@ -10,7 +10,14 @@ export const GET: APIRoute = async ({ locals }) => {
 
   try {
     await initDb();
-    const result = await query("SELECT * FROM contract_templates WHERE is_active = true ORDER BY name ASC");
+    const result = await query(
+      `SELECT ct.*, COUNT(c.id)::int AS contract_count
+       FROM contract_templates ct
+       LEFT JOIN contracts c ON c.template_id = ct.id
+       WHERE ct.is_active = true
+       GROUP BY ct.id
+       ORDER BY ct.name ASC`
+    );
     return new Response(JSON.stringify({ templates: result.rows }), { status: 200 });
   } catch (err) {
     console.error("[Templates] List error:", err);

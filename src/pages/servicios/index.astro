@@ -1,84 +1,21 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
-import ServiceCard from "../../components/ServiceCard.astro";
+import CinematicColumn from "../../components/CinematicColumn.astro";
 import BlurText from "../../components/BlurText.astro";
 import Footer from "../../components/Footer.astro";
+import { query, initDb } from "../../lib/db";
+import { toServiceDisplay } from "../../lib/service-display";
 
-interface Service {
-  icon: string;
-  title: string;
-  description: string;
-  descriptionLong: string;
-  tags: string[];
-  accent: string;
-  slug?: string;
-}
-
-const services: Service[] = [
-  {
-    icon: "Code",
-    title: "Desarrollo Web",
-    description: "Landing pages, sitios corporativos, e-commerce y aplicaciones web a medida. Modernos, veloces y hechos para convertir.",
-    descriptionLong: "Creamos experiencias digitales que impulsan tu negocio. Cada proyecto est\u00e1 optimizado para velocidad 90+ Lighthouse, SEO desde el d\u00eda uno y m\u00e1xima seguridad. Stack moderno (Astro, Next.js, FastAPI).",
-    tags: ["Landing Pages", "Sitios Corporativos", "E-commerce", "Apps Web"],
-    accent: "#6366f1",
-    slug: "desarrollo-web",
-  },
-  {
-    icon: "Bot",
-    title: "Automatizaci\u00f3n de Procesos",
-    description: "Bots WhatsApp, automatizaci\u00f3n Excel, flujos de email, integraci\u00f3n CRM y workflows. Tu negocio funcionando solo.",
-    descriptionLong: "Recupera horas de trabajo cada semana. Automatizamos procesos manuales, conectamos tus herramientas y eliminamos tareas repetitivas. Desde Excel hasta APIs complejas.",
-    tags: ["WhatsApp Bots", "Excel Automation", "CRM", "Workflows n8n"],
-    accent: "#06b6d4",
-    slug: "automatizaciones",
-  },
-  {
-    icon: "BarChart3",
-    title: "Datos e Inteligencia",
-    description: "Dashboards interactivos, scraping web, APIs a medida, OCR y procesamiento de documentos. Tus datos al servicio de tus decisiones.",
-    descriptionLong: "Transformamos datos crudos en decisiones inteligentes. Dashboards en tiempo real, extracci\u00f3n automatizada de datos web, APIs que conectan tus sistemas y digitalizaci\u00f3n de documentos con OCR.",
-    tags: ["Dashboards", "Scraping", "APIs", "OCR"],
-    accent: "#f97316",
-    slug: "datos",
-  },
-  {
-    icon: "Search",
-    title: "SEO",
-    description: "Posicionamiento en Google. SEO local, t\u00e9cnico y de contenido para la Regi\u00f3n de Los Lagos.",
-    descriptionLong: "Lleva tu negocio a los primeros resultados de b\u00fasqueda. Estrategia SEO completa con enfoque local: Google Maps, b\u00fasquedas por ciudad y contenido optimizado para tu zona.",
-    tags: ["SEO Local", "Google Maps", "Auditor\u00eda", "Contenido"],
-    accent: "#10b981",
-    slug: "seo",
-  },
-  {
-    icon: "TrendingUp",
-    title: "Marketing Digital",
-    description: "Google Ads, redes sociales y estrategia de contenido. Resultados medibles desde la primera semana.",
-    descriptionLong: "Clientes busc\u00e1ndote hoy. Campa\u00f1as segmentadas geogr\u00e1ficamente, gesti\u00f3n profesional de redes sociales y contenido que conecta con tu audiencia local.",
-    tags: ["Google Ads", "Redes Sociales", "Contenido", "Anal\u00edtica"],
-    accent: "#f59e0b",
-  },
-  {
-    icon: "Palette",
-    title: "Dise\u00f1o Gr\u00e1fico",
-    description: "Identidad corporativa, logotipos y manual de marca. Tu marca profesional lista para el mercado.",
-    descriptionLong: "Construye una marca que conecte con tu audiencia. Dise\u00f1amos tu identidad visual desde cero: logo, paleta, tipograf\u00eda y papeler\u00eda. Todo en formatos vectoriales listos para usar.",
-    tags: ["Logos", "Identidad Visual", "Manual de Marca", "UX/UI"],
-    accent: "#ec4899",
-  },
-  {
-    icon: "Globe",
-    title: "Consultor\u00eda Digital",
-    description: "Diagn\u00f3stico gratuito de tu negocio. Hoja de ruta clara con prioridades, presupuestos y plazos.",
-    descriptionLong: "Evaluamos tu situaci\u00f3n actual sin compromiso. Identificamos oportunidades digitales reales y te entregamos un plan accionable con prioridades a 30, 60 y 90 d\u00edas.",
-    tags: ["Diagn\u00f3stico", "Plan Digital", "Pymes", "Estrategia"],
-    accent: "#8b5cf6",
-  },
-];
+await initDb();
+const dbRows = await query(
+  `SELECT DISTINCT ON (LOWER(TRIM(category))) slug, name, description, category
+   FROM services WHERE is_active = true AND category IS NOT NULL
+   ORDER BY LOWER(TRIM(category)), is_popular DESC, id`
+);
+const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
 
 ---
 
@@ -245,16 +182,20 @@ const services: Service[] = [
           <p class="mt-4 text-white/60 font-body font-light max-w-md mx-auto">Todo lo que tu negocio necesita para crecer en el entorno digital</p>
         </div>
       </div>
+
+      <!-- Breadcrumb — integrado en hero, esquina inferior izquierda -->
+      <div class="absolute bottom-8 md:bottom-10 left-0 right-0 z-20 px-6">
+        <div class="mx-auto max-w-6xl">
+          <Breadcrumbs items={[{ name: "Servicios", path: "/servicios" }]} />
+        </div>
+      </div>
     </section>
 
-    <div class="mx-auto max-w-6xl px-6 pt-16">
-      <Breadcrumbs items={[{ name: "Servicios", path: "/servicios" }]} />
-    </div>
-
-    <!-- Services -->
-    <section class="relative bg-[#010101] py-28 md:py-36">
-      <div class="mx-auto max-w-6xl px-6">
-        <div class="reveal-group mb-12 md:mb-16 text-center">
+    <!-- Services: editorial cinematic columns -->
+    <section class="relative bg-[#0A0A0A] w-full">
+      <!-- Section header — compacto, como intro de revista -->
+      <div class="mx-auto max-w-6xl px-6 pt-28 md:pt-36 pb-16 md:pb-20">
+        <div class="reveal-group text-center">
           <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Nuestros Servicios</p>
           <BlurText
             text="Todo lo que tu negocio necesita"
@@ -262,99 +203,144 @@ const services: Service[] = [
             className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.1] tracking-[-1px]"
             wordMs={60}
           />
-          <p class="mt-4 text-white/50 font-body font-light max-w-lg mx-auto text-sm">
+          <p class="reveal-item mt-4 text-white/50 font-body font-light max-w-lg mx-auto text-sm">
             Soluciones digitales diseñadas para pymes y empresas del sur de Chile
           </p>
         </div>
-
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => (
-            <ServiceCard
-              icon={s.icon}
-              title={s.title}
-              description={s.description}
-              tags={s.tags}
-              number={i + 1}
-              accent={s.accent}
-              id={s.slug}
-            />
-          ))}
-        </div>
       </div>
-    </section>
 
-    <!-- FAQ -->
-    <section class="bg-[#010101] py-28 md:py-36 border-t border-white/[0.03]">
-      <div class="mx-auto max-w-3xl px-6">
-        <div class="reveal-group mb-12 md:mb-16 text-center">
-          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Preguntas Frecuentes</p>
-          <h2 class="reveal-item text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.1] tracking-[-1px]">Resolvemos tus dudas</h2>
-        </div>
-        <div class="reveal-group space-y-4">
-          {[
-            { q: "¿Cuánto cuesta una página web profesional?", a: "Landing pages desde $290.000, sitios corporativos (5-10 páginas) desde $690.000, tiendas online desde $1.500.000. Todos incluyen hosting, SSL, SEO básico y Analytics. Cotización personalizada sin compromiso." },
-            { q: "¿Qué procesos puedo automatizar en mi pyme?", a: "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots 24/7 que atienden clientes), email marketing (secuencias que nutren y venden), integración CRM (datos que fluyen solos) y workflows completos. Una corredora típica ahorra 10+ horas semanales." },
-            { q: "¿Qué es un dashboard de datos y para qué sirve?", a: "Un dashboard muestra tus indicadores clave en tiempo real: ventas, clientes, inventario. Conectamos tus datos (Excel, base de datos, APIs) y creamos visualizaciones interactivas accesibles desde cualquier dispositivo. Decisiones basadas en datos." },
-            { q: "¿En qué se diferencia Astro de WordPress?", a: "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos de WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son más seguros al no depender de plugins, y tienen mejor SEO desde el día uno." },
-          ].map((faq) => (
-            <details class="reveal-item group liquid-glass rounded-[1.25rem] overflow-hidden transition-all duration-300 open:border-[#6366f1]/30">
-              <summary class="flex cursor-pointer items-center justify-between gap-4 px-5 sm:px-6 py-4 sm:py-5 text-sm sm:text-base font-heading font-semibold text-white/90 hover:text-white transition-colors list-none [&::-webkit-details-marker]:hidden">
-                <span>{faq.q}</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-white/30 group-open:rotate-180 transition-transform duration-300"><path d="M6 9l6 6 6-6"/></svg>
-              </summary>
-              <div class="px-5 sm:px-6 pb-4 sm:pb-5">
-                <p class="text-sm text-white/50 font-body font-light leading-relaxed">{faq.a}</p>
+      <!-- Columnas editoriales — full-bleed, asimétricas, sin contenedores -->
+      <div class="w-full overflow-hidden">
+        <div class="reveal-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12">
+          {services.map((s, i) => {
+            // Ritmo asimétrico: ancho variable por índice
+            // Patrón: wide(6) + narrow(3) + narrow(3) → wide(6) + narrow(3) + narrow(3) → wide(6)
+            const span = i % 3 === 0 ? "lg:col-span-6" : "lg:col-span-3";
+            return (
+              <div class={`${span} md:col-span-1 reveal-item`}>
+                <CinematicColumn
+                  title={s.title}
+                  description={s.description}
+                  accent={s.accent}
+                  slug={s.slug}
+                  index={i}
+                />
               </div>
-            </details>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="bg-[#010101] py-28 md:py-36">
-      <div class="mx-auto max-w-6xl px-6">
-        <div class="cta-card reveal-group relative rounded-[1.375rem] p-10 md:p-14 text-center max-w-3xl mx-auto overflow-hidden bg-[#0a0a0b] border border-white/[0.06]">
-          <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute inset-0 opacity-30" style="background: radial-gradient(ellipse at 50% 0%, #6366f133, transparent 60%);" />
-            <div class="absolute -top-1/2 -left-1/2 w-full h-full animate-gradient-slow opacity-20" style="background: conic-gradient(from 0deg at 50% 50%, #6366f1, #8b5cf6, #ec4899, #6366f1); filter: blur(80px);" />
+    <!-- FAQ — editorial accordion -->
+    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
+      <!-- Background cinematográfico -->
+      <div class="absolute inset-0" style="background: #0A0A0A;" />
+      <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at 30% 0%, #6366f112 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, #8b5cf606 0%, transparent 50%);" />
+      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
+      <!-- Líneas decorativas -->
+      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
+
+      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44">
+        <div class="reveal-group text-center">
+          <!-- Label editorial -->
+          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Preguntas Frecuentes</p>
+
+          <!-- Título -->
+          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px]">
+            Resolvemos <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">tus dudas</span>
+          </h2>
+
+          <!-- Separador editorial -->
+          <div class="reveal-item mx-auto my-10 md:my-12 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
+        </div>
+
+        <!-- FAQ items — estilo columna editorial, clean, borders minimal -->
+        <div class="reveal-group mx-auto max-w-2xl">
+          <div class="divide-y divide-white/[0.06]">
+            {[
+              { q: "¿Cuánto cuesta una página web profesional?", a: "Landing pages desde $290.000, sitios corporativos (5-10 páginas) desde $690.000, tiendas online desde $1.500.000. Todos incluyen hosting, SSL, SEO básico y Analytics. Cotización personalizada sin compromiso." },
+              { q: "¿Qué procesos puedo automatizar en mi pyme?", a: "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots 24/7 que atienden clientes), email marketing (secuencias que nutren y venden), integración CRM (datos que fluyen solos) y workflows completos. Una corredora típica ahorra 10+ horas semanales." },
+              { q: "¿Qué es un dashboard de datos y para qué sirve?", a: "Un dashboard muestra tus indicadores clave en tiempo real: ventas, clientes, inventario. Conectamos tus datos (Excel, base de datos, APIs) y creamos visualizaciones interactivas accesibles desde cualquier dispositivo. Decisiones basadas en datos." },
+              { q: "¿En qué se diferencia Astro de WordPress?", a: "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos de WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son más seguros al no depender de plugins, y tienen mejor SEO desde el día uno." },
+            ].map((faq) => (
+              <details class="reveal-item group open:pb-6 transition-all duration-300">
+                <summary class="flex cursor-pointer items-center justify-between gap-4 py-5 md:py-6 text-sm md:text-base font-heading font-semibold text-white/85 hover:text-white transition-colors list-none [&::-webkit-details-marker]:hidden">
+                  <span class="leading-snug">{faq.q}</span>
+                  <span class="shrink-0 flex items-center justify-center w-6 h-6 rounded-full border border-white/10 text-white/30 group-open:text-[#6366f1] group-open:border-[#6366f1]/40 transition-all duration-300">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="transition-transform duration-300 group-open:rotate-45"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                  </span>
+                </summary>
+                <div class="pb-2">
+                  <p class="text-sm md:text-[15px] text-white/45 font-body font-light leading-[1.8] max-w-xl">{faq.a}</p>
+                </div>
+              </details>
+            ))}
           </div>
-          <div class="absolute top-6 left-8 flex gap-2 opacity-20 pointer-events-none">
-            <div class="w-1.5 h-1.5 rounded-full bg-white/40" />
-            <div class="w-1.5 h-1.5 rounded-full bg-white/20" />
-            <div class="w-1.5 h-1.5 rounded-full bg-white/10" />
+        </div>
+
+        <!-- Bottom CTA — más preguntas -->
+        <div class="reveal-item mt-16 md:mt-20 text-center">
+          <p class="text-sm text-white/40 font-body">¿Tienes más preguntas?</p>
+          <a
+            href="/contacto"
+            class="group inline-flex items-center gap-2.5 mt-3 text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300 hover:gap-4"
+            style="color: #6366f1;"
+          >
+            <span>Hablemos</span>
+            <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — editorial call to action -->
+    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
+      <div class="absolute inset-0" style="background: #0A0A0A;" />
+      <div class="absolute inset-0 opacity-50" style="background: radial-gradient(ellipse at 50% 0%, #6366f128 0%, transparent 50%), radial-gradient(ellipse at 30% 100%, #8b5cf610 0%, transparent 50%);" />
+      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
+      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
+
+      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44 text-center">
+        <div class="reveal-group">
+          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Contacto</p>
+
+          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px] lg:tracking-[-3px]">
+            Listo para impulsar<br />
+            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">tu negocio?</span>
+          </h2>
+
+          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
+
+          <p class="reveal-item mx-auto max-w-xl text-sm md:text-base lg:text-lg text-white/50 font-body font-light leading-relaxed">
+            Conversemos sin compromiso. Te ayudamos a definir la mejor estrategia digital para tu empresa en el sur de Chile.
+          </p>
+
+          <div class="reveal-item mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-5">
+            <a
+              href="/contacto"
+              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300"
+              style="color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+            >
+              <span>Contáctanos</span>
+              <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+            <span class="text-[11px] md:text-xs text-white/30 font-body tracking-wide">o llama al <span class="text-white/50">+56975475781</span></span>
           </div>
-          <div class="relative">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-white tracking-[-1px] leading-[1.1]">¿Listo para impulsar tu negocio?</h2>
-            <p class="mx-auto mt-4 max-w-lg text-sm text-white/50 font-body font-light leading-relaxed">
-              Conversemos sin compromiso. Te ayudamos a definir la mejor estrategia digital para tu empresa en el sur de Chile.
-            </p>
-            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="/contacto"
-                class="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-medium text-white transition-all duration-300"
-                style="background: linear-gradient(135deg, #6366f1, #8b5cf6);"
-              >
-                <span class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" style="background: #6366f166;" />
-                <span class="relative">Contáctanos</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-              </a>
-              <span class="text-[11px] text-white/30 font-body tracking-wide">o llama al <span class="text-white/50">+56975475781</span></span>
-            </div>
-            <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-white/30 font-body">
-              <span class="flex items-center gap-1.5">
-                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Sin compromiso
+
+          <div class="reveal-item mt-12 md:mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+            {[
+              { label: "Sin compromiso", accent: "#6366f1" },
+              { label: "Respuesta en 24 hrs", accent: "#10b981" },
+              { label: "Atención personalizada", accent: "#6366f1" },
+            ].map((t) => (
+              <span class="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium tracking-[0.1em] uppercase" style="color: rgba(255,255,255,0.35);">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke={t.accent} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                {t.label}
               </span>
-              <span class="flex items-center gap-1.5">
-                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Respuesta en 24 hrs
-              </span>
-              <span class="flex items-center gap-1.5">
-                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Atención personalizada
-              </span>
-            </div>
+            ))}
           </div>
         </div>
       </div>

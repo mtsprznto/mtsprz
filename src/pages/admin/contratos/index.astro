@@ -3,56 +3,70 @@ import AdminLayout from "../../../layouts/AdminLayout.astro";
 ---
 
 <AdminLayout title="Contratos" description="Gestión de contratos">
-  <div class="flex items-center justify-between flex-wrap gap-3 mb-6">
+  <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
     <div>
-      <h1 class="font-heading text-2xl font-bold text-white tracking-tight">Contratos</h1>
-      <p class="mt-1 text-sm text-white/35 font-body">Administra todos los contratos de Mtsprz</p>
+      <p class="text-[11px] font-medium text-accent tracking-[0.15em] uppercase mb-2">Gestión</p>
+      <h1 class="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight">Contratos</h1>
+      <p class="mt-2 text-sm text-white/30 font-body">Administra todos los contratos de Mtsprz</p>
     </div>
-    <a href="/admin/contratos/nuevo" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white bg-gradient-to-r from-accent to-violet-500 no-underline transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Nuevo Contrato
+    <a href="/admin/contratos/nuevo" class="group inline-flex items-center gap-2.5 px-4 py-2.5 bg-white/[0.04] hover:bg-white/[0.07] transition-all duration-300 no-underline">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="text-accent"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span class="text-[11px] font-medium text-white/60 tracking-wider uppercase group-hover:text-white/80 transition-colors">Nuevo Contrato</span>
     </a>
   </div>
 
-  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-4"><div class="text-[11px] text-white/35 uppercase tracking-wider font-medium">Total</div><div class="font-heading text-xl sm:text-2xl font-bold text-white mt-1" id="statTotal">—</div></div>
-    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-4"><div class="text-[11px] text-white/35 uppercase tracking-wider font-medium">Pendientes</div><div class="font-heading text-xl sm:text-2xl font-bold text-indigo-400 mt-1" id="statPending">—</div></div>
-    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-4"><div class="text-[11px] text-white/35 uppercase tracking-wider font-medium">Completados</div><div class="font-heading text-xl sm:text-2xl font-bold text-emerald-400 mt-1" id="statCompleted">—</div></div>
-    <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-4"><div class="text-[11px] text-white/35 uppercase tracking-wider font-medium">Borradores</div><div class="font-heading text-xl sm:text-2xl font-bold text-white/40 mt-1" id="statDraft">—</div></div>
-  </div>
-
-  <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-3 sm:p-4 mb-4">
-    <div class="flex flex-col sm:flex-row gap-3 items-center">
-      <div class="relative flex-1 w-full">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input id="searchInput" type="text" placeholder="Buscar por nombre, email o n&uacute;mero..." class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 pl-9 pr-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" />
-      </div>
-      <select id="statusFilter" class="w-full sm:w-44 bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body appearance-none" style="background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23fafafa%27 stroke-width=%272%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;">
-        <option value="">Todos los estados</option>
-        <option value="draft">Borrador</option>
-        <option value="pending">Pendiente</option>
-        <option value="client_signed">Cliente Firm&oacute;</option>
-        <option value="completed">Completado</option>
-        <option value="cancelled">Cancelado</option>
-      </select>
+  <!-- Stats row: editorial compact -->
+  <div class="flex flex-wrap gap-px bg-white/[0.04] mb-6">
+    <div class="bg-[#010101] px-5 py-4 flex-1 min-w-[100px]">
+      <div class="font-heading text-xl font-bold text-white" id="statTotal">—</div>
+      <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-1">Total</div>
+    </div>
+    <div class="bg-[#010101] px-5 py-4 flex-1 min-w-[100px]">
+      <div class="font-heading text-xl font-bold text-indigo-300" id="statPending">—</div>
+      <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-1">Pendientes</div>
+    </div>
+    <div class="bg-[#010101] px-5 py-4 flex-1 min-w-[100px]">
+      <div class="font-heading text-xl font-bold text-emerald-400" id="statCompleted">—</div>
+      <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-1">Completados</div>
+    </div>
+    <div class="bg-[#010101] px-5 py-4 flex-1 min-w-[100px]">
+      <div class="font-heading text-xl font-bold text-white/30" id="statDraft">—</div>
+      <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-1">Borradores</div>
     </div>
   </div>
 
-  <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] overflow-x-auto">
+  <!-- Search & Filter: editorial compact -->
+  <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center mb-6 pb-6 border-b border-white/[0.04]">
+    <div class="relative flex-1 w-full">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Buscar por nombre, email o n&uacute;mero..." class="w-full bg-transparent border-b border-white/[0.08] py-2.5 pl-8 pr-3 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" />
+    </div>
+    <select id="statusFilter" class="w-full sm:w-44 bg-transparent border-b border-white/[0.08] py-2.5 px-3 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body appearance-none cursor-pointer" style="background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23fafafa%27 stroke-width=%271.5%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 4px center;padding-right:24px;">
+      <option value="">Todos los estados</option>
+      <option value="draft">Borrador</option>
+      <option value="pending">Pendiente</option>
+      <option value="client_signed">Cliente Firm&oacute;</option>
+      <option value="completed">Completado</option>
+      <option value="cancelled">Cancelado</option>
+    </select>
+  </div>
+
+  <!-- Table: editorial divide-y style -->
+  <div class="overflow-x-auto">
     <table class="w-full border-collapse">
       <thead>
-        <tr>
-          <th class="text-left text-[11px] font-medium text-white/25 uppercase tracking-wider px-4 py-3 border-b border-white/[0.06]">N&deg; Contrato</th>
-          <th class="text-left text-[11px] font-medium text-white/25 uppercase tracking-wider px-4 py-3 border-b border-white/[0.06]">Cliente</th>
-          <th class="text-left text-[11px] font-medium text-white/25 uppercase tracking-wider px-4 py-3 border-b border-white/[0.06] hidden sm:table-cell">Email</th>
-          <th class="text-left text-[11px] font-medium text-white/25 uppercase tracking-wider px-4 py-3 border-b border-white/[0.06]">Monto</th>
-          <th class="text-left text-[11px] font-medium text-white/25 uppercase tracking-wider px-4 py-3 border-b border-white/[0.06]">Estado</th>
-          <th class="text-left text-[11px] font-medium text-white/25 uppercase tracking-wider px-4 py-3 border-b border-white/[0.06] hidden md:table-cell">Fecha</th>
-          <th class="px-4 py-3 border-b border-white/[0.06]"></th>
+        <tr class="divide-x divide-white/[0.04]">
+          <th class="text-left text-[10px] font-medium text-white/15 uppercase tracking-[0.12em] px-4 pb-3">N&deg; Contrato</th>
+          <th class="text-left text-[10px] font-medium text-white/15 uppercase tracking-[0.12em] px-4 pb-3">Cliente</th>
+          <th class="text-left text-[10px] font-medium text-white/15 uppercase tracking-[0.12em] px-4 pb-3 hidden sm:table-cell">Email</th>
+          <th class="text-right text-[10px] font-medium text-white/15 uppercase tracking-[0.12em] px-4 pb-3">Monto</th>
+          <th class="text-center text-[10px] font-medium text-white/15 uppercase tracking-[0.12em] px-4 pb-3">Estado</th>
+          <th class="text-left text-[10px] font-medium text-white/15 uppercase tracking-[0.12em] px-4 pb-3 hidden md:table-cell">Fecha</th>
+          <th class="px-4 pb-3"></th>
         </tr>
       </thead>
       <tbody id="contractsBody">
-        <tr><td colspan="7"><div class="text-center py-12 px-6"><svg class="w-12 h-12 text-white/[0.08] mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><p class="text-sm text-white/25">Cargando contratos...</p></div></td></tr>
+        <tr><td colspan="7"><div class="text-center py-16 px-6"><svg class="w-10 h-10 text-white/[0.06] mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><p class="text-sm text-white/20 font-body">Cargando contratos...</p></div></td></tr>
       </tbody>
     </table>
   </div>
@@ -64,16 +78,16 @@ import AdminLayout from "../../../layouts/AdminLayout.astro";
   };
 
   var statusColors = {
-    draft: "bg-white/[0.06] text-white/50",
-    pending: "bg-indigo-500/15 text-indigo-400",
-    client_signed: "bg-emerald-500/15 text-emerald-400",
-    completed: "bg-emerald-500/15 text-emerald-400",
-    cancelled: "bg-red-500/15 text-red-400",
+    draft: "text-white/30",
+    pending: "text-indigo-300",
+    client_signed: "text-emerald-400",
+    completed: "text-emerald-400",
+    cancelled: "text-red-400/70",
   };
 
-  function statusBadge(status) {
-    var color = statusColors[status] || "";
-    return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium ' + color + '"><span class="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>' + (statusLabels[status] || status) + "</span>";
+  function statusDot(status) {
+    var color = statusColors[status] || "text-white/30";
+    return '<span class="inline-flex items-center gap-2 text-[11px] font-medium ' + color + '"><span class="w-1.5 h-1.5 rounded-full bg-current shrink-0"></span>' + (statusLabels[status] || status) + "</span>";
   }
 
   function formatCurrency(n) {
@@ -94,19 +108,19 @@ import AdminLayout from "../../../layouts/AdminLayout.astro";
       var contracts = data.contracts || [];
 
       if (contracts.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7"><div class="text-center py-12 px-6"><svg class="w-12 h-12 text-white/[0.08] mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><p class="text-sm text-white/25">Sin contratos encontrados</p></div></td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7"><div class="text-center py-16 px-6"><svg class="w-10 h-10 text-white/[0.06] mx-auto mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><p class="text-sm text-white/20">Sin contratos encontrados</p></div></td></tr>';
       } else {
         var html = [];
         for (var i = 0; i < contracts.length; i++) {
           var c = contracts[i];
-          html.push("<tr class='transition-colors duration-150 hover:bg-white/[0.015]'>");
-          html.push("<td class='px-4 py-3.5 border-b border-white/[0.04]'><a href='/admin/contratos/" + c.id + "' class='text-accent no-underline font-medium font-mono text-xs'>" + c.contract_number + "</a></td>");
-          html.push("<td class='px-4 py-3.5 border-b border-white/[0.04] text-sm text-white/85 font-medium'>" + c.client_name + "</td>");
-          html.push("<td class='px-4 py-3.5 border-b border-white/[0.04] text-xs text-white/40 hidden sm:table-cell'>" + c.client_email + "</td>");
-          html.push("<td class='px-4 py-3.5 border-b border-white/[0.04] text-sm text-white/85 font-mono'>" + formatCurrency(c.total_amount) + "</td>");
-          html.push("<td class='px-4 py-3.5 border-b border-white/[0.04]'>" + statusBadge(c.status) + "</td>");
-          html.push("<td class='px-4 py-3.5 border-b border-white/[0.04] text-xs text-white/40 hidden md:table-cell'>" + new Date(c.created_at).toLocaleDateString("es-CL") + "</td>");
-          html.push("<td class='px-4 py-3.5 border-b border-white/[0.04]'><a href='/admin/contratos/" + c.id + "' class='text-accent no-underline text-xs font-medium hover:underline'>Ver \u2192</a></td>");
+          html.push("<tr class='transition-colors duration-150 hover:bg-white/[0.015] border-b border-white/[0.03]'>");
+          html.push("<td class='px-4 py-3.5'><a href='/admin/contratos/" + c.id + "' class='text-accent no-underline font-mono text-xs tracking-wider'>" + c.contract_number + "</a></td>");
+          html.push("<td class='px-4 py-3.5 text-sm text-white/80 font-medium'>" + c.client_name + "</td>");
+          html.push("<td class='px-4 py-3.5 text-xs text-white/30 hidden sm:table-cell'>" + c.client_email + "</td>");
+          html.push("<td class='px-4 py-3.5 text-sm text-white/70 font-mono text-right'>" + formatCurrency(c.total_amount) + "</td>");
+          html.push("<td class='px-4 py-3.5 text-center'>" + statusDot(c.status) + "</td>");
+          html.push("<td class='px-4 py-3.5 text-xs text-white/30 hidden md:table-cell'>" + new Date(c.created_at).toLocaleDateString("es-CL") + "</td>");
+          html.push("<td class='px-4 py-3.5'><a href='/admin/contratos/" + c.id + "' class='text-accent/60 hover:text-accent no-underline text-[11px] font-medium transition-colors'>Ver \u2192</a></td>");
           html.push("</tr>");
         }
         tbody.innerHTML = html.join("");

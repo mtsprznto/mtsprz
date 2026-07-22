@@ -3,7 +3,7 @@ import AdminLayout from "../../../layouts/AdminLayout.astro";
 import { query, initDb } from "../../../lib/db";
 
 await initDb();
-const result = await query("SELECT * FROM services WHERE is_active = true ORDER BY category, name");
+const svcResult = await query("SELECT * FROM services WHERE is_active = true ORDER BY category, name");
 interface Service {
   id: number;
   slug: string;
@@ -16,158 +16,141 @@ interface Service {
   maintenance_price: number;
   is_monthly: boolean;
 }
-const services = result.rows as Service[];
+const services = svcResult.rows as Service[];
+
+const tplResult = await query("SELECT * FROM contract_templates WHERE is_active = true ORDER BY name ASC");
+interface Template {
+  id: number;
+  name: string;
+  type: string;
+  description: string | null;
+  content_json: Record<string, unknown>;
+}
+const templates = tplResult.rows as Template[];
 const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 ---
 
 <AdminLayout title="Nuevo Contrato" description="Crear nuevo contrato">
-  <div class="mb-6">
-    <div class="flex items-center justify-between flex-wrap gap-3">
-      <div>
-        <h1 class="font-heading text-2xl font-bold text-white tracking-tight">Nuevo Contrato</h1>
-        <p class="mt-1 text-sm text-white/35 font-body">Completa los datos para generar el contrato</p>
-      </div>
-      <div class="flex items-center gap-1.5 text-xs text-white/25 font-medium">
-        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-accent"></span> paso 1</span>
-        <span class="text-white/10">—</span>
-        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-white/20"></span> paso 2</span>
-        <span class="text-white/10">—</span>
-        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-white/20"></span> paso 3</span>
-        <span class="text-white/10">—</span>
-        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-white/20"></span> paso 4</span>
-      </div>
-    </div>
+  <div class="mb-8">
+    <p class="text-[11px] font-medium text-accent tracking-[0.15em] uppercase mb-2">Creación</p>
+    <h1 class="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight">Nuevo Contrato</h1>
+    <p class="mt-2 text-sm text-white/30 font-body">Completa los datos para generar el contrato</p>
   </div>
 
   <form id="contractForm">
     <div class="lg:grid lg:grid-cols-5 lg:gap-6">
       <div class="lg:col-span-3">
 
-        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="1">
-          <div class="flex items-center gap-2.5 mb-5">
-            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-accent/10 text-accent">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            </span>
-            <div>
-              <span class="font-heading text-sm font-semibold text-white tracking-tight">Tipo de Contrato</span>
-              <p class="text-[11px] text-white/30">Selecciona la modalidad del servicio</p>
-            </div>
+        <div class="border-b border-white/[0.04] pb-6 mb-6" data-section="1">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+            <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Tipo de Contrato</span>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <label class="template-card relative cursor-pointer rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-200 has-checked:border-accent/40 has-checked:bg-accent/[0.04] hover:border-white/15" onclick="selectTemplate('proyecto_unico')" data-template="proyecto_unico">
-              <input type="radio" name="templateType" value="proyecto_unico" class="sr-only" checked required />
-              <div class="flex flex-col items-center text-center gap-2">
-                <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04]">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/50"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                </span>
-                <span class="text-sm font-medium text-white/80">Proyecto Único</span>
-                <span class="text-[10px] text-white/30 leading-relaxed">Alcance definido, entrega pactada</span>
-                <span class="inline-flex px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider bg-accent/10 text-accent">Recomendado</span>
-              </div>
-            </label>
-            <label class="template-card relative cursor-pointer rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-200 has-checked:border-accent/40 has-checked:bg-accent/[0.04] hover:border-white/15" onclick="selectTemplate('recurrente')" data-template="recurrente">
-              <input type="radio" name="templateType" value="recurrente" class="sr-only" />
-              <div class="flex flex-col items-center text-center gap-2">
-                <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04]">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/50"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                </span>
-                <span class="text-sm font-medium text-white/80">Servicio Recurrente</span>
-                <span class="text-[10px] text-white/30 leading-relaxed">Mensual, facturación periódica</span>
-              </div>
-            </label>
-            <label class="template-card relative cursor-pointer rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-200 has-checked:border-accent/40 has-checked:bg-accent/[0.04] hover:border-white/15" onclick="selectTemplate('jornada_dedicada')" data-template="jornada_dedicada">
-              <input type="radio" name="templateType" value="jornada_dedicada" class="sr-only" />
-              <div class="flex flex-col items-center text-center gap-2">
-                <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.04]">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/50"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                </span>
-                <span class="text-sm font-medium text-white/80">Jornada Dedicada</span>
-                <span class="text-[10px] text-white/30 leading-relaxed">Horario fijo, disponibilidad</span>
-              </div>
-            </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-px bg-white/[0.04]">
+            {templates.map((tpl, idx) => {
+              const firstSelected = idx === 0;
+              return <label class="template-card relative cursor-pointer bg-[#010101] p-4 flex flex-col transition-all duration-200 has-checked:bg-white/[0.02] hover:bg-white/[0.015] border border-white/[0.04] group" onclick="selectTemplate({tpl.id},'{tpl.type}')" data-template-id={tpl.id} data-template-type={tpl.type}>
+                <input type="radio" name="templateType" value={tpl.type} class="sr-only" checked={firstSelected || undefined} required />
+                <input type="hidden" name="template_id" value={tpl.id} class="template-id-input" />
+                <div class="flex flex-col gap-2 h-full">
+                  <div class="flex items-center gap-2 mb-0.5">
+                    <span class="flex items-center justify-center w-7 h-7 border border-white/[0.06] text-white/40">
+                      {tpl.type === 'proyecto_unico' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 group-has-checked:text-accent transition-colors"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>}
+                      {tpl.type === 'recurrente' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 group-has-checked:text-accent transition-colors"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
+                      {tpl.type === 'jornada_dedicada' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 group-has-checked:text-accent transition-colors"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>}
+                    </span>
+                    <span class="text-[9px] font-medium text-white/25 uppercase tracking-[0.12em]">{tpl.type === 'proyecto_unico' ? 'Proyecto' : tpl.type === 'recurrente' ? 'Recurrente' : 'Dedicada'}</span>
+                  </div>
+                  <span class="text-sm font-medium text-white/80 group-has-checked:text-white leading-snug">{tpl.name}</span>
+                  <p class="text-[10px] text-white/25 font-body leading-relaxed flex-1">{tpl.description || ''}</p>
+                  <span class="text-[9px] text-white/10 font-mono">#{tpl.id}</span>
+                </div>
+              </label>;
+            })}
           </div>
         </div>
 
-        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="2">
-          <div class="flex items-center gap-2.5 mb-5">
-            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-400/10 text-amber-400">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </span>
-            <div>
-              <span class="font-heading text-sm font-semibold text-white tracking-tight">Datos del Cliente</span>
-              <p class="text-[11px] text-white/30">Información del contratante</p>
-            </div>
+        <div class="border-b border-white/[0.04] pb-6 mb-6" data-section="2">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+            <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Datos del Cliente</span>
           </div>
+
+          <!-- Client quick-select -->
+          <div class="relative mb-4">
+            <div class="flex items-center gap-2 border border-white/[0.04] px-3 py-2.5 transition-all duration-200 focus-within:border-white/[0.08]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-white/20 shrink-0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input id="clientSearch" type="text" autocomplete="off" class="flex-1 bg-transparent text-xs text-white/60 outline-none placeholder:text-white/15 font-body" placeholder="Buscar cliente existente por nombre, RUT o email..." />
+            </div>
+            <div id="clientResults" class="hidden absolute top-full left-0 right-0 z-50 mt-px border border-white/[0.06] bg-[#070708] max-h-48 overflow-y-auto"></div>
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Nombre / Empresa <span class="text-red-400/60">*</span></label>
-              <input name="client_name" maxlength="255" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" required placeholder="Blast-up Consulting Spa" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Nombre / Empresa <span class="text-red-400/60">*</span></label>
+              <input name="client_name" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" required placeholder="Blast-up Consulting Spa" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">RUT</label>
-              <input name="client_rut" maxlength="20" pattern="\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]" title="Formato: 77.670.736-8" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="77.670.736-8" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">RUT</label>
+              <input name="client_rut" maxlength="20" pattern="\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]" title="Formato: 77.670.736-8" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="77.670.736-8" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Nacionalidad</label>
-              <input name="client_nationality" maxlength="100" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Chilena" value="Chilena" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Nacionalidad</label>
+              <input name="client_nationality" maxlength="100" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="Chilena" value="Chilena" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Profesión / Giro</label>
-              <input name="client_profession" maxlength="255" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Ingeniero Comercial / Consultoría" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Profesión / Giro</label>
+              <input name="client_profession" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="Ingeniero Comercial / Consultoría" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Email <span class="text-red-400/60">*</span></label>
-              <input name="client_email" type="email" maxlength="255" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" required placeholder="contacto@blast-up.cl" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Email <span class="text-red-400/60">*</span></label>
+              <input name="client_email" type="email" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" required placeholder="contacto@blast-up.cl" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Teléfono</label>
-              <input name="client_phone" maxlength="50" pattern="[\+\d\s\-\(\)]{8,20}" title="Formato: +56 9 7547 5781" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="+56 9 7547 5781" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Teléfono</label>
+              <input name="client_phone" maxlength="50" pattern="[\+\d\s\-\(\)]{8,20}" title="Formato: +56 9 7547 5781" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="+56 9 7547 5781" />
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Dirección <span class="text-white/20 font-normal normal-case">(incluir comuna)</span></label>
-              <input name="client_address" autocomplete="off" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Av. Bosques de Montemar 30, Of. 316, Concón, Región de Valparaíso" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Dirección <span class="text-white/15 font-normal normal-case">(incluir comuna)</span></label>
+              <input name="client_address" autocomplete="off" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="Av. Bosques de Montemar 30, Of. 316, Concón, Región de Valparaíso" />
+            </div>
+          </div>
+
+          <!-- Save as client checkbox -->
+          <div class="mt-4 flex items-center gap-2">
+            <input id="saveClient" name="save_client" type="checkbox" class="w-3.5 h-3.5 border-white/[0.08] bg-transparent text-accent focus:ring-accent/30" />
+            <label for="saveClient" class="text-[10px] text-white/25 font-body cursor-pointer select-none">Guardar como cliente recurrente</label>
+          </div>
+        </div>
+
+        <div class="border-b border-white/[0.04] pb-6 mb-6" data-section="2b">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+            <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Datos del Prestador</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">RUT Prestador</label>
+              <input name="prestador_rut" maxlength="20" pattern="\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]" title="Formato: 12.345.678-9" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="12.345.678-9" />
             </div>
           </div>
         </div>
 
-        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="2b">
-          <div class="flex items-center gap-2.5 mb-5">
-            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-400/10 text-violet-400">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </span>
-            <div>
-              <span class="font-heading text-sm font-semibold text-white tracking-tight">Datos del Prestador</span>
-              <p class="text-[11px] text-white/30">Mtsprz — Soluciones Digitales</p>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">RUT Prestador</label>
-              <input name="prestador_rut" maxlength="20" pattern="\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]" title="Formato: 12.345.678-9" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="12.345.678-9" />
-            </div>
-          </div>
-        </div>
-
-        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="3">
+        <div class="border-b border-white/[0.04] pb-6 mb-6" data-section="3">
           <div class="flex items-center justify-between mb-5">
-            <div class="flex items-center gap-2.5">
-              <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-400/10 text-emerald-400">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              </span>
-              <div>
-                <span class="font-heading text-sm font-semibold text-white tracking-tight">Servicios</span>
-                <p class="text-[11px] text-white/30">Ítems y valores del contrato</p>
-              </div>
+            <div class="flex items-center gap-3">
+              <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+              <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Servicios</span>
             </div>
-            <button type="button" id="addServiceBtn" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-accent border border-accent/20 transition-all duration-200 hover:bg-accent/10 hover:border-accent/30">+ Agregar Servicio</button>
+            <button type="button" id="addServiceBtn" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/[0.04] hover:bg-white/[0.07] text-[10px] font-medium text-white/40 tracking-wider uppercase transition-all duration-300">+ Agregar Servicio</button>
           </div>
           <div id="servicesContainer" class="space-y-3">
-            <div class="service-row rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4 transition-all duration-200">
+            <div class="service-row border border-white/[0.04] p-3 sm:p-4 transition-all duration-200">
               <div class="flex flex-col sm:flex-row gap-3">
                 <div class="w-full sm:flex-[3]">
-                  <label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Servicio</label>
-                    <select class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body service-select" onchange="updateServicePrice(this)">
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Servicio</label>
+                    <select class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body service-select" onchange="updateServicePrice(this)">
                       <option value="">Personalizado...</option>
                       {services.map(s => (
                         <option value={s.slug} data-price={s.promo_price && s.promo_price > 0 ? s.promo_price : s.price} data-price-full={s.price}>{s.name}</option>
@@ -175,94 +158,75 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
                   </select>
                 </div>
                 <div class="w-full sm:flex-[2]">
-                  <label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Nombre</label>
-                  <input class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body service-name" maxlength="255" placeholder="Desarrollo Web" />
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Nombre</label>
+                  <input class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body service-name" maxlength="255" placeholder="Desarrollo Web" />
                 </div>
                 <div class="w-full sm:flex-[2]">
-                  <label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Valor CLP</label>
-                  <input type="number" min="0" max="2147483647" step="1" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-mono service-price" placeholder="290000" oninput="updateTotal()" />
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Valor CLP</label>
+                  <input type="number" min="0" max="2147483647" step="1" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-mono service-price" placeholder="290000" oninput="updateTotal()" />
                 </div>
                 <div class="flex sm:items-end gap-2 pt-1 sm:pt-0 sm:pb-[1px]">
                   <div class="hidden sm:block w-px h-8 bg-white/[0.06] self-center"></div>
-                  <button type="button" class="inline-flex items-center justify-center w-9 h-9 rounded-xl text-sm text-white/30 border border-white/[0.06] transition-all duration-200 hover:border-red-400/30 hover:text-red-400 remove-service" onclick="this.closest('.service-row').remove(); updateTotal();">✕</button>
+                  <button type="button" class="inline-flex items-center justify-center w-9 h-9 text-sm text-white/20 hover:text-red-400/60 transition-colors remove-service" onclick="this.closest('.service-row').remove(); updateTotal();">✕</button>
               </div>
               <div class="mt-2">
                 <details class="service-deliverables-details" open>
                   <summary class="text-[10px] font-medium text-white/30 uppercase tracking-wider cursor-pointer hover:text-white/50 transition-colors">Entregables</summary>
-                  <textarea class="service-deliverables w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2 px-3.5 text-xs text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body resize-y mt-1" rows="3" placeholder="Entregable 1&#10;Entregable 2&#10;Entregable 3"></textarea>
+                  <textarea class="service-deliverables w-full bg-transparent border border-white/[0.08] py-2 px-3.5 text-xs text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body resize-y mt-1" rows="3" placeholder="Entregable 1&#10;Entregable 2&#10;Entregable 3"></textarea>
                 </details>
               </div>
             </div>
           </div>
           </div>
-          <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/[0.06]">
-            <span class="text-xs text-white/30"><span id="serviceCount">1</span> servicio(s)</span>
+          <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/[0.04]">
+            <span class="text-[10px] text-white/20"><span id="serviceCount">1</span> servicio(s)</span>
             <div class="flex items-center gap-2">
-              <span class="text-xs text-white/40">Total estimado</span>
-              <span id="totalDisplay" class="text-xl font-bold text-accent font-mono tracking-tight">$0</span>
+              <span class="text-[10px] text-white/25 uppercase tracking-wider">Total estimado</span>
+              <span id="totalDisplay" class="text-lg font-bold text-accent font-mono tracking-tight">$0</span>
             </div>
           </div>
 
-          <div id="recurringWarning" class="hidden mt-4 rounded-xl border border-sky-400/20 bg-sky-400/[0.04] p-4">
-            <div class="flex gap-3">
-              <span class="shrink-0 mt-0.5 flex items-center justify-center w-5 h-5 rounded-full bg-sky-400/20 text-sky-400">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              </span>
-              <div>
-                <p class="text-xs font-semibold text-sky-400 mb-1">Servicios recurrentes en esquema de pago único</p>
-                <p class="text-[11px] text-sky-300/70 leading-relaxed" id="recurringWarningDetail"></p>
-                <p class="text-[10px] text-sky-300/40 mt-1.5">Si el precio es mensual, marcar "is_monthly" en el catálogo o aclarar en cláusulas especiales "precio de $X.XXX por mes, facturación mensual adelantada".</p>
-              </div>
-            </div>
+          <div id="recurringWarning" class="hidden mt-4 border-l-2 border-sky-400/30 pl-4 py-2">
+            <p class="text-[11px] font-medium text-sky-300 mb-1">Servicios recurrentes en esquema de pago único</p>
+            <p class="text-[11px] text-sky-300/50 leading-relaxed" id="recurringWarningDetail"></p>
+            <p class="text-[10px] text-sky-300/30 mt-1.5">Si el precio es mensual, marcar "is_monthly" en el catálogo o aclarar en cláusulas especiales.</p>
           </div>
 
-          <div id="ivaWarning" class="hidden mt-4 rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-4">
-            <div class="flex gap-3">
-              <span class="shrink-0 mt-0.5 flex items-center justify-center w-5 h-5 rounded-full bg-amber-400/20 text-amber-400">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              </span>
-              <div>
-                <p class="text-xs font-semibold text-amber-400 mb-1">Validar tratamiento tributario antes de emitir</p>
-                <p class="text-[11px] text-amber-300/70 leading-relaxed" id="ivaWarningDetail"></p>
-                <p class="text-[10px] text-amber-300/40 mt-1.5">Consultar con contador antes de emitir la primera boleta. Si corresponde IVA, usar factura y ajustar cláusula SÉPTIMA.</p>
-              </div>
-            </div>
+          <div id="ivaWarning" class="hidden mt-4 border-l-2 border-amber-400/30 pl-4 py-2">
+            <p class="text-[11px] font-medium text-amber-300 mb-1">Validar tratamiento tributario antes de emitir</p>
+            <p class="text-[11px] text-amber-300/50 leading-relaxed" id="ivaWarningDetail"></p>
+            <p class="text-[10px] text-amber-300/30 mt-1.5">Consultar con contador antes de emitir la primera boleta.</p>
           </div>
         </div>
 
-        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4 transition-all duration-300" data-section="4">
-          <div class="flex items-center gap-2.5 mb-5">
-            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-sky-400/10 text-sky-400">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </span>
-            <div>
-              <span class="font-heading text-sm font-semibold text-white tracking-tight">Condiciones</span>
-              <p class="text-[11px] text-white/30">Plazos, montos y modalidad de pago</p>
-            </div>
+        <div class="border-b border-white/[0.04] pb-6 mb-6" data-section="4">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+            <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Condiciones</span>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Duración</label>
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Duración</label>
               <div class="flex gap-2">
-                <input name="duration_months" type="number" min="1" max="1200" class="w-24 bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" value="3" />
+                <input name="duration_months" type="number" min="1" max="1200" class="w-24 bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" value="3" />
                 <span class="inline-flex items-center text-xs text-white/30">meses</span>
               </div>
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Valor Total (CLP)</label>
-              <input name="total_amount" type="number" min="0" max="2147483647" step="1" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body font-mono" required placeholder="0" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Valor Total (CLP)</label>
+              <input name="total_amount" type="number" min="0" max="2147483647" step="1" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-mono" required placeholder="0" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Fecha de Inicio</label>
-              <input name="start_date" type="date" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Fecha de Inicio</label>
+              <input name="start_date" type="date" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Fecha de Término</label>
-              <input name="end_date" type="date" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Fecha de Término</label>
+              <input name="end_date" type="date" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Modalidad de Pago</label>
-              <select name="payment_method" onchange="togglePaymentTerms()" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body">
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Modalidad de Pago</label>
+              <select name="payment_method" onchange="togglePaymentTerms()" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body appearance-none" style="background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%2712%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23fafafa%27 stroke-width=%271.5%27%3E%3Cpath d=%27M6 9l6 6 6-6%27/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 4px center;">
                 <option value="">Personalizada...</option>
                 <option value="contado">Contado</option>
                 <option value="50_50">50% Inicio + 50% Entrega</option>
@@ -270,55 +234,55 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
               </select>
             </div>
             <div id="paymentTermsGroup">
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Términos de Pago</label>
-              <input name="payment_terms" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" placeholder="Transferencia mensual anticipada" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Términos de Pago</label>
+              <input name="payment_terms" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="Transferencia mensual anticipada" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Días de Garantía</label>
-              <input name="warranty_days" type="number" min="0" max="365" value="15" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Días de Garantía</label>
+              <input name="warranty_days" type="number" min="0" max="365" value="15" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" />
             </div>
             <div>
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-1.5">Días de Revisión</label>
-              <input name="revision_days" type="number" min="0" max="60" value="5" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Días de Revisión</label>
+              <input name="revision_days" type="number" min="0" max="60" value="5" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" />
             </div>
             <div class="sm:col-span-2">
               <label class="flex items-center gap-3 cursor-pointer">
-                <input name="subcontracting_allowed" type="checkbox" checked class="w-4 h-4 rounded border-white/[0.08] bg-white/[0.04] text-accent focus:ring-accent/30" />
+                <input name="subcontracting_allowed" type="checkbox" checked class="w-4 h-4 rounded border-white/[0.08] bg-transparent text-accent focus:ring-accent/30" />
                 <div>
-                  <span class="block text-[11px] font-medium text-white/40">Permitir subcontratación</span>
-                  <span class="block text-[10px] text-white/25">El Prestador podrá subcontratar parcialmente con autorización del Cliente</span>
+                  <span class="block text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Permitir subcontratación</span>
+                  <span class="block text-[10px] text-white/20 mt-0.5">El Prestador podrá subcontratar parcialmente con autorización del Cliente</span>
                 </div>
               </label>
             </div>
             <div id="scheduleGroup" style="display:none;" class="sm:col-span-2">
-              <label class="block text-[11px] font-medium text-white/40 uppercase tracking-wider mb-2">Jornada / Horario</label>
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Jornada / Horario</label>
               <div class="flex flex-wrap items-center gap-1.5 mb-2">
-                <span class="text-[10px] font-medium text-white/30 uppercase tracking-wider mr-1">Días:</span>
-                <button type="button" onclick="toggleDay(1)" id="day1" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Lun</button>
-                <button type="button" onclick="toggleDay(2)" id="day2" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Mar</button>
-                <button type="button" onclick="toggleDay(3)" id="day3" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Mié</button>
-                <button type="button" onclick="toggleDay(4)" id="day4" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Jue</button>
-                <button type="button" onclick="toggleDay(5)" id="day5" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 bg-accent/15 border-accent/30 text-accent">Vie</button>
-                <button type="button" onclick="toggleDay(6)" id="day6" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 text-white/40 border-white/[0.06]">Sáb</button>
-                <button type="button" onclick="toggleDay(0)" id="day0" class="day-chip px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 text-white/40 border-white/[0.06]">Dom</button>
+                <span class="text-[10px] font-medium text-white/20 uppercase tracking-[0.12em] mr-1">Días:</span>
+                <button type="button" onclick="toggleDay(1)" id="day1" class="day-chip px-2.5 py-1 text-[11px] font-medium border border-accent/40 text-accent transition-all duration-150">Lun</button>
+                <button type="button" onclick="toggleDay(2)" id="day2" class="day-chip px-2.5 py-1 text-[11px] font-medium border border-accent/40 text-accent transition-all duration-150">Mar</button>
+                <button type="button" onclick="toggleDay(3)" id="day3" class="day-chip px-2.5 py-1 text-[11px] font-medium border border-accent/40 text-accent transition-all duration-150">Mié</button>
+                <button type="button" onclick="toggleDay(4)" id="day4" class="day-chip px-2.5 py-1 text-[11px] font-medium border border-accent/40 text-accent transition-all duration-150">Jue</button>
+                <button type="button" onclick="toggleDay(5)" id="day5" class="day-chip px-2.5 py-1 text-[11px] font-medium border border-accent/40 text-accent transition-all duration-150">Vie</button>
+                <button type="button" onclick="toggleDay(6)" id="day6" class="day-chip px-2.5 py-1 text-[11px] font-medium border border-white/[0.08] text-white/30 transition-all duration-150">Sáb</button>
+                <button type="button" onclick="toggleDay(0)" id="day0" class="day-chip px-2.5 py-1 text-[11px] font-medium border border-white/[0.08] text-white/30 transition-all duration-150">Dom</button>
               </div>
               <div class="flex flex-wrap gap-1.5 mb-3">
-                <span class="text-[10px] font-medium text-white/25 uppercase tracking-wider mr-1 self-center">Predefinido:</span>
-                <button type="button" onclick="presetDays('lun-vie')" id="preset-lun-vie" class="preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 bg-accent/10 border-accent/20 text-accent">Lun-Vie</button>
-                <button type="button" onclick="presetDays('lun-sab')" id="preset-lun-sab" class="preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 text-white/35 border-white/[0.06]">Lun-Sáb</button>
-                <button type="button" onclick="presetDays('lun-dom')" id="preset-lun-dom" class="preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 text-white/35 border-white/[0.06]">Lun-Dom</button>
-                <button type="button" onclick="presetDays('finde')" id="preset-finde" class="preset-chip px-2.5 py-1 rounded-md text-[10px] font-medium border transition-all duration-150 text-white/35 border-white/[0.06]">Sáb-Dom</button>
+                <span class="text-[10px] font-medium text-white/20 uppercase tracking-[0.12em] mr-1 self-center">Predefinido:</span>
+                <button type="button" onclick="presetDays('lun-vie')" id="preset-lun-vie" class="preset-chip px-2 py-1 text-[10px] font-medium border border-accent/30 text-accent transition-all duration-150">Lun-Vie</button>
+                <button type="button" onclick="presetDays('lun-sab')" id="preset-lun-sab" class="preset-chip px-2 py-1 text-[10px] font-medium border border-white/[0.06] text-white/30 transition-all duration-150">Lun-Sáb</button>
+                <button type="button" onclick="presetDays('lun-dom')" id="preset-lun-dom" class="preset-chip px-2 py-1 text-[10px] font-medium border border-white/[0.06] text-white/30 transition-all duration-150">Lun-Dom</button>
+                <button type="button" onclick="presetDays('finde')" id="preset-finde" class="preset-chip px-2 py-1 text-[10px] font-medium border border-white/[0.06] text-white/30 transition-all duration-150">Sáb-Dom</button>
               </div>
               <div class="flex flex-col sm:flex-row sm:items-end gap-3">
                 <div class="flex items-center gap-2">
                   <div>
-                    <span class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Desde</span>
-                    <input type="time" id="scheduleFrom" value="09:00" onchange="updateScheduleDisplay()" class="w-28 bg-white/[0.04] border border-white/[0.08] rounded-xl py-2 px-3 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+                    <span class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-1">Desde</span>
+                    <input type="time" id="scheduleFrom" value="09:00" onchange="updateScheduleDisplay()" class="w-28 bg-transparent border-b border-white/[0.08] py-2 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" />
                   </div>
                   <span class="text-white/20 text-sm pt-5">—</span>
                   <div>
-                    <span class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Hasta</span>
-                    <input type="time" id="scheduleTo" value="13:00" onchange="updateScheduleDisplay()" class="w-28 bg-white/[0.04] border border-white/[0.08] rounded-xl py-2 px-3 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body" />
+                    <span class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-1">Hasta</span>
+                    <input type="time" id="scheduleTo" value="13:00" onchange="updateScheduleDisplay()" class="w-28 bg-transparent border-b border-white/[0.08] py-2 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" />
                   </div>
                 </div>
                 <span id="schedulePreview" class="text-xs text-accent font-mono">Lun-Vie 09:00–13:00</span>
@@ -328,18 +292,13 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
           </div>
         </div>
 
-        <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5 mb-4" data-section="5">
-          <div class="flex items-center gap-2.5 mb-5">
-            <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-400/10 text-violet-400">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </span>
-            <div>
-              <span class="font-heading text-sm font-semibold text-white tracking-tight">Cláusulas Especiales</span>
-              <p class="text-[11px] text-white-30">Términos adicionales (opcional)</p>
-            </div>
+        <div class="border-b border-white/[0.04] pb-6 mb-6" data-section="5">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
+            <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Cláusulas Especiales</span>
           </div>
           <div>
-            <textarea name="special_clauses" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body" rows="4" placeholder="Cualquier cláusula especial que quieras agregar..." oninput="updateClauseCount()"></textarea>
+            <textarea name="special_clauses" class="w-full bg-transparent border border-white/[0.08] py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" rows="4" placeholder="Cualquier cláusula especial que quieras agregar..." oninput="updateClauseCount()"></textarea>
             <div class="flex justify-end mt-1"><span id="clauseCount" class="text-[10px] text-white/20 font-mono">0 caracteres</span></div>
           </div>
         </div>
@@ -348,41 +307,43 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
       <div class="lg:col-span-2">
         <div class="lg:sticky lg:top-6 space-y-4">
-          <div class="rounded-xl bg-[#0a0a0b] border border-white/[0.06] p-5">
-            <h3 class="font-heading text-xs font-semibold text-white/50 uppercase tracking-wider mb-4">Resumen</h3>
-            <div id="previewContent" class="space-y-3 text-sm">
-              <div class="flex justify-between py-2 border-b border-white/[0.04]">
-                <span class="text-white/35">Tipo</span>
-                <span class="text-white/60 text-right" id="previewType">—</span>
+          <div class="border border-white/[0.04]">
+            <div class="p-4 border-b border-white/[0.04]">
+              <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Resumen</span>
+            </div>
+            <div id="previewContent" class="divide-y divide-white/[0.04]">
+              <div class="flex justify-between px-4 py-3">
+                <span class="text-[11px] text-white/30">Tipo</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewType">—</span>
               </div>
-              <div class="flex justify-between py-2 border-b border-white/[0.04]">
-                <span class="text-white/35">Cliente</span>
-                <span class="text-white/60 text-right" id="previewClient">—</span>
+              <div class="flex justify-between px-4 py-3">
+                <span class="text-[11px] text-white/30">Cliente</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewClient">—</span>
               </div>
-              <div class="flex justify-between py-2 border-b border-white/[0.04]">
-                <span class="text-white/35">Servicios</span>
-                <span class="text-white/60 text-right" id="previewServices">—</span>
+              <div class="flex justify-between px-4 py-3">
+                <span class="text-[11px] text-white/30">Servicios</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewServices">—</span>
               </div>
-              <div class="flex justify-between py-2 border-b border-white/[0.04]">
-                <span class="text-white/35">Duración</span>
-                <span class="text-white/60 text-right" id="previewDuration">—</span>
+              <div class="flex justify-between px-4 py-3">
+                <span class="text-[11px] text-white/30">Duración</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewDuration">—</span>
               </div>
-              <div class="flex justify-between py-2 border-b border-white/[0.04]">
-                <span class="text-white/35">Pago</span>
-                <span class="text-white/60 text-right" id="previewPayment">—</span>
+              <div class="flex justify-between px-4 py-3">
+                <span class="text-[11px] text-white/30">Pago</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewPayment">—</span>
               </div>
-              <div class="flex justify-between py-2">
-                <span class="text-white/50 font-medium">Total</span>
-                <span class="text-lg font-bold text-accent font-mono" id="previewTotal">$0</span>
+              <div class="flex justify-between px-4 py-3">
+                <span class="text-[11px] text-white/50 font-medium">Total</span>
+                <span class="text-base font-bold text-accent font-mono" id="previewTotal">$0</span>
               </div>
             </div>
           </div>
 
-          <div class="rounded-xl bg-accent/[0.04] border border-accent/10 p-4 hidden lg:block">
+          <div class="border border-accent/10 p-4 hidden lg:block">
             <div class="flex items-start gap-3">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               <div>
-                <p class="text-xs text-white/50 leading-relaxed">El contrato se generará automáticamente con los datos ingresados y se enviará al cliente para su firma electrónica.</p>
+                <p class="text-xs text-white/40 leading-relaxed font-body">El contrato se generará automáticamente con los datos ingresados y se enviará al cliente para su firma electrónica.</p>
               </div>
             </div>
           </div>
@@ -390,20 +351,20 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       </div>
     </div>
 
-    <div class="sticky bottom-0 z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#010101]/95 backdrop-blur-lg border-t border-white/[0.06] mt-2">
+    <div class="sticky bottom-0 z-10 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 bg-[#010101]/95 border-t border-white/[0.04] mt-2">
       <div class="flex items-center justify-between max-w-full">
         <div class="hidden sm:flex items-center gap-3">
-          <span class="text-xs text-white/30">Total:</span>
-          <span class="text-lg font-bold text-accent font-mono" id="stickyTotal">$0</span>
+          <span class="text-[10px] text-white/20 tracking-wider uppercase">Total:</span>
+          <span class="text-base font-bold text-accent font-mono" id="stickyTotal">$0</span>
         </div>
         <div class="flex gap-3 w-full sm:w-auto">
-          <a href="/admin/contratos" class="inline-flex items-center px-4 py-2.5 rounded-full text-sm font-medium text-white/50 border border-white/[0.06] no-underline transition-all duration-200 hover:border-white/15 hover:text-white/70">Cancelar</a>
-          <button type="button" id="previewBtn" onclick="openPreview()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white/70 border border-white/[0.1] transition-all duration-200 hover:border-white/20 hover:text-white">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <a href="/admin/contratos" class="inline-flex items-center px-3.5 py-2 bg-white/[0.04] hover:bg-white/[0.07] text-[10px] font-medium text-white/40 tracking-wider uppercase transition-all duration-300 no-underline">Cancelar</a>
+          <button type="button" id="previewBtn" onclick="openPreview()" class="inline-flex items-center gap-2 px-3.5 py-2 bg-white/[0.04] hover:bg-white/[0.07] text-[10px] font-medium text-white/40 tracking-wider uppercase transition-all duration-300">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Vista Previa
           </button>
-          <button type="submit" id="submitBtn" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium text-white bg-gradient-to-r from-accent to-violet-500 transition-all duration-200 hover:opacity-90 hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <button type="submit" id="submitBtn" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-accent/10 hover:bg-accent/20 text-[10px] font-medium text-accent tracking-wider uppercase transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
             Crear y Enviar Contrato
           </button>
         </div>
@@ -411,30 +372,25 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     </div>
   </form>
 
-  <div id="previewModal" class="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-6" onclick="if (event.target===this) closePreview()">
-    <div class="bg-[#0a0a0b] border border-white/[0.06] rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
-      <div class="flex items-center justify-between px-5 sm:px-7 py-4 border-b border-white/[0.06] shrink-0">
-        <div class="flex items-center gap-2.5">
-          <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-accent/10 text-accent">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </span>
-          <div>
-            <span class="font-heading text-sm font-semibold text-white tracking-tight">Vista Previa del Contrato</span>
-            <p class="text-[11px] text-white/30">Revisa el documento antes de enviarlo</p>
-          </div>
+  <div id="previewModal" class="fixed inset-0 z-[100] bg-[#010101]/90 hidden items-center justify-center p-3 sm:p-6" onclick="if (event.target===this) closePreview()">
+    <div class="bg-[#070708] border border-white/[0.04] w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div class="flex items-center justify-between px-5 sm:px-7 py-4 border-b border-white/[0.04] shrink-0">
+        <div>
+          <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Vista Previa del Contrato</span>
+          <p class="text-[11px] text-white/25 mt-0.5 font-body">Revisa el documento antes de enviarlo</p>
         </div>
-        <button onclick="closePreview()" class="text-white/30 hover:text-white/70 transition-colors p-1">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <button onclick="closePreview()" class="text-white/20 hover:text-white/50 transition-colors p-1">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <div class="flex-1 overflow-y-auto px-5 sm:px-7 py-6">
-        <div id="previewDocument" class="bg-white text-black rounded-xl p-6 sm:p-8 font-body text-sm leading-relaxed max-w-4xl mx-auto">
+        <div id="previewDocument" class="bg-white text-black p-6 sm:p-8 font-body text-sm leading-relaxed max-w-4xl mx-auto">
         </div>
       </div>
-      <div class="flex items-center justify-end gap-3 px-5 sm:px-7 py-4 border-t border-white/[0.06] shrink-0">
-        <button onclick="closePreview()" class="px-4 py-2 rounded-full text-sm font-medium text-white/50 border border-white/[0.08] transition-all duration-200 hover:border-white/20 hover:text-white/70">Cerrar</button>
-        <button id="previewSubmitBtn" class="px-5 py-2 rounded-full text-sm font-medium text-white bg-gradient-to-r from-accent to-violet-500 transition-all duration-200 hover:opacity-90">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="inline mr-1.5 -mt-0.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="flex items-center justify-end gap-3 px-5 sm:px-7 py-4 border-t border-white/[0.04] shrink-0">
+        <button onclick="closePreview()" class="px-3.5 py-2 bg-white/[0.04] hover:bg-white/[0.07] text-[10px] font-medium text-white/40 tracking-wider uppercase transition-all duration-300">Cerrar</button>
+        <button id="previewSubmitBtn" class="px-4 py-2 bg-accent/10 hover:bg-accent/20 text-[10px] font-medium text-accent tracking-wider uppercase transition-all duration-300">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="inline mr-1 -mt-0.5"><polyline points="20 6 9 17 4 12"/></svg>
           Enviar Contrato
         </button>
       </div>
@@ -687,32 +643,32 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       opts += '<option value="' + s.slug + '" data-price="' + displayPrice + '" data-price-full="' + fullP + '">' + label + "</option>";
     }
     var div = document.createElement("div");
-    div.className = "service-row rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4 transition-all duration-200";
+    div.className = "service-row border border-white/[0.04] p-3 sm:p-4 transition-all duration-200";
     div.innerHTML =
       '<div class="flex flex-col sm:flex-row gap-3">' +
         '<div class="w-full sm:flex-[3]">' +
-          '<label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Servicio</label>' +
-          '<select class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] font-body service-select" onchange="updateServicePrice(this)">' +
+          '<label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Servicio</label>' +
+          '<select class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body service-select" onchange="updateServicePrice(this)">' +
             '<option value="">Personalizado...</option>' + opts +
           "</select>" +
         "</div>" +
         '<div class="w-full sm:flex-[2]">' +
-          '<label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Nombre</label>' +
-          '<input class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body service-name" maxlength="255" placeholder="Desarrollo Web" />' +
+          '<label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Nombre</label>' +
+          '<input class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body service-name" maxlength="255" placeholder="Desarrollo Web" />' +
         "</div>" +
         '<div class="w-full sm:flex-[2]">' +
-          '<label class="block text-[10px] font-medium text-white/35 uppercase tracking-wider mb-1">Valor CLP</label>' +
-          '<input type="number" min="0" max="2147483647" step="1" class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2.5 px-3.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-mono service-price" placeholder="290000" oninput="updateTotal()" />' +
+          '<label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Valor CLP</label>' +
+          '<input type="number" min="0" max="2147483647" step="1" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-mono service-price" placeholder="290000" oninput="updateTotal()" />' +
         "</div>" +
         '<div class="flex sm:items-end gap-2 pt-1 sm:pt-0 sm:pb-[1px]">' +
-          '<div class="hidden sm:block w-px h-8 bg-white/[0.06] self-center"></div>' +
-          '<button type="button" class="inline-flex items-center justify-center w-9 h-9 rounded-xl text-sm text-white/30 border border-white/[0.06] transition-all duration-200 hover:border-red-400/30 hover:text-red-400 remove-service">✕</button>' +
+          '<div class="hidden sm:block w-px h-8 bg-white/[0.04] self-center"></div>' +
+          '<button type="button" class="inline-flex items-center justify-center w-9 h-9 text-sm text-white/20 hover:text-red-400/60 transition-colors remove-service">✕</button>' +
         "</div>" +
       "</div>" +
       '<div class="mt-2">' +
         '<details class="service-deliverables-details" open>' +
-          '<summary class="text-[10px] font-medium text-white/30 uppercase tracking-wider cursor-pointer hover:text-white/50 transition-colors">Entregables</summary>' +
-          '<textarea class="service-deliverables w-full bg-white/[0.04] border border-white/[0.08] rounded-xl py-2 px-3.5 text-xs text-white outline-none transition-all duration-200 focus:border-accent/40 focus:bg-accent/[0.04] placeholder:text-white/15 font-body resize-y mt-1" rows="3" placeholder="Entregable 1&#10;Entregable 2&#10;Entregable 3"></textarea>' +
+          '<summary class="text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] cursor-pointer hover:text-white/50 transition-colors">Entregables</summary>' +
+          '<textarea class="service-deliverables w-full bg-transparent border border-white/[0.08] py-2 px-3.5 text-xs text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body resize-y mt-1" rows="3" placeholder="Entregable 1&#10;Entregable 2&#10;Entregable 3"></textarea>' +
         "</details>" +
       "</div>";
     div.querySelector(".remove-service").onclick = function() { div.remove(); updateTotal(); };
@@ -828,15 +784,98 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     updateScheduleDisplay();
   }
 
-  function selectTemplate(type) {
-    var radio = document.querySelector("input[name='templateType'][value='" + type + "']");
+  function selectTemplate(tplId, tplType) {
+    var radio = document.querySelector("input[name='templateType'][value='" + tplType + "']");
     if (radio) radio.checked = true;
-    var isJornada = type === "jornada_dedicada";
+    // Set the hidden template_id input for the selected template
+    document.querySelectorAll("input[name='template_id']").forEach(function(inp) {
+      var card = inp.closest(".template-card");
+      if (card && card.getAttribute("data-template-id") == tplId) {
+        inp.value = tplId;
+      } else if (card) {
+        inp.value = "";
+      }
+    });
+    var isJornada = tplType === "jornada_dedicada";
     var sg = document.getElementById("scheduleGroup");
     if (sg) {
       sg.style.display = isJornada ? "block" : "none";
     }
     updatePreview();
+  }
+
+  // ── Client quick-search ─────────────────────────────────────────────────
+  var clientSearchEl = document.getElementById("clientSearch");
+  var clientResultsEl = document.getElementById("clientResults");
+  var clientSearchTimeout;
+
+  function fillClient(c) {
+    document.querySelector("[name='client_name']").value = c.name || "";
+    document.querySelector("[name='client_rut']").value = c.rut || "";
+    document.querySelector("[name='client_email']").value = c.email || "";
+    document.querySelector("[name='client_phone']").value = c.phone || "";
+    document.querySelector("[name='client_address']").value = c.address || "";
+    document.querySelector("[name='client_nationality']").value = c.nationality || "Chilena";
+    document.querySelector("[name='client_profession']").value = c.profession || "";
+    clientResultsEl.classList.add("hidden");
+    clientSearchEl.value = "";
+    updatePreview();
+  }
+
+  function renderClientResults(clients) {
+    if (clients.length === 0) {
+      var q = (clientSearchEl.value || "").trim();
+      clientResultsEl.innerHTML =
+        '<div class="px-3 py-4 text-center border-b border-white/[0.03]">' +
+        '<p class="text-xs text-white/20 font-body">Sin resultados para "<span class="text-white/40">' + escapeHtml(q) + '</span>"</p>' +
+        '<p class="text-[10px] text-white/15 font-body mt-1.5">Completa los datos manualmente y marca "Guardar como cliente recurrente" al crear el contrato</p>' +
+        '</div>';
+      clientResultsEl.classList.remove("hidden");
+      return;
+    }
+    var html = [];
+    for (var i = 0; i < clients.length; i++) {
+      var c = clients[i];
+      html.push('<button type="button" class="w-full text-left px-3 py-2.5 border-b border-white/[0.03] hover:bg-white/[0.03] transition-colors" onclick="fillClient(' + JSON.stringify(c).replace(/"/g, "&quot;") + ')">');
+      html.push('<div class="text-xs text-white/70 font-medium">' + escapeHtml(c.name) + (c.company_name ? " — " + escapeHtml(c.company_name) : "") + '</div>');
+      html.push('<div class="text-[10px] text-white/25 mt-0.5">' + (c.rut ? escapeHtml(c.rut) + " · " : "") + (c.email ? escapeHtml(c.email) : "") + '</div>');
+      html.push('</button>');
+    }
+    clientResultsEl.innerHTML = html.join("");
+    clientResultsEl.classList.remove("hidden");
+  }
+
+  if (clientSearchEl) {
+    clientSearchEl.addEventListener("input", function() {
+      clearTimeout(clientSearchTimeout);
+      var q = this.value.trim();
+      if (q.length < 2) {
+        clientResultsEl.classList.add("hidden");
+        return;
+      }
+      clientSearchTimeout = setTimeout(function() {
+        fetch("/api/clients?search=" + encodeURIComponent(q))
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.error) {
+              renderClientResults([]);
+            } else {
+              renderClientResults(data.clients || []);
+            }
+          })
+          .catch(function() {
+            clientResultsEl.innerHTML =
+              '<div class="px-3 py-3 text-center"><p class="text-xs text-white/20 font-body">Error al buscar. Si es la primera vez, reinicia el servidor para aplicar migraciones.</p></div>';
+            clientResultsEl.classList.remove("hidden");
+          });
+      }, 250);
+    });
+    clientSearchEl.addEventListener("blur", function() {
+      setTimeout(function() { clientResultsEl.classList.add("hidden"); }, 200);
+    });
+    clientSearchEl.addEventListener("focus", function() {
+      if (clientResultsEl.children.length > 0) clientResultsEl.classList.remove("hidden");
+    });
   }
 
   document.querySelector("[name='client_name']").addEventListener("input", updatePreview);
@@ -852,6 +891,11 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     if (el) el.addEventListener("change", updatePreview);
   });
   presetDays("lun-vie");
+  // Init first template as selected
+  var firstCard = document.querySelector(".template-card");
+  if (firstCard) {
+    selectTemplate(firstCard.getAttribute("data-template-id"), firstCard.getAttribute("data-template-type"));
+  }
   updateTotal();
   updatePreview();
   loadServiceDescriptions();
@@ -1142,8 +1186,13 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var services = getServices();
     var total = services.reduce(function(sum, s) { return sum + s.price; }, 0);
 
+    // Find the active template_id (only the selected card has a non-empty value)
+    var tplId = null;
+    document.querySelectorAll("input[name='template_id']").forEach(function(inp) {
+      if (inp.value) tplId = parseInt(inp.value);
+    });
     var body = {
-      template_type: formData.get("templateType"),
+      template_id: tplId,
       client_name: formData.get("client_name"),
       client_rut: formData.get("client_rut"),
       client_nationality: formData.get("client_nationality") || "Chilena",
@@ -1187,11 +1236,36 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       }
 
       // Respuesta exitosa: intentamos leer el body JSON
+      var data;
       try {
-        var data = await res.json();
-        window.location.href = "/admin/contratos/" + data.contract.id;
+        data = await res.json();
       } catch (_jsonErr) {
-        // Body vacío o inválido pero status 2xx → el contrato se creó igual
+        data = null;
+      }
+
+      // Save client as recurring if checkbox is checked
+      if (document.getElementById("saveClient").checked) {
+        var clientData = {
+          name: formData.get("client_name"),
+          company_name: formData.get("client_company") || formData.get("client_name"),
+          rut: formData.get("client_rut"),
+          email: formData.get("client_email"),
+          phone: formData.get("client_phone"),
+          address: formData.get("client_address"),
+          nationality: formData.get("client_nationality") || "Chilena",
+          profession: formData.get("client_profession"),
+        };
+        // Fire-and-forget: no bloquear redirect
+        fetch("/api/clients", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(clientData),
+        }).catch(function() {});
+      }
+
+      if (data && data.contract && data.contract.id) {
+        window.location.href = "/admin/contratos/" + data.contract.id;
+      } else {
         window.location.href = "/admin/contratos";
       }
     } catch (_e) {

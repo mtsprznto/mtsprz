@@ -1,74 +1,34 @@
 ---
-export const prerender = true;
+export const prerender = false;
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import StaggerText from "../components/StaggerText.astro";
 import BlurText from "../components/BlurText.astro";
-import ServiceCard from "../components/ServiceCard.astro";
+import CinematicColumn from "../components/CinematicColumn.astro";
 import Footer from "../components/Footer.astro";
-import { ArrowUpRight } from "@lucide/astro";
 import Testimonials from "../components/Testimonials.astro";
 import testimonialsData from "../data/testimonials.json";
+import { query, initDb } from "../lib/db";
+import { toServiceDisplay } from "../lib/service-display";
 
-interface Service {
-  icon: string;
-  title: string;
-  description: string;
-  tags: string[];
-  accent: string;
-}
+await initDb();
+const dbRows = await query(
+  `SELECT DISTINCT ON (LOWER(TRIM(category))) slug, name, description, category
+   FROM services WHERE is_active = true AND category IS NOT NULL
+   ORDER BY LOWER(TRIM(category)), is_popular DESC, id`
+);
+const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
 
-const services: Service[] = [
-  {
-    icon: "Code",
-    title: "Desarrollo Web",
-    description: "Landing pages, sitios corporativos, e-commerce y aplicaciones web a medida. Modernos, veloces y hechos para convertir.",
-    tags: ["Landing Pages", "Sitios Web", "E-commerce", "Apps Web"],
-    accent: "#6366f1",
-  },
-  {
-    icon: "Bot",
-    title: "Automatización",
-    description: "Bots WhatsApp, automatización Excel, flujos de email, CRM y workflows. Tu negocio funcionando solo.",
-    tags: ["WhatsApp Bots", "Excel", "CRM", "Workflows"],
-    accent: "#06b6d4",
-  },
-  {
-    icon: "BarChart3",
-    title: "Datos e Inteligencia",
-    description: "Dashboards interactivos, scraping web, APIs a medida y OCR. Tus datos al servicio de tus decisiones.",
-    tags: ["Dashboards", "Scraping", "APIs", "OCR"],
-    accent: "#f97316",
-  },
-  {
-    icon: "Search",
-    title: "SEO",
-    description: "Posicionamiento en Google Maps y búsquedas locales. Tu negocio apareciendo cuando te buscan en tu ciudad.",
-    tags: ["SEO Local", "Google Maps", "Auditoría", "Contenido"],
-    accent: "#10b981",
-  },
-  {
-    icon: "TrendingUp",
-    title: "Marketing Digital",
-    description: "Google Ads, redes sociales y estrategia de contenido. Resultados medibles desde la primera semana.",
-    tags: ["Google Ads", "Redes Sociales", "Contenido", "Analítica"],
-    accent: "#f59e0b",
-  },
-  {
-    icon: "Palette",
-    title: "Diseño Gráfico",
-    description: "Identidad corporativa, logotipos y manual de marca. Tu marca profesional lista para el mercado.",
-    tags: ["Logos", "Identidad", "Marca", "UX/UI"],
-    accent: "#ec4899",
-  },
-  {
-    icon: "Globe",
-    title: "Consultoría Digital",
-    description: "Diagnóstico gratuito de tu negocio. Hoja de ruta clara con prioridades, presupuestos y plazos.",
-    tags: ["Diagnóstico", "Plan", "Pymes", "Estrategia"],
-    accent: "#8b5cf6",
-  },
+// Feature-d sections for homepage diagnosis
+const diagnosisSlugs = ["desarrollo-web", "seo", "automatizaciones"];
+const diagnosisServices = services.filter((s: any) => diagnosisSlugs.includes(s.slug));
+// Hardcoded fallbacks if DB doesn't have these categories yet
+const diagnosisFallbacks = [
+  { title: "Sitio Web Profesional", description: "Páginas ultrarrápidas con Astro, diseño responsive y SEO local incluido para tu negocio en el sur de Chile.", accent: "#6366f1", slug: "desarrollo-web", icon: "Code", tags: [] },
+  { title: "Posicionamiento SEO Local", description: "Aparece en Google Maps y búsquedas locales en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos.", accent: "#10b981", slug: "seo", icon: "Search", tags: [] },
+  { title: "Automatización de Procesos", description: "Bots para WhatsApp, flujos de email marketing, integraciones CRM y workflows que ahorran horas a tu pyme.", accent: "#06b6d4", slug: "automatizaciones", icon: "Bot", tags: [] },
 ];
+const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFallbacks;
 ---
 
 <BaseLayout
@@ -130,7 +90,7 @@ const services: Service[] = [
         <div class="mt-8 flex items-center gap-4">
           <button onclick="window.openCotizarModal()" class="liquid-glass-strong rounded-full px-7 sm:px-10 py-3.5 sm:py-4 text-sm font-medium text-white/90 tracking-[0.18em] uppercase flex items-center gap-2 transition-all hover:scale-[1.03] hover:text-white cursor-pointer">
             Cotizar
-            <ArrowUpRight size={16} stroke-width="2" />
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
           </button>
         </div>
         <div class="mt-10 inline-flex flex-wrap items-center gap-x-5 gap-y-2 justify-center rounded-full border border-white/[0.08] bg-white/[0.04] px-5 py-2 text-[11px] text-white/80 font-body tracking-wide backdrop-blur-sm">
@@ -159,59 +119,67 @@ const services: Service[] = [
       </div>
     </section>
 
-    <!-- Service Discovery — 2026 SEO: indexable, linked, GEO-optimized -->
-    <section class="relative bg-[#010101] py-16 md:py-20" id="diagnostico">
-      <div class="mx-auto max-w-3xl px-6 text-center">
-        <div class="liquid-glass rounded-[1.5rem] p-8 md:p-10">
-          <p class="text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-3">Diagnóstico Rápido</p>
-          <h2 class="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-white tracking-[-0.5px]">
-            ¿Qué necesita tu negocio en <span class="text-[#6366f1]">Puerto Varas</span>, <span class="text-[#10b981]">Osorno</span> o <span class="text-[#06b6d4]">Valdivia</span>?
+    <!-- Diagnóstico — editorial cinematic columns -->
+    <section class="relative bg-[#0A0A0A] w-full" id="diagnostico">
+      <!-- Header -->
+      <div class="mx-auto max-w-5xl px-6 pt-20 md:pt-28 pb-14 md:pb-18 text-center">
+        <div class="reveal-group">
+          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-3">Diagnóstico Rápido</p>
+          <h2 class="reveal-item text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-[1.05] tracking-[-1px]">
+            ¿Qué necesita tu negocio en <span style="color: #6366f1">Puerto Varas</span>, <span style="color: #10b981">Osorno</span> o <span style="color: #06b6d4">Valdivia</span>?
           </h2>
-          <p class="mt-2 text-sm text-white/50 font-body font-light max-w-lg mx-auto">
+          <p class="reveal-item mt-3 text-sm md:text-base text-white/50 font-body font-light max-w-lg mx-auto">
             Cada pyme es diferente. Encuentra el servicio digital ideal para tu empresa en la Región de Los Lagos.
           </p>
+        </div>
+      </div>
 
-          <!-- Service cards — fully crawlable anchor links -->
-          <div class="mt-8 grid gap-4 sm:grid-cols-3 text-left">
-            <a href="/servicios/#desarrollo-web" class="group block rounded-xl border border-white/10 p-5 hover:border-[#6366f1]/50 transition-all duration-300">
-              <svg class="w-6 h-6 text-[#6366f1] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 3.75L2.25 12l5.25 8.25m9-16.5L21.75 12l-5.25 8.25"/></svg>
-              <h3 class="text-white font-heading font-semibold text-base">Sitio Web Profesional</h3>
-              <p class="mt-1 text-sm text-white/50 font-body leading-relaxed">Páginas ultrarrápidas con Astro, diseño responsive y SEO local incluido para tu negocio en el sur de Chile.</p>
-              <span class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-[#6366f1] group-hover:gap-2 transition-all">Saber más →</span>
-            </a>
-            <a href="/servicios/#seo" class="group block rounded-xl border border-white/10 p-5 hover:border-[#10b981]/50 transition-all duration-300">
-              <svg class="w-6 h-6 text-[#10b981] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
-              <h3 class="text-white font-heading font-semibold text-base">Posicionamiento SEO Local</h3>
-              <p class="mt-1 text-sm text-white/50 font-body leading-relaxed">Aparece en Google Maps y búsquedas locales en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos.</p>
-              <span class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-[#10b981] group-hover:gap-2 transition-all">Saber más →</span>
-            </a>
-            <a href="/servicios/#automatizaciones" class="group block rounded-xl border border-white/10 p-5 hover:border-[#06b6d4]/50 transition-all duration-300">
-              <svg class="w-6 h-6 text-[#06b6d4] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"/></svg>
-              <h3 class="text-white font-heading font-semibold text-base">Automatización de Procesos</h3>
-              <p class="mt-1 text-sm text-white/50 font-body leading-relaxed">Bots para WhatsApp, flujos de email marketing, integraciones CRM y workflows que ahorran horas a tu pyme.</p>
-              <span class="mt-2 inline-flex items-center gap-1 text-xs font-medium text-[#06b6d4] group-hover:gap-2 transition-all">Saber más →</span>
-            </a>
-          </div>
-
-          <!-- Full-width CTA for undecided visitors -->
-          <a href="/contacto" class="mt-4 group block rounded-xl border border-[#6366f1]/20 p-4 bg-[#6366f1]/5 hover:bg-[#6366f1]/10 hover:border-[#6366f1]/40 transition-all duration-300">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-              <div class="text-left">
-                <h3 class="text-white font-heading font-semibold text-sm">¿No sabes por dónde empezar?</h3>
-                <p class="mt-0.5 sm:mt-0 text-sm text-white/50 font-body">Cuéntanos tu situación y te recomendamos la solución ideal sin compromiso.</p>
-              </div>
-              <span class="self-start sm:self-auto shrink-0 inline-flex items-center gap-1 text-xs font-medium text-[#6366f1] group-hover:gap-2 transition-all whitespace-nowrap">Diagnóstico gratuito →</span>
+      <!-- 3 editorial columns — full-bleed, cada una link a /servicios/#slug -->
+      <div class="w-full overflow-hidden reveal-group">
+        <div class="grid grid-cols-1 md:grid-cols-3">
+          {featured.map((s, i) => (
+            <div class="reveal-item">
+              <CinematicColumn
+                title={s.title}
+                description={s.description}
+                accent={s.accent}
+                slug={s.slug}
+                index={i}
+                href={`/servicios/#${s.slug}`}
+                ctaText="Saber más"
+                compact
+              />
             </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Full-width CTA + GEO Quick Answer — sutil, debajo de columnas -->
+      <div class="mx-auto max-w-5xl px-6 py-16 md:py-20">
+        <div class="reveal-group">
+          <a href="/contacto" class="reveal-item group flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl px-6 md:px-8 py-5 md:py-6 transition-all duration-300"
+            style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);"
+          >
+            <div>
+              <h3 class="text-sm md:text-base font-heading font-semibold text-white/80">¿No sabes por dónde empezar?</h3>
+              <p class="mt-0.5 text-xs md:text-sm text-white/40 font-body">Cuéntanos tu situación y te recomendamos la solución ideal sin compromiso.</p>
+            </div>
+            <span class="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium tracking-[0.1em] uppercase transition-all duration-300 group-hover:gap-3"
+              style="color: #6366f1cc;"
+            >
+              Diagnóstico gratuito
+              <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </span>
           </a>
 
-          <!-- GEO Quick Answer Block — optimized for AI Overviews extraction -->
-          <div class="mt-6 pt-4 border-t border-white/5 text-left">
-            <p class="text-xs text-white/40 font-body leading-relaxed">
-              <strong class="text-white/60">Respuesta rápida: </strong>
+          <!-- GEO Quick Answer -->
+          <div class="reveal-item mt-6 pt-5 border-t border-white/5 text-left">
+            <p class="text-xs text-white/35 font-body leading-relaxed">
+              <strong class="text-white/50">Respuesta rápida: </strong>
               La mayoría de las pymes en la Región de Los Lagos comienzan con un sitio web profesional optimizado para SEO local.
               Si ya tienes página, el siguiente paso es el posicionamiento en Google Maps y búsquedas locales.
               Las automatizaciones son ideales cuando tu negocio empieza a recibir más clientes de los que puedes atender manualmente.
-              <a href="/contacto" class="text-[#6366f1] hover:underline ml-1">Solicita un diagnóstico →</a>
+              <a href="/contacto" class="hover:underline ml-1" style="color: #6366f1bb;">Solicita un diagnóstico →</a>
             </p>
           </div>
         </div>
@@ -294,100 +262,160 @@ const services: Service[] = [
       ]
     })} />
 
-    <section class="relative bg-[#010101] py-28 md:py-36 overflow-hidden">
-      <div class="mx-auto max-w-6xl px-6">
-        <div class="reveal-group text-center sm:text-left">
+    <!-- Services — editorial cinematic columns -->
+    <section class="relative bg-[#0A0A0A] w-full">
+      <!-- Header -->
+      <div class="mx-auto max-w-5xl px-6 pt-20 md:pt-28 pb-14 md:pb-18 text-center">
+        <div class="reveal-group">
           <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Servicios</p>
           <BlurText
             text="Todo lo que tu negocio necesita para crecer en el entorno digital"
             as="h2"
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] max-w-3xl"
+            className="reveal-item text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] max-w-3xl mx-auto"
+            wordMs={60}
           />
         </div>
+      </div>
 
-        <div class="mt-16 md:mt-20 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => (
-            <div id={s.title.toLowerCase().replace(/\s+/g, '-')} class="service-card" data-tags={(s.title + " " + s.tags.join(" ")).toLowerCase()} style="transition: opacity 0.3s ease, transform 0.3s ease">
-              <ServiceCard
-                icon={s.icon}
-                title={s.title}
-                description={s.description}
-                tags={s.tags}
-                number={i + 1}
-                accent={s.accent}
-              />
-            </div>
-          ))}
+      <!-- Columnas editoriales — full-bleed, asimétricas -->
+      <div class="w-full overflow-hidden reveal-group">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12">
+          {services.map((s, i) => {
+            const span = i % 3 === 0 ? "lg:col-span-6" : "lg:col-span-3";
+            return (
+              <div class={`${span} md:col-span-1 reveal-item`}>
+                <CinematicColumn
+                  title={s.title}
+                  description={s.description}
+                  accent={s.accent}
+                  slug={s.slug}
+                  index={i}
+                  href="/cotizar"
+                  ctaText="Saber más"
+                  compact
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
 
-    <section class="bg-[#010101] py-28 md:py-36 border-t border-white/[0.03]">
-      <div class="mx-auto max-w-6xl px-6">
-        <div class="reveal-group max-w-3xl mx-auto text-center">
-          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Nosotros</p>
-          <h2 class="reveal-item text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.05] tracking-[-1px]">
-            Agencia Digital en la Región de Los Lagos
+    <!-- Nosotros — editorial brand spread -->
+    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
+      <!-- Background cinematográfico — iluminación de estudio dramática -->
+      <div class="absolute inset-0" style="background: #0A0A0A;" />
+      <div class="absolute inset-0 opacity-60" style="background: radial-gradient(ellipse at 30% 20%, #6366f122 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, #8b5cf615 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #0A0A0A 0%, transparent 70%);" />
+      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
+      <!-- Línea decorativa superior -->
+      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+
+      <div class="relative mx-auto max-w-5xl px-6 py-28 md:py-36 lg:py-44">
+        <div class="reveal-group text-center max-w-4xl mx-auto">
+          <!-- Label editorial -->
+          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Sobre Nosotros</p>
+
+          <!-- Título principal — enorme, editorial -->
+          <h2 class="reveal-item text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-heading font-bold text-white leading-[0.92] tracking-[-2px] md:tracking-[-3px] lg:tracking-[-4px] uppercase">
+            Agencia Digital<br />
+            <span class="block mt-1 md:mt-0" style="color: #6366f1cc;">Región de Los Lagos</span>
           </h2>
-          <p class="reveal-item mt-6 text-white/60 font-body font-light leading-relaxed max-w-2xl mx-auto text-sm sm:text-base">
-            Mtsprz nació en Puerto Varas con la misión de llevar soluciones digitales profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad sin pagar precios de Santiago. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
-          </p>
-          <p class="reveal-item mt-4 text-white/50 font-body font-light leading-relaxed max-w-2xl mx-auto text-sm">
-            Trabajamos con negocios de <a href="/regiones/puerto-varas" class="text-white/70 underline underline-offset-2 decoration-white/20 hover:decoration-white/60 transition-all">Puerto Varas</a>, <a href="/regiones/osorno" class="text-white/70 underline underline-offset-2 decoration-white/20 hover:decoration-white/60 transition-all">Osorno</a>, <a href="/regiones/valdivia" class="text-white/70 underline underline-offset-2 decoration-white/20 hover:decoration-white/60 transition-all">Valdivia</a>, Ancud, Castro y toda la Región de Los Lagos. Cada proyecto incluye optimización SEO desde el día uno, diseño responsive y atención personalizada sin importar el tamaño de tu empresa.
-          </p>
+
+          <!-- Separador editorial -->
+          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
+
+          <!-- Cuerpo — texto editorial con tracking amplio -->
+          <div class="reveal-item max-w-3xl mx-auto space-y-5 md:space-y-6">
+            <p class="text-sm md:text-base lg:text-lg text-white/55 font-body font-light leading-[1.8] md:leading-[1.9] tracking-[0.01em]">
+              Mtsprz nació en <span class="text-white/80">Puerto Varas</span> con la misión de llevar soluciones digitales profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad sin pagar precios de Santiago. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
+            </p>
+            <p class="text-sm md:text-base text-white/45 font-body font-light leading-[1.8] md:leading-[1.9]">
+              Trabajamos con negocios de toda la región.
+            </p>
+          </div>
+
+          <!-- Regiones — chips editoriales -->
+          <div class="reveal-item mt-10 md:mt-12 flex flex-wrap justify-center gap-3">
+            {[
+              { name: "Puerto Varas", slug: "puerto-varas" },
+              { name: "Osorno", slug: "osorno" },
+              { name: "Valdivia", slug: "valdivia" },
+              { name: "Ancud", slug: "ancud" },
+              { name: "Castro", slug: "castro" },
+            ].map((r) => (
+              <a
+                href={`/regiones/${r.slug}`}
+                class="group inline-flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 text-[11px] md:text-xs font-medium tracking-[0.1em] uppercase transition-all duration-300"
+                style="color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);"
+                onmouseover="this.style.background='rgba(99,102,241,0.12)'; this.style.borderColor='rgba(99,102,241,0.3)'; this.style.color='rgba(255,255,255,0.85)'"
+                onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.06)'; this.style.color='rgba(255,255,255,0.5)'"
+              >
+                <span>{r.name}</span>
+                <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
+
+      <!-- Línea decorativa inferior -->
+      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
     </section>
 
-    <section class="bg-[#010101] py-28 md:py-36">
-      <div class="mx-auto max-w-6xl px-6">
-        <div class="cta-card reveal-group relative rounded-[1.375rem] p-10 md:p-14 text-center max-w-3xl mx-auto overflow-hidden bg-[#0a0a0b] border border-white/[0.06]">
-          <!-- Animated gradient background -->
-          <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute inset-0 opacity-30" style="background: radial-gradient(ellipse at 50% 0%, #6366f133, transparent 60%);" />
-            <div class="absolute -top-1/2 -left-1/2 w-full h-full animate-gradient-slow opacity-20" style="background: conic-gradient(from 0deg at 50% 50%, #6366f1, #8b5cf6, #ec4899, #6366f1); filter: blur(80px);" />
+    <!-- CTA — editorial call to action -->
+    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
+      <!-- Background cinematográfico -->
+      <div class="absolute inset-0" style="background: #0A0A0A;" />
+      <div class="absolute inset-0 opacity-50" style="background: radial-gradient(ellipse at 50% 0%, #6366f128 0%, transparent 50%), radial-gradient(ellipse at 30% 100%, #8b5cf610 0%, transparent 50%);" />
+      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
+      <!-- Líneas decorativas -->
+      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
+
+      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44 text-center">
+        <div class="reveal-group">
+          <!-- Label editorial -->
+          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Contacto</p>
+
+          <!-- Título -->
+          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px] lg:tracking-[-3px]">
+            Listo para impulsar<br />
+            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">tu negocio?</span>
+          </h2>
+
+          <!-- Separador -->
+          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
+
+          <!-- Descripción -->
+          <p class="reveal-item mx-auto max-w-xl text-sm md:text-base lg:text-lg text-white/50 font-body font-light leading-relaxed">
+            Conversemos sin compromiso. Te ayudamos a definir la mejor estrategia digital para tu empresa en el sur de Chile.
+          </p>
+
+          <!-- CTA + teléfono -->
+          <div class="reveal-item mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-5">
+            <a
+              href="/contacto"
+              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300"
+              style="color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+            >
+              <span>Contáctanos</span>
+              <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+            <span class="text-[11px] md:text-xs text-white/30 font-body tracking-wide">o llama al <span class="text-white/50">+56975475781</span></span>
           </div>
-          <!-- Decorative dots -->
-          <div class="absolute top-6 left-8 flex gap-2 opacity-20 pointer-events-none">
-            <div class="w-1.5 h-1.5 rounded-full bg-white/40" />
-            <div class="w-1.5 h-1.5 rounded-full bg-white/20" />
-            <div class="w-1.5 h-1.5 rounded-full bg-white/10" />
-          </div>
-          <div class="relative">
-            <BlurText
-              text="Listo para impulsar tu negocio?"
-              as="h2"
-              className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-white tracking-[-1px] leading-[1.1]"
-            />
-            <p class="mx-auto mt-4 max-w-lg text-sm text-white/50 font-body font-light leading-relaxed">
-              Conversemos sin compromiso. Te ayudamos a definir la mejor estrategia digital para tu empresa en el sur de Chile.
-            </p>
-            <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="/contacto"
-                class="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-medium text-white transition-all duration-300"
-                style="background: linear-gradient(135deg, #6366f1, #8b5cf6);"
-              >
-                <span class="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl" style="background: #6366f166;" />
-                <span class="relative">Contáctanos</span>
-                <ArrowUpRight size={16} class="relative transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" stroke-width="2" />
-              </a>
-              <span class="text-[11px] text-white/30 font-body tracking-wide">o llama al <span class="text-white/50">+56975475781</span></span>
-            </div>
-            <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-white/30 font-body">
-              <span class="flex items-center gap-1.5">
-                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Sin compromiso
+
+          <!-- Trust signals — chips editoriales -->
+          <div class="reveal-item mt-12 md:mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+            {[
+              { label: "Sin compromiso", accent: "#6366f1" },
+              { label: "Respuesta en 24 hrs", accent: "#10b981" },
+              { label: "Atención personalizada", accent: "#6366f1" },
+            ].map((t) => (
+              <span class="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium tracking-[0.1em] uppercase" style="color: rgba(255,255,255,0.35);">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke={t.accent} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                {t.label}
               </span>
-              <span class="flex items-center gap-1.5">
-                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Respuesta en 24 hrs
-              </span>
-              <span class="flex items-center gap-1.5">
-                <svg class="w-3 h-3 text-[#6366f1]/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Atención personalizada
-              </span>
-            </div>
+            ))}
           </div>
         </div>
       </div>

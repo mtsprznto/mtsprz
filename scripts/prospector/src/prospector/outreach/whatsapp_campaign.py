@@ -197,6 +197,8 @@ class WhatsAppCampaign:
         """Create instance in Evolution API."""
         payload = json.dumps({
             "instanceName": self.instance,
+            "integration": "WHATSAPP-BAILEYS",
+            "qrcode": True,
         }).encode("utf-8")
         req = urllib.request.Request(
             f"{self.base_url}/instance/create",
@@ -213,20 +215,39 @@ class WhatsAppCampaign:
             return False
 
     def get_qr_url(self) -> str:
-        """URL para ver/descargar QR."""
-        return f"{self.base_url}/instance/qrcode/{self.instance}?apikey={self.api_key}"
-
-    def is_connected(self) -> bool:
-        """Check if WhatsApp is connected."""
+        """URL para ver/descargar QR (manager dashboard)."""
+        # Primero obtener instanceId
         req = urllib.request.Request(
-            f"{self.base_url}/instance/connectionState/{self.instance}",
+            f"{self.base_url}/instance/fetchInstances",
             headers=self.headers,
         )
         try:
             with urllib.request.urlopen(req, timeout=10) as resp:
                 data = json.loads(resp.read().decode())
-                state = data.get("state", "") if isinstance(data, dict) else ""
-                return state == "open"
+                instances = data if isinstance(data, list) else []
+                for inst in instances:
+                    if inst.get("name") == self.instance:
+                        iid = inst.get("id")
+                        if iid:
+                            return f"{self.base_url}/manager/instance/{iid}/dashboard"
+        except Exception:
+            pass
+        return f"{self.base_url}/manager/"
+
+    def is_connected(self) -> bool:
+        """Check if WhatsApp is connected via fetchInstances."""
+        req = urllib.request.Request(
+            f"{self.base_url}/instance/fetchInstances",
+            headers=self.headers,
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read().decode())
+                instances = data if isinstance(data, list) else []
+                for inst in instances:
+                    if inst.get("name") == self.instance:
+                        return inst.get("connectionStatus") == "open"
+                return False
         except Exception:
             return False
 
@@ -399,23 +420,24 @@ class WhatsAppCampaign:
 
         log.info("")
         log.info("══════════════ ESCANEA EL QR ══════════════")
-        log.info("Abre esta URL en tu navegador:")
+        log.info("Abre el dashboard de la instancia:")
         log.info("")
         log.info("  {url}", url=self.get_qr_url())
         log.info("")
+        log.info("Si no ves QR, haz click en 'Connect' o 'Generate QR'")
         log.info("Escanea el QR con WhatsApp (como WhatsApp Web)")
         log.info("============================================")
         log.info("")
 
         # Esperar conexión
-        log.info("Esperando conexión...")
-        for i in range(60):
+        log.info("Esperando conexión (hasta 5 min)...")
+        for i in range(150):
             if self.is_connected():
                 log.info("✓ WhatsApp conectado!")
                 return True
             time.sleep(2)
-            if i % 5 == 0 and i > 0:
-                log.info("  Esperando... ({i}s)", i=i * 2)
+            if i % 15 == 0 and i > 0:
+                log.info("  Esperando... ({i}s) — revisa el QR en el navegador", i=i * 2)
 
-        log.error("Tiempo de espera agotado. Revisa el QR")
+        log.error("Tiempo de espera agotado. Revisa el QR en el dashboard")
         return False

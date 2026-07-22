@@ -1,5 +1,42 @@
 [
   {
+    "id": "fie",
+    "title": "FIE — Gestión de Gastos Educativos con IA",
+    "description": "Plataforma de rendición de gastos educacionales con inteligencia artificial. Automatiza la clasificación de documentos contra el Manual de Cuentas SUPEREDUC usando OCR, RAG y LLM. Sistema completo con Next.js 15, FastAPI, PostgreSQL y arquitectura hexagonal.",
+    "tags": ["Next.js", "Python", "FastAPI", "PostgreSQL", "IA", "Docker", "OCR"],
+    "url": "https://fie.mtsprz.org/",
+    "images": [
+      "/portafolio/fie-landing.png",
+      "/portafolio/fie-dashboard.png",
+      "/portafolio/fie-login.png",
+      "/portafolio/fie-rag.png"
+    ]
+  },
+  {
+    "id": "lllit",
+    "title": "LLLIT — Visuales en Vivo & Música Electrónica",
+    "description": "Proyecto de visuales en vivo, mapping inmersivo con TouchDesigner y música electrónica. Sitio web con diseño cinematográfico oscuro, discografía integrada desde Bandcamp, catálogo de precios con modalidad de reserva y página de álbum con tracklist. Construido con Astro y Tailwind CSS.",
+    "tags": ["Astro", "Tailwind CSS", "TouchDesigner", "Música", "Visuales", "Mapping", "Diseño Cinematográfico"],
+    "url": "https://lllit.mtsprz.org/",
+    "images": [
+      "/portafolio/lllit-landing.png",
+      "/portafolio/lllit-album.png",
+      "/portafolio/lllit-discografia.png",
+      "/portafolio/lllit-proyector.png"
+    ]
+  },
+  {
+    "id": "gestpass",
+    "title": "GestorPass — Gestión de Accesos y Contraseñas",
+    "description": "Gestor de contraseñas y accesos corporativos con autenticación segura, panel de administración de credenciales y recuperación de cuenta. Aplicación web moderna construida con Next.js 15, autenticación JWT y base de datos PostgreSQL.",
+    "tags": ["Next.js", "React", "TypeScript", "PostgreSQL", "JWT", "Autenticación"],
+    "url": "https://gestpass.mtsprz.org/",
+    "images": [
+      "/portafolio/gestpass-login.png",
+      "/portafolio/gestpass-dashboard.png"
+    ]
+  },
+  {
     "id": "blast-up",
     "title": "Blast-Up",
     "description": "Landing page corporativa para Blast-Up, empresa de ingeniería especializada en vibraciones, geotecnia e instrumentación minera. Sitio web profesional con Next.js, modelado 3D interactivo y diseño moderno.",

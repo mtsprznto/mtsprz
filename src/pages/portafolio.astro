@@ -2,110 +2,228 @@
 export const prerender = true;
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Footer from "../components/Footer.astro";
-import { ExternalLink, ArrowUpRight } from "@lucide/astro";
 import projects from "../data/projects.json";
 ---
 
 <BaseLayout
-  title="Portafolio de Desarrollo Web"
+  title="Portafolio de Desarrollo Web — Mtsprz"
   description="Proyectos de desarrollo web y aplicaciones realizados por Mtsprz en la Región de Los Lagos. Sitios web modernos con Astro, React y Next.js para pymes en Chile."
   canonical="https://mtsprz.org/portafolio"
 >
   <Header />
-  <main class="min-h-screen bg-[#010101]">
-    <div class="mx-auto max-w-6xl px-6 pt-28">
-      <div class="reveal-group">
-        <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Portafolio</p>
-        <h1 class="reveal-item text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-[0.9] tracking-[-2px]">Proyectos Realizados</h1>
-        <p class="reveal-item mt-3 text-white/60 font-body font-light max-w-xl">
-          Cada proyecto refleja nuestro compromiso con la calidad, el rendimiento y el diseño.
-        </p>
-      </div>
-    </div>
+  <link rel="preload" as="video" href="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4" fetchpriority="high" />
+  <main>
+    <!-- Hero — video background full-bleed -->
+    <section class="relative w-screen h-[100dvh] md:h-screen overflow-hidden bg-[#010101]">
+      <video
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
+        autoplay loop muted playsinline
+        preload="auto"
+        class="z-[1]"
+        style="position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; max-width: none !important; min-width: 0 !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; display: block !important;"
+      />
+      <div style="position: absolute !important; top: 0; left: 0; width: 100%; height: 24%; z-index: 2;" class="bg-gradient-to-b from-[#010101] to-transparent sm:h-32"></div>
+      <div style="position: absolute !important; bottom: 0; left: 0; width: 100%; height: 36%; z-index: 2;" class="bg-gradient-to-t from-[#010101] to-transparent sm:h-48"></div>
 
-    <div class="mt-12 md:mt-16 space-y-0 reveal-group">
-      {projects.map((p, idx) => (
-        <article class="reveal-item group/project relative overflow-hidden w-full bg-[#010101]">
-          <div class="project-carousel relative w-full overflow-hidden" style="height:clamp(300px,50vh,600px)">
-              <div class="carousel-track relative h-full flex transition-transform duration-500 ease-out" style="width:100%">
+      <!-- Contenido central -->
+      <div style="position: absolute !important; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; pointer-events: none;">
+        <div class="text-center px-6" style="pointer-events: auto;">
+          <p class="text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Portafolio</p>
+          <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[0.9] tracking-[-3px] md:tracking-[-4px]">PORTAFOLIO</h1>
+          <p class="mt-4 text-white/50 font-body font-light max-w-md mx-auto text-sm md:text-base">
+            Proyectos que reflejan nuestro compromiso con la calidad y el diseño
+          </p>
+        </div>
+      </div>
+
+      <!-- Breadcrumb — integrado en hero, esquina inferior -->
+      <div class="absolute bottom-8 md:bottom-10 left-0 right-0 z-20 px-6">
+        <div class="mx-auto max-w-6xl">
+          <Breadcrumbs items={[{ name: "Portafolio", path: "/portafolio" }]} />
+        </div>
+      </div>
+    </section>
+
+    <!-- Project editorial spreads -->
+    {projects.map((p, idx) => {
+      const accents = ["#6366f1", "#8b5cf6"];
+      const accent = accents[idx % accents.length];
+      const gradientId = `project-grad-${idx}`;
+      return (
+        <section class="group/project relative w-full overflow-hidden bg-[#0A0A0A]">
+          <!-- Background cinematográfico por proyecto -->
+          <div class="absolute inset-0" style="background: #0A0A0A;" />
+          <div class="absolute inset-0" style={`background: radial-gradient(ellipse at ${idx % 2 === 0 ? '70%' : '30%'} 40%, ${accent}15 0%, transparent 50%);`} />
+          <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
+          <!-- Línea decorativa superior -->
+          <div class="absolute top-0 left-0 right-0 h-[1px]" style={`background: linear-gradient(90deg, transparent, ${accent}44, transparent);`} />
+
+          <div class="relative w-full min-h-screen flex flex-col lg:flex-row">
+            <!-- Image area — carrusel cinematográfico -->
+            <div class="relative w-full lg:w-3/5 xl:w-2/3 min-h-[50vh] lg:min-h-screen overflow-hidden">
+              <div class="project-carousel relative w-full min-h-[50vh] lg:min-h-screen overflow-hidden">
+                <div class="carousel-track relative flex transition-transform duration-500 ease-out" style="width:100%; min-height:inherit;">
                   {p.images.map((img, iIdx) => {
                     const avifSrc = img.replace(/\.(png|jpg|jpeg)$/i, '.avif');
                     const webpSrc = img.replace(/\.(png|jpg|jpeg)$/i, '.webp');
                     return (
-                    <div class="carousel-slide shrink-0 h-full relative" style="width:100%">
-                      <picture>
-                        <source srcset={avifSrc} type="image/avif" />
-                        <source srcset={webpSrc} type="image/webp" />
-                        <img src={img} alt={iIdx === 0 ? `Captura principal del proyecto ${p.title}` : `Vista adicional del proyecto ${p.title} - ${iIdx + 1}`} loading={iIdx === 0 ? "eager" : "lazy"} decoding="async" width="1200" height="675" class="w-full h-full object-cover" />
-                      </picture>
-                    </div>
+                      <div class="carousel-slide shrink-0 relative" style="width:100%; min-height:inherit;">
+                        <picture class="block w-full h-full">
+                          <source srcset={avifSrc} type="image/avif" />
+                          <source srcset={webpSrc} type="image/webp" />
+                          <img
+                            src={img}
+                            alt={iIdx === 0 ? `Captura principal ${p.title}` : `${p.title} - vista ${iIdx + 1}`}
+                            loading={iIdx === 0 ? "eager" : "lazy"}
+                            decoding="async"
+                            class="w-full h-full object-cover object-top"
+                            style="min-height: inherit;"
+                          />
+                        </picture>
+                      </div>
                     );
                   })}
+                </div>
+
+                <!-- Gradient — DENTRO de project-carousel, sobre imágenes -->
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/20 to-transparent pointer-events-none lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#0A0A0A]/60" />
+
+                <!-- Carousel controls — DENTRO de project-carousel para que JS los alcance -->
+                {p.images.length > 1 && (
+                  <div class="carousel-controls absolute bottom-5 left-5 z-30 flex items-center gap-3 opacity-60 md:opacity-0 md:group-hover/project:opacity-100 transition-all duration-300">
+                    <div class="carousel-dots flex gap-1.5">
+                      {p.images.map((_, i) => (
+                        <button
+                          class="w-1.5 h-1.5 rounded-full bg-white/50 transition-all hover:bg-white/80 active:scale-125 cursor-pointer"
+                          data-index={i}
+                          aria-label={`Imagen ${i + 1}`}
+                        />
+                      ))}
+                    </div>
+                    <div class="flex gap-1">
+                      <button class="carousel-prev w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white/70 hover:bg-black/80 hover:text-white transition-all active:scale-90 cursor-pointer" aria-label="Anterior">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                      </button>
+                      <button class="carousel-next w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white/70 hover:bg-black/80 hover:text-white transition-all active:scale-90 cursor-pointer" aria-label="Siguiente">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                      </button>
+                    </div>
+                    <!-- Indicador de posición tipo editorial -->
+                    <span class="carousel-indicator text-[10px] font-body tracking-[0.15em] text-white/40 font-mono ml-1">01 / {String(p.images.length).padStart(2, '0')}</span>
+                  </div>
+                )}
               </div>
+
+              <!-- Overlay de gradiente secundario FUERA del carrusel (capa extra sobre todo) -->
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/40 via-transparent to-transparent pointer-events-none lg:hidden" />
             </div>
 
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#010101]/80 pointer-events-none" />
-
-            {p.images.length > 1 && (
-              <div class="carousel-dots absolute top-4 left-4 z-30 flex gap-1.5 opacity-0 group-hover/project:opacity-100 transition-opacity">
-                {p.images.map((_, i) => (
-                  <button class="w-1.5 h-1.5 rounded-full bg-white/40 transition-all hover:bg-white/80" data-index={i} aria-label={`Imagen ${i + 1}`} />
-                ))}
-              </div>
-            )}
-
-            <button class="carousel-prev absolute left-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover/project:opacity-100 transition-all text-white/70 hover:bg-black/70 hover:text-white" aria-label="Anterior">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <button class="carousel-next absolute right-3 top-1/2 -translate-y-1/2 z-30 w-9 h-9 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover/project:opacity-100 transition-all text-white/70 hover:bg-black/70 hover:text-white" aria-label="Siguiente">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-
-            <div class="absolute inset-0 flex items-end sm:items-center justify-start sm:justify-end p-4 sm:p-6 lg:p-8 z-10 pointer-events-none">
-              <div class="pointer-events-auto w-full sm:w-[300px] lg:w-[360px] liquid-glass rounded-[1.25rem] p-5 lg:p-6">
-                <span class="text-[10px] uppercase tracking-[0.15em] text-white/40 font-body">
+            <!-- Content area — info editorial sobre fondo oscuro -->
+            <div class="relative w-full lg:w-2/5 xl:w-1/3 flex items-end lg:items-center p-8 md:p-12 lg:p-16 xl:p-20">
+              <div class="w-full max-w-md reveal-group">
+                <!-- Número editorial -->
+                <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium" style={`color: ${accent}aa;`}>
                   Proyecto {String(idx + 1).padStart(2, '0')}
-                </span>
-                <h2 class="text-xl lg:text-2xl font-heading font-bold text-white mt-1 tracking-[-0.5px]">{p.title}</h2>
-                <p class="mt-2 text-sm text-white/60 font-body font-light leading-snug">{p.description}</p>
-                <div class="mt-4 flex items-center justify-between gap-3">
-                  <div class="flex flex-wrap gap-1.5">
-                    {p.tags.map((tag) => (
-                      <span class="rounded-full bg-white/5 px-2.5 py-0.5 text-[10px] text-white/50">{tag}</span>
-                    ))}
-                  </div>
-                  <a href={p.url} target="_blank" rel="noopener noreferrer" class="shrink-0 liquid-glass-strong rounded-full px-3.5 py-1.5 text-[11px] font-medium text-white inline-flex items-center gap-1.5 transition-all hover:scale-105">
-                    Visitar
-                    <ExternalLink size={11} stroke-width="1.5" />
+                </p>
+
+                <!-- Título — enorme, mayúscula, como titular de revista -->
+                <h2 class="reveal-item text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[0.92] tracking-[-1.5px] md:tracking-[-2px] mt-2 md:mt-3">
+                  {p.title}
+                </h2>
+
+                <!-- Separador editorial -->
+                <div class="reveal-item my-5 md:my-6 w-8 h-[1px]" style={`background: linear-gradient(90deg, ${accent}66, transparent);`} />
+
+                <!-- Descripción — cuerpo editorial -->
+                <p class="reveal-item text-sm md:text-[15px] text-white/45 font-body font-light leading-[1.8]">
+                  {p.description}
+                </p>
+
+                <!-- Tags — como notas editoriales -->
+                <div class="reveal-item mt-6 flex flex-wrap gap-x-4 gap-y-1.5">
+                  {p.tags.map((tag, tIdx) => (
+                    <span class="text-[10px] md:text-xs text-white/30 font-body tracking-[0.05em]">
+                      {tIdx > 0 && <span class="mr-4 text-white/10">/</span>}
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <!-- CTA — botón carbono -->
+                <div class="reveal-item mt-8 md:mt-10">
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group inline-flex items-center gap-2.5 px-6 md:px-7 py-3 md:py-3.5 text-[11px] md:text-xs font-medium uppercase tracking-[0.15em] transition-all duration-300"
+                    style={`color: ${accent}cc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);`}
+                    onmouseover={`this.style.background='${accent}22'; this.style.borderColor='${accent}44'`}
+                    onmouseout={`this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(255,255,255,0.06)'`}
+                  >
+                    <span>Visitar proyecto</span>
+                    <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
                   </a>
                 </div>
               </div>
             </div>
-          </article>
-        ))}
-      </div>
+          </div>
 
-    <div class="mx-auto max-w-6xl px-6 pb-20">
-      <div class="reveal-group mt-16 md:mt-20 text-center">
-        <div class="reveal-item liquid-glass rounded-[1.25rem] p-8 md:p-12 max-w-2xl mx-auto">
-          <h2 class="text-xl md:text-2xl font-heading font-bold text-white tracking-[-0.5px]">Tienes un proyecto en mente?</h2>
-          <p class="mt-3 text-sm text-white/50 font-body font-light max-w-md mx-auto">
-            Cada proyecto inicia con una conversacion. Trabajemos juntos para llevar tu idea al siguiente nivel.
+          <!-- Línea decorativa inferior -->
+          <div class="absolute bottom-0 left-0 right-0 h-[1px]" style={`background: linear-gradient(90deg, transparent, ${accent}22, transparent);`} />
+        </section>
+      );
+    })}
+
+    <!-- CTA — editorial call to action -->
+    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
+      <div class="absolute inset-0" style="background: #0A0A0A;" />
+      <div class="absolute inset-0 opacity-50" style="background: radial-gradient(ellipse at 50% 0%, #6366f128 0%, transparent 50%), radial-gradient(ellipse at 30% 100%, #8b5cf610 0%, transparent 50%);" />
+      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
+      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
+
+      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44 text-center">
+        <div class="reveal-group">
+          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Contacto</p>
+
+          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px] lg:tracking-[-3px]">
+            Tienes un proyecto<br />
+            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">en mente?</span>
+          </h2>
+
+          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
+
+          <p class="reveal-item mx-auto max-w-xl text-sm md:text-base lg:text-lg text-white/50 font-body font-light leading-relaxed">
+            Cada proyecto inicia con una conversación. Trabajemos juntos para llevar tu idea al siguiente nivel.
           </p>
-          <div class="mt-6 flex flex-wrap items-center justify-center gap-4">
-            <a href="/contacto" class="liquid-glass-strong rounded-full px-6 py-2.5 text-sm font-medium text-white inline-flex items-center gap-2 transition-all hover:scale-105">
-              Contactar
-              <ArrowUpRight size={16} stroke-width="2" />
+
+          <div class="reveal-item mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="/contacto"
+              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300"
+              style="color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+            >
+              <span>Contactar</span>
+              <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
-            <a href="https://portafolio.mtsprz.org/" target="_blank" rel="noopener noreferrer" class="rounded-full px-6 py-2.5 text-sm font-medium text-white/50 border border-white/10 inline-flex items-center gap-2 transition-all hover:text-white hover:border-white/30">
-              Portafolio completo
-              <ExternalLink size={14} stroke-width="1.5" />
+            <a
+              href="https://portafolio.mtsprz.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group inline-flex items-center gap-2.5 px-6 md:px-7 py-3 md:py-3.5 text-[11px] md:text-xs font-medium uppercase tracking-[0.15em] transition-all duration-300"
+              style="color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"
+              onmouseover="this.style.color='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(255,255,255,0.15)'"
+              onmouseout="this.style.color='rgba(255,255,255,0.5)'; this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(255,255,255,0.08)'"
+            >
+              <span>Portafolio completo</span>
+              <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </main>
   <Footer />
 
@@ -114,42 +232,133 @@ import projects from "../data/projects.json";
     document.querySelectorAll('.project-carousel').forEach(function(carousel) {
       var track = carousel.querySelector('.carousel-track');
       var slides = carousel.querySelectorAll('.carousel-slide');
-      var dots = carousel.querySelectorAll('.carousel-dots button');
-      var prev = carousel.querySelector('.carousel-prev');
-      var next = carousel.querySelector('.carousel-next');
-      var article = carousel.closest('article');
-      var autoTimer;
+      var controls = carousel.querySelector('.carousel-controls');
+      var dots = controls ? controls.querySelectorAll('.carousel-dots button') : [];
+      var prev = controls ? controls.querySelector('.carousel-prev') : null;
+      var next = controls ? controls.querySelector('.carousel-next') : null;
+      var indicator = controls ? controls.querySelector('.carousel-indicator') : null;
+      var section = carousel.closest('section');
       var total = slides.length;
       var current = 0;
+      var autoTimer = null;
+      var pauseTimer = null;
+      var touchStartX = 0;
+      var touchStartY = 0;
+      var isDragging = false;
 
       if (total < 2) {
-        if (dots.length) dots.forEach(function(d) { d.style.display = 'none'; });
+        if (controls) controls.style.display = 'none';
         return;
+      }
+
+      function updateIndicator() {
+        if (!indicator) return;
+        indicator.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+      }
+
+      function updateDots() {
+        dots.forEach(function(d, j) {
+          d.className = 'rounded-full transition-all duration-300 cursor-pointer ' + (j === current ? 'bg-white/80 w-2.5 h-1.5' : 'bg-white/40 w-1.5 h-1.5 hover:bg-white/70 active:scale-125');
+        });
       }
 
       function goTo(i) {
         current = Math.max(0, Math.min(total - 1, i));
         track.style.transform = 'translateX(-' + (current * 100) + '%)';
-        dots.forEach(function(d, j) {
-          d.className = 'rounded-full transition-all ' + (j === current ? 'bg-white/80 w-2.5 h-1.5' : 'bg-white/40 w-1.5 h-1.5 hover:bg-white/70');
+        updateDots();
+        updateIndicator();
+      }
+
+      function nextSlide() {
+        if (current >= total - 1) goTo(0);
+        else goTo(current + 1);
+      }
+
+      function prevSlide() {
+        if (current <= 0) goTo(total - 1);
+        else goTo(current - 1);
+      }
+
+      function startAuto() {
+        stopAuto();
+        autoTimer = setInterval(nextSlide, 4500);
+      }
+
+      function stopAuto() {
+        if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+      }
+
+      function pauseAuto(delay) {
+        stopAuto();
+        if (pauseTimer) clearTimeout(pauseTimer);
+        pauseTimer = setTimeout(startAuto, delay || 8000);
+      }
+
+      // Manual navigation
+      if (prev) prev.addEventListener('click', function(e) {
+        e.stopPropagation();
+        prevSlide();
+        pauseAuto(8000);
+      });
+
+      if (next) next.addEventListener('click', function(e) {
+        e.stopPropagation();
+        nextSlide();
+        pauseAuto(8000);
+      });
+
+      dots.forEach(function(d) {
+        d.addEventListener('click', function() {
+          goTo(parseInt(d.getAttribute('data-index')));
+          pauseAuto(8000);
+        });
+      });
+
+      // Pausar auto en hover del section desktop
+      if (section) {
+        section.addEventListener('mouseenter', stopAuto);
+        section.addEventListener('mouseleave', function() {
+          if (!pauseTimer) startAuto();
         });
       }
 
-      function startAuto() { stopAuto(); autoTimer = setInterval(function() { goTo(current + 1); if (current >= total - 1) goTo(0); }, 4000); }
-      function stopAuto() { clearInterval(autoTimer); }
+      // ── Touch / Swipe ──
+      carousel.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+        isDragging = false;
+      }, { passive: true });
 
-      if (prev) prev.addEventListener('click', function(e) { e.stopPropagation(); goTo(current - 1); stopAuto(); startAuto(); });
-      if (next) next.addEventListener('click', function(e) { e.stopPropagation(); goTo(current + 1); stopAuto(); startAuto(); });
+      carousel.addEventListener('touchmove', function(e) {
+        if (!touchStartX) return;
+        var dx = Math.abs(e.changedTouches[0].screenX - touchStartX);
+        var dy = Math.abs(e.changedTouches[0].screenY - touchStartY);
+        if (dx > 10 || dy > 10) isDragging = true;
+      }, { passive: true });
 
-      dots.forEach(function(d) {
-        d.addEventListener('click', function() { goTo(parseInt(d.getAttribute('data-index'))); stopAuto(); startAuto(); });
+      carousel.addEventListener('touchend', function(e) {
+        if (!isDragging) return;
+        var diffX = e.changedTouches[0].screenX - touchStartX;
+        if (Math.abs(diffX) > 40) {
+          if (diffX > 0) prevSlide();
+          else nextSlide();
+          pauseAuto(8000);
+        }
+        touchStartX = 0;
+        touchStartY = 0;
+        isDragging = false;
+      }, { passive: true });
+
+      // ── Keyboard (solo si el carrusel es visible) ──
+      carousel.setAttribute('tabindex', '0');
+      carousel.setAttribute('role', 'region');
+      carousel.setAttribute('aria-label', 'Galería de imágenes');
+      carousel.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') { prevSlide(); pauseAuto(8000); }
+        if (e.key === 'ArrowRight') { nextSlide(); pauseAuto(8000); }
       });
 
-      if (article) {
-        article.addEventListener('mouseenter', stopAuto);
-        article.addEventListener('mouseleave', startAuto);
-      }
-
+      // Init
       goTo(0);
       startAuto();
     });

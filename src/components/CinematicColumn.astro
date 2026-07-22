@@ -1,0 +1,163 @@
+---
+/**
+ * CinematicColumn — columna editorial inmersiva a pantalla completa.
+ *
+ * Filosofía: reemplazar "tarjetas" por columnas cinematográficas.
+ * Sin contenedores, sin bordes, sin sombras. La imagen (gradiente)
+ * es el contenido. El texto flota sobre ella como una superposición
+ * de revista de lujo.
+ *
+ * Inspiración: Zara editorial, fotografía de estudio Rembrandt,
+ * interfaces de marcas de lujo en modo oscuro.
+ */
+
+export interface Props {
+  title: string;
+  description: string;
+  accent: string;
+  slug: string;
+  index: number;
+  href?: string;      // convierte toda la columna en link navegable
+  ctaText?: string;   // texto del botón CTA (default: "Cotizar")
+  compact?: boolean;  // altura reducida (homepage), default: false (full-screen)
+}
+
+const { title, description, accent, slug, index, href, ctaText = "Cotizar", compact = false } = Astro.props;
+const isLink = !!href;
+const Wrapper = isLink ? "a" : "div";
+const wrapperAttrs: Record<string, string> = {};
+if (isLink) {
+  wrapperAttrs.href = href!;
+}
+
+// Gradiente editorial único por índice — luz lateral alternante
+const lightSide = index % 2 === 0 ? "70% 30%" : "30% 70%";
+const topLight = index % 3 === 0 ? "20% 0%" : "80% 0%";
+
+const bgBase = `
+  radial-gradient(ellipse at ${lightSide}, ${accent}22 0%, transparent 60%),
+  radial-gradient(ellipse at ${topLight}, ${accent}0a 0%, transparent 50%),
+  radial-gradient(ellipse at 50% 100%, ${accent}08 0%, transparent 50%),
+  linear-gradient(165deg, #0A0A0A 0%, ${accent}06 40%, #0A0A0A 100%)
+`;
+
+const bgHover = `
+  radial-gradient(ellipse at ${lightSide}, ${accent}44 0%, transparent 60%),
+  radial-gradient(ellipse at ${topLight}, ${accent}18 0%, transparent 50%),
+  radial-gradient(ellipse at 50% 100%, ${accent}14 0%, transparent 50%),
+  linear-gradient(165deg, #0A0A0A 0%, ${accent}0d 40%, #0A0A0A 100%)
+`;
+---
+
+<Wrapper
+  id={slug}
+  class={`group relative w-full overflow-hidden reveal-item ${isLink ? "block no-underline" : "cursor-pointer"} ${compact ? "min-h-[55vh] md:min-h-[70vh]" : "min-h-[80vh] md:min-h-screen"}`}
+  style="transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1);"
+  {...wrapperAttrs}
+>
+  <!-- Background — el "lienzo" fotográfico editorial -->
+  <div
+    class="absolute inset-0 transition-opacity duration-1000"
+    style={`background: ${bgBase};`}
+  />
+  <div
+    class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-800"
+    style={`background: ${bgHover};`}
+  />
+
+  <!-- Textura sutil "grano fotográfico" -->
+  <div
+    class="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none"
+    style={`
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    `}
+  />
+
+  <!-- Overlay inferior — fundido oscuro para legibilidad del texto -->
+  <div
+    class="absolute inset-x-0 bottom-0 h-3/5 pointer-events-none"
+    style={`
+      background: linear-gradient(
+        to top,
+        #0A0A0A 0%,
+        ${accent}0a 30%,
+        transparent 100%
+      );
+    `}
+  />
+
+  <!-- Indicador editorial — línea de acento animada -->
+  <div
+    class="absolute top-0 left-0 right-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+    style={`background: linear-gradient(90deg, ${accent}66, transparent);`}
+  />
+
+  <!-- Número editorial (identificador de columna) -->
+  <div class={`absolute pointer-events-none select-none ${compact ? "top-5 left-5 md:top-6 md:left-6" : "top-8 md:top-10 left-8 md:left-10 lg:left-12"}`}>
+    <span
+      class={`font-mono font-bold tracking-[0.2em] ${compact ? "text-[9px]" : "text-[11px]"}`}
+      style={`color: ${accent}88;`}
+    >
+      {String(index + 1).padStart(2, "0")}
+    </span>
+  </div>
+
+  <!-- Contenido principal — alineado abajo (como pie de foto editorial) -->
+  <div class={`absolute inset-0 flex flex-col justify-end ${compact ? "p-6 md:p-8 lg:p-10" : "p-8 md:p-10 lg:p-12 xl:p-16"}`}>
+    <div class="max-w-md">
+      <!-- Categoría — titulografía enorme, nítida, mayúscula -->
+      <h3
+        class={`font-heading font-bold text-white leading-[0.92] uppercase transition-all duration-500 group-hover:tracking-[-1px] ${compact ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[-1.5px] md:tracking-[-2px]" : "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl tracking-[-2px] md:tracking-[-3px]"}`}
+      >
+        {title}
+      </h3>
+
+      <!-- Descripción — cuerpo editorial sutil -->
+      <p
+        class={`font-body font-light leading-relaxed max-w-sm md:max-w-md transition-all duration-500 group-hover:text-white/60 ${compact ? "mt-3 text-xs md:text-sm text-white/35" : "mt-4 md:mt-5 text-sm md:text-base lg:text-lg text-white/40"}`}
+      >
+        {description}
+      </p>
+
+      <!-- CTA — botón carbono, mayúscula -->
+      {(() => {
+        const ctaClasses = `inline-flex items-center gap-2.5 transition-all duration-300 group-hover:gap-4 uppercase font-medium tracking-[0.15em] ${compact ? "mt-4 px-5 py-2.5 text-[10px]" : "mt-6 md:mt-7 px-6 md:px-7 py-3 md:py-3.5 text-[11px] md:text-xs"}`;
+        const ctaStyle = `color: ${accent}cc; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06);`;
+        const iconClass = `transition-transform duration-300 group-hover:translate-x-1 ${compact ? "w-3 h-3" : "w-3.5 h-3.5"}`;
+        const inner = (
+          <>
+            <span>{ctaText}</span>
+            <svg class={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14" /><path d="M12 5l7 7-7 7" />
+            </svg>
+          </>
+        );
+        if (isLink) {
+          return <span class={ctaClasses} style={ctaStyle}>{inner}</span>;
+        }
+        return (
+          <a
+            href="/cotizar"
+            class={ctaClasses}
+            style={ctaStyle}
+            onmouseover={`this.style.background='${accent}22'; this.style.borderColor='${accent}44'`}
+            onmouseout={`this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(255,255,255,0.06)'`}
+          >
+            {inner}
+          </a>
+        );
+      })()}
+    </div>
+  </div>
+
+  <!-- Efecto hover: sutil elevación de luz en la columna -->
+  <div
+    class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+    style={`
+      background: radial-gradient(ellipse at 50% 80%, ${accent}11 0%, transparent 60%);
+      mix-blend-mode: screen;
+    `}
+  />
+</Wrapper>
