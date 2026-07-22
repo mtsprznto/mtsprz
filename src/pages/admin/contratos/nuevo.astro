@@ -1255,12 +1255,17 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
           nationality: formData.get("client_nationality") || "Chilena",
           profession: formData.get("client_profession"),
         };
-        // Fire-and-forget: no bloquear redirect
-        fetch("/api/clients", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(clientData),
-        }).catch(function() {});
+        // Await save before redirect — evita que navegación aborte el fetch
+        try {
+          await fetch("/api/clients", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(clientData),
+          });
+        } catch (_clientErr) {
+          // No bloqueamos redirect si falla el save del cliente
+          console.warn("[Client Save] falló:", _clientErr);
+        }
       }
 
       if (data && data.contract && data.contract.id) {
