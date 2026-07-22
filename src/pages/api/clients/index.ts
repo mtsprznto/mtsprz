@@ -15,19 +15,21 @@ export const GET: APIRoute = async ({ locals, url }) => {
 
     let rows: Record<string, unknown>[];
     if (search.trim()) {
-      // Full-text search with tsvector
+      // ILIKE fallback — más robusto que tsvector para búsquedas cortas/parciales
+      const pattern = `%${search.trim()}%`;
       const result = await query(
-        `SELECT id, name, company_name, rut, email, phone, address, nationality, profession, notes, created_at
+        `SELECT id, name, company_name, rut, email, phone, address, nationality, profession, notes, notif_email, representante, created_at
          FROM clients
-         WHERE is_active = true AND search_vector @@ plainto_tsquery('spanish', $1)
-         ORDER BY ts_rank(search_vector, plainto_tsquery('spanish', $1)) DESC
+         WHERE is_active = true
+           AND (name ILIKE $1 OR company_name ILIKE $1 OR rut ILIKE $1 OR email ILIKE $1)
+         ORDER BY name ASC
          LIMIT 10`,
-        [search.trim()]
+        [pattern]
       );
       rows = result.rows;
     } else {
       const result = await query(
-        `SELECT id, name, company_name, rut, email, phone, address, nationality, profession, notes, created_at
+        `SELECT id, name, company_name, rut, email, phone, address, nationality, profession, notes, notif_email, representante, created_at
          FROM clients WHERE is_active = true ORDER BY name ASC LIMIT 20`
       );
       rows = result.rows;
@@ -39,7 +41,7 @@ export const GET: APIRoute = async ({ locals, url }) => {
     });
   } catch (err) {
     console.error("[Clients] List error:", err);
-    return new Response(JSON.stringify({ error: "Error al buscar clientes" }), { status: 500 });
+    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
   }
 };
 
@@ -71,11 +73,27 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const profession = body.profession ? String(body.profession) : null;
     const notes = body.notes ? String(body.notes) : null;
 
+    const notifEmail = body.notif_email ? String(body.notif_email) : null;
+    const representante = body.representante ? String(body.representante) : null;
+
     const result = await query(
-      `INSERT INTO clients (name, company_name, rut, email, phone, address, nationality, profession, notes)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING id, name, company_name, rut, email, phone, address, nationality, profession, notes, created_at`,
-      [name, companyName, rut, email, phone, address, nationality, profession, notes]
+      `INSERT INTO clients (name, company_name, rut, email, phone, address, nationality, profession, notes, notif_email, representante)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+       ON CONFLICT (LOWER(TRIM(email))) WHERE email IS NOT NULL AND is_active = true
+       DO UPDATE SET
+         name         = EXCLUDED.name,
+         company_name = EXCLUDED.company_name,
+         rut          = EXCLUDED.rut,
+         phone        = EXCLUDED.phone,
+         address      = EXCLUDED.address,
+         nationality  = EXCLUDED.nationality,
+         profession   = EXCLUDED.profession,
+         notes        = COALESCE(EXCLUDED.notes, clients.notes),
+         notif_email  = COALESCE(EXCLUDED.notif_email, clients.notif_email),
+         representante= COALESCE(EXCLUDED.representante, clients.representante),
+         updated_at   = NOW()
+       RETURNING id, name, company_name, rut, email, phone, address, nationality, profession, notes, notif_email, representante, created_at`,
+      [name, companyName, rut, email, phone, address, nationality, profession, notes, notifEmail, representante]
     );
 
     return new Response(JSON.stringify({ client: result.rows[0] }), {

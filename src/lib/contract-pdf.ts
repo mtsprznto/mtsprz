@@ -39,6 +39,12 @@ export interface ContractData {
   governingLaw?: string;         // default "Chile"
   jurisdiction?: string;         // default "Puerto Varas"
   prestadorRut?: string;
+
+  // NUEVOS — identificación legal correcta (recomendación abogado)
+  prestadorNombreCivil?: string; // nombre civil completo del prestador (persona natural)
+  clientRepresentante?: string;  // "[nombre], RUT [rut], según consta en escritura/estatutos" — para SpA/SA/Ltda
+  clientNotifEmail?: string;     // correo formal del cliente para notificaciones (si distinto a clientEmail)
+  prestadorNotifEmail?: string;  // correo formal del prestador (default: contacto@mtsprz.org)
 }
 
 // ── Layout Helpers ──────────────────────────────────────────────────────────
@@ -196,35 +202,34 @@ function drawClause1_Parties(ctx: LayoutCtx, data: ContractData): void {
   drawClauseTitle(ctx, 0, "IDENTIFICACIÓN DE LAS PARTES");
 
   const prestadorRut = data.prestadorRut || import.meta.env.MTSPRZ_RUT || "Pendiente";
+  const prestadorNombre = data.prestadorNombreCivil
+    ? `${data.prestadorNombreCivil}, que usa el nombre de fantasía Mtsprz — Soluciones Digitales`
+    : "Mtsprz — Soluciones Digitales";
 
-  const parties = [
-    { label: "PRESTADOR", value: "Mtsprz — Soluciones Digitales" },
+  const prestadorRows = [
+    { label: "PRESTADOR", value: prestadorNombre },
     { label: "RUT PRESTADOR", value: prestadorRut },
     { label: "DOMICILIO PRESTADOR", value: "Puerto Varas, Región de Los Lagos, Chile" },
-    { label: "CORREO PRESTADOR", value: "contacto@mtsprz.org" },
-    { label: "", value: "" },
+    { label: "CORREO PRESTADOR", value: data.prestadorNotifEmail || "contacto@mtsprz.org" },
+  ];
+
+  const isCompanyRut = /^[5-9]\d{7,}/.test((data.clientRut || "").replace(/[.\-]/g, ""));
+
+  const clientRows = [
     { label: "CLIENTE", value: data.clientName },
+    ...(isCompanyRut && data.clientRepresentante
+      ? [{ label: "REPRESENTANTE LEGAL", value: data.clientRepresentante }]
+      : []),
     { label: "RUT CLIENTE", value: data.clientRut || "—" },
-    { label: "NACIONALIDAD", value: data.clientNationality || "Chilena" },
-    { label: "PROFESIÓN / GIRO", value: data.clientProfession || "—" },
+    ...(!isCompanyRut ? [{ label: "NACIONALIDAD", value: data.clientNationality || "Chilena" }] : []),
+    ...(data.clientProfession ? [{ label: isCompanyRut ? "GIRO" : "PROFESIÓN / GIRO", value: data.clientProfession }] : []),
     { label: "DOMICILIO CLIENTE", value: data.clientAddress || "—" },
     { label: "CORREO CLIENTE", value: data.clientEmail },
     { label: "TELÉFONO", value: data.clientPhone || "—" },
   ];
 
-  const isCompanyRut = /^[5-9]\d{7,}/.test((data.clientRut || "").replace(/[.\-]/g, ""));
-
-  for (const p of parties) {
-    if (!p.label && !p.value) {
-      ctx.y -= 6;
-      continue;
-    }
-    // Saltar NACIONALIDAD si el RUT corresponde a empresa
-    if (p.label === "NACIONALIDAD" && isCompanyRut) {
-      continue;
-    }
-    // Cambiar label si empresa
-    const label = (p.label === "PROFESIÓN / GIRO" && isCompanyRut) ? "GIRO" : p.label;
+  const drawRow = (label: string, value: string) => {
+    ensureSpace(ctx, 16);
     ctx.page.drawText(label, {
       x: MARGIN,
       y: ctx.y,
@@ -232,14 +237,25 @@ function drawClause1_Parties(ctx: LayoutCtx, data: ContractData): void {
       font: ctx.fontBold,
       color: MUTED,
     });
-    ctx.page.drawText(p.value, {
-      x: MARGIN + 130,
-      y: ctx.y,
-      size: SMALL_SIZE,
-      font: ctx.font,
-      color: TEXT,
-    });
-    ctx.y -= 14;
+    ctx.y = drawWrappedText(ctx, value, MARGIN + 130, ctx.y, CONTENT_W - 130, SMALL_SIZE, ctx.font, 13);
+    ctx.y -= 2;
+  };
+
+  for (const p of prestadorRows) drawRow(p.label, p.value);
+  ctx.y -= 6;
+  for (const p of clientRows) drawRow(p.label, p.value);
+
+  // Nota de personería para personas jurídicas
+  if (isCompanyRut) {
+    ctx.y -= 4;
+    const noteriaText = data.clientRepresentante
+      ? "El representante legal indicado actúa en nombre y representación del Cliente, con las facultades " +
+        "que le otorga la escritura social o instrumento constitutivo correspondiente. Las partes declaran " +
+        "que la personería del representante es suficiente para celebrar y obligar al Cliente en virtud del " +
+        "presente contrato."
+      : "ADVERTENCIA: El Cliente es persona jurídica. Se recomienda identificar al representante legal y " +
+        "citar la fuente de sus poderes (escritura pública, estatutos) antes de suscribir el contrato.";
+    ctx.y = drawWrappedText(ctx, noteriaText, MARGIN, ctx.y, CONTENT_W, 8, ctx.font, 12);
   }
   ctx.y -= 8;
 }
@@ -461,9 +477,19 @@ function drawClause7_Payment(ctx: LayoutCtx, data: ContractData): void {
     `de la Ley N° 21.133.`
   );
 
-  drawClauseParagraph(ctx, "Mora: ",
-    `En caso de mora en el pago, el deudor devengará el interés corriente para operaciones reajustables ` +
-    `desde la fecha de exigibilidad de la obligación, conforme al Artículo 1559 del Código Civil.`
+  drawClauseParagraph(ctx, "Cláusula penal por mora del Cliente (Art. 1535 CC): ",
+    "En caso de mora en el pago de cualquier cuota u hito acordado, el Cliente pagará al Prestador, " +
+    "a título de pena convencional, una suma equivalente al 5% del monto adeudado por cada semana de " +
+    "atraso, con un máximo del 20% del total del contrato. La pena convencional reemplaza toda otra " +
+    "indemnización moratoria, salvo el reajuste conforme al Artículo 1559 del Código Civil. " +
+    "El Prestador podrá exigir simultáneamente el cumplimiento de la obligación principal y la pena, " +
+    "conforme al inciso 2° del Artículo 1537 del Código Civil."
+  );
+
+  drawClauseParagraph(ctx, "Cláusula penal por retraso en entrega de insumos: ",
+    "Si el Cliente incurre en mora en la entrega de información, accesos o insumos necesarios para la " +
+    "ejecución de los servicios, el plazo de entrega del Prestador se prorrogará automáticamente en igual " +
+    "número de días hábiles al retraso del Cliente, sin que ello constituya incumplimiento del Prestador."
   );
 }
 
@@ -557,10 +583,12 @@ function drawClause11_IntellectualProperty(ctx: LayoutCtx, data: ContractData): 
     "el Cliente no adquiere los derechos patrimoniales sobre las obras y su uso de los entregables " +
     "se considerará una licencia precaria y revocable, limitada a los fines de revisión y prueba, " +
     "sin derecho a explotación comercial, publicación ni modificación de las obras. " +
-    "Tratándose de sistemas, automatizaciones o plataformas desarrolladas, el paso a producción, " +
-    "la entrega de credenciales de administración y el acceso a los entornos productivos se " +
-    "producirán únicamente contra el pago total de los honorarios. Hasta ese momento, los sistemas " +
-    "permanecerán en un entorno de pruebas (staging) o acceso restringido, sin uso productivo."
+    "Tratándose de sitios web, sistemas, automatizaciones o plataformas desarrolladas: el paso a " +
+    "producción, la activación de herramientas de indexación y posicionamiento (incluyendo Google " +
+    "Search Console, datos estructurados y servicios SEO que requieran el sitio publicado), la " +
+    "entrega de credenciales de administración y el acceso a los entornos productivos se producirán " +
+    "únicamente contra el pago total de los honorarios. Hasta ese momento, los sistemas permanecerán " +
+    "en un entorno de pruebas (staging) o acceso restringido, sin uso productivo ni indexación."
   );
 
   drawClauseParagraph(ctx, "Derechos morales: ",
@@ -711,12 +739,30 @@ function drawClause17_ForceMajeure(ctx: LayoutCtx, data: ContractData): void {
 }
 
 function drawClause18_Jurisdiction(ctx: LayoutCtx, data: ContractData): void {
-  drawClauseTitle(ctx, 17, "JURISDICCIÓN Y LEGISLACIÓN APLICABLE");
+  drawClauseTitle(ctx, 17, "NOTIFICACIONES, JURISDICCIÓN Y LEGISLACIÓN APLICABLE");
+
+  const prestadorNotifEmail = data.prestadorNotifEmail || "contacto@mtsprz.org";
+  const clientNotifEmail = data.clientNotifEmail || data.clientEmail;
+
+  drawClauseParagraph(ctx, "Notificaciones: ",
+    "Toda comunicación, notificación o requerimiento entre las partes que deba constar por escrito para " +
+    "efectos del presente contrato se efectuará a los siguientes correos electrónicos, los que las partes " +
+    "reconocen como válidos y suficientes para producir efectos legales entre ellas:"
+  );
+  drawClauseText(ctx,
+    `Prestador: ${prestadorNotifEmail} | Cliente: ${clientNotifEmail}`
+  );
+  drawClauseText(ctx,
+    "Se entenderá recibida la comunicación al día hábil siguiente al de su envío, salvo acuse de recibo " +
+    "anterior. El cambio de correo electrónico válido deberá notificarse a la contraparte con al menos " +
+    "5 días hábiles de anticipación mediante comunicación expresa."
+  );
 
   drawClauseText(ctx,
     "El presente contrato se rige por las leyes de la República de Chile. Las partes fijan su domicilio " +
     "en la ciudad de " + (data.jurisdiction || "Puerto Varas") + ", Región de Los Lagos, Chile, y se someten " +
-    "a la competencia de sus tribunales ordinarios de justicia."
+    "a la competencia de sus tribunales ordinarios de justicia. La presente prórroga de competencia " +
+    "es válida conforme al Artículo 181 del Código Orgánico de Tribunales."
   );
 
   drawClauseParagraph(ctx, "Firma electrónica: ",
@@ -1085,9 +1131,12 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
       );
     } else {
       drawClauseParagraph(ctx, "Plazo de ejecución: ",
-        `Los entregables se liberarán de forma incremental entre el ${startD} y el ${endD}. ` +
-        `Las partes podrán acordar hitos específicos por escrito, los que se entenderán ` +
-        `incorporados al presente anexo.`
+        `Fecha de inicio: ${startD} — Fecha de término estimada: ${endD}. ` +
+        `Las partes acuerdan definir los hitos específicos y sus fechas de entrega mediante ` +
+        `comunicación escrita dentro de los 5 días hábiles siguientes a la firma del contrato, ` +
+        `los que se entenderán incorporados al presente Anexo A como parte integrante. ` +
+        `La falta de definición de hitos en dicho plazo habilitará al Prestador para gestionar ` +
+        `los entregables en el orden y tiempos que estime convenientes, dentro del plazo total.`
       );
     }
 
@@ -1141,13 +1190,15 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
     if (hasHosting) {
       ctx.y -= 2;
       drawClauseParagraph(ctx, "Nota sobre hosting e infraestructura: ",
-        "El servicio incluye alojamiento web (hosting) con SSL y CDN por el período indicado en los " +
-        "entregables. Dicho período se contará desde la puesta en producción del sitio, la que ocurrirá " +
-        "una vez recibido el pago total de los honorarios. Transcurrido el período incluido, la " +
-        "renovación será por cuenta del Cliente. El Prestador no será responsable por caídas del " +
-        "servicio imputables al proveedor de infraestructura. Al término del período de hosting " +
-        "incluido, el Cliente podrá solicitar la migración a un proveedor de su elección. La " +
-        "titularidad del contenido alojado corresponde al Cliente desde el pago total de los honorarios."
+        "El costo de alojamiento web (hosting), SSL y CDN incluido en este servicio corresponde al " +
+        "traspaso al costo de infraestructura contratada a terceros proveedores, y no constituye " +
+        "servicio personal del Prestador. El Prestador actúa como intermediario de dicho gasto y lo " +
+        "facturará separadamente o lo desglosa como item dentro del presente servicio a fin de " +
+        "mantener la claridad tributaria. El período de hosting se contará desde la puesta en " +
+        "producción del sitio, la que ocurrirá una vez recibido el pago total de los honorarios. " +
+        "Transcurrido el período incluido, la renovación será por cuenta del Cliente. El Prestador " +
+        "no será responsable por caídas imputables al proveedor de infraestructura. Al término, " +
+        "el Cliente podrá solicitar migración a un proveedor de su elección."
       );
     }
     ctx.y -= 4;

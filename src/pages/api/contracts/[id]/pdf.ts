@@ -72,6 +72,9 @@ export const GET: APIRoute = async ({ params, locals }) => {
       subcontractingAllowed: (c.subcontracting_allowed as boolean) ?? undefined,
       jurisdiction: (c.jurisdiction as string) || "Puerto Varas",
       prestadorRut: (c.prestador_rut as string) || undefined,
+      prestadorNombreCivil: (c.prestador_nombre_civil as string) || undefined,
+      clientRepresentante: (c.client_representante as string) || undefined,
+      clientNotifEmail: (c.client_notif_email as string) || undefined,
     };
 
     const pdfBytes = await generateContractPdf(contractData);

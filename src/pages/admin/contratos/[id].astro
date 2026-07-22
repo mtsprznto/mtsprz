@@ -197,7 +197,7 @@ const { id } = Astro.params;
         "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Duraci\u00f3n</span><span class='text-sm text-white/80'>" + (c.duration_months || "\u2014") + " meses</span></div>",
         "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Inicio</span><span class='text-sm text-white/80'>" + formatDate(c.start_date) + "</span></div>",
         "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>T\u00e9rmino</span><span class='text-sm text-white/80'>" + formatDate(c.end_date) + "</span></div>",
-        "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Forma de Pago</span><span class='text-sm text-white/80'>" + (c.payment_terms || "\u2014") + "</span></div>",
+        "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Forma de Pago</span><span class='text-sm text-white/80'>" + ({"contado":"Contado","50_50":"50% Inicio + 50% Entrega","hitos":"Por Hitos"}[c.payment_method] || c.payment_terms || "\u2014") + "</span></div>",
         c.schedule ? "<div class='sm:col-span-2'><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Jornada</span><span class='text-sm text-white/80'>" + c.schedule + "</span></div>" : "",
         c.special_clauses ? "<div class='sm:col-span-2'><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Cl\u00e1usulas Especiales</span><span class='text-sm text-white/80'>" + c.special_clauses + "</span></div>" : "",
       ].join("");

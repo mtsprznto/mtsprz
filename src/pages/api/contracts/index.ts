@@ -94,6 +94,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
     acceptance_email,
     subcontracting_allowed,
     prestador_rut,
+    prestador_nombre_civil,
+    client_representante,
+    client_notif_email,
   } = body as any;
 
   if (!client_name || !client_email || !services || !total_amount) {
@@ -118,8 +121,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
         start_date, end_date, duration_months, schedule, special_clauses,
         client_nationality, client_profession, payment_method,
         warranty_days, revision_days, acceptance_email, subcontracting_allowed,
-        signing_token, token_expires_at, prestador_rut
-      ) VALUES ($1,$2,$3,'pending',$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27)
+        signing_token, token_expires_at, prestador_rut,
+        prestador_nombre_civil, client_representante, client_notif_email
+      ) VALUES ($1,$2,$3,'pending',$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
       RETURNING *`,
       [
         template_id || null,
@@ -149,6 +153,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
         signingToken,
         expiresAt,
         prestador_rut || null,
+        prestador_nombre_civil || null,
+        client_representante || null,
+        client_notif_email || null,
       ]
     );
 

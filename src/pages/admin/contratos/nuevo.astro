@@ -115,6 +115,16 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
               <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Dirección <span class="text-white/15 font-normal normal-case">(incluir comuna)</span></label>
               <input name="client_address" autocomplete="off" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="Av. Bosques de Montemar 30, Of. 316, Concón, Región de Valparaíso" />
             </div>
+            <div id="representanteGroup" class="sm:col-span-2 hidden">
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Representante Legal <span class="text-amber-400/50 font-normal normal-case">(obligatorio para SpA/SA/Ltda)</span></label>
+              <input name="client_representante" maxlength="500" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="María González Rojas, RUT 12.345.678-9, según consta en escritura pública de constitución" />
+              <p class="text-[10px] text-white/20 mt-1 font-body">Nombre completo + RUT + fuente de personería (escritura, estatutos, poderes notariales)</p>
+            </div>
+            <div>
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Correo Notificaciones Cliente <span class="text-white/15 font-normal normal-case">(formal)</span></label>
+              <input name="client_notif_email" type="email" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="legal@blast-up.cl (si distinto al email principal)" />
+              <p class="text-[10px] text-white/20 mt-1 font-body">Email válido para comunicaciones formales. Si vacío, se usará el email principal.</p>
+            </div>
           </div>
 
           <!-- Save as client checkbox -->
@@ -133,6 +143,11 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
             <div>
               <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">RUT Prestador</label>
               <input name="prestador_rut" maxlength="20" pattern="\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]" title="Formato: 12.345.678-9" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="12.345.678-9" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Nombre Civil Prestador <span class="text-white/15 font-normal normal-case">(persona natural)</span></label>
+              <input name="prestador_nombre_civil" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="Juan Pérez González" />
+              <p class="text-[10px] text-white/20 mt-1 font-body">Aparecerá junto al nombre de fantasía: "Juan Pérez González, que usa el nombre de fantasía Mtsprz…"</p>
             </div>
           </div>
         </div>
@@ -809,6 +824,30 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
   var clientResultsEl = document.getElementById("clientResults");
   var clientSearchTimeout;
 
+  function escapeHtml(str) {
+    return String(str || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function checkIsCompanyRut(rut) {
+    return /^[5-9]\d{7,}/.test((rut || "").replace(/[.\-]/g, ""));
+  }
+
+  function updateRepresentanteVisibility() {
+    var rut = document.querySelector("[name='client_rut']").value || "";
+    var grp = document.getElementById("representanteGroup");
+    if (grp) {
+      if (checkIsCompanyRut(rut)) {
+        grp.classList.remove("hidden");
+      } else {
+        grp.classList.add("hidden");
+      }
+    }
+  }
+
+  // Watch RUT changes
+  var rutInput = document.querySelector("[name='client_rut']");
+  if (rutInput) rutInput.addEventListener("input", updateRepresentanteVisibility);
+
   function fillClient(c) {
     document.querySelector("[name='client_name']").value = c.name || "";
     document.querySelector("[name='client_rut']").value = c.rut || "";
@@ -817,6 +856,11 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     document.querySelector("[name='client_address']").value = c.address || "";
     document.querySelector("[name='client_nationality']").value = c.nationality || "Chilena";
     document.querySelector("[name='client_profession']").value = c.profession || "";
+    var notifEl = document.querySelector("[name='client_notif_email']");
+    if (notifEl) notifEl.value = c.notif_email || "";
+    var repEl = document.querySelector("[name='client_representante']");
+    if (repEl) repEl.value = c.representante || "";
+    updateRepresentanteVisibility();
     clientResultsEl.classList.add("hidden");
     clientSearchEl.value = "";
     updatePreview();
@@ -855,17 +899,18 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       }
       clientSearchTimeout = setTimeout(function() {
         fetch("/api/clients?search=" + encodeURIComponent(q))
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
-            if (data.error) {
-              renderClientResults([]);
-            } else {
-              renderClientResults(data.clients || []);
-            }
+          .then(function(r) {
+            return r.json().then(function(data) {
+              if (!r.ok) throw new Error("HTTP " + r.status + ": " + (data.error || r.statusText));
+              return data;
+            });
           })
-          .catch(function() {
+          .then(function(data) {
+            renderClientResults(data.clients || []);
+          })
+          .catch(function(err) {
             clientResultsEl.innerHTML =
-              '<div class="px-3 py-3 text-center"><p class="text-xs text-white/20 font-body">Error al buscar. Si es la primera vez, reinicia el servidor para aplicar migraciones.</p></div>';
+              '<div class="px-3 py-3 text-center"><p class="text-xs text-red-400/60 font-body">' + (err && err.message ? err.message : String(err)) + '</p></div>';
             clientResultsEl.classList.remove("hidden");
           });
       }, 250);
@@ -917,6 +962,9 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var clientEmail = document.querySelector("[name='client_email']").value || "—";
     var clientPhone = document.querySelector("[name='client_phone']").value || "—";
     var clientAddress = document.querySelector("[name='client_address']").value || "—";
+    var clientRepresentante = document.querySelector("[name='client_representante']")?.value || "";
+    var clientNotifEmail = document.querySelector("[name='client_notif_email']")?.value || "";
+    var prestadorNombreCivil = document.querySelector("[name='prestador_nombre_civil']")?.value || "";
     var paymentMethod = document.querySelector("[name='payment_method']")?.value || "";
     var paymentTerms = document.querySelector("[name='payment_terms']")?.value || "";
     var warrantyDays = document.querySelector("[name='warranty_days']")?.value || "15";
@@ -958,20 +1006,25 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     html += '</div>';
 
     // ── 1. IDENTIFICACIÓN DE LAS PARTES ──
+    var isCompanyRut = checkIsCompanyRut(clientRut);
+    var prestadorLabel = prestadorNombreCivil
+      ? prestadorNombreCivil + ', que usa el nombre de fantasía Mtsprz — Soluciones Digitales'
+      : 'Mtsprz — Soluciones Digitales';
     html += clauseTitle(0, 'IDENTIFICACIÓN DE LAS PARTES');
     html += '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:8px;">';
-    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;width:130px;">PRESTADOR:</td><td style="padding:2px 0;color:#111827;">Mtsprz — Soluciones Digitales</td></tr>';
+    html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;width:160px;">PRESTADOR:</td><td style="padding:2px 0;color:#111827;">' + prestadorLabel + '</td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">RUT PRESTADOR:</td><td style="padding:2px 0;color:#111827;">' + prestadorRut + '</td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">DOMICILIO:</td><td style="padding:2px 0;color:#111827;">Puerto Varas, Región de Los Lagos, Chile</td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CORREO:</td><td style="padding:2px 0;color:#111827;">contacto@mtsprz.org</td></tr>';
     html += '<tr><td colspan="2" style="padding:4px 0;"></td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CLIENTE:</td><td style="padding:2px 0;color:#111827;">' + clientName + '</td></tr>';
+    if (isCompanyRut && clientRepresentante) html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">REPRESENTANTE LEGAL:</td><td style="padding:2px 0;color:#111827;">' + clientRepresentante + '</td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">RUT:</td><td style="padding:2px 0;color:#111827;">' + clientRut + '</td></tr>';
-    var isCompanyRut = /^[5-9]\d{7,}/.test((clientRut || '').replace(/[.\-]/g, ''));
     if (!isCompanyRut && clientNationality) html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">NACIONALIDAD:</td><td style="padding:2px 0;color:#111827;">' + clientNationality + '</td></tr>';
     if (clientProfession) html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">' + (isCompanyRut ? 'GIRO:' : 'PROFESIÓN / GIRO:') + '</td><td style="padding:2px 0;color:#111827;">' + clientProfession + '</td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">DOMICILIO:</td><td style="padding:2px 0;color:#111827;">' + clientAddress + '</td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CORREO:</td><td style="padding:2px 0;color:#111827;">' + clientEmail + '</td></tr>';
+    if (clientNotifEmail && clientNotifEmail !== clientEmail) html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CORREO NOTIF.:</td><td style="padding:2px 0;color:#111827;">' + clientNotifEmail + '</td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">TELÉFONO:</td><td style="padding:2px 0;color:#111827;">' + clientPhone + '</td></tr>';
     html += '</table>';
 
@@ -1027,6 +1080,8 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     html += clauseBold('Medio de pago: ', 'Transferencia a cuenta del Prestador indicada en boleta de honorarios.');
     html += clauseText('Boleta de honorarios: El Prestador emitirá boleta electrónica (Art. 88 CT). El Cliente, en su calidad de contribuyente con contabilidad completa, enterará retención 15,25% en SII, conforme a la tasa vigente a la fecha del presente contrato (Ley 21.133).');
     html += clauseBold('Mora: ', 'Interés corriente para operaciones reajustables desde la exigibilidad (Art. 1559 CC).');
+    html += clauseBold('Cláusula penal por mora del Cliente (Art. 1535 CC): ', 'El Cliente en mora pagará al Prestador el 5% del monto adeudado por semana de atraso, con máximo del 20% del total del contrato. La pena convencional reemplaza toda otra indemnización moratoria, salvo el reajuste (Art. 1559 CC). El Prestador podrá exigir simultáneamente el cumplimiento y la pena (Art. 1537 CC inc. 2°).');
+    html += clauseBold('Cláusula penal por retraso en entrega de insumos: ', 'Si el Cliente incurre en mora en la entrega de información, accesos o insumos, el plazo de entrega del Prestador se prorroga automáticamente en igual número de días hábiles, sin que ello constituya incumplimiento del Prestador.');
 
     // ── 8. PLAZO, VIGENCIA Y TÉRMINO ──
     html += clauseTitle(7, 'PLAZO, VIGENCIA Y TÉRMINO');
@@ -1052,7 +1107,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     // ── 11. PROPIEDAD INTELECTUAL ──
     html += clauseTitle(10, 'PROPIEDAD INTELECTUAL');
     html += clauseText('El Prestador cede los derechos patrimoniales sobre códigos fuentes, diseños y activos creados (Ley 17.336).');
-    html += clauseBold('Transferencia efectiva: ', 'Contra el pago total de los honorarios. Mientras no se complete el pago total: (i) el uso de los entregables es licencia precaria y revocable, limitada a revisión y prueba, sin explotación comercial; (ii) los sistemas, automatizaciones o plataformas desarrolladas permanecerán en entorno de pruebas (staging) o acceso restringido, sin uso productivo. Las credenciales de administración y el acceso a entornos productivos se transfieren solo contra el pago total.');
+    html += clauseBold('Transferencia efectiva: ', 'Contra el pago total de los honorarios. Mientras no se complete el pago total: (i) el uso de los entregables es licencia precaria y revocable, limitada a revisión y prueba, sin explotación comercial; (ii) el paso a producción, la activación de herramientas de indexación y posicionamiento (incluyendo Google Search Console, datos estructurados y SEO que requieran el sitio publicado), las credenciales de administración y el acceso a entornos productivos se producirán únicamente contra el pago total. Hasta ese momento, los sistemas permanecerán en staging o acceso restringido, sin uso productivo ni indexación.');
     html += clauseBold('Derechos morales: ', 'El Prestador los conserva (Art. 14 Ley 17.336).');
     html += clauseBold('Portafolio: ', 'El Prestador puede usar los trabajos en su portafolio, salvo acuerdo en contrario.');
 
@@ -1100,9 +1155,11 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     html += clauseItem('b', 'Notificar en 24 hrs.');
     html += clauseItem('c', 'Obligaciones suspendidas mientras dure la causal.');
 
-    // ── 18. JURISDICCIÓN ──
-    html += clauseTitle(17, 'JURISDICCIÓN Y LEGISLACIÓN APLICABLE');
-    html += clauseText('Se rige por las leyes de la República de Chile. Domicilio: Puerto Varas, Región de Los Lagos. Las partes se someten a sus tribunales ordinarios.');
+    // ── 18. NOTIFICACIONES + JURISDICCIÓN ──
+    html += clauseTitle(17, 'NOTIFICACIONES, JURISDICCIÓN Y LEGISLACIÓN APLICABLE');
+    var notifEmailCliente = clientNotifEmail || clientEmail;
+    html += clauseBold('Notificaciones: ', 'Correos válidos para efectos legales — Prestador: contacto@mtsprz.org | Cliente: ' + notifEmailCliente + '. Se entenderá recibida la comunicación al día hábil siguiente de su envío. El cambio de correo válido debe notificarse con 5 días hábiles de anticipación.');
+    html += clauseText('Se rige por las leyes de la República de Chile. Domicilio: Puerto Varas, Región de Los Lagos. Las partes se someten a sus tribunales ordinarios (prórroga de competencia válida conforme Art. 181 COT).');
     html += clauseBold('Firma electrónica: ', 'La firma electrónica simple utilizada produce efectos jurídicos entre las partes conforme a la Ley 19.799. No cuenta con la presunción de integridad y autoría de la firma electrónica avanzada (certificada); su valor probatorio será apreciado por el tribunal según las reglas generales.');
 
     // ── ANEXO A: ENTREGABLES Y PLAZOS ──
@@ -1118,7 +1175,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       if (asvc.is_monthly) {
         html += clauseBold('Modalidad: ', 'Servicio recurrente mensual. El valor de $' + (asvc.price || 0).toLocaleString('es-CL') + ' corresponde a cada mes de servicio. Se factura y paga mensualmente por adelantado.');
       } else {
-        html += clauseBold('Plazo de ejecución: ', 'Los entregables se liberarán de forma incremental entre el ' + plazoInicio + ' y el ' + plazoFin + '. Las partes podrán acordar hitos específicos por escrito, los que se entenderán incorporados al presente anexo.');
+        html += clauseBold('Plazo de ejecución: ', 'Fecha de inicio: ' + plazoInicio + ' — Fecha de término estimada: ' + plazoFin + '. Las partes acuerdan definir los hitos específicos y sus fechas de entrega mediante comunicación escrita dentro de los 5 días hábiles siguientes a la firma del contrato, los que se entenderán incorporados al presente Anexo A. La falta de definición en dicho plazo habilitará al Prestador para gestionar los entregables en el orden y tiempos que estime convenientes, dentro del plazo total.');
       }
       if (asvc.deliverables && asvc.deliverables.length > 0) {
         html += '<strong style="font-size:11px;color:#111827;">Entregables:</strong>';
@@ -1201,6 +1258,9 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       client_phone: formData.get("client_phone"),
       client_address: formData.get("client_address"),
       prestador_rut: formData.get("prestador_rut") || undefined,
+      prestador_nombre_civil: formData.get("prestador_nombre_civil") || undefined,
+      client_representante: formData.get("client_representante") || undefined,
+      client_notif_email: formData.get("client_notif_email") || undefined,
       services: services,
       total_amount: parseInt(formData.get("total_amount")) || total,
       payment_method: formData.get("payment_method"),
@@ -1254,6 +1314,8 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
           address: formData.get("client_address"),
           nationality: formData.get("client_nationality") || "Chilena",
           profession: formData.get("client_profession"),
+          notif_email: formData.get("client_notif_email") || null,
+          representante: formData.get("client_representante") || null,
         };
         // Await save before redirect — evita que navegación aborte el fetch
         try {

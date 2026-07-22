@@ -11,6 +11,7 @@ const JSON_HEADERS = {
 const ALLOWED_FIELDS = [
   "name", "company_name", "rut", "email", "phone",
   "address", "nationality", "profession", "notes",
+  "notif_email", "representante",
 ];
 
 export const GET: APIRoute = async ({ params, locals }) => {
@@ -26,7 +27,7 @@ export const GET: APIRoute = async ({ params, locals }) => {
   try {
     await initDb();
     const result = await query(
-      `SELECT id, name, company_name, rut, email, phone, address, nationality, profession, notes, created_at, updated_at
+      `SELECT id, name, company_name, rut, email, phone, address, nationality, profession, notes, notif_email, representante, created_at, updated_at
        FROM clients WHERE id = $1 AND is_active = true`,
       [Number(id)]
     );
@@ -82,7 +83,7 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
     updates.push(`updated_at = NOW()`);
     params_.push(Number(id));
 
-    const sql = `UPDATE clients SET ${updates.join(", ")} WHERE id = $${idx} AND is_active = true RETURNING id, name, company_name, rut, email, phone, address, nationality, profession, notes, created_at, updated_at`;
+    const sql = `UPDATE clients SET ${updates.join(", ")} WHERE id = $${idx} AND is_active = true RETURNING id, name, company_name, rut, email, phone, address, nationality, profession, notes, notif_email, representante, created_at, updated_at`;
     const result = await query(sql, params_);
 
     if (result.rows.length === 0) {
