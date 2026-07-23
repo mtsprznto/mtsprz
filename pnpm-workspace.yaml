@@ -1,3 +1,9 @@
+packages:
+  - '.'
+  - 'migrations'
+  - 'scripts'
+  - 'src'
+
 allowBuilds:
   esbuild: true
   sharp: true
