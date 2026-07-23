@@ -1,18 +1,42 @@
 import type { APIRoute } from "astro";
+import { sanitizeBody, validateBodySize } from "../../lib/validators";
+import { checkRateLimit } from "../../lib/rate-limit";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   let body: { email?: string };
   try {
-    body = await request.json();
+    body = sanitizeBody(await request.json());
   } catch {
     return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400 });
   }
 
-  const email = body.email?.trim().toLowerCase();
+  if (!validateBodySize(body)) {
+    return new Response(JSON.stringify({ error: "Solicitud demasiado grande" }), { status: 413 });
+  }
+
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return new Response(JSON.stringify({ error: "Correo electrónico inválido" }), { status: 400 });
+  }
+
+  // 🛡️ Rate limit: max 3 codes/hour per email, 10 codes/hour per IP
+  const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+
+  const emailLimit = checkRateLimit(`send-code:email:${email}`, 3, 3600_000);
+  if (!emailLimit.allowed) {
+    return new Response(JSON.stringify({
+      error: "Demasiados códigos solicitados para este correo. Intenta en 1 hora.",
+    }), { status: 429 });
+  }
+
+  const ipLimit = checkRateLimit(`send-code:ip:${clientIp}`, 10, 3600_000);
+  if (!ipLimit.allowed) {
+    return new Response(JSON.stringify({
+      error: "Demasiadas solicitudes desde esta IP. Intenta más tarde.",
+    }), { status: 429 });
   }
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();

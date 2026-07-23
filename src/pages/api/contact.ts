@@ -1,11 +1,22 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
+import { checkRateLimit } from "../../lib/rate-limit";
 
 export const prerender = false;
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
 export const POST: APIRoute = async ({ request }) => {
+  // 🛡️ Rate limit: 3 contact messages per hour per IP
+  const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const rateCheck = checkRateLimit(`contact:ip:${clientIp}`, 3, 3600_000);
+  if (!rateCheck.allowed) {
+    return new Response(
+      JSON.stringify({ error: "Demasiados mensajes. Intenta en 1 hora." }),
+      { status: 429, headers: { "Content-Type": "application/json" } }
+    );
+  }
+
   try {
     const data = await request.formData();
     const name = data.get("name")?.toString().trim();
@@ -15,6 +26,21 @@ export const POST: APIRoute = async ({ request }) => {
     if (!name || !email || !message) {
       return new Response(
         JSON.stringify({ error: "Todos los campos son obligatorios" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Validate field sizes
+    if (name.length > 200 || email.length > 254 || message.length > 5000) {
+      return new Response(
+        JSON.stringify({ error: "Campos demasiado largos" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return new Response(
+        JSON.stringify({ error: "Correo electrónico inválido" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }

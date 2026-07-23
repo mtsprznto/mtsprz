@@ -1,23 +1,53 @@
 import type { APIRoute } from "astro";
 import { query, initDb } from "../../lib/db";
 import { sendEmail } from "../../lib/mail";
+import { sanitizeBody, validateBodySize, validateEmail } from "../../lib/validators";
+import { checkRateLimit } from "../../lib/rate-limit";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   let body: { email?: string; services?: { id: string; name: string; price: number }[]; total?: number; message?: string };
   try {
-    body = await request.json();
+    body = sanitizeBody(await request.json());
   } catch {
     return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400 });
   }
 
-  const email = body.email?.trim().toLowerCase();
+  if (!validateBodySize(body)) {
+    return new Response(JSON.stringify({ error: "Solicitud demasiado grande" }), { status: 413 });
+  }
+
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const services = body.services;
   const total = body.total;
 
-  if (!email || !services || !total) {
-    return new Response(JSON.stringify({ error: "Email, servicios y total requeridos" }), { status: 400 });
+  if (!email || !validateEmail(email)) {
+    return new Response(JSON.stringify({ error: "Email inválido" }), { status: 400 });
+  }
+
+  if (!Array.isArray(services) || services.length === 0 || services.length > 50) {
+    return new Response(JSON.stringify({ error: "Lista de servicios inválida" }), { status: 400 });
+  }
+
+  // Validate each service entry
+  for (const s of services) {
+    if (typeof s !== "object" || !s || typeof s.id !== "string" || typeof s.name !== "string" || typeof s.price !== "number") {
+      return new Response(JSON.stringify({ error: "Formato de servicio inválido" }), { status: 400 });
+    }
+    if (s.name.length > 200 || s.id.length > 200) {
+      return new Response(JSON.stringify({ error: "Nombre de servicio demasiado largo" }), { status: 400 });
+    }
+  }
+
+  if (typeof total !== "number" || total < 0 || total > 100_000_000 || !Number.isFinite(total)) {
+    return new Response(JSON.stringify({ error: "Total inválido" }), { status: 400 });
+  }
+
+  // 🛡️ Rate limit: max 5 quotes per hour per email
+  const rateCheck = checkRateLimit(`submit-quote:email:${email}`, 5, 3600_000);
+  if (!rateCheck.allowed) {
+    return new Response(JSON.stringify({ error: "Demasiadas cotizaciones solicitadas. Intenta en 1 hora." }), { status: 429 });
   }
 
   try {

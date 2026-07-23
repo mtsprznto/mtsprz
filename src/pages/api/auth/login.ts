@@ -1,19 +1,24 @@
 import type { APIRoute } from "astro";
 import { query, initDb } from "../../../lib/db";
 import { verifyPassword, createToken } from "../../../lib/crypto";
-import { validateEmail } from "../../../lib/validators";
+import { validateEmail, sanitizeBody, validateBodySize } from "../../../lib/validators";
+import { checkRateLimit } from "../../../lib/rate-limit";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   let body: { email?: string; password?: string };
   try {
-    body = await request.json();
+    body = sanitizeBody(await request.json());
   } catch {
     return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400 });
   }
 
-  const email = body.email?.trim().toLowerCase();
+  if (!validateBodySize(body)) {
+    return new Response(JSON.stringify({ error: "Solicitud demasiado grande" }), { status: 413 });
+  }
+
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const password = body.password;
 
   if (!email || !password) {
@@ -22,6 +27,17 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
   if (!validateEmail(email)) {
     return new Response(JSON.stringify({ error: "Email inválido" }), { status: 400 });
+  }
+
+  // 🛡️ Rate limit: 10 login attempts per minute per email, 30 per IP
+  const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const emailLimit = checkRateLimit(`login:email:${email}`, 10, 60_000);
+  if (!emailLimit.allowed) {
+    return new Response(JSON.stringify({ error: "Demasiados intentos. Intenta en 1 minuto." }), { status: 429 });
+  }
+  const ipLimit = checkRateLimit(`login:ip:${clientIp}`, 30, 60_000);
+  if (!ipLimit.allowed) {
+    return new Response(JSON.stringify({ error: "Demasiados intentos desde esta IP." }), { status: 429 });
   }
 
   try {

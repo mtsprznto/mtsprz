@@ -212,6 +212,26 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
             <p class="text-[11px] text-amber-300/50 leading-relaxed" id="ivaWarningDetail"></p>
             <p class="text-[10px] text-amber-300/30 mt-1.5">Consultar con contador antes de emitir la primera boleta.</p>
           </div>
+
+          <div id="appDevWarning" class="hidden mt-4 border-l-2 border-violet-400/30 pl-4 py-2">
+            <p class="text-[11px] font-medium text-violet-300 mb-1">Software a medida — revisar pago y garantía</p>
+            <p class="text-[11px] text-violet-300/50 leading-relaxed" id="appDevWarningDetail"></p>
+          </div>
+
+          <div id="precioAmbiguo" class="hidden mt-4 border-l-2 border-yellow-400/30 pl-4 py-2">
+            <p class="text-[11px] font-medium text-yellow-300 mb-1">Precio ambiguo en servicios continuos</p>
+            <p class="text-[11px] text-yellow-300/50 leading-relaxed" id="precioAmbiguoDetail"></p>
+          </div>
+
+          <div id="ilimitadoWarning" class="hidden mt-4 border-l-2 border-red-400/30 pl-4 py-2">
+            <p class="text-[11px] font-medium text-red-300 mb-1">Compromisos absolutos en entregables</p>
+            <p class="text-[11px] text-red-300/50 leading-relaxed" id="ilimitadoWarningDetail"></p>
+          </div>
+
+          <div id="hostingIncluido" class="hidden mt-4 border-l-2 border-orange-400/30 pl-4 py-2">
+            <p class="text-[11px] font-medium text-orange-300 mb-1">Entregable con "incluido" + infraestructura</p>
+            <p class="text-[11px] text-orange-300/50 leading-relaxed">Un entregable dice "SSL/CDN/hosting incluido" pero la Nota de hosting excluye la infra del honorario. Reemplaza "incluidos" por "configuración de SSL/CDN (costo de infraestructura según Nota de hosting)" para evitar contradicción con la cláusula tercera.</p>
+          </div>
         </div>
 
         <div class="border-b border-white/[0.04] pb-6 mb-6" data-section="4">
@@ -598,6 +618,124 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     }
   }
 
+  function checkIlimitado(svcs) {
+    var ABSOLUTE_WORDS = ["ilimitado", "ilimitada", "tiempo real", "real time", "100%", "garantizamos", "garantizado"];
+    var found = [];
+    svcs.forEach(function(s) {
+      (s.deliverables || []).forEach(function(d) {
+        var dl = d.toLowerCase();
+        ABSOLUTE_WORDS.forEach(function(w) {
+          if (dl.includes(w)) found.push('"' + d.substring(0, 60) + '"');
+        });
+      });
+      var nl = (s.name || "").toLowerCase();
+      ABSOLUTE_WORDS.forEach(function(w) {
+        if (nl.includes(w)) found.push('"' + s.name + '"');
+      });
+    });
+    var banner = document.getElementById("ilimitadoWarning");
+    var detail = document.getElementById("ilimitadoWarningDetail");
+    if (!banner || !detail) return;
+    if (found.length > 0) {
+      detail.textContent = "Entregables con compromisos absolutos: " + [...new Set(found)].join(", ") + " — reemplazar por descripción acotada (ej: 'sin límite impuesto por el Prestador, sujeto a la infraestructura del Cliente').";
+      banner.classList.remove("hidden");
+    } else {
+      banner.classList.add("hidden");
+    }
+  }
+
+  function checkPrecioAmbiguo(svcs) {
+    var duration = parseInt(document.querySelector("[name='duration_months']")?.value || "1");
+    var banner = document.getElementById("precioAmbiguo");
+    var detail = document.getElementById("precioAmbiguoDetail");
+    if (!banner || !detail) return;
+    if (duration <= 1) { banner.classList.add("hidden"); return; }
+    var CONTINUOUS_PATTERNS = ["mensual", "seo", "redes", "ads", "mantenimiento", "soporte continuo", "gestión"];
+    var ambiguous = svcs.filter(function(s) {
+      if (s.is_monthly) return false;
+      var name = (s.name || "").toLowerCase();
+      return CONTINUOUS_PATTERNS.some(function(p) { return name.includes(p); });
+    });
+    if (ambiguous.length > 0) {
+      detail.textContent = "Servicios posiblemente recurrentes sin marcar como mensual: " +
+        ambiguous.map(function(s) { return '"' + s.name + '" ($' + s.price.toLocaleString("es-CL") + ')'; }).join(", ") +
+        " — ¿es precio mensual o total por " + duration + " meses? Marcar como mensual en el catálogo para que el contrato lo aclare. El Art. 1566 CC interpreta ambigüedades contra el redactor.";
+      banner.classList.remove("hidden");
+    } else {
+      banner.classList.add("hidden");
+    }
+  }
+
+  function checkAdsPago(svcs) {
+    var ADS_PATTERNS = ["ads", "google", "meta", "pauta", "campaña", "campana"];
+    var hasAds = svcs.some(function(s) {
+      var name = (s.name || "").toLowerCase();
+      return ADS_PATTERNS.some(function(p) { return name.includes(p); });
+    });
+    var paymentMethod = document.querySelector("[name='payment_method']")?.value || "";
+    var banner = document.getElementById("recurringWarning");
+    var detail = document.getElementById("recurringWarningDetail");
+    if (!banner || !detail) return;
+    if (hasAds && (paymentMethod === "50_50" || paymentMethod === "contado")) {
+      var extra = " · Además: servicio de Ads es continuo — el 50% final no tiene 'entrega conforme' clara. Considerar pago mensual por reporte o hitos mensuales como gatillo.";
+      if (!detail.textContent.includes("Ads")) {
+        detail.textContent += extra;
+        banner.classList.remove("hidden");
+      }
+    }
+  }
+
+  function checkHostingIncluido(svcs) {
+    var INFRA_WORDS = ["ssl", "cdn", "hosting", "vercel", "railway", "cloudflare", "servidor", "despliegue"];
+    var hasConflict = svcs.some(function(s) {
+      return (s.deliverables || []).some(function(d) {
+        var dl = d.toLowerCase();
+        return dl.includes("incluido") && INFRA_WORDS.some(function(w) { return dl.includes(w); });
+      });
+    });
+    var banner = document.getElementById("hostingIncluido");
+    if (!banner) return;
+    if (hasConflict) banner.classList.remove("hidden");
+    else banner.classList.add("hidden");
+  }
+
+  var APP_DEV_PATTERNS = [
+    "aplicación", "aplicacion", "web app", "webapp", "app a medida",
+    "desarrollo a medida", "sistema a medida", "plataforma", "panel de administración",
+    "panel admin", "backend", "fastapi", "next.js", "nextjs", "arquitectura escalable",
+  ];
+
+  function checkAppDevRisk(svcs) {
+    var appSvcs = svcs.filter(function(s) {
+      var name = (s.name || "").toLowerCase();
+      return APP_DEV_PATTERNS.some(function(p) { return name.includes(p); });
+    });
+    var warranty = parseInt(document.querySelector("[name='warranty_days']")?.value || "15");
+    var paymentMethod = document.querySelector("[name='payment_method']")?.value || "";
+    var banner = document.getElementById("appDevWarning");
+    var detail = document.getElementById("appDevWarningDetail");
+    if (!banner || !detail) return;
+
+    var issues = [];
+    if (appSvcs.length > 0) {
+      if (paymentMethod === "50_50" || paymentMethod === "contado") {
+        issues.push("Pago 50/50 o contado es insuficiente para software a medida — usar pago por hitos (30/30/30/10) con cada entregable funcional como gatillo.");
+      }
+      if (warranty < 30) {
+        issues.push("Garantía de " + warranty + " días es corta para software con autenticación/API/BD — mínimo 30 días, idealmente 60-90.");
+      }
+      if (appSvcs.some(function(s) { return s.price >= 500000; })) {
+        issues.push("Monto alto: definir alcance funcional (nº de módulos, pantallas, roles) en el Anexo A para evitar conflictos sobre 'modificaciones sustanciales'.");
+      }
+    }
+    if (issues.length > 0) {
+      detail.innerHTML = issues.map(function(i) { return "• " + i; }).join("<br>");
+      banner.classList.remove("hidden");
+    } else {
+      banner.classList.add("hidden");
+    }
+  }
+
   function updateTotal() {
     var svcs = getServices();
     var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
@@ -608,7 +746,12 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var totalInput = document.querySelector("[name='total_amount']");
     if (!totalInput.value) totalInput.value = String(total);
     checkRecurringMismatch(svcs);
+    checkPrecioAmbiguo(svcs);
+    checkAdsPago(svcs);
     checkIvaRisk(svcs);
+    checkAppDevRisk(svcs);
+    checkHostingIncluido(svcs);
+    checkIlimitado(svcs);
     updatePreview();
   }
 
@@ -924,7 +1067,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
   }
 
   document.querySelector("[name='client_name']").addEventListener("input", updatePreview);
-  document.querySelector("[name='duration_months']").addEventListener("input", updatePreview);
+  document.querySelector("[name='duration_months']").addEventListener("input", function() { updatePreview(); checkPrecioAmbiguo(getServices()); });
 
   togglePaymentTerms();
   document.querySelector("[name='payment_method']")?.addEventListener("change", function() {
@@ -933,7 +1076,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
   });
   ["warranty_days","revision_days","client_nationality","client_profession","subcontracting_allowed","prestador_rut"].forEach(function(n) {
     var el = document.querySelector("[name='" + n + "']");
-    if (el) el.addEventListener("change", updatePreview);
+    if (el) el.addEventListener("change", function() { updatePreview(); checkAppDevRisk(getServices()); });
   });
   presetDays("lun-vie");
   // Init first template as selected

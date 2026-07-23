@@ -71,6 +71,7 @@ const ORDINALS = [
   "SEXTA", "SÉPTIMA", "OCTAVA", "NOVENA", "DÉCIMA",
   "DÉCIMA PRIMERA", "DÉCIMA SEGUNDA", "DÉCIMA TERCERA", "DÉCIMA CUARTA", "DÉCIMA QUINTA",
   "DÉCIMA SEXTA", "DÉCIMA SÉPTIMA", "DÉCIMA OCTAVA", "DÉCIMA NOVENA",
+  "VIGÉSIMA", "VIGÉSIMA PRIMERA", "VIGÉSIMA SEGUNDA",
 ];
 
 // ── Layout Helpers ──────────────────────────────────────────────────────────
@@ -206,11 +207,14 @@ function drawClause1_Parties(ctx: LayoutCtx, data: ContractData): void {
     ? `${data.prestadorNombreCivil}, que usa el nombre de fantasía Mtsprz — Soluciones Digitales`
     : "Mtsprz — Soluciones Digitales";
 
+  const prestadorNotifEmail = data.prestadorNotifEmail || "contacto@mtsprz.org";
+  const clientNotifEmail = data.clientNotifEmail || data.clientEmail;
+
   const prestadorRows = [
     { label: "PRESTADOR", value: prestadorNombre },
     { label: "RUT PRESTADOR", value: prestadorRut },
     { label: "DOMICILIO PRESTADOR", value: "Puerto Varas, Región de Los Lagos, Chile" },
-    { label: "CORREO PRESTADOR", value: data.prestadorNotifEmail || "contacto@mtsprz.org" },
+    { label: "CORREO ELECTRÓNICO", value: prestadorNotifEmail },
   ];
 
   const isCompanyRut = /^[5-9]\d{7,}/.test((data.clientRut || "").replace(/[.\-]/g, ""));
@@ -224,7 +228,10 @@ function drawClause1_Parties(ctx: LayoutCtx, data: ContractData): void {
     ...(!isCompanyRut ? [{ label: "NACIONALIDAD", value: data.clientNationality || "Chilena" }] : []),
     ...(data.clientProfession ? [{ label: isCompanyRut ? "GIRO" : "PROFESIÓN / GIRO", value: data.clientProfession }] : []),
     { label: "DOMICILIO CLIENTE", value: data.clientAddress || "—" },
-    { label: "CORREO CLIENTE", value: data.clientEmail },
+    { label: "CORREO (CONTACTO)", value: data.clientEmail },
+    ...(data.clientNotifEmail && data.clientNotifEmail !== data.clientEmail
+      ? [{ label: "CORREO (NOTIFICACIONES)", value: data.clientNotifEmail }]
+      : []),
     { label: "TELÉFONO", value: data.clientPhone || "—" },
   ];
 
@@ -396,7 +403,7 @@ function drawClause5_ObligationsPrestador(ctx: LayoutCtx, data: ContractData): v
 
   const items = [
     "Ejecutar los servicios con estándar profesional y la diligencia exigible conforme al Artículo 1547 del Código Civil (culpa leve).",
-    "Cumplir los plazos y condiciones pactadas en el presente contrato, de conformidad con el Artículo 2009 del Código Civil.",
+    "Cumplir los plazos y condiciones pactadas en el presente contrato, de conformidad con los Artículos 1545 y 1547 del Código Civil.",
     "Mantener informado al Cliente del estado de avance de los servicios y cualquier eventualidad que pudiera afectar su ejecución.",
     "Entregar los códigos fuentes, archivos editables y activos digitales producidos. Los avances parciales " +
     "se pondrán a disposición del Cliente en un entorno de pruebas (staging) o vista previa durante la " +
@@ -439,13 +446,14 @@ function drawClause7_Payment(ctx: LayoutCtx, data: ContractData): void {
     `El valor total de los servicios asciende a $${total} CLP (${total} pesos chilenos). El Prestador es persona natural que emite boleta de honorarios, por lo que estos servicios no están afectos a IVA. El valor corresponde al monto bruto de las boletas de honorarios; la retención legal se descuenta de dicho monto.`
   );
 
+  // ── Modalidad de pago ──
   let paymentDetail: string;
   switch (data.paymentMethod) {
     case "contado":
       paymentDetail = "Pago único al contado contra la aceptación del presente contrato.";
       break;
     case "50_50":
-      paymentDetail = "50% del valor total al inicio de los servicios y 50% a la entrega y recepción conforme de los trabajos.";
+      paymentDetail = "50% del valor de cada servicio al inicio de su ejecución y 50% dentro de los 5 días hábiles siguientes a la recepción conforme de ese servicio, expresa o tácita. Cuando el contrato comprenda varios servicios, se pagarán de forma independiente por servicio, sin perjuicio de que las partes puedan acordar por escrito agrupar pagos iniciales o finales de servicios que se ejecuten simultáneamente.";
       break;
     case "hitos":
       paymentDetail = data.paymentTerms || "Según los hitos detallados y acordados entre las partes.";
@@ -474,22 +482,50 @@ function drawClause7_Payment(ctx: LayoutCtx, data: ContractData): void {
     `conforme al Artículo 88 del Código Tributario. El Cliente, en su calidad de contribuyente con contabilidad ` +
     `completa, deberá enterar la retención del ${retentionRate} en el Servicio de Impuestos Internos (SII), ` +
     `de acuerdo con la tasa vigente a la fecha del presente contrato en virtud del calendario progresivo ` +
-    `de la Ley N° 21.133.`
+    `de la Ley N° 21.133. La retención aplicable será la tasa vigente a la fecha de emisión de cada boleta, dado que el calendario progresivo de la Ley N° 21.133 modifica la tasa anualmente (15,25% en 2026, 16% en 2027, 17% en 2028).`
+  );
+
+  drawClauseParagraph(ctx, "Mora automática y reajuste: ",
+    "El solo vencimiento del plazo de pago convenido constituirá al Cliente en mora, sin necesidad " +
+    "de requerimiento judicial ni extrajudicial previo, conforme al Artículo 1551 N°1 del Código Civil. " +
+    "Las partes pactan reajustabilidad de las obligaciones de dinero según la variación del Índice de " +
+    "Precios al Consumidor (IPC) desde la fecha de exigibilidad hasta el pago efectivo."
   );
 
   drawClauseParagraph(ctx, "Cláusula penal por mora del Cliente (Art. 1535 CC): ",
     "En caso de mora en el pago de cualquier cuota u hito acordado, el Cliente pagará al Prestador, " +
-    "a título de pena convencional, una suma equivalente al 5% del monto adeudado por cada semana de " +
-    "atraso, con un máximo del 20% del total del contrato. La pena convencional reemplaza toda otra " +
-    "indemnización moratoria, salvo el reajuste conforme al Artículo 1559 del Código Civil. " +
-    "El Prestador podrá exigir simultáneamente el cumplimiento de la obligación principal y la pena, " +
-    "conforme al inciso 2° del Artículo 1537 del Código Civil."
+    "a título de pena convencional, una suma equivalente al 1,5% mensual sobre el saldo insoluto " +
+    "por cada mes o fracción de atraso, con un tope máximo del 10% del saldo insoluto a la fecha " +
+    "de exigibilidad de dicho pago. Se deja constancia que el reajuste IPC ya está contemplado " +
+    "en el párrafo anterior y no se aplica duplicadamente sobre la pena. La pena convencional " +
+    "reemplaza toda otra indemnización moratoria. El Prestador podrá exigir simultáneamente el " +
+    "cumplimiento de la obligación principal y la pena, conforme al inciso 2° del Artículo 1537 " +
+    "del Código Civil."
   );
 
   drawClauseParagraph(ctx, "Cláusula penal por retraso en entrega de insumos: ",
     "Si el Cliente incurre en mora en la entrega de información, accesos o insumos necesarios para la " +
     "ejecución de los servicios, el plazo de entrega del Prestador se prorrogará automáticamente en igual " +
     "número de días hábiles al retraso del Cliente, sin que ello constituya incumplimiento del Prestador."
+  );
+
+  drawClauseParagraph(ctx, "Plazo de pago del saldo por servicio: ",
+    "Se entenderá producida la recepción conforme de un servicio cuando hayan sido recibidos " +
+    "conforme —expresa o tácitamente— todos los entregables que lo componen según el Anexo A, " +
+    "o mediante acta de recepción del servicio completo suscrita por ambas partes. " +
+    "La recepción conforme del servicio abre un plazo de 5 días hábiles para el pago del saldo " +
+    "correspondiente a ese servicio. Vencido dicho plazo sin pago, el Cliente quedará constituido " +
+    "en mora de pleno derecho, sin necesidad de requerimiento previo."
+  );
+
+  drawClauseParagraph(ctx, "Suspensión por mora: ",
+    "El Prestador podrá suspender la prestación de los servicios mientras el Cliente se encuentre " +
+    "en mora en el pago de cualquier cuota u honorario exigible, sin que dicha suspensión constituya " +
+    "incumplimiento del Prestador ni le haga perder el derecho a los honorarios devengados. La " +
+    "suspensión se fundamenta en la excepción de contrato no cumplido del Artículo 1552 del Código " +
+    "Civil. El Prestador notificará la suspensión por escrito al correo de notificaciones del Cliente, " +
+    "con al menos 48 horas de anticipación. El plazo de entrega del Prestador se prorrogará " +
+    "automáticamente por el mismo número de días hábiles que dure la suspensión."
   );
 }
 
@@ -499,24 +535,63 @@ function drawClause8_Term(ctx: LayoutCtx, data: ContractData): void {
   const startDate = data.startDate || "—";
   const endDate = data.endDate || "—";
 
-  drawClauseParagraph(ctx, "Duración: ",
-    `El presente contrato tendrá una vigencia de ${data.durationMonths || 1} mes(es), contados desde el ${startDate}, ` +
-    `con fecha estimada de término el ${endDate}.`
+  drawClauseParagraph(ctx, "Perfeccionamiento y entrada en vigor: ",
+    `El presente contrato se perfecciona con su suscripción por ambas partes. La ejecución de los ` +
+    `servicios y el cómputo de la vigencia de ${data.durationMonths || 1} mes(es) comenzarán con el ` +
+    `pago inicial del primer servicio o bloque de servicios que se inicie, que deberá enterarse ` +
+    `dentro de los 5 días hábiles siguientes a la suscripción. ` +
+    `El plazo de ${data.durationMonths || 1} mes(es) se contará desde la fecha efectiva de ese primer pago inicial. ` +
+    `La falta de pago inicial del primer servicio dentro de dicho plazo facultará al Prestador, ` +
+    `a su elección, para exigir el cumplimiento forzado o para resolver el contrato de pleno derecho, ` +
+    `sin necesidad de declaración judicial, previa comunicación escrita al correo de notificaciones ` +
+    `del Cliente, produciendo efectos desde su envío —no obstante lo dispuesto en la cláusula ` +
+    `DÉCIMA OCTAVA—, en ambos casos con derecho a indemnización de perjuicios.`
   );
 
   drawClauseParagraph(ctx, "Término anticipado: ",
     "El contrato podrá terminar anticipadamente por: (a) mutuo acuerdo por escrito entre las partes; " +
     "(b) incumplimiento grave de cualquiera de las partes, aplicándose la condición resolutoria tácita del " +
-    "Artículo 1489 del Código Civil; (c) caso fortuito o fuerza mayor; (d) aviso escrito de cualquiera de las partes " +
-    "con al menos 30 días de anticipación."
+    "Artículo 1489 del Código Civil; (c) caso fortuito o fuerza mayor; (d) aviso escrito de cualquiera de " +
+    "las partes con al menos 30 días de anticipación. Durante los primeros 45 días corridos contados " +
+    "desde la entrada en vigor, el desistimiento unilateral del Cliente conforme a la letra (d) no " +
+    "producirá efecto. Vencido ese período, el aviso de 30 días comenzará a correr."
+  );
+
+  drawClauseParagraph(ctx, "Cascada de liquidación por desistimiento del Cliente: ",
+    "Si el Cliente ejerce la facultad de la letra (d) una vez vencido el período de 45 días, " +
+    "la liquidación se regirá por la siguiente cascada, en el orden que se indica, la que " +
+    "constituye avaluación anticipada de perjuicios conforme al Artículo 1999 inciso 2° en " +
+    "relación con el Artículo 2006 del Código Civil y no acumula otras indemnizaciones: " +
+    "(1º) el Cliente pagará el saldo del valor de los servicios efectivamente ejecutados y " +
+    "recibidos conforme a la fecha de término, menos los pagos iniciales ya enterados por " +
+    "dichos servicios; (2º) los pagos iniciales ya recibidos por servicios no ejecutados o " +
+    "no recibidos conforme se imputarán a los perjuicios del Prestador por reserva de " +
+    "capacidad y costos incurridos; (3º) el Cliente pagará una indemnización adicional " +
+    "equivalente al 30% del valor de los servicios no ejecutados a la fecha de término. " +
+    "Las partes declaran que esta cascada completa constituye una avaluación anticipada " +
+    "y razonable de perjuicios, no acumulable con otras indemnizaciones, y que ninguna " +
+    "de sus partidas tiene carácter de cláusula penal autónoma sino que todas integran " +
+    "un régimen indemnizatorio unitario y equilibrado."
   );
 
   drawClauseParagraph(ctx, "Efectos del término: ",
-    "Al término del contrato, el Cliente pagará los servicios efectivamente ejecutados y recibidos " +
-    "conforme a la fecha, y el Prestador devolverá toda la información confidencial del Cliente en su poder. " +
-    "Respecto de los servicios no concluidos a la fecha de término, el Prestador entregará los avances " +
-    "y activos parciales producidos, y el Cliente pagará una proporción del valor del servicio según " +
-    "el avance acreditado. En caso de desacuerdo sobre el avance, las partes se someterán a mediación."
+    "Al término del contrato por cualquier causa, el Prestador entregará los avances y activos " +
+    "parciales producidos de los servicios no concluidos, y devolverá toda la información " +
+    "confidencial del Cliente en su poder, salvo aquella que deba conservar por obligación " +
+    "legal o tributaria, y salvo los accesos que subsistan conforme a la cláusula de supervivencia. " +
+    "Respecto de los servicios no concluidos, si las partes no logran acuerdo sobre el porcentaje " +
+    "de avance, dicho desacuerdo se resolverá mediante informe de un perito técnico independiente " +
+    "designado de común acuerdo o, a falta de acuerdo, por el presidente del Colegio de Ingenieros " +
+    "de Chile o la entidad gremial equivalente, cuyo informe será vinculante para las partes y se " +
+    "evacuará en un plazo máximo de 15 días corridos. Esta peritación técnica es independiente y " +
+    "no condiciona ni suspende las acciones de cobro de honorarios ya exigibles."
+  );
+
+  drawClauseParagraph(ctx, "Divisibilidad: ",
+    "Cuando el presente contrato comprenda dos o más servicios independientes, el incumplimiento " +
+    "relativo a uno de ellos no afectará la vigencia ni la exigibilidad de los demás, salvo que " +
+    "las partes acuerden expresamente lo contrario por escrito. La condición resolutoria del " +
+    "Artículo 1489 del Código Civil operará de forma parcial, circunscrita al servicio incumplido."
   );
 }
 
@@ -532,13 +607,20 @@ function drawClause9_Deliverables(ctx: LayoutCtx, data: ContractData): void {
   );
 
   drawClauseText(ctx,
-    "Correcciones menores (una ronda) están incluidas dentro del valor contratado. Modificaciones sustanciales " +
-    "al alcance original se regirán por la cláusula DÉCIMA CUARTA (Modificaciones)."
+    "Se incluye dentro del valor contratado una ronda de correcciones menores por defecto. " +
+    "El número de rondas de revisión específico para cada servicio —que podrá ser superior a una— " +
+    "se detalla en el Anexo A, que prevalece sobre esta cláusula general en virtud del principio " +
+    "de especialidad. Las revisiones o cambios que excedan las rondas estipuladas en el Anexo A " +
+    "se considerarán modificaciones sustanciales y se regirán por la cláusula DÉCIMA CUARTA " +
+    "(Modificaciones) y estarán sujetas a cotización adicional."
   );
 
   drawClauseParagraph(ctx, "Aprobación tácita: ",
     "Si el Cliente no formula observaciones dentro del plazo de " + revisionDays + " días hábiles, " +
-    "se entenderá que el entregable ha sido recibido conforme y aprobado en todas sus partes."
+    "se entenderá que el entregable ha sido recibido conforme y aprobado en todas sus partes. " +
+    "Cuando el Prestador notifique más de 3 entregables de forma simultánea (en una misma " +
+    "comunicación), el plazo de revisión se extenderá automáticamente a 10 días hábiles para " +
+    "todos ellos, a fin de garantizar al Cliente tiempo suficiente de revisión."
   );
 
   drawClauseParagraph(ctx, "Recomendación: ",
@@ -571,34 +653,114 @@ function drawClause10_Independence(ctx: LayoutCtx, data: ContractData): void {
 function drawClause11_IntellectualProperty(ctx: LayoutCtx, data: ContractData): void {
   drawClauseTitle(ctx, 10, "PROPIEDAD INTELECTUAL");
 
-  drawClauseText(ctx,
-    "El Prestador cede y transfiere al Cliente todos los derechos patrimoniales sobre los códigos fuentes, " +
-    "diseños, activos digitales y obras creadas en virtud del presente contrato, de conformidad con la " +
-    "Ley N° 17.336 sobre Propiedad Intelectual."
+  // ── Layer 1: Software — cesión directa vía Art. 8 inc. 3° Ley 17.336 ──
+  drawClauseParagraph(ctx, "A. Programas computacionales (software): ",
+    "Respecto de los programas computacionales —incluyendo códigos fuentes, aplicaciones web, APIs, " +
+    "backend, automatizaciones, bots, scrapers, scripts, integraciones y similar— creados en virtud " +
+    "del presente contrato, se aplica lo dispuesto en el Artículo 8 inciso 3° de la Ley N° 17.336, " +
+    "reputándose cedidos al Cliente los derechos patrimoniales sobre dichos programas desde el pago " +
+    "íntegro del honorario del servicio respectivo. La retención de derechos hasta el pago total " +
+    "constituye la estipulación escrita en contrario a que se refiere dicha norma."
   );
 
-  drawClauseParagraph(ctx, "Transferencia efectiva: ",
-    "La cesión de derechos patrimoniales se hará efectiva contra el pago total de los honorarios " +
-    "estipulados en el presente contrato. En consecuencia, mientras no se complete el pago total, " +
-    "el Cliente no adquiere los derechos patrimoniales sobre las obras y su uso de los entregables " +
-    "se considerará una licencia precaria y revocable, limitada a los fines de revisión y prueba, " +
-    "sin derecho a explotación comercial, publicación ni modificación de las obras. " +
-    "Tratándose de sitios web, sistemas, automatizaciones o plataformas desarrolladas: el paso a " +
-    "producción, la activación de herramientas de indexación y posicionamiento (incluyendo Google " +
-    "Search Console, datos estructurados y servicios SEO que requieran el sitio publicado), la " +
-    "entrega de credenciales de administración y el acceso a los entornos productivos se producirán " +
-    "únicamente contra el pago total de los honorarios. Hasta ese momento, los sistemas permanecerán " +
-    "en un entorno de pruebas (staging) o acceso restringido, sin uso productivo ni indexación."
+  // ── Layer 2: Obras no-software — licencia exclusiva (sostenida por sí sola) ──
+  drawClauseParagraph(ctx, "B. Demás obras (diseño, contenidos, identidad visual): ",
+    "Respecto de las demás obras creadas en virtud del presente contrato —incluyendo diseños UI/UX, " +
+    "identidad visual, manual de marca, logotipos, contenidos, textos, copywriting, gráficas para " +
+    "redes sociales, fotografías y cualquier otra obra no comprendida en la letra A anterior— el " +
+    "Prestador concede al Cliente una licencia exclusiva —sin perjuicio de la facultad de portafolio " +
+    "de la presente cláusula—, irrevocable, mundial, perpetua, gratuita y transferible, con todas " +
+    "las facultades de explotación reconocidas por la Ley N° 17.336, que operará desde el pago " +
+    "íntegro del honorario del servicio respectivo. Las partes se comprometen a suscribir, " +
+    "a requerimiento escrito de cualquiera de ellas y dentro de los 30 días hábiles siguientes, la " +
+    "cesión formal de derechos sobre estas obras ante notario, siendo los costos notariales y de " +
+    "registro de exclusivo cargo del Cliente. Mientras no se complete el pago del servicio respectivo, " +
+    "el Cliente no adquiere derecho alguno sobre estas obras y cualquier uso previo se considerará " +
+    "licencia precaria y revocable, limitada a fines de revisión y prueba, sin derecho a explotación " +
+    "comercial, publicación ni modificación."
   );
 
+  // ── Condición suspensiva común (pago) ──
+  drawClauseParagraph(ctx, "Condición suspensiva común: ",
+    "Tanto la cesión de la letra A como la licencia de la letra B están sujetas a la condición " +
+    "suspensiva del pago íntegro del honorario del servicio respectivo. Mientras no se complete " +
+    "dicho pago, el Cliente no adquiere los derechos patrimoniales ni la licencia sobre las obras " +
+    "correspondientes. Cuando el contrato comprenda servicios independientes, la cesión o licencia " +
+    "de cada servicio operará de forma independiente contra el pago íntegro de ese servicio en " +
+    "particular, de forma consistente con la divisibilidad pactada en la cláusula OCTAVA."
+  );
+
+  // ── Secuencia de entrega y pago ──
+  drawClauseParagraph(ctx, "Secuencia de entrega y pago: ",
+    "A fin de evitar un bloqueo entre entrega y pago, las partes acuerdan la siguiente secuencia: " +
+    "(i) el Prestador notifica la disponibilidad del entregable en entorno de pruebas (staging); " +
+    "(ii) el Cliente dispone del plazo de revisión estipulado para formular observaciones escritas o, " +
+    "vencido dicho plazo sin observaciones, el entregable se entiende recibido conforme (aprobación tácita); " +
+    "(iii) la recepción conforme —expresa o tácita— gatilla la exigibilidad del pago del saldo; " +
+    "(iv) dentro de los 3 días hábiles siguientes al pago total de ese servicio, el Prestador entrega el " +
+    "repositorio de código fuente, credenciales de administración y activa el paso a producción. " +
+    "Tratándose de sitios web, sistemas o plataformas, el paso a producción, la activación de " +
+    "herramientas de indexación y posicionamiento (incluyendo Google Search Console, datos estructurados " +
+    "y SEO que requieran el sitio publicado) se producirán únicamente contra el pago total. " +
+    "Hasta ese momento, los sistemas permanecerán en staging o acceso restringido, sin uso productivo ni indexación."
+  );
+
+  // ── Derechos morales ──
   drawClauseParagraph(ctx, "Derechos morales: ",
     "El Prestador conserva los derechos morales sobre las obras creadas, incluyendo el derecho " +
     "de paternidad e integridad de la obra, conforme al Artículo 14 de la Ley N° 17.336."
   );
 
-  drawClauseParagraph(ctx, "Portafolio: ",
-    "El Prestador podrá utilizar los trabajos realizados en su portafolio profesional, salvo que las partes " +
-    "acuerden expresamente lo contrario por escrito."
+  // ── Portafolio — carve-out expreso frente a confidencialidad ──
+  drawClauseParagraph(ctx, "Portafolio (carve-out de confidencialidad): ",
+    "El Prestador podrá utilizar los trabajos realizados en virtud del presente contrato en su " +
+    "portafolio profesional, incluyendo la publicación en su sitio web, redes sociales y plataformas " +
+    "de portafolio, salvo que las partes acuerden expresamente lo contrario por escrito. Esta " +
+    "autorización prevalece sobre la obligación de confidencialidad de la cláusula DÉCIMA SEGUNDA " +
+    "respecto de los aspectos visuales, públicos y descriptivos del trabajo, sin perjuicio de que " +
+    "el Prestador no revelará información financiera, técnica reservada, credenciales ni datos " +
+    "personales de clientes del Cliente. En caso de trabajos que contengan información del Cliente " +
+    "no pública, el Prestador someterá la pieza de portafolio a revisión previa del Cliente, que no " +
+    "podrá denegarla injustificadamente."
+  );
+
+  // ── Componentes de terceros ──
+  drawClauseParagraph(ctx, "Componentes de terceros y open source: ",
+    "La cesión y licencia de derechos patrimoniales recae exclusivamente sobre el código, diseños " +
+    "y activos originales producidos por el Prestador. Los componentes de terceros, librerías y " +
+    "frameworks de código abierto incorporados en los entregables se entregan bajo sus respectivas " +
+    "licencias originales (MIT, Apache, GPL u otras), que el Prestador identificará en la " +
+    "documentación técnica. El Cliente acepta quedar sujeto a dichas licencias en cuanto al uso " +
+    "de esos componentes."
+  );
+
+  // ── IA generativa ──
+  drawClauseParagraph(ctx, "Uso de herramientas de IA generativa: ",
+    "El Prestador podrá utilizar herramientas de inteligencia artificial generativa como apoyo en " +
+    "la producción de entregables. El Prestador garantiza que los outputs generados por IA que " +
+    "sean incorporados a las obras serán revisados, adaptados y validados por él, y que el " +
+    "resultado final cuenta con contribución creativa humana suficiente para cumplir con los " +
+    "entregables contratados. El Prestador asume la responsabilidad profesional por el resultado " +
+    "final y declara que las obras entregadas no infringen derechos de autor de terceros. " +
+    "Queda expresamente prohibido al Prestador enviar, procesar o transmitir datos personales " +
+    "del Cliente o de sus clientes a herramientas de inteligencia artificial de terceros sin " +
+    "autorización escrita previa del Cliente, ni utilizar dichos datos para entrenamiento de modelos."
+  );
+
+  // ── Titularidad de dominio y cuentas ──
+  drawClauseParagraph(ctx, "Titularidad de dominio y cuentas digitales: ",
+    "El nombre de dominio se registrará directamente a nombre y en la cuenta del Cliente, sin que el " +
+    "Prestador adquiera ni retenga titularidad sobre él. Las cuentas de plataforma (Google Ads, Google " +
+    "Analytics, Google Search Console, Google Business Profile, Meta Business Manager y similares) " +
+    "serán titularidad del Cliente desde el momento de su creación o transferencia. El Prestador " +
+    "operará dichas cuentas en calidad de gestor autorizado (administrador), sin adquirir titularidad. " +
+    "Las credenciales de administración de los entornos, sistemas y código desarrollados por el " +
+    "Prestador se entregarán conforme a la secuencia de la presente cláusula, que recae exclusivamente " +
+    "sobre el código y los entornos propios del Prestador, no sobre el dominio ni las cuentas de " +
+    "plataforma del Cliente. Al término del contrato, el Prestador transferirá los accesos de " +
+    "administrador al Cliente y se removerá como usuario dentro de los 5 días hábiles siguientes, " +
+    "salvo respecto de los accesos estrictamente necesarios para prestar el soporte y la garantía que " +
+    "subsistan según la cláusula de supervivencia, cuya remoción operará al vencimiento de dichos plazos."
   );
 }
 
@@ -616,7 +778,7 @@ function drawClause12_Confidentiality(ctx: LayoutCtx, data: ContractData): void 
     "La obligación de confidencialidad se mantendrá vigente durante el plazo del contrato y por 3 años adicionales después de su término.",
     "La Información Confidencial solo podrá ser utilizada para los fines del presente contrato.",
     "No constituye Información Confidencial: (a) la que sea o llegue a ser de dominio público sin infracción de la Parte Receptora; (b) la requerida por orden judicial o autoridad competente.",
-    "Al término del contrato, la Parte Receptora deberá devolver o destruir toda la Información Confidencial recibida.",
+    "Al término del contrato, la Parte Receptora deberá devolver o destruir toda la Información Confidencial recibida, salvo (i) aquella que deba conservar por obligación legal o tributaria; (ii) los accesos que subsistan conforme a la cláusula de supervivencia para prestar soporte y garantía; y (iii) la información que el Prestador requiera conservar para acreditar la ejecución del contrato ante terceros o autoridades, plazo durante el cual mantendrá la reserva.",
   ];
   const letters = "abcde".split("");
   for (let i = 0; i < confItems.length; i++) {
@@ -628,19 +790,24 @@ function drawClause13_DataProtection(ctx: LayoutCtx, data: ContractData): void {
   drawClauseTitle(ctx, 12, "PROTECCIÓN DE DATOS PERSONALES");
 
   drawClauseText(ctx,
-    "Ambas partes se obligan al cumplimiento de la Ley N° 19.628 sobre Protección de la Vida Privada. " +
-    "Asimismo, tendrán presente lo dispuesto en la Ley N° 21.719 (publicada el 13 de diciembre de 2024), " +
-    "que crea la Agencia de Protección de Datos Personales, cuya entrada en vigencia está prevista para " +
-    "el 1 de diciembre de 2026, y que resultará aplicable si el presente contrato se extiende más allá de dicha fecha."
+    "Ambas partes se obligan al cumplimiento de la Ley N° 19.628 sobre Protección de la Vida Privada, " +
+    "en su versión reformada por la Ley N° 21.719 (publicada el 13 de diciembre de 2024), cuyo nuevo " +
+    "Artículo 15 bis regula el tratamiento de datos personales a través de un encargado y detalla los " +
+    "requisitos del contrato entre las partes para dicha transferencia. Las partes se obligan a " +
+    "suscribir un anexo de encargo de tratamiento (DPA) conforme a los requisitos del Artículo 15 bis " +
+    "dentro de los 15 días hábiles siguientes a la entrada en vigor del presente contrato, sin esperar " +
+    "a la entrada en vigencia plena de la Ley N° 21.719."
   );
 
   const dpItems = [
     "Los datos personales a los que tenga acceso el Prestador serán utilizados exclusivamente para la ejecución del objeto del contrato.",
     "El Prestador adoptará las medidas de seguridad técnicas y organizativas necesarias para proteger los datos personales contra acceso no autorizado, pérdida o destrucción.",
     "El Prestador notificará al Cliente cualquier incidente de seguridad que involucre datos personales en un plazo máximo de 72 horas desde que tome conocimiento del mismo, conforme al estándar establecido en la Ley N° 21.719.",
-    "Cuando el Prestador acceda a bases de datos o contactos del Cliente (por ejemplo, en integraciones CRM), actuará como encargado de tratamiento: tratará los datos exclusivamente bajo instrucciones del Cliente, no los utilizará para fines propios ni los comunicará a terceros, y al término del contrato los devolverá o eliminará, salvo obligación legal de conservación.",
+    "Cuando el Prestador acceda a bases de datos o contactos del Cliente (por ejemplo, en integraciones CRM), actuará como encargado de tratamiento: tratará los datos exclusivamente bajo instrucciones del Cliente, no los utilizará para fines propios ni los comunicará a terceros sin autorización, y al término del contrato los devolverá o eliminará, salvo obligación legal de conservación.",
+    "El Prestador deberá informar al Cliente la identidad de sus subencargados de tratamiento (proveedores de hosting, CRM en la nube, servicios de OCR, plataformas de email y cualquier otro tercero que trate datos personales del Cliente o de sus clientes) y obtener autorización previa del Cliente antes de incorporar nuevos subencargados. El Prestador responderá por el cumplimiento de estos subencargados.",
+    "Queda expresamente prohibido al Prestador enviar, procesar o transmitir datos personales del Cliente o de sus clientes a herramientas de inteligencia artificial de terceros sin autorización escrita previa del Cliente, ni utilizar dichos datos para entrenamiento de modelos de IA.",
   ];
-  const letters = "abcd".split("");
+  const letters = "abcdef".split("");
   for (let i = 0; i < dpItems.length; i++) {
     drawClauseItem(ctx, letters[i], dpItems[i]);
   }
@@ -661,8 +828,8 @@ function drawClause14_Modifications(ctx: LayoutCtx, data: ContractData): void {
   );
 
   drawClauseParagraph(ctx, "Efecto: ",
-    "Las modificaciones debidamente aprobadas modificarán el objeto del contrato en los términos acordados, " +
-    "rigiéndose por el Artículo 1545 del Código Civil (efecto relativo de los contratos)."
+    "Las modificaciones debidamente aprobadas modificarán el objeto del contrato en los términos acordados " +
+    "por las partes, rigiéndose por el Artículo 1545 del Código Civil (fuerza obligatoria del contrato)."
   );
 }
 
@@ -695,8 +862,11 @@ function drawClause16_Warranty(ctx: LayoutCtx, data: ContractData): void {
   const warrantyDays = data.warrantyDays || 15;
 
   drawClauseParagraph(ctx, "Período de garantía: ",
-    `El Prestador garantiza los servicios prestados por un plazo de ${warrantyDays} días corridos ` +
-    `contados desde la fecha de entrega y recepción conforme de cada entregable.`
+    `El Prestador garantiza los servicios prestados por un plazo de ${warrantyDays} días corridos. ` +
+    `Para los entregables que no requieran puesta en producción, el plazo se cuenta desde la ` +
+    `recepción conforme. Para los servicios que requieran puesta en producción (sitios web, ` +
+    `sistemas, plataformas y similares cuyo paso a producción se produce contra el pago total), ` +
+    `el plazo de garantía se cuenta desde la fecha efectiva de puesta en producción.`
   );
 
   drawClauseParagraph(ctx, "Cobertura: ",
@@ -710,11 +880,20 @@ function drawClause16_Warranty(ctx: LayoutCtx, data: ContractData): void {
     "derivados de la infraestructura tecnológica del Cliente o de terceros."
   );
 
+  drawClauseParagraph(ctx, "Custodia de entornos no pagados: ",
+    "Transcurridos 90 días corridos desde que el Cliente se constituya en mora respecto del pago " +
+    "de cualquier servicio sin que se haya regularizado el pago, el Prestador, previo aviso escrito " +
+    "de 10 días hábiles al correo de notificaciones del Cliente, podrá dar de baja los entornos de " +
+    "staging y eliminar los entregables no pagados, sin responsabilidad para el Prestador."
+  );
+
   drawClauseParagraph(ctx, "Límite de responsabilidad: ",
-    "La responsabilidad total del Prestador por cualquier causa derivada del presente contrato se limita " +
-    "al monto total de los honorarios efectivamente pagados por el Cliente. Quedan excluidos los daños " +
-    "indirectos, pérdida de ingresos, lucro cesante y daños emergentes no cubiertos por el límite anterior. " +
-    "La exclusión anterior no aplica en caso de dolo o culpa grave del Prestador (Artículo 44 del Código Civil)."
+    "La responsabilidad del Prestador respecto de cada servicio se limita a los honorarios " +
+    "efectivamente pagados por ese servicio. La responsabilidad agregada por el contrato se limita " +
+    "al total efectivamente pagado. Se excluyen expresamente los daños indirectos y el lucro cesante. " +
+    "El daño emergente directo queda sujeto al tope anterior. En caso de dolo o culpa grave del " +
+    "Prestador (Artículo 44 del Código Civil), no serán aplicables ni las exclusiones ni el límite " +
+    "establecidos en esta cláusula, rigiéndose la responsabilidad por las reglas generales."
   );
 }
 
@@ -723,13 +902,12 @@ function drawClause17_ForceMajeure(ctx: LayoutCtx, data: ContractData): void {
 
   drawClauseText(ctx,
     "Ninguna de las partes será responsable por el incumplimiento de sus obligaciones cuando dicho " +
-    "incumplimiento se deba a caso fortuito o fuerza mayor, conforme a los Artículos 45 y 1545 " +
-    "del Código Civil."
+    "incumplimiento se deba a caso fortuito o fuerza mayor, conforme al Artículo 45 del Código Civil."
   );
 
   const fmItems = [
     "Se considerarán causales de fuerza mayor: desastres naturales, guerra, pandemia, atentados terroristas, huelgas generales, corte de servicios esenciales (electricidad, internet), y cualquier otro evento imprevisible, irresistible o inevitable.",
-    "La parte afectada deberá notificar a la otra dentro de las 24 horas siguientes de ocurrido el evento.",
+    "La parte afectada deberá notificar a la otra dentro de los 5 días hábiles siguientes al momento en que tomó conocimiento del evento.",
     "Las obligaciones de las partes quedarán suspendidas durante la vigencia de la causal de fuerza mayor, reanudándose una vez que esta cese.",
   ];
   const letters = "abc".split("");
@@ -755,7 +933,10 @@ function drawClause18_Jurisdiction(ctx: LayoutCtx, data: ContractData): void {
   drawClauseText(ctx,
     "Se entenderá recibida la comunicación al día hábil siguiente al de su envío, salvo acuse de recibo " +
     "anterior. El cambio de correo electrónico válido deberá notificarse a la contraparte con al menos " +
-    "5 días hábiles de anticipación mediante comunicación expresa."
+    "5 días hábiles de anticipación mediante comunicación expresa. Los correos electrónicos indicados " +
+    "en la presente cláusula son los únicos válidos para producir efectos legales y prevalecen sobre " +
+    "cualquier otra dirección de correo que se indique en otras cláusulas del presente contrato o " +
+    "en sus anexos."
   );
 
   drawClauseText(ctx,
@@ -771,6 +952,43 @@ function drawClause18_Jurisdiction(ctx: LayoutCtx, data: ContractData): void {
     "Electrónicos, Firma Electrónica y Servicios de Certificación. La firma electrónica simple no cuenta " +
     "con la presunción de integridad y autoría de la firma electrónica avanzada (certificada), por lo que " +
     "su valor probatorio será apreciado por el tribunal de acuerdo con las reglas generales."
+  );
+
+  drawClauseParagraph(ctx, "Integridad del contrato: ",
+    "El presente instrumento, junto con el Anexo A y cualquier anexo adicional suscrito por las " +
+    "partes, constituye el acuerdo completo entre ellas respecto del objeto contratado y sustituye " +
+    "toda negociación, oferta o acuerdo previo, sea verbal o escrito. Si alguna cláusula fuese " +
+    "declarada nula o ineficaz, las restantes conservarán plena validez (severabilidad)."
+  );
+}
+
+function drawClause20_Survival(ctx: LayoutCtx, data: ContractData): void {
+  drawClauseTitle(ctx, 19, "OBLIGACIONES QUE SUBSISTEN AL TÉRMINO DEL CONTRATO");
+
+  drawClauseText(ctx,
+    "Las siguientes obligaciones subsistirán al término o resolución del contrato por cualquier " +
+    "causa: (a) confidencialidad, por el plazo pactado en la cláusula DÉCIMA SEGUNDA; " +
+    "(b) garantía y soporte post-entrega, por el plazo indicado en cada entregable del Anexo A; " +
+    "(c) obligaciones de protección de datos personales de la cláusula DÉCIMA TERCERA, hasta la " +
+    "devolución o eliminación de los datos; (d) licencia y cesión de derechos patrimoniales, una vez " +
+    "pagados los honorarios del servicio respectivo conforme a la cláusula DÉCIMA PRIMERA; " +
+    "(e) titularidad de dominio, cuentas publicitarias y credenciales de plataformas conforme a lo " +
+    "pactado en la cláusula DÉCIMA PRIMERA; (f) los efectos de la liquidación por desistimiento " +
+    "conforme a la cláusula OCTAVA; (g) obligaciones de pago de honorarios devengados y no pagados; " +
+    "(h) las cláusulas de solución de controversias y jurisdicción; (i) las obligaciones tributarias " +
+    "y de conservación de documentos que la ley imponga a las partes."
+  );
+}
+
+function drawClause21_Assignment(ctx: LayoutCtx, data: ContractData): void {
+  drawClauseTitle(ctx, 20, "CESIÓN DEL CONTRATO");
+
+  drawClauseText(ctx,
+    "El Prestador no podrá ceder el presente contrato ni los derechos u obligaciones que de él " +
+    "emanan sin el consentimiento previo y por escrito del Cliente. El Cliente no podrá ceder el " +
+    "presente contrato sin el consentimiento previo y por escrito del Prestador, el que no podrá " +
+    "denegarse injustificadamente. Cualquier cesión en contravención a esta cláusula será " +
+    "ineficaz y no producirá efecto alguno entre las partes."
   );
 }
 
@@ -942,14 +1160,21 @@ async function drawClause19_Signatures(ctx: LayoutCtx, data: ContractData): Prom
 
 function drawAutoSpecialClauses(ctx: LayoutCtx, data: ContractData): void {
   const serviceNames = (data.services || []).map(s => s.name.toLowerCase());
+  const allDeliverables = (data.services || []).flatMap(s => (s.deliverables || []).map(d => d.toLowerCase()));
+
   const hasScaping = serviceNames.some(n =>
     n.includes("scrap") || n.includes("etl") || n.includes("datos") || n.includes("prospect")
   );
   const hasAds = serviceNames.some(n =>
     n.includes("ads") || n.includes("google") || n.includes("meta") || n.includes("pauta") || n.includes("campan")
   );
+  const hasEcommerce = serviceNames.some(n =>
+    n.includes("ecommerce") || n.includes("e-commerce") || n.includes("tienda") || n.includes("shop") || n.includes("woocommerce") || n.includes("shopify")
+  ) || allDeliverables.some(d =>
+    d.includes("webpay") || d.includes("flow") || d.includes("mercado pago") || d.includes("pasarela") || d.includes("carrito")
+  );
 
-  if (!hasScaping && !hasAds) return;
+  if (!hasScaping && !hasAds && !hasEcommerce) return;
 
   ensureSpace(ctx, 60);
   ctx.y -= 8;
@@ -970,7 +1195,7 @@ function drawAutoSpecialClauses(ctx: LayoutCtx, data: ContractData): void {
   ctx.y -= 20;
 
   if (hasScaping) {
-    ensureSpace(ctx, 120);
+    ensureSpace(ctx, 160);
     ctx.page.drawText("A. RECOLECCIÓN AUTOMATIZADA DE DATOS (WEB SCRAPING / ETL)", {
       x: MARGIN,
       y: ctx.y,
@@ -981,27 +1206,50 @@ function drawAutoSpecialClauses(ctx: LayoutCtx, data: ContractData): void {
     ctx.y -= 16;
 
     drawClauseText(ctx,
-      "En lo relativo a los servicios de recolección y procesamiento automatizado de datos, el Cliente " +
-      "declara y garantiza: (i) que tiene derecho o autorización suficiente sobre las fuentes de datos " +
-      "objeto del servicio; (ii) que el uso que dará a los datos recolectados es lícito y no infringe " +
-      "los términos de servicio de los sitios fuente, derechos de autor, ni la normativa de protección " +
-      "de datos personales aplicable; (iii) que, en la medida que los datos recolectados incluyan datos " +
-      "de carácter personal, el Cliente actúa como responsable del tratamiento y cuenta con la base " +
-      "legal habilitante para su recolección y uso, conforme a la Ley N° 19.628."
+      "El servicio de recolección automatizada se ejecutará sobre fuentes expresamente designadas o " +
+      "aprobadas por el Cliente. El Prestador implementará buenas prácticas técnicas en la ejecución: " +
+      "control de frecuencia de solicitudes (rate limiting), respeto de las directivas robots.txt de " +
+      "los sitios fuente, uso preferente de APIs oficiales cuando existan, y manejo de reintentos ante " +
+      "errores transitorios. En lo relativo a este servicio, el Cliente declara y garantiza: (i) que " +
+      "ha designado o aprobado las fuentes de datos objeto del servicio y que tiene derecho o " +
+      "autorización suficiente sobre ellas; (ii) que el uso que dará a los datos recolectados es lícito " +
+      "y no infringe términos de servicio de los sitios fuente, derechos de autor, ni la normativa de " +
+      "protección de datos aplicable; (iii) que, en la medida que los datos incluyan datos personales, " +
+      "el Cliente actúa como responsable del tratamiento y cuenta con la base legal habilitante, " +
+      "conforme a la Ley N° 19.628 y la Ley N° 21.719."
+    );
+    drawClauseText(ctx,
+      "El Prestador declara expresamente que las técnicas de recolección que ejecutará se limitan " +
+      "a aquellas que no implican la superación de barreras técnicas o medidas de seguridad de " +
+      "los sitios fuente, y que en ningún caso ejecutará instrucciones del Cliente que requieran " +
+      "acceder a sistemas sin autorización o eludir medidas tecnológicas de seguridad. La solicitud " +
+      "del Cliente en tal sentido será considerada incumplimiento grave y facultará al Prestador " +
+      "a resolver el contrato de pleno derecho, con derecho a cobrar la totalidad de los honorarios " +
+      "devengados y no pagados a esa fecha."
     );
     drawClauseText(ctx,
       "El Cliente se obliga a indemnizar y mantener indemne al Prestador frente a cualquier reclamo, " +
-      "demanda, multa o perjuicio proveniente de terceros — incluyendo los titulares de los sitios " +
-      "fuente, personas cuyos datos sean recolectados, o autoridades — que deriven de la ilicitud del " +
-      "uso de los datos o de la infracción de términos de servicio de terceros, cuando dicha ilicitud " +
-      "sea atribuible a instrucciones o al uso que el Cliente dé al servicio. La obligación de " +
-      "indemnidad subsistirá por 3 años desde el término del contrato."
+      "demanda, multa o perjuicio proveniente de terceros —incluyendo titulares de sitios fuente, " +
+      "personas cuyos datos sean recolectados, o autoridades— que deriven de: (a) la designación por " +
+      "el Cliente de fuentes de datos que no contaban con autorización suficiente; (b) el uso que el " +
+      "Cliente dé a los datos recolectados, siempre que el Prestador haya ejecutado el servicio " +
+      "conforme a las buenas prácticas técnicas descritas y sin eludir medidas de seguridad. " +
+      "La obligación de indemnidad subsistirá por 3 años desde el término del contrato y es " +
+      "independiente de toda culpa del Prestador en la ejecución técnica."
+    );
+    drawClauseText(ctx,
+      "Término del contrato y cese de ejecución: Al término o resolución del presente contrato por " +
+      "cualquier causa, el Prestador cesará toda ejecución del sistema de scraping en su propia " +
+      "infraestructura. La operación, alojamiento, mantenimiento y responsabilidad de ejecución " +
+      "futura del sistema pasan íntegramente al Cliente a partir de esa fecha. El Prestador entregará " +
+      "el código fuente y la documentación necesaria para que el Cliente pueda operar el sistema de " +
+      "forma autónoma, contra el pago total de los honorarios."
     );
     ctx.y -= 4;
   }
 
   if (hasAds) {
-    ensureSpace(ctx, 100);
+    ensureSpace(ctx, 140);
     const letter = hasScaping ? "B" : "A";
     ctx.page.drawText(`${letter}. GESTIÓN DE CAMPAÑAS PUBLICITARIAS DIGITALES`, {
       x: MARGIN,
@@ -1013,17 +1261,88 @@ function drawAutoSpecialClauses(ctx: LayoutCtx, data: ContractData): void {
     ctx.y -= 16;
 
     drawClauseText(ctx,
-      "El valor de los honorarios por gestión de campañas publicitarias digitales cubre exclusivamente " +
-      "el servicio profesional de configuración, optimización y reporte de campañas. No incluye, bajo " +
-      "ningún concepto, la inversión publicitaria (ad spend) que se pague a las plataformas (Google, " +
-      "Meta u otras), la que es un gasto directo del Cliente a dichas plataformas, facturado y cobrado " +
-      "por ellas de forma independiente."
+      "El servicio de gestión de campañas publicitarias es de naturaleza continua y se presta durante " +
+      "todo el período del contrato. El valor de los honorarios cubre exclusivamente el servicio " +
+      "profesional de configuración, optimización y reporte de campañas. No incluye, bajo ningún " +
+      "concepto, la inversión publicitaria (ad spend) pagada a las plataformas (Google, Meta u otras), " +
+      "la que es un gasto directo del Cliente a dichas plataformas, facturado por ellas de forma " +
+      "independiente."
     );
     drawClauseText(ctx,
-      "El Cliente es responsable de mantener vigentes y con saldo suficiente las cuentas publicitarias " +
-      "en las plataformas respectivas. El Prestador no responde por la interrupción de campañas " +
-      "derivada de falta de fondos, suspensión de cuentas por parte de la plataforma, ni por cambios " +
-      "en las políticas publicitarias de dichas plataformas que afecten el rendimiento de las campañas."
+      "Facturación del servicio continuo: Los honorarios correspondientes exclusivamente al servicio " +
+      "de gestión de campañas publicitarias se devengan por mensualidades vencidas. Cada mensualidad " +
+      "es exigible al término del mes calendario de servicio prestado, contra la entrega del reporte " +
+      "mensual de rendimiento. Este mecanismo de devengo aplica independientemente de la modalidad " +
+      "de pago general pactada en la cláusula séptima para los demás servicios del contrato, y " +
+      "prevalece sobre ella en lo relativo a la gestión de campañas. El reporte mensual que gatilla " +
+      "el cobro es el reporte de resumen de período, distinto de los reportes semanales de seguimiento. " +
+      "Cuando el presente contrato incluya también el desarrollo de la plataforma o tienda destinataria " +
+      "de las campañas, la gestión de Ads comenzará a devengarse desde la fecha de puesta en producción " +
+      "de dicha plataforma, no desde la firma del contrato, a fin de evitar inversión publicitaria sin " +
+      "destino operativo."
+    );
+    drawClauseText(ctx,
+      "No garantía de resultados: El Prestador no garantiza conversiones, CPA (costo por adquisición), " +
+      "ROAS (retorno sobre inversión publicitaria), posiciones ni ninguna otra métrica de resultado " +
+      "de las campañas, por depender de algoritmos, subastas y políticas de las plataformas que " +
+      "escapan al control del Prestador. El servicio comprometido es la gestión profesional diligente, " +
+      "no un resultado determinado."
+    );
+    drawClauseText(ctx,
+      "El Cliente es responsable de mantener vigentes y con saldo suficiente las cuentas publicitarias. " +
+      "El Prestador no responde por la interrupción de campañas derivada de falta de fondos, " +
+      "suspensión de cuentas por la plataforma, ni por cambios en sus políticas publicitarias."
+    );
+    ctx.y -= 4;
+  }
+
+  if (hasEcommerce) {
+    ensureSpace(ctx, 180);
+    const letter = [hasScaping, hasAds].filter(Boolean).length === 2 ? "C" :
+                   [hasScaping, hasAds].some(Boolean) ? "B" : "A";
+    ctx.page.drawText(`${letter}. COMERCIO ELECTRÓNICO Y PASARELAS DE PAGO`, {
+      x: MARGIN,
+      y: ctx.y,
+      size: SMALL_SIZE,
+      font: ctx.fontBold,
+      color: TEXT,
+    });
+    ctx.y -= 16;
+
+    drawClauseParagraph(ctx, "Pasarelas de pago — responsabilidad del Cliente: ",
+      "La afiliación a las pasarelas de pago (Webpay/Transbank, Flow, Mercado Pago u otras) debe ser " +
+      "gestionada directamente por el Cliente a su propio nombre, con su RUT y cuenta bancaria, " +
+      "mediante contrato comercial directo con cada proveedor. El Prestador realiza exclusivamente la " +
+      "integración técnica una vez que el Cliente provea las credenciales de la cuenta ya aprobada. " +
+      "La demora del proveedor de pasarela en aprobar la afiliación del Cliente prorroga automáticamente " +
+      "el plazo de entrega del Prestador en igual número de días hábiles, sin que ello constituya " +
+      "incumplimiento."
+    );
+
+    drawClauseParagraph(ctx, "Exclusión de responsabilidad transaccional: ",
+      "El Prestador no responde por: fallos de transacción, contracargos, fraudes, retenciones de " +
+      "fondos, comisiones, suspensión de la cuenta de comercio por la pasarela, ni por cualquier " +
+      "incidente derivado de la operación del medio de pago una vez entregado y puesto en producción. " +
+      "El sistema que el Prestador construye no almacena datos de medios de pago (número de tarjeta, " +
+      "CVV, fecha de expiración): toda transacción se procesa por redirección al servidor del proveedor " +
+      "de pasarela, que es el único responsable del tratamiento de esos datos."
+    );
+
+    drawClauseParagraph(ctx, "Ley del Consumidor (Ley N° 19.496) y Reglamento de Comercio Electrónico: ",
+      "La adecuación de la tienda a la normativa de protección al consumidor —incluyendo la " +
+      "elaboración de términos y condiciones de venta, política de privacidad, política de devoluciones " +
+      "y retracto (10 días, art. 3 bis), garantía legal (6 meses), exhibición de precios con impuestos " +
+      "incluidos, e identificación legal del vendedor— es de exclusiva responsabilidad del Cliente, " +
+      "que actúa como proveedor frente a los consumidores finales conforme al artículo 1° de la " +
+      "Ley N° 19.496. El Prestador se limita a incorporar técnicamente los textos que el Cliente " +
+      "provea; no redacta ni certifica su adecuación legal."
+    );
+
+    drawClauseParagraph(ctx, "Datos personales de compradores: ",
+      "La tienda almacenará datos personales de consumidores finales (nombre, RUT, dirección, " +
+      "historial de compras). El Cliente actúa como responsable del tratamiento de dichos datos. " +
+      "El Prestador construirá el sistema con cifrado en reposo y control de accesos conforme a los " +
+      "estándares de la Ley N° 21.719, cuya plena vigencia opera desde el 1 de diciembre de 2026."
     );
     ctx.y -= 4;
   }
@@ -1055,6 +1374,32 @@ function drawSpecialClauses(ctx: LayoutCtx, data: ContractData): void {
 
   ctx.y = drawWrappedText(ctx, data.specialClauses, MARGIN, ctx.y, CONTENT_W, SMALL_SIZE, ctx.font, 14);
   ctx.y -= 16;
+}
+
+/** Filtra entregables problemáticos que no deben aparecer en un contrato firmado */
+function sanitizeDeliverable(d: string): string | null {
+  const lower = d.toLowerCase().trim();
+  // Eliminar texto de marketing interno ("Sin compromiso de contratación", etc.)
+  if (lower.includes("sin compromiso de contratación") || lower.includes("sin compromiso de")) return null;
+  // Si dice "opcional" sin condición, forzar a que sea condicional
+  if (lower.includes("opcional") && !lower.includes("sujeta a") && !lower.includes("cotización adicional")) {
+    return d + " (sujeta a cotización adicional)";
+  }
+  // Si menciona "rotación de IPs" o "anti-bloqueo" — riesgos penales por scraping
+  if (lower.includes("rotación de ip") || lower.includes("rotacion de ip") || lower.includes("anti-bloqueo") || lower.includes("antibloqueo")) {
+    return null;
+  }
+  // Hosting/SSL/CDN "incluido" contradice la nota de hosting (infraestructura nunca incluida)
+  const infraWords = ["hosting", "ssl", "cdn", "servidor", "despliegue", "deployment"];
+  if (lower.includes("incluido") && infraWords.some(w => lower.includes(w))) {
+    // Reemplazar "incluido" por "configuración de"
+    return d.replace(/\bincluido\b/gi, "configuración de") + " (costo de infraestructura no incluido — ver Nota sobre hosting)";
+  }
+  // Si contiene "Hosting" pero no habla de configuración, forzar aclaración
+  if (lower.includes("hosting") && !lower.includes("configuración") && !lower.includes("nota")) {
+    return d + " (configuración técnica; costo de infraestructura según Nota sobre hosting)";
+  }
+  return d;
 }
 
 // ── Anexo A: Entregables y Plazos ────────────────────────────────────────────
@@ -1096,8 +1441,8 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
   );
   ctx.y -= 8;
 
-  const startD = data.startDate || "la fecha de inicio";
-  const endD = data.endDate || "la fecha de término";
+  const startD = "la fecha de entrada en vigor conforme a la cláusula OCTAVA";
+  const endD = `${data.durationMonths || 1} mes(es) contados desde la entrada en vigor conforme a la cláusula OCTAVA`;
 
   for (let idx = 0; idx < data.services.length; idx++) {
     const svc = data.services[idx];
@@ -1131,9 +1476,9 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
       );
     } else {
       drawClauseParagraph(ctx, "Plazo de ejecución: ",
-        `Fecha de inicio: ${startD} — Fecha de término estimada: ${endD}. ` +
+        `Plazo de ejecución: ${endD}. ` +
         `Las partes acuerdan definir los hitos específicos y sus fechas de entrega mediante ` +
-        `comunicación escrita dentro de los 5 días hábiles siguientes a la firma del contrato, ` +
+        `comunicación escrita dentro de los 5 días hábiles siguientes a la entrada en vigor del contrato, ` +
         `los que se entenderán incorporados al presente Anexo A como parte integrante. ` +
         `La falta de definición de hitos en dicho plazo habilitará al Prestador para gestionar ` +
         `los entregables en el orden y tiempos que estime convenientes, dentro del plazo total.`
@@ -1141,7 +1486,10 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
     }
 
     // Deliverables list or fallback
-    if (svc.deliverables && svc.deliverables.length > 0) {
+    const sanitizedDeliverables = (svc.deliverables || [])
+      .map(sanitizeDeliverable)
+      .filter((d): d is string => d !== null);
+    if (sanitizedDeliverables.length > 0) {
       ctx.page.drawText("Entregables:", {
         x: MARGIN,
         y: ctx.y,
@@ -1150,9 +1498,9 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
         color: TEXT,
       });
       ctx.y -= 14;
-      for (let di = 0; di < svc.deliverables.length; di++) {
+      for (let di = 0; di < sanitizedDeliverables.length; di++) {
         ensureSpace(ctx, 16);
-        ctx.page.drawText(`• ${svc.deliverables[di]}`, {
+        ctx.page.drawText(`• ${sanitizedDeliverables[di]}`, {
           x: MARGIN + 12,
           y: ctx.y,
           size: SMALL_SIZE,
@@ -1185,20 +1533,23 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
 
     // Hosting notice if service includes hosting as deliverable
     const hasHosting = svc.deliverables?.some(d =>
-      d.toLowerCase().includes("hosting") || d.toLowerCase().includes("cdn")
+      d.toLowerCase().includes("hosting") || d.toLowerCase().includes("cdn") || d.toLowerCase().includes("ssl")
     );
     if (hasHosting) {
       ctx.y -= 2;
       drawClauseParagraph(ctx, "Nota sobre hosting e infraestructura: ",
-        "El costo de alojamiento web (hosting), SSL y CDN incluido en este servicio corresponde al " +
-        "traspaso al costo de infraestructura contratada a terceros proveedores, y no constituye " +
-        "servicio personal del Prestador. El Prestador actúa como intermediario de dicho gasto y lo " +
-        "facturará separadamente o lo desglosa como item dentro del presente servicio a fin de " +
-        "mantener la claridad tributaria. El período de hosting se contará desde la puesta en " +
-        "producción del sitio, la que ocurrirá una vez recibido el pago total de los honorarios. " +
-        "Transcurrido el período incluido, la renovación será por cuenta del Cliente. El Prestador " +
-        "no será responsable por caídas imputables al proveedor de infraestructura. Al término, " +
-        "el Cliente podrá solicitar migración a un proveedor de su elección."
+        "El alojamiento web (hosting), SSL y CDN no constituyen servicio personal del Prestador, " +
+        "sino infraestructura de terceros. Las partes acuerdan instrumentarlo bajo una de las " +
+        "siguientes modalidades, que se determinará antes del inicio del servicio: (a) Contratación " +
+        "directa: el Cliente contrata el servicio de hosting a su propio nombre ante el proveedor " +
+        "elegido, y el Prestador realiza la configuración técnica —modalidad que elimina toda " +
+        "complejidad tributaria—; o (b) Reembolso con mandato: el Prestador adelanta el pago al " +
+        "proveedor en calidad de mandatario del Cliente, quien reembolsa el costo exacto contra " +
+        "el documento tributario del proveedor emitido a nombre del Cliente. En ningún caso el costo " +
+        "de infraestructura se incluye dentro del honorario de boleta del Prestador. El período de " +
+        "alojamiento se contará desde la puesta en producción del sitio, una vez recibido el pago " +
+        "total de los honorarios. Transcurrido el período acordado, la renovación es por cuenta del " +
+        "Cliente. El Prestador no responde por caídas imputables al proveedor de infraestructura."
       );
     }
     ctx.y -= 4;
@@ -1330,17 +1681,23 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
   drawClause17_ForceMajeure(ctx, data);
   drawClause18_Jurisdiction(ctx, data);
 
+  // VIGÉSIMA — Obligaciones que subsisten al término
+  drawClause20_Survival(ctx, data);
+
+  // VIGÉSIMA PRIMERA — Cesión del contrato
+  drawClause21_Assignment(ctx, data);
+
   // Auto clauses (scraping indemnity, ads spend exclusion) — injected by service type
   drawAutoSpecialClauses(ctx, data);
 
   // Manual special clauses (free text from admin)
   drawSpecialClauses(ctx, data);
 
-  // Anexo A: Entregables y Plazos (nueva página)
-  drawAnnexA_Deliverables(ctx, data);
-
-  // Signatures
+  // Signatures — cierran el cuerpo del contrato
   await drawClause19_Signatures(ctx, data);
+
+  // Anexo A: Entregables y Plazos (nueva página, después de las firmas)
+  drawAnnexA_Deliverables(ctx, data);
 
   return await doc.save();
 }

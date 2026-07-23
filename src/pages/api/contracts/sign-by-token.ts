@@ -3,6 +3,8 @@ import { query, initDb } from "../../../lib/db";
 import { dataUrlToBase64 } from "../../../lib/storage";
 import { sendEmail, contractSignedEmail, adminContractCompletedEmail } from "../../../lib/mail";
 import { decodeVerificationToken } from "../../../lib/biometric";
+import { sanitizeBody, validateBodySize } from "../../../lib/validators";
+import { checkRateLimit } from "../../../lib/rate-limit";
 
 export const prerender = false;
 
@@ -14,9 +16,20 @@ const JSON_HEADERS = {
 export const POST: APIRoute = async ({ request }) => {
   let body: Record<string, unknown>;
   try {
-    body = await request.json();
+    body = sanitizeBody(await request.json());
   } catch {
     return new Response(JSON.stringify({ error: "JSON inv\u00e1lido" }), { status: 400, headers: JSON_HEADERS });
+  }
+
+  if (!validateBodySize(body)) {
+    return new Response(JSON.stringify({ error: "Solicitud demasiado grande" }), { status: 413, headers: JSON_HEADERS });
+  }
+
+  // 🛡️ Rate limit: 10 signing attempts per hour per IP
+  const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const rateCheck = checkRateLimit(`sign:ip:${clientIp}`, 10, 3600_000);
+  if (!rateCheck.allowed) {
+    return new Response(JSON.stringify({ error: "Demasiados intentos. Intenta en 1 hora." }), { status: 429, headers: JSON_HEADERS });
   }
 
   const { signing_token, signature_data, client_name, client_rut, client_phone, client_address, id_front_data, id_back_data, selfie_data, verification_token } = body as any;
