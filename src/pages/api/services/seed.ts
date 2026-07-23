@@ -21,7 +21,7 @@ const seedServices = [
       "Formulario de contacto con validaci\u00f3n + notificaciones",
       "SEO on-page b\u00e1sico (meta tags, estructura, sitemap)",
       "Bot\u00f3n WhatsApp flotante",
-      "Hosting 3 meses con SSL + CDN incluido",
+      "Configuraci\u00f3n de hosting, SSL y CDN \u2014 costo de infraestructura por cuenta del Cliente conforme a la Nota",
       "Google Analytics 4 configurado"
     ],
     includes_maintenance: true,
@@ -45,7 +45,7 @@ const seedServices = [
       "SEO avanzado on-page + datos estructurados (Schema.org)",
       "Galer\u00eda de im\u00e1genes optimizada para velocidad",
       "Formularios inteligentes con validaci\u00f3n",
-      "Hosting 3 meses con SSL + CDN incluido",
+      "Configuración de hosting, SSL y CDN — costo de infraestructura por cuenta del Cliente conforme a la Nota",
       "Google Analytics 4 + Search Console",
       "Capacitaci\u00f3n del equipo para gesti\u00f3n aut\u00f3noma"
     ],
@@ -72,7 +72,7 @@ const seedServices = [
       "Gesti\u00f3n de inventario y \u00f3rdenes",
       "Panel administrador completo",
       "SEO avanzado para e-commerce",
-      "Hosting premium con SSL + CDN (3 meses)",
+      "Configuraci\u00f3n de hosting premium, SSL y CDN \u2014 costo de infraestructura por cuenta del Cliente conforme a la Nota",
       "Capacitaci\u00f3n del equipo"
     ],
     includes_maintenance: true,
@@ -94,7 +94,7 @@ const seedServices = [
       "API REST o GraphQL seg\u00fan necesidad",
       "Base de datos PostgreSQL optimizada",
       "Despliegue en Vercel / Railway / Cloudflare",
-      "SSL + CDN incluidos",
+      "Configuración de SSL y CDN — costo de infraestructura por cuenta del Cliente conforme a la Nota",
       "Documentaci\u00f3n t\u00e9cnica del sistema",
       "Capacitaci\u00f3n del equipo"
     ],
@@ -349,8 +349,8 @@ const seedServices = [
     deliverables: [
       "Optimizaci\u00f3n on-page integral del sitio",
       "Correcci\u00f3n de errores t\u00e9cnicos SEO detectados",
-      "Monitoreo de posiciones de palabras clave objetivo",
-      "Reporte ejecutivo con resultados y recomendaciones",
+      "Monitoreo de posiciones de palabras clave objetivo durante la vigencia del contrato",
+      "1 reporte ejecutivo por cada mes de vigencia del contrato",
       "Sesi\u00f3n de capacitaci\u00f3n al equipo sobre buenas pr\u00e1cticas SEO",
       "No incluye redacci\u00f3n de art\u00edculos salvo que se indique"
     ],
@@ -367,15 +367,16 @@ const seedServices = [
     slug: "social-media",
     name: "Gesti\u00f3n de Redes Sociales",
     category: "Marketing Digital",
-    description: "Contenido profesional para tus redes, con estrategia mensual, dise\u00f1o y copywriting. Ideal para negocios que quieren presencia constante sin depender de agendas internas. Servicio recurrente mensual.",
+    description: "Contenido profesional para tus redes, con estrategia de contenido, dise\u00f1o y copywriting durante la vigencia del contrato.",
     price: 350000,
     promo_price: 350000,
     deliverables: [
       "Plataformas: Instagram / Facebook / LinkedIn / TikTok — a designar",
-      "Publicaciones mensuales + historias (cantidad a acordar)",
-      "Calendario de contenidos mensual",
-      "Dise\u00f1o de piezas gr\u00e1ficas y copywriting incluido",
-      "Reporte mensual de m\u00e9tricas y alcance",
+      "8 publicaciones en total durante la vigencia del contrato",
+      "Estrategia de contenido para el período",
+      "Dise\u00f1o de piezas gr\u00e1ficas y copywriting",
+      "Gesti\u00f3n de comunidad y respuestas durante la vigencia del contrato",
+      "1 reporte de rendimiento por cada mes de vigencia",
       "No incluye pauta pagada (presupuesto de ads a cargo del Cliente)"
     ],
     includes_maintenance: false,
@@ -387,14 +388,16 @@ const seedServices = [
     slug: "google-ads",
     name: "Google Ads",
     category: "Marketing Digital",
-    description: "Configuraci\u00f3n y puesta en marcha de campa\u00f1as pagadas en Google. Incluye investigaci\u00f3n de palabras clave, redacci\u00f3n de anuncios, configuraci\u00f3n de conversiones y optimizaci\u00f3n inicial. No incluye el presupuesto de pauta (lo paga el Cliente directo a Google). Servicio \u00fanico de setup.",
+    description: "Gestión y optimización de campañas pagadas en Google durante la vigencia del contrato. No incluye el presupuesto de pauta (lo paga el Cliente directo a Google).",
     price: 250000,
     promo_price: 200000,
     deliverables: [
       "Configuraci\u00f3n de campa\u00f1as (Search/Display/Performance Max) en la cuenta del Cliente",
       "Investigaci\u00f3n de keywords, redacci\u00f3n de anuncios y grupos de anuncios",
       "Configuraci\u00f3n de conversiones y seguimiento",
-      "Gesti\u00f3n y optimizaci\u00f3n por per\u00edodo inicial + reporte de resultados",
+      "Optimizaci\u00f3n de pujas y presupuesto durante la vigencia del contrato",
+      "Reporte semanal de seguimiento durante la vigencia del contrato",
+      "Reporte de resumen por período (gatilla cobro conf. Cláusula Especial B)",
       "No incluye el presupuesto de pauta (lo paga el Cliente directo a Google)"
     ],
     includes_maintenance: false,

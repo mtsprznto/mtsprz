@@ -8,19 +8,21 @@
  */
 export const categoryDisplay: Record<
   string,
-  { icon: string; accent: string; slug: string; tags: string[] }
+  { icon: string; accent: string; slug: string; tags: string[]; landingUrl?: string }
 > = {
   "Desarrollo Web": {
     icon: "Code",
     accent: "#6366f1",
     slug: "desarrollo-web",
     tags: ["Landing Pages", "Sitios Web", "E-commerce", "Apps Web"],
+    landingUrl: "/desarrollo-web",
   },
   "Automatización de Procesos": {
     icon: "Bot",
     accent: "#06b6d4",
     slug: "automatizaciones",
     tags: ["WhatsApp Bots", "Excel", "CRM", "Workflows"],
+    landingUrl: "/automatizacion",
   },
   "Datos e Inteligencia": {
     icon: "BarChart3",
@@ -33,6 +35,7 @@ export const categoryDisplay: Record<
     accent: "#10b981",
     slug: "seo",
     tags: ["SEO Local", "Google Maps", "Auditoría", "Contenido"],
+    landingUrl: "/seo-local",
   },
   "Marketing Digital": {
     icon: "TrendingUp",
@@ -94,6 +97,7 @@ export interface ServiceDisplay {
   tags: string[];
   accent: string;
   slug: string;
+  landingUrl?: string;
 }
 
 export function toServiceDisplay(row: {
@@ -111,5 +115,6 @@ export function toServiceDisplay(row: {
     tags: cfg.tags,
     accent: cfg.accent,
     slug: cfg.slug,
+    landingUrl: cfg.landingUrl,
   };
 }

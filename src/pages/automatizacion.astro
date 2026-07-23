@@ -1,0 +1,443 @@
+---
+export const prerender = true;
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Footer from "../components/Footer.astro";
+
+const waPhone = "56966929818";
+const waMsg = encodeURIComponent("Hola! Vi la página de automatización y quiero saber cómo puedo automatizar procesos en mi negocio.");
+const waUrl = `https://wa.me/${waPhone}?text=${waMsg}`;
+const site = "https://mtsprz.org";
+---
+
+<BaseLayout
+  title="Automatización de Procesos — Bots WhatsApp, CRM, Dashboards | Mtsprz"
+  description="Automatizamos procesos manuales en tu pyme: bots WhatsApp 24/7, flujos de email marketing, integraciones CRM, dashboards de datos y workflows con n8n. Ahorra 10+ horas semanales. En Puerto Varas, Osorno, Valdivia."
+  canonical="https://mtsprz.org/automatizacion"
+  breadcrumbs={[{ name: "Automatización", path: "/automatizacion" }]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": `${site}/automatizacion#service`,
+        "name": "Automatización de Procesos — Mtsprz",
+        "description": "Bots de WhatsApp, automatización de Excel, flujos de email marketing, integraciones CRM, dashboards de datos y workflows con n8n para pymes en la Región de Los Lagos.",
+        "provider": { "@id": `${site}/#organization` },
+        "areaServed": [
+          { "@type": "City", "name": "Puerto Varas" },
+          { "@type": "City", "name": "Osorno" },
+          { "@type": "City", "name": "Valdivia" },
+          { "@type": "City", "name": "Puerto Montt" }
+        ],
+        "serviceType": "Automatización de Procesos"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${site}/automatizacion#faq`,
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Qué procesos puedo automatizar en mi pyme?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots que atienden 24/7), email marketing (secuencias automáticas), integración de CRM (datos que fluyen entre sistemas) y workflows completos con n8n." }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cuánto cuesta un bot de WhatsApp para mi negocio?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Desde $290.000 para un bot básico con respuestas automáticas y menú interactivo. Los planes avanzados con integración CRM y dashboard van desde $690.000." }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cuánto tiempo ahorro automatizando procesos?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Una corredora de propiedades típica ahorra 10+ horas semanales automatizando WhatsApp, generación de informes y seguimiento de clientes. Una clínica dental ahorró 15 horas/semana con agendamiento automático." }
+          }
+        ]
+      }
+    ]
+  })} />
+
+  <Header />
+  <link rel="preload" as="video" href="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4" fetchpriority="high" />
+
+  <main style="overflow-x:hidden;">
+
+    <!-- ═══════════════════════════════════════════
+         HERO — Video full-bleed, texto al pie izquierdo
+    ═══════════════════════════════════════════ -->
+    <section style="position:relative; width:100vw; height:100dvh; min-height:100vh; overflow:hidden; background:#010101;">
+      <video
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
+        autoplay loop muted playsinline preload="auto"
+        style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;"
+      />
+      <!-- Gradiente cinemático sobre video -->
+      <div style="position:absolute; inset:0; z-index:2; background:linear-gradient(to top, #010101 0%, #010101 18%, rgba(1,1,1,0.55) 50%, rgba(1,1,1,0.3) 100%);"></div>
+      <div style="position:absolute; inset:0; z-index:2; background:linear-gradient(to right, rgba(1,1,1,0.5) 0%, transparent 60%);"></div>
+      <!-- Noise -->
+      <div style="position:absolute; inset:0; z-index:3; opacity:0.025; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+
+      <!-- Texto al pie izquierdo -->
+      <div style="position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 2.5rem 3.5rem;">
+        <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-body); margin-bottom:1rem;">Automatización</p>
+        <h1 style="font-size:clamp(4rem, 13vw, 15rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+          AUTOMATIZA<br /><span style="color:rgba(255,255,255,0.18);">TU NEGOCIO</span>
+        </h1>
+        <p style="margin-top:1.25rem; font-size:0.75rem; color:rgba(255,255,255,0.35); font-family:var(--font-body); font-weight:300; max-width:380px; line-height:1.65;">
+          Bots WhatsApp, dashboards, CRM e integraciones que recuperan horas de trabajo cada semana.
+        </p>
+        <div style="margin-top:1.75rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+            CONSULTAR AHORA
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/cotizar"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:transparent; color:rgba(255,255,255,0.45); font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; border:1px solid rgba(255,255,255,0.12); text-decoration:none; transition:all 0.2s;"
+            onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="this.style.color='rgba(255,255,255,0.45)'; this.style.borderColor='rgba(255,255,255,0.12)'">
+            COTIZAR ONLINE
+          </a>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div style="position:absolute; bottom:2rem; right:2.5rem; z-index:20;">
+        <Breadcrumbs items={[{ name: "Automatización", path: "/automatizacion" }]} />
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         SOLUCIONES — 4 columnas cinematográficas
+         Fila 1: 55/45 | Fila 2: 45/55
+    ═══════════════════════════════════════════ -->
+    <div class="sol-wrapper">
+
+      <!-- Fila 1 -->
+      <div class="sol-row">
+
+        <!-- BOT WHATSAPP — col dominante 55% -->
+        <div class="sol-col sol-dominant">
+          <div style="position:absolute; inset:0; background:linear-gradient(150deg, #041208 0%, #021a0d 45%, #010101 100%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 20% 30%, #25d36614 0%, transparent 55%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 80% 80%, #05301a0a 0%, transparent 50%);"></div>
+          <div style="position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+          <div class="sol-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
+          <div style="position:relative; z-index:10; padding:2.5rem;">
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">01 — Bot WhatsApp</p>
+            <h2 style="font-size:clamp(2.25rem, 5vw, 5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+              ATENCIÓN<br />24/7
+            </h2>
+            <p style="margin-top:0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; max-width:340px; line-height:1.65;">
+              Responde consultas, agenda citas, muestra catálogo y califica leads automáticamente. Funciona mientras duermes.
+            </p>
+            <div style="margin-top:1.25rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.6rem 1.25rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+                onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1A1A1A'">
+                CONSULTAR →
+              </a>
+              <span style="font-size:0.7rem; color:rgba(255,255,255,0.2); font-family:var(--font-body);">80% consultas automáticas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXCEL / REPORTES — col 45% -->
+        <div class="sol-col sol-secondary" style="position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end;">
+          <div style="position:absolute; inset:0; background:linear-gradient(145deg, #060810 0%, #0a0e1a 45%, #010101 100%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 70% 25%, #06b6d414 0%, transparent 55%);"></div>
+          <div style="position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+          <div class="sol-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
+          <div style="position:relative; z-index:10; padding:2.5rem;">
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">02 — Excel & Reportes</p>
+            <h2 style="font-size:clamp(2rem, 4vw, 3.75rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+              REPORTES<br />AUTOMÁTICOS
+            </h2>
+            <p style="margin-top:0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; max-width:300px; line-height:1.65;">
+              Ventas diarias, inventario, comisiones. Tu Excel conectado a tu base de datos, actualizado en tiempo real.
+            </p>
+            <div style="margin-top:1.25rem; display:flex; align-items:center; gap:1rem;">
+              <span style="display:inline-block; padding:0.6rem 1.25rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em;">10+ HRS/SEMANA</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /fila 1 -->
+
+      <!-- Fila 2 -->
+      <div class="sol-row">
+
+        <!-- EMAIL MARKETING — col 45% -->
+        <div class="sol-col sol-secondary-alt">
+          <div style="position:absolute; inset:0; background:linear-gradient(155deg, #07060f 0%, #0c0a18 45%, #010101 100%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 35%, #6366f114 0%, transparent 55%);"></div>
+          <div style="position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+          <div class="sol-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
+          <div style="position:relative; z-index:10; padding:2.5rem;">
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">03 — Email Marketing</p>
+            <h2 style="font-size:clamp(2rem, 4vw, 3.75rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+              EMAILS<br />QUE VENDEN
+            </h2>
+            <p style="margin-top:0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; max-width:300px; line-height:1.65;">
+              Secuencias de bienvenida, seguimiento, recuperación de carritos. Conectado a tu CRM.
+            </p>
+            <div style="margin-top:1.25rem;">
+              <span style="display:inline-block; padding:0.6rem 1.25rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em;">3X MÁS APERTURA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DASHBOARD — col dominante 55% -->
+        <div class="sol-col sol-dominant-alt">
+          <div style="position:absolute; inset:0; background:linear-gradient(140deg, #04100a 0%, #061a10 45%, #010101 100%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 75% 30%, #10b98112 0%, transparent 55%);"></div>
+          <div style="position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+          <div class="sol-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
+          <div style="position:relative; z-index:10; padding:2.5rem;">
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">04 — Dashboard de Datos</p>
+            <h2 style="font-size:clamp(2.25rem, 5vw, 5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+              DATOS EN<br />TIEMPO REAL
+            </h2>
+            <p style="margin-top:0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; max-width:340px; line-height:1.65;">
+              Ventas, clientes, inventario. Visualiza tus KPIs desde cualquier dispositivo. Decisiones basadas en datos, no en intuición.
+            </p>
+            <div style="margin-top:1.25rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.6rem 1.25rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+                onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1A1A1A'">
+                CONSULTAR →
+              </a>
+              <span style="font-size:0.7rem; color:rgba(255,255,255,0.2); font-family:var(--font-body);">Dashboard en 7 días</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /fila 2 -->
+
+    </div><!-- /soluciones -->
+
+
+    <!-- ═══════════════════════════════════════════
+         PLANES — editorial full-width, sin cards
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%, rgba(6,182,212,0.04) 0%, transparent 55%);"></div>
+
+      <div style="padding:6rem 2.5rem;">
+
+        <!-- Header -->
+        <div class="reveal-group" style="margin-bottom:4rem;">
+          <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Precios</p>
+          <h2 class="reveal-item" style="font-size:clamp(2.5rem,8vw,8rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.04em; text-transform:uppercase; line-height:0.88; margin:0;">
+            PLANES DE<br /><span style="color:rgba(255,255,255,0.18);">AUTOMATIZACIÓN</span>
+          </h2>
+        </div>
+
+        <!-- 3 planes: líneas editoriales, sin tarjetas -->
+        <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
+
+          <!-- Plan 1 -->
+          <div class="reveal-item plan-row" style="border-bottom:1px solid rgba(255,255,255,0.06); padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem;">
+            <div style="min-width:120px;">
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.5rem;">01</p>
+              <p style="font-size:clamp(2rem,5vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$290k</p>
+              <p style="font-size:0.65rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-top:0.25rem;">Pago único</p>
+            </div>
+            <div style="flex:1; min-width:200px;">
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; margin:0 0 0.75rem;">Bot WhatsApp</h3>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                {["Respuestas automáticas", "Menú interactivo", "Horario configurable", "Estadísticas básicas", "Instalación en 3 días"].map(item => (
+                  <span style="font-size:0.72rem; color:rgba(255,255,255,0.38); font-family:var(--font-body);">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; white-space:nowrap; transition:background 0.2s;"
+                onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1A1A1A'">
+                LO QUIERO →
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan 2 — destacado -->
+          <div class="reveal-item plan-row plan-featured" style="border-bottom:1px solid rgba(255,255,255,0.06); padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem; position:relative;">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:2px; background:rgba(255,255,255,0.15);"></div>
+            <div style="min-width:120px; padding-left:1.5rem;">
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.5); font-family:var(--font-body); margin-bottom:0.5rem;">02 — Popular</p>
+              <p style="font-size:clamp(2rem,5vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$690k</p>
+              <p style="font-size:0.65rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-top:0.25rem;">Desde / pago único</p>
+            </div>
+            <div style="flex:1; min-width:200px; padding-left:1.5rem;">
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; margin:0 0 0.75rem;">Automatización Completa</h3>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                {["Bot WhatsApp avanzado", "Integración CRM", "Dashboard de datos", "Email marketing", "Flujos n8n", "Reportes automáticos"].map(item => (
+                  <span style="font-size:0.72rem; color:rgba(255,255,255,0.45); font-family:var(--font-body);">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; padding-left:1.5rem;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.7rem 1.5rem; background:#fff; color:#010101; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; white-space:nowrap; transition:all 0.2s; font-weight:600;"
+                onmouseover="this.style.background='#e5e5e5'" onmouseout="this.style.background='#fff'">
+                LO QUIERO →
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan 3 -->
+          <div class="reveal-item plan-row" style="padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem;">
+            <div style="min-width:120px;">
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.5rem;">03</p>
+              <p style="font-size:clamp(2rem,5vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$490k</p>
+              <p style="font-size:0.65rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-top:0.25rem;">Desde / pago único</p>
+            </div>
+            <div style="flex:1; min-width:200px;">
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; margin:0 0 0.75rem;">Dashboard + IA</h3>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                {["Dashboard interactivo", "Datos en tiempo real", "Conexión Excel/API", "Gráficos editables", "Acceso multi-dispositivo", "Soporte 30 días"].map(item => (
+                  <span style="font-size:0.72rem; color:rgba(255,255,255,0.38); font-family:var(--font-body);">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; white-space:nowrap; transition:background 0.2s;"
+                onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1A1A1A'">
+                LO QUIERO →
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="reveal-item" style="margin-top:2.5rem; font-size:0.7rem; color:rgba(255,255,255,0.2); font-family:var(--font-body);">
+          ¿Necesitas algo distinto? <a href="/contacto" style="color:rgba(255,255,255,0.45); text-decoration:underline; text-underline-offset:3px;">Cuéntanos tu caso →</a>
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         FAQ — editorial strip
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#010101; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="max-width:800px; margin:0 auto; padding:6rem 2.5rem;">
+
+        <div class="reveal-group" style="margin-bottom:3rem;">
+          <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Preguntas frecuentes</p>
+          <h2 class="reveal-item" style="font-size:clamp(2rem,5vw,4rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0;">
+            LO QUE<br />NOS PREGUNTAN
+          </h2>
+        </div>
+
+        <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
+          {[
+            { q: "¿Qué procesos puedo automatizar en mi pyme?", a: "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots que atienden 24/7), email marketing (secuencias que nutren clientes), integración de CRM (datos que fluyen entre sistemas) y workflows completos con n8n." },
+            { q: "¿Necesito conocimientos técnicos?", a: "No. Nosotros configuramos todo. Tú solo usas las herramientas: tu bot de WhatsApp, tu dashboard, tus reportes automáticos. Incluimos capacitación básica." },
+            { q: "¿Cuánto cuesta un bot de WhatsApp?", a: "Desde $290.000 para un bot básico con respuestas automáticas y menú interactivo. Planes avanzados con integración CRM y dashboard desde $690.000." },
+            { q: "¿Cuánto tiempo toma implementar una automatización?", a: "Un bot de WhatsApp básico está listo en 3-5 días. Una automatización completa con CRM + dashboard toma 2-3 semanas." },
+            { q: "¿Funciona con mi sistema actual?", a: "Sí. Nos adaptamos a tus herramientas: Excel, Google Sheets, Salesforce, HubSpot, Mercado Pago, Transbank, y cualquier sistema con API o acceso a datos." },
+          ].map(faq => (
+            <details class="reveal-item faq-item" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <summary style="display:flex; cursor:pointer; align-items:center; justify-content:space-between; gap:1rem; padding:1.5rem 0; font-size:0.875rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); list-style:none; transition:color 0.2s;">
+                <span>{faq.q}</span>
+                <span class="faq-icon" style="flex-shrink:0; width:1.25rem; height:1.25rem; border:1px solid rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </span>
+              </summary>
+              <p style="padding-bottom:1.5rem; font-size:0.8rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; line-height:1.8; max-width:600px;">{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         CTA FINAL — viewport, texto al pie
+    ═══════════════════════════════════════════ -->
+    <section style="position:relative; width:100vw; min-height:75vh; overflow:hidden; background:#0A0A0A; display:flex; flex-direction:column; justify-content:flex-end;">
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 60%, rgba(37,211,102,0.04) 0%, transparent 55%);"></div>
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+
+      <div class="reveal-group" style="position:relative; z-index:10; padding:4rem 2.5rem 5rem;">
+        <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Empieza hoy</p>
+        <h2 class="reveal-item" style="font-size:clamp(3rem,10vw,11rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+          RECUPERA<br /><span style="color:rgba(255,255,255,0.15);">TU TIEMPO</span>
+        </h2>
+        <p class="reveal-item" style="margin-top:1.25rem; font-size:0.78rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); font-weight:300; max-width:340px; line-height:1.7;">
+          Cuéntanos qué proceso manual te quita más tiempo y te mostramos cómo automatizarlo.
+        </p>
+        <div class="reveal-item" style="margin-top:2rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:#1A1A1A; color:#fff; font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+            WHATSAPP
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/cotizar"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:transparent; color:rgba(255,255,255,0.4); font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; border:1px solid rgba(255,255,255,0.1); text-decoration:none; transition:all 0.2s;"
+            onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.borderColor='rgba(255,255,255,0.1)'">
+            COTIZAR ONLINE
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+  <style>
+    /* ── Sol wrapper + rows ──────────────────────── */
+    .sol-wrapper { display: flex; flex-direction: column; width: 100vw; }
+
+    .sol-row {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .sol-col {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 85vw;
+    }
+
+    @media (min-width: 768px) {
+      .sol-row { flex-direction: row; }
+      .sol-col { min-height: 72vh; }
+      .sol-dominant      { width: 55%; }
+      .sol-secondary     { width: 45%; border-left: 1px solid rgba(255,255,255,0.04); }
+      .sol-secondary-alt { width: 45%; }
+      .sol-dominant-alt  { width: 55%; border-left: 1px solid rgba(255,255,255,0.04); }
+      .sol-row + .sol-row { border-top: 1px solid rgba(255,255,255,0.04); }
+    }
+
+    .sol-col:hover .sol-hover { opacity: 1 !important; }
+
+    @media (max-width: 640px) {
+      .sol-col { min-height: 100vw; }
+    }
+
+    /* Planes */
+    .plan-row:hover { background: rgba(255,255,255,0.01); }
+
+    /* FAQ */
+    .faq-item summary:hover { color: #fff !important; }
+    .faq-item[open] summary { color: #fff !important; }
+    .faq-item[open] .faq-icon { border-color: rgba(255,255,255,0.3) !important; transform: rotate(45deg); }
+  </style>
+
+</BaseLayout>

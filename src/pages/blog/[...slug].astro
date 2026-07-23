@@ -19,6 +19,18 @@ const { post } = Astro.props;
 const slug = post.id.replace(/\.(md|mdx)$/, "");
 const { Content, headings } = await render(post);
 const allPosts = await getCollection("blog");
+
+const waPhone = "56966929818";
+// CTA contextual según tags del post
+const tags = (post.data.tags || []).map((t: string) => t.toLowerCase());
+const isAutomatizacion = tags.some((t: string) => ["automatización", "whatsapp", "bot", "crm"].includes(t));
+const isSEO = tags.some((t: string) => ["seo", "google maps", "posicionamiento", "seo local"].includes(t));
+const ctaConfig = isAutomatizacion
+  ? { service: "automatización", url: "/automatizacion", accent: "#06b6d4", gradient: "linear-gradient(135deg,#06b6d4,#0891b2)", waMsg: "Hola! Leí el blog y quiero saber cómo automatizar mi negocio." }
+  : isSEO
+  ? { service: "SEO local", url: "/seo-local", accent: "#10b981", gradient: "linear-gradient(135deg,#10b981,#059669)", waMsg: "Hola! Leí el blog y quiero posicionar mi negocio en Google." }
+  : { service: "desarrollo web", url: "/desarrollo-web", accent: "#6366f1", gradient: "linear-gradient(135deg,#6366f1,#8b5cf6)", waMsg: "Hola! Leí el blog y quiero cotizar una página web." };
+const waCtaUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(ctaConfig.waMsg)}`;
 const postTags = post.data.tags || [];
 const postTagSet = new Set(postTags.map((t: string) => t.toLowerCase()));
 const related = allPosts
@@ -363,48 +375,54 @@ const shareText = encodeURIComponent(post.data.title);
       )
     }
 
-    <!-- CTA — editorial call to action -->
+    <!-- CTA — contextual según tema del post -->
     <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
       <div class="absolute inset-0" style="background: #0A0A0A;" />
-      <div class="absolute inset-0 opacity-50" style="background: radial-gradient(ellipse at 50% 0%, #6366f128 0%, transparent 50%), radial-gradient(ellipse at 30% 100%, #8b5cf610 0%, transparent 50%);" />
+      <div class="absolute inset-0 opacity-50" style={`background: radial-gradient(ellipse at 50% 0%, ${ctaConfig.accent}28 0%, transparent 50%);`} />
       <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
-      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
-      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
+      <div class="absolute top-0 left-0 right-0 h-[1px]" style={`background: linear-gradient(90deg, transparent, ${ctaConfig.accent}44, transparent);`} />
+      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style={`background: linear-gradient(90deg, transparent, ${ctaConfig.accent}22, transparent);`} />
 
-      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44 text-center">
+      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 text-center">
         <div class="reveal-group">
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Contacto</p>
-
-          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px] lg:tracking-[-3px]">
-            Lleva tu negocio<br />
-            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">al siguiente nivel</span>
-          </h2>
-
-          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
-
-          <p class="reveal-item mx-auto max-w-xl text-sm md:text-base lg:text-lg text-white/50 font-body font-light leading-relaxed">
-            En Mtsprz creamos soluciones digitales para pymes del sur de Chile. Conversemos sin compromiso.
+          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6" style={`color: ${ctaConfig.accent}aa;`}>
+            Aplica lo que leíste
           </p>
 
-          <div class="reveal-item mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="/contacto"
-              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300"
-              style="color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6);"
-            >
-              <span>Solicitar cotización</span>
-              <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px]">
+            ¿Tu negocio necesita<br />
+            <span class="text-transparent bg-clip-text" style={`background-image: ${ctaConfig.gradient};`}>{ctaConfig.service}?</span>
+          </h2>
+
+          <div class="reveal-item mx-auto my-8 w-12 h-[1px]" style={`background: linear-gradient(90deg, transparent, ${ctaConfig.accent}66, transparent);`} />
+
+          <p class="reveal-item mx-auto max-w-lg text-sm md:text-base text-white/50 font-body font-light leading-relaxed">
+            Somos Mtsprz — agencia digital del sur de Chile. Conversemos sin compromiso sobre cómo podemos ayudarte.
+          </p>
+
+          <div class="reveal-item mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href={waCtaUrl} target="_blank" rel="noopener noreferrer"
+              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all"
+              style="color:#fff; background:#25D366;">
+              <span>WhatsApp</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href={ctaConfig.url}
+              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all"
+              style={`color:#fff; background:${ctaConfig.gradient};`}>
+              <span>Ver servicio</span>
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
             </a>
           </div>
 
-          <div class="reveal-item mt-12 md:mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          <div class="reveal-item mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
             {[
-              { label: "Sin compromiso", accent: "#6366f1" },
-              { label: "Respuesta en 24 hrs", accent: "#10b981" },
-              { label: "Atención personalizada", accent: "#6366f1" },
+              { label: "Sin compromiso" },
+              { label: "Respuesta en 24 hrs" },
+              { label: "Sur de Chile" },
             ].map((t) => (
-              <span class="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium tracking-[0.1em] uppercase" style="color: rgba(255,255,255,0.35);">
-                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke={t.accent} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium tracking-[0.1em] uppercase" style="color: rgba(255,255,255,0.25);">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke={ctaConfig.accent} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
                 {t.label}
               </span>
             ))}

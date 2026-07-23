@@ -108,12 +108,13 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
               <input name="client_email" type="email" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" required placeholder="contacto@blast-up.cl" />
             </div>
             <div>
-              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Teléfono</label>
-              <input name="client_phone" maxlength="50" pattern="[\+\d\s\-\(\)]{8,20}" title="Formato: +56 9 7547 5781" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="+56 9 7547 5781" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Teléfono <span class="text-red-400/40">*</span></label>
+              <input name="client_phone" maxlength="20" pattern="\+56\s?9\s?\d{8}" title="Formato chileno: +56 9 1234 5678 (9 + 8 dígitos)" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-mono" required placeholder="+56 9 XXXX XXXX" />
+              <p class="text-[10px] text-white/20 mt-1 font-body">Formato chileno: +56 9 seguido de 8 dígitos (ej: +56 9 7547 5781)</p>
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Dirección <span class="text-white/15 font-normal normal-case">(incluir comuna)</span></label>
-              <input name="client_address" autocomplete="off" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="Av. Bosques de Montemar 30, Of. 316, Concón, Región de Valparaíso" />
+              <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Dirección <span class="text-red-400/40">*</span> <span class="text-white/15 font-normal normal-case">(incluir comuna, ciudad y región)</span></label>
+              <input name="client_address" autocomplete="off" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" required placeholder="Av. Bosques de Montemar 30, Of. 316, Concón, Región de Valparaíso" />
             </div>
             <div id="representanteGroup" class="sm:col-span-2 hidden">
               <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Representante Legal <span class="text-amber-400/50 font-normal normal-case">(obligatorio para SpA/SA/Ltda)</span></label>
@@ -158,7 +159,10 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
               <span class="w-0.5 h-5 bg-white/10 shrink-0"></span>
               <span class="text-[10px] font-medium text-white/30 uppercase tracking-[0.12em]">Servicios</span>
             </div>
-            <button type="button" id="addServiceBtn" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/[0.04] hover:bg-white/[0.07] text-[10px] font-medium text-white/40 tracking-wider uppercase transition-all duration-300">+ Agregar Servicio</button>
+            <div class="flex items-center gap-2">
+              <button type="button" id="addServiceBtn" class="inline-flex items-center gap-1.5 px-3 py-2 bg-white/[0.04] hover:bg-white/[0.07] text-[10px] font-medium text-white/40 tracking-wider uppercase transition-all duration-300">+ Agregar Servicio</button>
+              <button type="button" id="addAllServicesBtn" class="inline-flex items-center gap-1.5 px-3 py-2 bg-accent/5 hover:bg-accent/10 text-[10px] font-medium text-accent/60 tracking-wider uppercase transition-all duration-300 border border-accent/10">+ Agregar Todos</button>
+            </div>
           </div>
           <div id="servicesContainer" class="space-y-3">
             <div class="service-row border border-white/[0.04] p-3 sm:p-4 transition-all duration-200">
@@ -863,6 +867,52 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     });
   });
 
+  document.getElementById("addAllServicesBtn").addEventListener("click", function() {
+    if (!allServices || allServices.length === 0) {
+      // Fallback: cargar servicios si aun no están disponibles
+      loadServiceDescriptions().then(function() { addAllServices(); });
+      return;
+    }
+    addAllServices();
+  });
+
+  function addAllServices() {
+    var container = document.getElementById("servicesContainer");
+    var added = 0;
+    for (var si = 0; si < allServices.length; si++) {
+      var svc = allServices[si];
+      // Saltar si ya está agregado (mismo slug)
+      var already = false;
+      container.querySelectorAll(".service-select").forEach(function(sel) {
+        if (sel.value === svc.slug) already = true;
+      });
+      if (already) continue;
+      var row = createServiceRow();
+      container.appendChild(row);
+      var select = row.querySelector(".service-select");
+      select.value = svc.slug;
+      updateServicePrice(select);
+      row.querySelector(".service-name").addEventListener("input", function() {
+        checkDuplicateNames();
+        updatePreview();
+      });
+      select.addEventListener("change", function() {
+        checkDuplicateNames();
+      });
+      added++;
+    }
+    if (added === 0 && container.querySelectorAll(".service-select").length > 0) {
+      // Todos ya estaban agregados — mensaje sutil
+      var firstRow = container.querySelector(".service-row");
+      if (firstRow) {
+        firstRow.style.transition = "outline 0.3s";
+        firstRow.style.outline = "1px solid rgba(251,191,36,0.3)";
+        setTimeout(function() { firstRow.style.outline = ""; }, 1500);
+      }
+    }
+    updateTotal();
+  }
+
   // Attach duplicate checker to existing rows on page load
   document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".service-name").forEach(function(inp) {
@@ -1125,7 +1175,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     function fmt(n) { return "$" + n.toLocaleString("es-CL"); }
 
     // Helper: clause header
-    var ordinals = ["PRIMERA","SEGUNDA","TERCERA","CUARTA","QUINTA","SEXTA","SÉPTIMA","OCTAVA","NOVENA","DÉCIMA","DÉCIMA PRIMERA","DÉCIMA SEGUNDA","DÉCIMA TERCERA","DÉCIMA CUARTA","DÉCIMA QUINTA","DÉCIMA SEXTA","DÉCIMA SÉPTIMA","DÉCIMA OCTAVA","DÉCIMA NOVENA"];
+    var ordinals = ["PRIMERA","SEGUNDA","TERCERA","CUARTA","QUINTA","SEXTA","SÉPTIMA","OCTAVA","NOVENA","DÉCIMA","DÉCIMA PRIMERA","DÉCIMA SEGUNDA","DÉCIMA TERCERA","DÉCIMA CUARTA","DÉCIMA QUINTA","DÉCIMA SEXTA","DÉCIMA SÉPTIMA","DÉCIMA OCTAVA","DÉCIMA NOVENA","VIGÉSIMA","VIGÉSIMA PRIMERA","VIGÉSIMA SEGUNDA"];
     function clauseTitle(idx, title) {
       return '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e5e7eb;">' + ordinals[idx] + '. — ' + title + '</h3>';
     }
@@ -1340,13 +1390,13 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
     // ── CLAUSULAS ESPECIALES ──
     if (specialClauses) {
-      html += clauseTitle(18, 'CLÁUSULAS ESPECIALES ADICIONALES');
+      html += clauseTitle(20, 'CLÁUSULAS ESPECIALES ADICIONALES');
       html += '<p style="font-size:11px;color:#374151;margin:0;line-height:1.6;white-space:pre-wrap;">' + specialClauses + '</p>';
     }
 
-    // ── 19. FIRMAS ──
+    // ── 22. FIRMAS (VIGÉSIMA SEGUNDA) ──
     html += '<div style="margin-top:24px;padding-top:16px;border-top:2px solid #e5e7eb;">';
-    html += '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:0 0 12px;">DÉCIMA NOVENA. — FIRMAS</h3>';
+    html += '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:0 0 12px;">VIGÉSIMA SEGUNDA. — FIRMAS</h3>';
     html += '<p style="font-size:10px;color:#6b7280;margin:0 0 14px;font-style:italic;">"Las partes firman en señal de aprobación, aceptando todas y cada una de las cláusulas del presente contrato."</p>';
     html += '<div style="display:flex;justify-content:space-between;gap:20px;">';
     html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">Mtsprz — Soluciones Digitales</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">PRESTADOR</p></div>';
@@ -1380,6 +1430,20 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var form = this;
     var formData = new FormData(form);
     var btn = document.getElementById("submitBtn");
+
+    // Validar teléfono chileno: +56 9 + 8 dígitos
+    var phone = (formData.get("client_phone") || "").replace(/[\s\-\(\)]/g, "");
+    if (phone && !/^\+569\d{8}$/.test(phone)) {
+      alert("El teléfono debe tener formato chileno: +56 9 seguido de 8 dígitos (ej: +56 9 7547 5781). Actual: " + (formData.get("client_phone") || "(vacío)"));
+      return;
+    }
+    // Validar dirección: debe incluir comuna/ciudad
+    var addr = (formData.get("client_address") || "").trim();
+    if (addr && !/,\s*\S+\s*,/.test(addr)) {
+      alert("La dirección debe incluir comuna, ciudad y región (ej: Av. Bosques de Montemar 30, Concón, Región de Valparaíso)");
+      return;
+    }
+
     btn.disabled = true;
     btn.innerHTML = '<svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Creando...';
 

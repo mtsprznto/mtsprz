@@ -24,9 +24,9 @@ const diagnosisSlugs = ["desarrollo-web", "seo", "automatizaciones"];
 const diagnosisServices = services.filter((s: any) => diagnosisSlugs.includes(s.slug));
 // Hardcoded fallbacks if DB doesn't have these categories yet
 const diagnosisFallbacks = [
-  { title: "Sitio Web Profesional", description: "Páginas ultrarrápidas con Astro, diseño responsive y SEO local incluido para tu negocio en el sur de Chile.", accent: "#6366f1", slug: "desarrollo-web", icon: "Code", tags: [] },
-  { title: "Posicionamiento SEO Local", description: "Aparece en Google Maps y búsquedas locales en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos.", accent: "#10b981", slug: "seo", icon: "Search", tags: [] },
-  { title: "Automatización de Procesos", description: "Bots para WhatsApp, flujos de email marketing, integraciones CRM y workflows que ahorran horas a tu pyme.", accent: "#06b6d4", slug: "automatizaciones", icon: "Bot", tags: [] },
+  { title: "Sitio Web Profesional", description: "Páginas ultrarrápidas con Astro, diseño responsive y SEO local incluido para tu negocio en el sur de Chile.", accent: "#6366f1", slug: "desarrollo-web", icon: "Code", tags: [], landingUrl: "/desarrollo-web" },
+  { title: "Posicionamiento SEO Local", description: "Aparece en Google Maps y búsquedas locales en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos.", accent: "#10b981", slug: "seo", icon: "Search", tags: [], landingUrl: "/seo-local" },
+  { title: "Automatización de Procesos", description: "Bots para WhatsApp, flujos de email marketing, integraciones CRM y workflows que ahorran horas a tu pyme.", accent: "#06b6d4", slug: "automatizaciones", icon: "Bot", tags: [], landingUrl: "/automatizacion" },
 ];
 const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFallbacks;
 ---
@@ -134,7 +134,7 @@ const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFa
         </div>
       </div>
 
-      <!-- 3 editorial columns — full-bleed, cada una link a /servicios/#slug -->
+      <!-- 3 editorial columns — full-bleed, cada una link a su landing si existe -->
       <div class="w-full overflow-hidden reveal-group">
         <div class="grid grid-cols-1 md:grid-cols-3">
           {featured.map((s, i) => (
@@ -145,8 +145,8 @@ const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFa
                 accent={s.accent}
                 slug={s.slug}
                 index={i}
-                href={`/servicios/#${s.slug}`}
-                ctaText="Saber más"
+                href={s.landingUrl || `/servicios/#${s.slug}`}
+                ctaText="Explorar"
                 compact
               />
             </div>
@@ -290,8 +290,8 @@ const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFa
                   accent={s.accent}
                   slug={s.slug}
                   index={i}
-                  href="/cotizar"
-                  ctaText="Saber más"
+                  href={s.landingUrl || "/cotizar"}
+                  ctaText={s.landingUrl ? "Explorar" : "Cotizar"}
                   compact
                 />
               </div>

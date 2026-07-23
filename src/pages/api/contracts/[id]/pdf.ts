@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { query, initDb } from "../../../../lib/db";
-import { generateContractPdf } from "../../../../lib/contract-pdf";
+import { generateContractPdf, validateContractData } from "../../../../lib/contract-pdf";
 import crypto from "node:crypto";
 
 export const prerender = false;
@@ -10,7 +10,7 @@ const JSON_HEADERS = {
   "Cache-Control": "private, no-store",
 };
 
-export const GET: APIRoute = async ({ params, locals }) => {
+export const GET: APIRoute = async ({ params, locals, request }) => {
   const { id } = params;
 
   if (!locals.user) {
@@ -76,6 +76,16 @@ export const GET: APIRoute = async ({ params, locals }) => {
       clientRepresentante: (c.client_representante as string) || undefined,
       clientNotifEmail: (c.client_notif_email as string) || undefined,
     };
+
+    // Validar antes de generar. ?draft=1 permite generar igualmente (borrador admin).
+    const isDraft = new URL(request.url ?? "http://localhost").searchParams.get("draft") === "1";
+    const blockers = validateContractData(contractData, false);
+    if (blockers.length > 0 && !isDraft) {
+      return new Response(
+        JSON.stringify({ error: "Contrato no apto para emisión", blockers }),
+        { status: 422, headers: JSON_HEADERS }
+      );
+    }
 
     const pdfBytes = await generateContractPdf(contractData);
     const pdfBuffer = Buffer.from(pdfBytes);

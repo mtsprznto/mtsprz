@@ -284,26 +284,26 @@
         "Gestión de citas locales en directorios chilenos",
         "Estrategia de reseñas y reputación online",
         "Contenido local optimizado (ciudades + servicios)",
-        "Monitoreo semanal de posiciones locales",
-        "Reporte mensual de resultados",
-        "Soporte continuo 3 meses"
+        "Monitoreo de posiciones locales durante la vigencia del contrato",
+        "1 reporte de resultados por cada mes de vigencia",
+        "Soporte durante la vigencia del contrato"
       ],
       "popular": true
     },
     {
       "id": "seo-mensual",
       "category": "SEO",
-      "name": "Mantenimiento SEO Mensual",
+      "name": "Mantenimiento SEO",
       "description": "SEO continuo para mantener y mejorar tu posición en Google mes a mes. Ideal para negocios que ya tienen base SEO y quieren sostener su ventaja competitiva.",
       "price": 150000,
       "promoPrice": 120000,
       "features": [
-        "Monitoreo semanal de posiciones y tráfico",
+        "Monitoreo de posiciones y tráfico durante la vigencia del contrato",
         "Optimización continua de contenido existente",
-        "Análisis de competencia mensual",
+        "Análisis de competencia por período",
         "Detección y corrección de errores técnicos",
         "Actualización de Google Business Profile",
-        "Reporte mensual detallado con recomendaciones",
+        "1 reporte detallado por cada mes de vigencia",
         "Soporte prioritario vía WhatsApp"
       ],
       "monthly": true,
@@ -317,14 +317,14 @@
       "price": 350000,
       "promoPrice": 290000,
       "features": [
-        "Estrategia de contenido mensual alineada a tu negocio",
-        "8 publicaciones diseñadas profesionalmente",
+        "Estrategia de contenido para el período",
+        "8 publicaciones en total durante la vigencia del contrato",
         "Copywriting persuasivo para cada publicación",
         "Gráficas e imágenes personalizadas",
-        "Gestion de comunidad y respuestas",
+        "Gestión de comunidad y respuestas durante la vigencia del contrato",
         "Interacción con seguidores y cuentas clave",
-        "Reporte mensual de rendimiento y alcance",
-        "Optimización continua según métricas"
+        "1 reporte de rendimiento por cada mes de vigencia",
+        "Optimización según métricas durante la vigencia del contrato"
       ],
       "monthly": true,
       "popular": false
@@ -342,9 +342,9 @@
         "Segmentación geográfica (ciudades, radios)",
         "Creación de anuncios persuasivos",
         "A/B testing continuo de anuncios",
-        "Optimización diaria de puja y presupuesto",
-        "Reporte semanal de rendimiento y CPA",
-        "Soporte y ajustes durante toda la campaña"
+        "Optimización de pujas y presupuesto durante la vigencia del contrato",
+        "Reporte semanal durante la vigencia del contrato",
+        "Soporte y ajustes durante la vigencia del contrato"
       ],
       "monthly": true,
       "popular": false

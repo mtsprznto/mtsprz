@@ -213,8 +213,6 @@ const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
       <div class="w-full overflow-hidden">
         <div class="reveal-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12">
           {services.map((s, i) => {
-            // Ritmo asimétrico: ancho variable por índice
-            // Patrón: wide(6) + narrow(3) + narrow(3) → wide(6) + narrow(3) + narrow(3) → wide(6)
             const span = i % 3 === 0 ? "lg:col-span-6" : "lg:col-span-3";
             return (
               <div class={`${span} md:col-span-1 reveal-item`}>
@@ -224,6 +222,8 @@ const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
                   accent={s.accent}
                   slug={s.slug}
                   index={i}
+                  href={s.landingUrl}
+                  ctaText={s.landingUrl ? "Explorar servicio" : "Cotizar"}
                 />
               </div>
             );

@@ -1,0 +1,535 @@
+---
+export const prerender = true;
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Footer from "../components/Footer.astro";
+
+const waPhone = "56966929818";
+const waMsg = encodeURIComponent("Hola! Vi la página de SEO Local y quiero posicionar mi negocio en Google Maps.");
+const waUrl = `https://wa.me/${waPhone}?text=${waMsg}`;
+const site = "https://mtsprz.org";
+---
+
+<BaseLayout
+  title="SEO Local — Posiciona tu Negocio en Google Maps | Mtsprz"
+  description="Posicionamiento SEO local para pymes en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos. Aparece primero en Google Maps, atrae más clientes locales. Desde $190.000."
+  canonical="https://mtsprz.org/seo-local"
+  breadcrumbs={[{ name: "SEO Local", path: "/seo-local" }]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": `${site}/seo-local#service`,
+        "name": "SEO Local — Mtsprz",
+        "description": "Posicionamiento SEO local en Google Maps y búsquedas locales para pymes en la Región de Los Lagos y Los Ríos.",
+        "provider": { "@id": `${site}/#organization` },
+        "areaServed": [
+          { "@type": "City", "name": "Puerto Varas" },
+          { "@type": "City", "name": "Osorno" },
+          { "@type": "City", "name": "Valdivia" },
+          { "@type": "City", "name": "Puerto Montt" }
+        ],
+        "serviceType": "SEO Local",
+        "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 190000, "highPrice": 490000, "offerCount": 3 }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${site}/seo-local#faq`,
+        "mainEntity": [
+          { "@type": "Question", "name": "¿Cuánto cuesta el SEO local en Puerto Varas y Osorno?", "acceptedAnswer": { "@type": "Answer", "text": "Desde $190.000 para optimización Google Business Profile + SEO básico. Plan completo con gestión mensual desde $290.000/mes." } },
+          { "@type": "Question", "name": "¿En cuánto tiempo aparezco en Google Maps?", "acceptedAnswer": { "@type": "Answer", "text": "Mejoras en Google Maps se ven en 2-4 semanas. Posicionamiento orgánico toma 2-3 meses. Reportes mensuales con evidencia." } },
+          { "@type": "Question", "name": "¿Funciona el SEO local para cualquier tipo de negocio?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Restaurantes, hospedajes, corredoras, clínicas, talleres, ferreterías — cualquier negocio con clientes locales." } }
+        ]
+      }
+    ]
+  })} />
+
+  <Header />
+  <link rel="preload" as="video" href="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4" fetchpriority="high" />
+
+  <main style="overflow-x:hidden;">
+
+    <!-- ═══════════════════════════════════════════
+         HERO — Video full-bleed, texto al pie izquierdo
+    ═══════════════════════════════════════════ -->
+    <section style="position:relative; width:100vw; height:100dvh; min-height:100vh; overflow:hidden; background:#010101;">
+      <video
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
+        autoplay loop muted playsinline preload="auto"
+        style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;"
+      />
+      <div style="position:absolute; inset:0; z-index:2; background:linear-gradient(to top, #010101 0%, #010101 18%, rgba(1,1,1,0.55) 50%, rgba(1,1,1,0.3) 100%);"></div>
+      <div style="position:absolute; inset:0; z-index:2; background:linear-gradient(to right, rgba(1,1,1,0.5) 0%, transparent 60%);"></div>
+      <div style="position:absolute; inset:0; z-index:3; opacity:0.025; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+
+      <div style="position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 2.5rem 3.5rem;">
+        <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-body); margin-bottom:1rem;">SEO Local</p>
+        <h1 style="font-size:clamp(4rem, 13vw, 15rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+          APARECE<br /><span style="color:rgba(255,255,255,0.18);">EN GOOGLE</span>
+        </h1>
+        <p style="margin-top:1.25rem; font-size:0.75rem; color:rgba(255,255,255,0.35); font-family:var(--font-body); font-weight:300; max-width:380px; line-height:1.65;">
+          Posicionamiento local para pymes del sur de Chile. Más clientes desde Google Maps, sin pagar publicidad.
+        </p>
+        <div style="margin-top:1.75rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+            CONSULTAR AHORA
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/cotizar"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:transparent; color:rgba(255,255,255,0.45); font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; border:1px solid rgba(255,255,255,0.12); text-decoration:none; transition:all 0.2s;"
+            onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="this.style.color='rgba(255,255,255,0.45)'; this.style.borderColor='rgba(255,255,255,0.12)'">
+            COTIZAR GRATIS
+          </a>
+        </div>
+      </div>
+
+      <div style="position:absolute; bottom:2rem; right:2.5rem; z-index:20;">
+        <Breadcrumbs items={[{ name: "SEO Local", path: "/seo-local" }]} />
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         EL PROBLEMA — full-width, 2 cols 35/65
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 15% 60%, rgba(16,185,129,0.05) 0%, transparent 55%);"></div>
+
+      <div class="problem-row">
+
+        <!-- Col izquierda — etiqueta y título grande -->
+        <div class="problem-col-left" style="position:relative; display:flex; flex-direction:column; justify-content:center; padding:5rem 2.5rem; background:#010101;">
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 80% 50%, rgba(16,185,129,0.06) 0%, transparent 60%);"></div>
+          <div style="position:relative; z-index:2;">
+            <p class="reveal-item" style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.5rem;">El problema</p>
+            <h2 class="reveal-item" style="font-size:clamp(2.5rem,6vw,6rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+              TUS<br />CLIENTES<br />TE BUSCAN<br /><span style="color:rgba(255,255,255,0.18);">EN GOOGLE</span>
+            </h2>
+          </div>
+        </div>
+
+        <!-- Col derecha — stats + texto -->
+        <div class="problem-col-right" style="position:relative; display:flex; flex-direction:column; justify-content:center; padding:5rem 2.5rem; background:#0A0A0A; border-left:1px solid rgba(255,255,255,0.04);">
+          <div class="reveal-group" style="max-width:540px;">
+            <p class="reveal-item" style="font-size:0.9rem; color:rgba(255,255,255,0.45); font-family:var(--font-body); font-weight:300; line-height:1.8; margin-bottom:2rem;">
+              El 97% de los consumidores buscan negocios locales en Google antes de comprar. Si no apareces en los primeros resultados cuando buscan en Puerto Varas, Osorno o Valdivia, esos clientes van a tu competencia.
+            </p>
+            <p class="reveal-item" style="font-size:0.78rem; color:rgba(255,255,255,0.25); font-family:var(--font-body); font-weight:300; line-height:1.8; margin-bottom:3rem;">
+              El SEO local no es publicidad pagada — es optimización permanente. Una vez posicionado, los clientes llegan solos, todos los días, sin costo por clic.
+            </p>
+            <!-- Stats: sin cards, solo números editoriales -->
+            <div class="reveal-group" style="display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid rgba(255,255,255,0.06);">
+              {[
+                { n: "97%", label: "busca local antes de comprar" },
+                { n: "76%", label: "visita el negocio tras la búsqueda" },
+                { n: "28%", label: "compra el mismo día" },
+              ].map((s, i) => (
+                <div class="reveal-item" style={`padding:1.5rem 0; padding-right:1.5rem; border-right:${i < 2 ? "1px solid rgba(255,255,255,0.06)" : "none"}; padding-left:${i > 0 ? "1.5rem" : "0"};`}>
+                  <p style="font-size:clamp(1.5rem,3.5vw,2.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">{s.n}</p>
+                  <p style="font-size:0.62rem; color:rgba(255,255,255,0.25); text-transform:uppercase; letter-spacing:0.1em; font-family:var(--font-body); margin-top:0.4rem; line-height:1.4;">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         QUÉ OPTIMIZAMOS — 4 columnas cinematográficas
+         Fila 1: 60/40 | Fila 2: 40/60
+    ═══════════════════════════════════════════ -->
+    <div class="opt-wrapper">
+
+      <!-- Fila 1 -->
+      <div class="opt-row">
+
+        <!-- GOOGLE BUSINESS PROFILE — 60% -->
+        <div class="opt-col opt-dominant">
+          <div style="position:absolute; inset:0; background:linear-gradient(145deg, #041208 0%, #071a10 45%, #010101 100%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 25% 30%, rgba(16,185,129,0.14) 0%, transparent 55%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 80% 80%, rgba(16,185,129,0.05) 0%, transparent 50%);"></div>
+          <div style="position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+          <div class="opt-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
+          <div style="position:relative; z-index:10; padding:2.5rem;">
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">01 — Google Business Profile</p>
+            <h2 style="font-size:clamp(2.25rem, 5vw, 5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+              FICHA<br />GOOGLE MAPS
+            </h2>
+            <p style="margin-top:0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; max-width:340px; line-height:1.65;">
+              Categorías correctas, fotos de calidad, horarios, servicios, zona de atención y respuestas a reseñas. La base del SEO local.
+            </p>
+            <div style="margin-top:1.25rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <span style="display:inline-block; padding:0.6rem 1.25rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em;">RESULTADOS 2-4 SEMANAS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO ON-PAGE — 40% -->
+        <div class="opt-col opt-secondary">
+          <div style="position:absolute; inset:0; background:linear-gradient(155deg, #060810 0%, #0a0e1a 45%, #010101 100%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 70% 25%, rgba(6,182,212,0.14) 0%, transparent 55%);"></div>
+          <div style="position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+          <div class="opt-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
+          <div style="position:relative; z-index:10; padding:2.5rem;">
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">02 — SEO On-Page</p>
+            <h2 style="font-size:clamp(2rem, 4vw, 3.75rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+              SITIO WEB<br />OPTIMIZADO
+            </h2>
+            <p style="margin-top:0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; max-width:300px; line-height:1.65;">
+              Metadatos, keywords locales, schema markup LocalBusiness. Tu sitio web listo para Google.
+            </p>
+            <div style="margin-top:1.25rem;">
+              <span style="display:inline-block; padding:0.6rem 1.25rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em;">RESULTADOS 1-3 MESES</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /fila 1 -->
+
+      <!-- Fila 2 -->
+      <div class="opt-row">
+
+        <!-- DIRECTORIOS — 40% -->
+        <div class="opt-col opt-secondary-alt">
+          <div style="position:absolute; inset:0; background:linear-gradient(160deg, #07060f 0%, #0c0a18 45%, #010101 100%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 35%, rgba(99,102,241,0.14) 0%, transparent 55%);"></div>
+          <div style="position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+          <div class="opt-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
+          <div style="position:relative; z-index:10; padding:2.5rem;">
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">03 — Citas & Directorios</p>
+            <h2 style="font-size:clamp(2rem, 4vw, 3.75rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+              PRESENCIA<br />DIGITAL
+            </h2>
+            <p style="margin-top:0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; max-width:300px; line-height:1.65;">
+              15+ directorios locales de Chile: Páginas Amarillas, Yelp, TripAdvisor. Consistencia NAP total.
+            </p>
+            <div style="margin-top:1.25rem;">
+              <span style="display:inline-block; padding:0.6rem 1.25rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em;">MÁS AUTORIDAD</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESEÑAS — 60% -->
+        <div class="opt-col opt-dominant-alt">
+          <div style="position:absolute; inset:0; background:linear-gradient(140deg, #0d0a04 0%, #140e02 45%, #010101 100%);"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 75% 30%, rgba(245,158,11,0.12) 0%, transparent 55%);"></div>
+          <div style="position:absolute; inset:0; opacity:0.022; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+          <div class="opt-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
+          <div style="position:relative; z-index:10; padding:2.5rem;">
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">04 — Reseñas & Reputación</p>
+            <h2 style="font-size:clamp(2.25rem, 5vw, 5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+              5 ESTRELLAS<br />EN GOOGLE
+            </h2>
+            <p style="margin-top:0.75rem; font-size:0.75rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; max-width:340px; line-height:1.65;">
+              Las reseñas son el factor #1 de conversión local. Estrategia para conseguir más reseñas de 5 estrellas sin spam.
+            </p>
+            <div style="margin-top:1.25rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.6rem 1.25rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+                onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1A1A1A'">
+                CONSULTAR →
+              </a>
+              <span style="font-size:0.7rem; color:rgba(255,255,255,0.2); font-family:var(--font-body);">+40% conversiones</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /fila 2 -->
+
+    </div><!-- /qué optimizamos -->
+
+
+    <!-- ═══════════════════════════════════════════
+         PLANES — editorial list, sin cards
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.04) 0%, transparent 55%);"></div>
+
+      <div style="padding:6rem 2.5rem;">
+        <div class="reveal-group" style="margin-bottom:4rem;">
+          <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Precios</p>
+          <h2 class="reveal-item" style="font-size:clamp(2.5rem,8vw,8rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.04em; text-transform:uppercase; line-height:0.88; margin:0;">
+            PLANES DE<br /><span style="color:rgba(255,255,255,0.18);">SEO LOCAL</span>
+          </h2>
+        </div>
+
+        <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
+
+          <!-- Plan 1: Starter -->
+          <div class="reveal-item plan-row" style="border-bottom:1px solid rgba(255,255,255,0.06); padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem;">
+            <div style="min-width:120px;">
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.5rem;">01</p>
+              <p style="font-size:clamp(2rem,5vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$190k</p>
+              <p style="font-size:0.65rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-top:0.25rem;">Pago único</p>
+            </div>
+            <div style="flex:1; min-width:200px;">
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; margin:0 0 0.75rem;">Starter</h3>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                {["Google Business Profile optimizado", "Fotos + descripción profesional", "Categorías y atributos", "Horarios y zona de servicio", "Setup schema LocalBusiness"].map(item => (
+                  <span style="font-size:0.72rem; color:rgba(255,255,255,0.38); font-family:var(--font-body);">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; white-space:nowrap; transition:background 0.2s;"
+                onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1A1A1A'">
+                LO QUIERO →
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan 2: Local Pro — destacado -->
+          <div class="reveal-item plan-row" style="border-bottom:1px solid rgba(255,255,255,0.06); padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem; position:relative;">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:2px; background:rgba(255,255,255,0.15);"></div>
+            <div style="min-width:120px; padding-left:1.5rem;">
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.5); font-family:var(--font-body); margin-bottom:0.5rem;">02 — Popular</p>
+              <p style="font-size:clamp(2rem,5vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$290k</p>
+              <p style="font-size:0.65rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-top:0.25rem;">/ mes · mín 3 meses</p>
+            </div>
+            <div style="flex:1; min-width:200px; padding-left:1.5rem;">
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; margin:0 0 0.75rem;">Local Pro</h3>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                {["Todo lo de Starter", "Gestión mensual de reseñas", "Publicaciones Google Maps", "SEO on-page (4 páginas)", "Directorios locales (15)", "Reporte mensual"].map(item => (
+                  <span style="font-size:0.72rem; color:rgba(255,255,255,0.45); font-family:var(--font-body);">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; padding-left:1.5rem;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.7rem 1.5rem; background:#fff; color:#010101; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; white-space:nowrap; font-weight:600; transition:background 0.2s;"
+                onmouseover="this.style.background='#e5e5e5'" onmouseout="this.style.background='#fff'">
+                LO QUIERO →
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan 3: Autoridad -->
+          <div class="reveal-item plan-row" style="padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem;">
+            <div style="min-width:120px;">
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.5rem;">03</p>
+              <p style="font-size:clamp(2rem,5vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$490k</p>
+              <p style="font-size:0.65rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-top:0.25rem;">/ mes · mín 3 meses</p>
+            </div>
+            <div style="flex:1; min-width:200px;">
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; margin:0 0 0.75rem;">Autoridad</h3>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                {["Todo lo de Local Pro", "Contenido blog SEO (2 posts/mes)", "Link building local", "Keyword tracking competencia", "Posicionamiento multi-ciudad", "Dashboard en tiempo real"].map(item => (
+                  <span style="font-size:0.72rem; color:rgba(255,255,255,0.38); font-family:var(--font-body);">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; white-space:nowrap; transition:background 0.2s;"
+                onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1A1A1A'">
+                LO QUIERO →
+              </a>
+            </div>
+          </div>
+
+        </div>
+        <p class="reveal-item" style="margin-top:2.5rem; font-size:0.7rem; color:rgba(255,255,255,0.2); font-family:var(--font-body);">
+          ¿Múltiples sucursales? <a href="/contacto" style="color:rgba(255,255,255,0.45); text-decoration:underline; text-underline-offset:3px;">Cotización especial →</a>
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         CIUDADES — franja full-width
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#010101; position:relative;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.04),transparent);"></div>
+      <div style="padding:4rem 2.5rem;">
+        <div class="reveal-group" style="margin-bottom:2.5rem;">
+          <p class="reveal-item" style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1rem;">Cobertura</p>
+          <h2 class="reveal-item" style="font-size:clamp(1.75rem,4vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0;">
+            POSICIONAMOS<br /><span style="color:rgba(255,255,255,0.18);">EN TODO EL SUR</span>
+          </h2>
+        </div>
+        <div class="reveal-group cities-grid" style="display:grid; grid-template-columns:repeat(4,1fr); border:1px solid rgba(255,255,255,0.04);">
+          {[
+            { city: "Puerto Varas", url: "/regiones/puerto-varas" },
+            { city: "Osorno", url: "/regiones/osorno" },
+            { city: "Valdivia", url: "/regiones/valdivia" },
+            { city: "Puerto Montt", url: null },
+            { city: "Frutillar", url: null },
+            { city: "Lago Ranco", url: null },
+            { city: "La Unión", url: null },
+            { city: "Río Bueno", url: null },
+          ].map((c, i) => (
+            c.url
+              ? <a href={c.url} class="reveal-item city-cell city-link" style={`padding:1.75rem 1.5rem; display:flex; align-items:center; justify-content:space-between; border-right:${(i+1) % 4 !== 0 ? "1px solid rgba(255,255,255,0.04)" : "none"}; border-bottom:${i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none"}; text-decoration:none; transition:background 0.2s;`}
+                  onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                <span style="font-size:0.78rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.65); text-transform:uppercase; letter-spacing:0.05em;">{c.city}</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              </a>
+              : <div class="reveal-item city-cell" style={`padding:1.75rem 1.5rem; border-right:${(i+1) % 4 !== 0 ? "1px solid rgba(255,255,255,0.04)" : "none"}; border-bottom:${i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none"};`}>
+                  <span style="font-size:0.78rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.25); text-transform:uppercase; letter-spacing:0.05em;">{c.city}</span>
+                </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         FAQ — editorial strip
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="max-width:800px; margin:0 auto; padding:6rem 2.5rem;">
+        <div class="reveal-group" style="margin-bottom:3rem;">
+          <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Preguntas frecuentes</p>
+          <h2 class="reveal-item" style="font-size:clamp(2rem,5vw,4rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0;">
+            LO QUE<br />NOS PREGUNTAN
+          </h2>
+        </div>
+        <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
+          {[
+            { q: "¿Cuánto cuesta el SEO local en Puerto Varas y Osorno?", a: "El servicio empieza desde $190.000 para optimización Google Business Profile + SEO básico. El plan completo con gestión mensual y reportes va desde $290.000/mes." },
+            { q: "¿En cuánto tiempo aparezco en Google Maps?", a: "Mejoras en Google Maps se ven en 2-4 semanas. Posicionamiento orgánico toma 2-3 meses. Entregamos reportes mensuales con evidencia de avances y posiciones." },
+            { q: "¿Es diferente el SEO local del SEO normal?", a: "Sí. El SEO local se enfoca en búsquedas con intención geográfica ('restaurant Valdivia', 'mecánico cerca mío') y en Google Maps. Usa Google Business Profile, schema LocalBusiness y citas en directorios locales." },
+            { q: "¿Funciona para cualquier tipo de negocio?", a: "Sí. Restaurantes, hospedajes, corredoras, clínicas, talleres, ferreterías — cualquier negocio con clientes locales. Si tus clientes están en tu ciudad, el SEO local te trae más." },
+            { q: "¿Puedo aparecer en varias ciudades?", a: "Sí con el plan Autoridad. Posicionamos en múltiples ciudades del sur de Chile simultáneamente: Puerto Varas + Puerto Montt + Osorno." },
+          ].map(faq => (
+            <details class="reveal-item faq-item" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <summary style="display:flex; cursor:pointer; align-items:center; justify-content:space-between; gap:1rem; padding:1.5rem 0; font-size:0.875rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); list-style:none; transition:color 0.2s;">
+                <span>{faq.q}</span>
+                <span class="faq-icon" style="flex-shrink:0; width:1.25rem; height:1.25rem; border:1px solid rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </span>
+              </summary>
+              <p style="padding-bottom:1.5rem; font-size:0.8rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; line-height:1.8; max-width:600px;">{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         CTA FINAL — viewport, texto al pie
+    ═══════════════════════════════════════════ -->
+    <section style="position:relative; width:100vw; min-height:75vh; overflow:hidden; background:#010101; display:flex; flex-direction:column; justify-content:flex-end;">
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 60%, rgba(16,185,129,0.05) 0%, transparent 55%);"></div>
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div class="reveal-group" style="position:relative; z-index:10; padding:4rem 2.5rem 5rem;">
+        <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Empieza hoy</p>
+        <h2 class="reveal-item" style="font-size:clamp(3rem,10vw,11rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+          MÁS CLIENTES<br /><span style="color:rgba(255,255,255,0.15);">DESDE GOOGLE</span>
+        </h2>
+        <p class="reveal-item" style="margin-top:1.25rem; font-size:0.78rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); font-weight:300; max-width:340px; line-height:1.7;">
+          Cuéntanos dónde está tu negocio. En 24 horas te decimos cómo posicionarte.
+        </p>
+        <div class="reveal-item" style="margin-top:2rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:#1A1A1A; color:#fff; font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+            WHATSAPP
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/cotizar"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:transparent; color:rgba(255,255,255,0.4); font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; border:1px solid rgba(255,255,255,0.1); text-decoration:none; transition:all 0.2s;"
+            onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.borderColor='rgba(255,255,255,0.1)'">
+            COTIZAR ONLINE
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+  <style>
+    /* ── Problem row ─────────────────────────────── */
+    .problem-row {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .problem-col-left,
+    .problem-col-right { width: 100%; }
+
+    @media (min-width: 768px) {
+      .problem-row { flex-direction: row; }
+      .problem-col-left  { width: 35%; min-height: 60vh; }
+      .problem-col-right { width: 65%; min-height: 60vh; }
+    }
+
+    /* ── Opt wrapper + rows ──────────────────────── */
+    .opt-wrapper { display: flex; flex-direction: column; width: 100vw; }
+
+    .opt-row {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .opt-col {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 85vw;
+    }
+
+    @media (min-width: 768px) {
+      .opt-row { flex-direction: row; }
+      .opt-col { min-height: 72vh; }
+      .opt-dominant      { width: 60%; }
+      .opt-secondary     { width: 40%; border-left: 1px solid rgba(255,255,255,0.04); }
+      .opt-secondary-alt { width: 40%; }
+      .opt-dominant-alt  { width: 60%; border-left: 1px solid rgba(255,255,255,0.04); }
+      .opt-row + .opt-row { border-top: 1px solid rgba(255,255,255,0.04); }
+    }
+
+    @media (max-width: 640px) {
+      .opt-col { min-height: 100vw; }
+      .cities-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+
+    /* hover overlay */
+    .opt-col:hover .opt-hover { opacity: 1 !important; }
+
+    /* ── Plans ───────────────────────────────────── */
+    .plan-row:hover { background: rgba(255,255,255,0.01); }
+
+    /* ── FAQ ─────────────────────────────────────── */
+    .faq-item summary:hover { color: #fff !important; }
+    .faq-item[open] summary { color: #fff !important; }
+    .faq-item[open] .faq-icon {
+      border-color: rgba(255,255,255,0.3) !important;
+      transform: rotate(45deg);
+    }
+
+    /* ── CTA final ───────────────────────────────── */
+    .cta-final {
+      position: relative;
+      width: 100vw;
+      min-height: 75vh;
+      overflow: hidden;
+      background: #010101;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+  </style>
+
+</BaseLayout>
