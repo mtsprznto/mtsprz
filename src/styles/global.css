@@ -294,6 +294,32 @@ select option {
   animation: gradient-slow 12s linear infinite;
 }
 
+/* Reading progress bar */
+#reading-progress {
+  z-index: 60;
+}
+
+#reading-progress-bar {
+  will-change: width;
+}
+
+/* ToC sidebar active indicator */
+.toc-sidebar a.toc-active {
+  position: relative;
+}
+
+.toc-sidebar a.toc-active::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 14px;
+  background: #6366f1;
+  border-radius: 1px;
+}
+
 /* Blog prose styling */
 .prose-blog {
   font-size: 1.0625rem;

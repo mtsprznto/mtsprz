@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  <!-- Home page -->
   <url>
-    <loc>https://mtsprz.org/</loc>
+    <loc>https://mtsprz.org</loc>
     <image:image>
       <image:loc>https://mtsprz.org/logo.jpg</image:loc>
     </image:image>
   </url>
-  <!-- Blog posts -->
   <url>
     <loc>https://mtsprz.org/blog/agencia-digital-pymes-osorno</loc>
     <image:image>
@@ -51,44 +49,48 @@
       <image:loc>https://mtsprz.org/logo.jpg</image:loc>
     </image:image>
   </url>
-  <!-- Portfolio -->
-  <url>
-    <loc>https://mtsprz.org/portafolio</loc>
-    <image:image>
-      <image:loc>https://mtsprz.org/portafolio/blast-landing.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mtsprz.org/portafolio/blast-dashboard.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mtsprz.org/portafolio/novablast-landing.png</image:loc>
-    </image:image>
-    <image:image>
-      <image:loc>https://mtsprz.org/portafolio/novablast-simulador.png</image:loc>
-    </image:image>
-  </url>
-  <!-- Contacto -->
   <url>
     <loc>https://mtsprz.org/contacto</loc>
     <image:image>
       <image:loc>https://mtsprz.org/logo.jpg</image:loc>
     </image:image>
   </url>
-  <!-- Servicios -->
   <url>
     <loc>https://mtsprz.org/servicios</loc>
     <image:image>
       <image:loc>https://mtsprz.org/logo.jpg</image:loc>
     </image:image>
   </url>
-  <!-- Nosotros -->
   <url>
     <loc>https://mtsprz.org/nosotros</loc>
     <image:image>
       <image:loc>https://mtsprz.org/logo.jpg</image:loc>
     </image:image>
   </url>
-  <!-- Regiones -->
+  <url>
+    <loc>https://mtsprz.org/portafolio</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/logo.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/desarrollo-web</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/logo.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/seo-local</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/logo.jpg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/automatizacion</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/logo.jpg</image:loc>
+    </image:image>
+  </url>
   <url>
     <loc>https://mtsprz.org/regiones/puerto-varas</loc>
     <image:image>

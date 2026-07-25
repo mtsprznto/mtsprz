@@ -19,43 +19,18 @@ const site = "https://mtsprz.org";
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Service",
-        "@id": `${site}/automatizacion#service`,
-        "name": "Automatización de Procesos — Mtsprz",
-        "description": "Bots de WhatsApp, automatización de Excel, flujos de email marketing, integraciones CRM, dashboards de datos y workflows con n8n para pymes en la Región de Los Lagos.",
-        "provider": { "@id": `${site}/#organization` },
-        "areaServed": [
-          { "@type": "City", "name": "Puerto Varas" },
-          { "@type": "City", "name": "Osorno" },
-          { "@type": "City", "name": "Valdivia" },
-          { "@type": "City", "name": "Puerto Montt" }
-        ],
-        "serviceType": "Automatización de Procesos"
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${site}/automatizacion#faq`,
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "¿Qué procesos puedo automatizar en mi pyme?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots que atienden 24/7), email marketing (secuencias automáticas), integración de CRM (datos que fluyen entre sistemas) y workflows completos con n8n." }
-          },
-          {
-            "@type": "Question",
-            "name": "¿Cuánto cuesta un bot de WhatsApp para mi negocio?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Desde $290.000 para un bot básico con respuestas automáticas y menú interactivo. Los planes avanzados con integración CRM y dashboard van desde $690.000." }
-          },
-          {
-            "@type": "Question",
-            "name": "¿Cuánto tiempo ahorro automatizando procesos?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Una corredora de propiedades típica ahorra 10+ horas semanales automatizando WhatsApp, generación de informes y seguimiento de clientes. Una clínica dental ahorró 15 horas/semana con agendamiento automático." }
-          }
-        ]
-      }
-    ]
+    "@type": "Service",
+    "@id": `${site}/automatizacion#service`,
+    "name": "Automatización de Procesos — Mtsprz",
+    "description": "Bots de WhatsApp, automatización de Excel, flujos de email marketing, integraciones CRM, dashboards de datos y workflows con n8n para pymes en la Región de Los Lagos.",
+    "provider": { "@id": `${site}/#organization` },
+    "areaServed": [
+      { "@type": "City", "name": "Puerto Varas" },
+      { "@type": "City", "name": "Osorno" },
+      { "@type": "City", "name": "Valdivia" },
+      { "@type": "City", "name": "Puerto Montt" }
+    ],
+    "serviceType": "Automatización de Procesos"
   })} />
 
   <Header />

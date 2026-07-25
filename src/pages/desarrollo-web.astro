@@ -19,33 +19,19 @@ const site = "https://mtsprz.org";
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Service",
-        "@id": `${site}/desarrollo-web#service`,
-        "name": "Desarrollo Web Profesional — Mtsprz",
-        "description": "Páginas web ultrarrápidas con Astro para pymes en la Región de Los Lagos. Diseño responsive, SEO local incluido y optimización Core Web Vitals.",
-        "provider": { "@id": `${site}/#organization` },
-        "areaServed": [
-          { "@type": "City", "name": "Puerto Varas" },
-          { "@type": "City", "name": "Osorno" },
-          { "@type": "City", "name": "Valdivia" },
-          { "@type": "City", "name": "Puerto Montt" }
-        ],
-        "serviceType": "Desarrollo Web",
-        "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 290000, "highPrice": 1500000, "offerCount": 3 }
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${site}/desarrollo-web#faq`,
-        "mainEntity": [
-          { "@type": "Question", "name": "¿Cuánto cuesta una página web profesional en Puerto Varas?", "acceptedAnswer": { "@type": "Answer", "text": "Landing pages desde $290.000, sitios corporativos desde $690.000, tiendas online desde $1.500.000. Todos incluyen hosting, SSL, SEO básico y Analytics." } },
-          { "@type": "Question", "name": "¿En qué se diferencia Astro de WordPress?", "acceptedAnswer": { "@type": "Answer", "text": "Astro carga en menos de 1.5s vs 3-6s de WordPress, puntaje 95+ en PageSpeed, más seguro sin plugins vulnerables, mejor SEO desde el día uno." } },
-          { "@type": "Question", "name": "¿Cuánto tiempo toma crear una página web?", "acceptedAnswer": { "@type": "Answer", "text": "Landing page en 5-7 días hábiles. Sitio corporativo completo 2-3 semanas. Tienda online 4-8 semanas." } },
-          { "@type": "Question", "name": "¿Incluye hosting y dominio?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Hosting en Vercel con CDN global, certificado SSL y configuración de dominio personalizado. Sin costos ocultos." } }
-        ]
-      }
-    ]
+    "@type": "Service",
+    "@id": `${site}/desarrollo-web#service`,
+    "name": "Desarrollo Web Profesional — Mtsprz",
+    "description": "Páginas web ultrarrápidas con Astro para pymes en la Región de Los Lagos. Diseño responsive, SEO local incluido y optimización Core Web Vitals.",
+    "provider": { "@id": `${site}/#organization` },
+    "areaServed": [
+      { "@type": "City", "name": "Puerto Varas" },
+      { "@type": "City", "name": "Osorno" },
+      { "@type": "City", "name": "Valdivia" },
+      { "@type": "City", "name": "Puerto Montt" }
+    ],
+    "serviceType": "Desarrollo Web",
+    "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 290000, "highPrice": 1500000, "offerCount": 3 }
   })} />
 
   <Header />

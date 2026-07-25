@@ -186,7 +186,7 @@ const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFa
       </div>
     </section>
 
-    <!-- Structured Data: Service + FAQPage (2026 SEO / GEO) -->
+    <!-- Structured Data: Services (SEO 2026 — FAQPage deprecated May 2026) -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
@@ -228,36 +228,6 @@ const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFa
             { "@type": "City", "name": "Valdivia" }
           ],
           "serviceType": "Automatización"
-        },
-        {
-          "@type": "FAQPage",
-          "@id": "https://mtsprz.org/#faq-home",
-          "mainEntity": [
-            {
-              "@type": "Question",
-              "name": "¿Qué servicio digital necesita mi pyme en la Región de Los Lagos?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "La mayoría de las pymes en la Región de Los Lagos comienzan con un sitio web profesional optimizado para SEO local. Si ya tienes página, el siguiente paso es el posicionamiento en Google Maps y búsquedas locales. Las automatizaciones son ideales cuando tu negocio empieza a recibir más clientes de los que puedes atender manualmente."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "¿Cuánto cuesta una página web en Puerto Varas?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Los precios varían según la complejidad del proyecto. En Mtsprz ofrecemos sitios web profesionales con Astro desde presupuestos accesibles para pymes del sur de Chile, incluyendo SEO local y diseño responsive. Solicita un diagnóstico gratuito sin compromiso."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "¿Cómo funciona el SEO local en Osorno y Valdivia?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "El SEO local optimiza tu presencia en Google Maps y búsquedas geográficas. Trabajamos con tu Google Business Profile, generamos citaciones en directorios chilenos y creamos contenido con keywords locales de la Región de Los Lagos para que tu negocio aparezca cuando los clientes buscan cerca."
-              }
-            }
-          ]
         }
       ]
     })} />

@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/fonts.css";
 import CotizarModal from "../components/CotizarModal.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 
@@ -62,7 +63,8 @@ const resolvedBreadcrumbs = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs 
 const personSameAs = [
   "https://www.linkedin.com/company/mtsprz",
   "https://github.com/mtsprz",
-  // TODO: Replace with actual Google Business Profile URL (ver "Perfil de Negocio" en Google)
+  // TODO: Reemplazar con URL real de Google Business Profile verificado
+  // Buscar en google.com/maps → tu negocio → Compartir → Copiar enlace
   "https://www.google.com/maps/place/?q=Mtsprz+Soluciones+Digitales+Puerto+Varas",
 ];
 ---
@@ -81,10 +83,11 @@ const personSameAs = [
     <link rel="icon" type="image/jpeg" href="/logo.jpg" />
     <link rel="apple-touch-icon" href="/logo.jpg" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" />
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Preload critical self-hosted fonts (LCP/CLS optimization) -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-400-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-700-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-800-latin.woff2" crossorigin />
 
     <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:title" content={fullTitle} />
@@ -130,7 +133,17 @@ const personSameAs = [
             "@type": "ImageObject",
             url: `${site}/logo.jpg`,
           },
+          image: `${site}/logo.jpg`,
           description: "Soluciones Digitales en la Región de Los Lagos",
+          foundingDate: "2024",
+          priceRange: "$$",
+          areaServed: [
+            { "@type": "City", "name": "Puerto Varas" },
+            { "@type": "City", "name": "Osorno" },
+            { "@type": "City", "name": "Valdivia" },
+            { "@type": "City", "name": "Puerto Montt" },
+            { "@type": "AdministrativeArea", "name": "Región de Los Lagos" },
+          ],
           address: {
             "@type": "PostalAddress",
             streetAddress: "Puerto Varas",
@@ -239,7 +252,7 @@ const personSameAs = [
           description: description,
           isPartOf: { "@id": `${site}/#website` },
           about: { "@id": `${site}/#organization` },
-          lastReviewed: "2026-07-18",
+          lastReviewed: new Date().toISOString().split("T")[0],
           ...(article ? { datePublished: article.publishedTime, dateModified: article.modifiedTime } : {}),
         },
       ],

@@ -19,32 +19,19 @@ const site = "https://mtsprz.org";
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Service",
-        "@id": `${site}/seo-local#service`,
-        "name": "SEO Local — Mtsprz",
-        "description": "Posicionamiento SEO local en Google Maps y búsquedas locales para pymes en la Región de Los Lagos y Los Ríos.",
-        "provider": { "@id": `${site}/#organization` },
-        "areaServed": [
-          { "@type": "City", "name": "Puerto Varas" },
-          { "@type": "City", "name": "Osorno" },
-          { "@type": "City", "name": "Valdivia" },
-          { "@type": "City", "name": "Puerto Montt" }
-        ],
-        "serviceType": "SEO Local",
-        "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 190000, "highPrice": 490000, "offerCount": 3 }
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${site}/seo-local#faq`,
-        "mainEntity": [
-          { "@type": "Question", "name": "¿Cuánto cuesta el SEO local en Puerto Varas y Osorno?", "acceptedAnswer": { "@type": "Answer", "text": "Desde $190.000 para optimización Google Business Profile + SEO básico. Plan completo con gestión mensual desde $290.000/mes." } },
-          { "@type": "Question", "name": "¿En cuánto tiempo aparezco en Google Maps?", "acceptedAnswer": { "@type": "Answer", "text": "Mejoras en Google Maps se ven en 2-4 semanas. Posicionamiento orgánico toma 2-3 meses. Reportes mensuales con evidencia." } },
-          { "@type": "Question", "name": "¿Funciona el SEO local para cualquier tipo de negocio?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Restaurantes, hospedajes, corredoras, clínicas, talleres, ferreterías — cualquier negocio con clientes locales." } }
-        ]
-      }
-    ]
+    "@type": "Service",
+    "@id": `${site}/seo-local#service`,
+    "name": "SEO Local — Mtsprz",
+    "description": "Posicionamiento SEO local en Google Maps y búsquedas locales para pymes en la Región de Los Lagos y Los Ríos.",
+    "provider": { "@id": `${site}/#organization` },
+    "areaServed": [
+      { "@type": "City", "name": "Puerto Varas" },
+      { "@type": "City", "name": "Osorno" },
+      { "@type": "City", "name": "Valdivia" },
+      { "@type": "City", "name": "Puerto Montt" }
+    ],
+    "serviceType": "SEO Local",
+    "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 190000, "highPrice": 490000, "offerCount": 3 }
   })} />
 
   <Header />

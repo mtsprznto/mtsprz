@@ -36,68 +36,6 @@ const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@graph": [
-        {
-          "@type": "FAQPage",
-          "@id": "https://mtsprz.org/servicios#faq",
-          "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "\u00bfCu\u00e1nto cuesta una p\u00e1gina web profesional?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Depende de la complejidad. Landing pages desde $290.000, sitios corporativos de 5-10 p\u00e1ginas desde $690.000, y tiendas online completas desde $1.500.000. Incluyen hosting, SSL y SEO b\u00e1sico. Cont\u00e1ctanos para una cotizaci\u00f3n personalizada sin compromiso."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "\u00bfQu\u00e9 es el SEO local y por qu\u00e9 es importante para mi negocio?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "El SEO local optimiza tu presencia en Google para b\u00fasquedas geogr\u00e1ficas como 'taller mec\u00e1nico en Puerto Varas' o 'abogado en Osorno'. Atrae clientes que buscan activamente tus servicios en tu misma zona. En la Regi\u00f3n de Los Lagos, la competencia digital es menor que en Santiago, lo que permite resultados visibles en 2 a 4 meses."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "\u00bfC\u00f3mo puedo automatizar procesos en mi pyme?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots que atienden 24/7), email marketing (secuencias que nutren clientes), integraci\u00f3n de CRM (datos que fluyen entre sistemas) y workflows completos con n8n. Una corredora de propiedades t\u00edpica ahorra 10+ horas semanales."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "\u00bfQu\u00e9 es un dashboard de datos y para qu\u00e9 sirve?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Un dashboard muestra tus indicadores clave en tiempo real: ventas, clientes, inventario, lo que sea relevante para tu negocio. Conectamos tus datos (Excel, base de datos, APIs) y creamos visualizaciones interactivas accesibles desde cualquier dispositivo. Decisiones basadas en datos, no en corazonadas."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "\u00bfHacen scraping o extracci\u00f3n de datos de sitios web?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "S\u00ed. Extraemos datos de cualquier sitio web o sistema sin API: precios de competencia, directorios de empresas, portales inmobiliarios, redes sociales. Te entregamos los datos limpios en Excel o base de datos, actualizados peri\u00f3dicamente."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "\u00bfOfrecen servicios de dise\u00f1o gr\u00e1fico y branding?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "S\u00ed. Creamos identidad corporativa completa: logo principal con variantes, tipograf\u00eda, paleta de colores, papeler\u00eda b\u00e1sica y manual de marca. Todo en formatos vectoriales listos para imprimir y usar en digital."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "\u00bfEn qu\u00e9 se diferencia una p\u00e1gina web con Astro de una en WordPress?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos de WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son inherentemente m\u00e1s seguros al no depender de plugins de terceros, y tienen mejor posicionamiento SEO desde el d\u00eda uno."
-            }
-          }
-        ]
-      },
       {
         "@type": "ItemList",
         "itemListElement": [
