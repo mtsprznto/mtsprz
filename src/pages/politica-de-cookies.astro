@@ -1,0 +1,461 @@
+---
+export const prerender = true;
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<BaseLayout
+  title="Politica de Cookies — Mtsprz"
+  description="Conoce como Mtsprz utiliza cookies en su sitio web. Informacion sobre las cookies necesarias, analiticas y de marketing, y como gestionar tus preferencias."
+  canonical="https://mtsprz.org/politica-de-cookies"
+  breadcrumbs={[{ name: "Politica de Cookies", path: "/politica-de-cookies" }]}
+  noindex={true}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": "https://mtsprz.org/politica-de-cookies#webpage",
+    url: "https://mtsprz.org/politica-de-cookies",
+    name: "Politica de Cookies — Mtsprz",
+    description: "Politica de cookies de Mtsprz. Informacion sobre el uso de cookies y gestion de preferencias.",
+    isPartOf: { "@id": "https://mtsprz.org/#website" },
+    about: { "@id": "https://mtsprz.org/#organization" }
+  })} />
+
+  <Header />
+
+  <main id="main-content" class="min-h-screen bg-[#010101] pt-28 sm:pt-32 pb-20">
+    <div class="mx-auto max-w-3xl px-6">
+
+      <!-- Hero -->
+      <div class="mb-12">
+        <p class="text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-3">Legal</p>
+        <h1 class="text-4xl sm:text-5xl font-heading font-bold text-white tracking-[-2px] leading-[1.1]">
+          Politica de Cookies
+        </h1>
+        <p class="mt-4 text-white/50 font-body text-sm leading-relaxed">
+          Ultima actualizacion: 26 de julio de 2026
+        </p>
+      </div>
+
+      <!-- Content -->
+      <article class="prose-legal">
+
+        <!-- 1. Que son las cookies -->
+        <section class="legal-section">
+          <h2 class="legal-h2">1. Que son las cookies</h2>
+          <p class="legal-p">
+            Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo (computador, tablet o movil) cuando visitas un sitio web. Permiten que el sitio recuerde tus acciones y preferencias durante un periodo de tiempo, para que no tengas que configurarlas cada vez que vuelvas a visitarlo.
+          </p>
+        </section>
+
+        <!-- 2. Como utilizamos las cookies -->
+        <section class="legal-section">
+          <h2 class="legal-h2">2. Como utilizamos las cookies</h2>
+          <p class="legal-p">
+            En <strong class="text-white/80">mtsprz.org</strong> utilizamos cookies para:
+          </p>
+          <ul class="legal-list">
+            <li>Garantizar el funcionamiento correcto del sitio</li>
+            <li>Mantener tu sesion de autenticacion</li>
+            <li>Recordar tus preferencias de cookies</li>
+            <li>Analizar como los visitantes utilizan el sitio (con tu consentimiento)</li>
+            <li>Medir la efectividad de campanas de marketing (con tu consentimiento)</li>
+          </ul>
+        </section>
+
+        <!-- 3. Tipos de cookies -->
+        <section class="legal-section">
+          <h2 class="legal-h2">3. Tipos de cookies que utilizamos</h2>
+
+          <!-- Necesarias -->
+          <div class="legal-cookie-card">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="legal-badge legal-badge--required">Necesarias</span>
+              <span class="text-[11px] text-white/30 font-body">Siempre activas</span>
+            </div>
+            <p class="legal-p">
+              Son esenciales para el funcionamiento del sitio web. No se pueden desactivar porque sin ellas el sitio no funcionaria correctamente. Se utilizan para mantener tu sesion autenticada, recordar preferencias de cookies y proteger contra ataques CSRF.
+            </p>
+            <div class="legal-table-wrapper">
+              <table class="legal-table">
+                <thead>
+                  <tr>
+                    <th>Cookie</th>
+                    <th>Proveedor</th>
+                    <th>Finalidad</th>
+                    <th>Duracion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>mtsprz_token</code></td>
+                    <td>Mtsprz</td>
+                    <td>Sesion de autenticacion del usuario</td>
+                    <td>7 dias</td>
+                  </tr>
+                  <tr>
+                    <td><code>cookie_consent</code></td>
+                    <td>Mtsprz</td>
+                    <td>Almacena las preferencias de cookies del usuario</td>
+                    <td>365 dias</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Analiticas -->
+          <div class="legal-cookie-card">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="legal-badge legal-badge--analytics">Analiticas</span>
+              <span class="text-[11px] text-white/30 font-body">Requieren consentimiento</span>
+            </div>
+            <p class="legal-p">
+              Nos ayudan a entender como los visitantes interactuan con el sitio web, recopilando informacion de forma anonima. Esta informacion nos permite mejorar la experiencia del usuario y el rendimiento del sitio.
+            </p>
+            <div class="legal-table-wrapper">
+              <table class="legal-table">
+                <thead>
+                  <tr>
+                    <th>Cookie</th>
+                    <th>Proveedor</th>
+                    <th>Finalidad</th>
+                    <th>Duracion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>_ga</code></td>
+                    <td>Google Analytics</td>
+                    <td>Distintivos de usuarios unicos</td>
+                    <td>2 anos</td>
+                  </tr>
+                  <tr>
+                    <td><code>_ga_*</code></td>
+                    <td>Google Analytics</td>
+                    <td>Mantiene el estado de la sesion</td>
+                    <td>2 anos</td>
+                  </tr>
+                  <tr>
+                    <td><code>_gid</code></td>
+                    <td>Google Analytics</td>
+                    <td>Distintivo de usuario unico</td>
+                    <td>24 horas</td>
+                  </tr>
+                  <tr>
+                    <td><code>_clck</code></td>
+                    <td>Microsoft Clarity</td>
+                    <td>Identificador de usuario unico</td>
+                    <td>1 ano</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Marketing -->
+          <div class="legal-cookie-card">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="legal-badge legal-badge--marketing">Marketing</span>
+              <span class="text-[11px] text-white/30 font-body">Requieren consentimiento</span>
+            </div>
+            <p class="legal-p">
+              Se utilizan para rastrear a los visitantes en los sitios web con la intencion de mostrar anuncios relevantes. Tambien se usan para medir la efectividad de las campanas publicitarias.
+            </p>
+            <div class="legal-table-wrapper">
+              <table class="legal-table">
+                <thead>
+                  <tr>
+                    <th>Cookie</th>
+                    <th>Proveedor</th>
+                    <th>Finalidad</th>
+                    <th>Duracion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>_fbp</code></td>
+                    <td>Facebook</td>
+                    <td>Pixel de Facebook para publicidad</td>
+                    <td>3 meses</td>
+                  </tr>
+                  <tr>
+                    <td><code>_gcl_au</code></td>
+                    <td>Google Ads</td>
+                    <td>Conversion de Google Ads</td>
+                    <td>3 meses</td>
+                  </tr>
+                  <tr>
+                    <td><code>_uetsid</code></td>
+                    <td>Microsoft Ads</td>
+                    <td>Sesion de Microsoft Advertising</td>
+                    <td>Sesion</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Gestionar preferencias -->
+        <section class="legal-section">
+          <h2 class="legal-h2">4. Como gestionar tus preferencias</h2>
+          <p class="legal-p">
+            Puedes configurar tus preferencias de cookies en cualquier momento a traves de las siguientes opciones:
+          </p>
+          <ul class="legal-list">
+            <li><strong class="text-white/80">Banner de cookies:</strong> Cuando visitas el sitio por primera vez, aparece un banner donde puedes aceptar, denegar o configurar tus preferencias.</li>
+            <li><strong class="text-white/80">Boton "Cookies" en el footer:</strong> Haz clic en el enlace "Cookies" en la parte inferior de cualquier pagina para abrir la configuracion de preferencias.</li>
+            <li><strong class="text-white/80">Configuracion del navegador:</strong> Puedes bloquear o eliminar cookies desde la configuracion de tu navegador.</li>
+          </ul>
+          <div class="legal-callout">
+            <p class="legal-p">
+              <strong class="text-white/80">Nota importante:</strong> Si bloqueas las cookies necesarias, algunas partes del sitio podrian no funcionar correctamente.
+            </p>
+          </div>
+        </section>
+
+        <!-- 5. Cookies de terceros -->
+        <section class="legal-section">
+          <h2 class="legal-h2">5. Cookies de terceros</h2>
+          <p class="legal-p">
+            Algunas cookies son instaladas por servicios de terceros que aparecen en nuestras paginas. No tenemos control sobre estas cookies. Te recomendamos revisar las politicas de privacidad de estos servicios:
+          </p>
+          <ul class="legal-list">
+            <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="legal-link">Google Analytics — Politica de Privacidad</a></li>
+            <li><a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank" rel="noopener noreferrer" class="legal-link">Microsoft Clarity — Politica de Privacidad</a></li>
+            <li><a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer" class="legal-link">Facebook — Politica de Privacidad</a></li>
+          </ul>
+        </section>
+
+        <!-- 6. Derechos del usuario -->
+        <section class="legal-section">
+          <h2 class="legal-h2">6. Tus derechos</h2>
+          <p class="legal-p">
+            Conforme a la Ley N° 19.628 sobre Proteccion de Datos Personales en Chile (LGPD), tienes derecho a:
+          </p>
+          <ul class="legal-list">
+            <li>Saber que datos personales estamos recopilando</li>
+            <li>Solicitar la eliminacion de tus datos personales</li>
+            <li>Oponerte al procesamiento de tus datos</li>
+            <li>Revocar tu consentimiento en cualquier momento</li>
+          </ul>
+          <p class="legal-p">
+            Para ejercer estos derechos, contactanos a traves de <a href="/contacto" class="legal-link">nuestra pagina de contacto</a> o al email <a href="mailto:contacto@mtsprz.org" class="legal-link">contacto@mtsprz.org</a>.
+          </p>
+        </section>
+
+        <!-- 7. Cambios en la politica -->
+        <section class="legal-section">
+          <h2 class="legal-h2">7. Cambios en esta politica</h2>
+          <p class="legal-p">
+            Nos reservamos el derecho de actualizar esta Politica de Cookies en cualquier momento. Los cambios seran publicados en esta pagina con la fecha de ultima actualizacion. Te recomendamos revisar esta periodicamente.
+          </p>
+        </section>
+
+        <!-- 8. Contacto -->
+        <section class="legal-section">
+          <h2 class="legal-h2">8. Contacto</h2>
+          <p class="legal-p">
+            Si tienes preguntas sobre esta Politica de Cookies, puedes contactarnos:
+          </p>
+          <ul class="legal-list">
+            <li><strong class="text-white/80">Email:</strong> <a href="mailto:contacto@mtsprz.org" class="legal-link">contacto@mtsprz.org</a></li>
+            <li><strong class="text-white/80">Telefono:</strong> <a href="tel:+56975475781" class="legal-link">+56 9 7547 5781</a></li>
+            <li><strong class="text-white/80">Ubicacion:</strong> Puerto Varas, Region de Los Lagos, Chile</li>
+          </ul>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* ─── Legal prose styling ──────────────────────────────────────────── */
+  .legal-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .legal-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-h2 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgba(250, 250, 250, 0.92);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+
+  .legal-p {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    color: rgba(250, 250, 250, 0.55);
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-p:last-child {
+    margin-bottom: 0;
+  }
+
+  .legal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .legal-list li {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: rgba(250, 250, 250, 0.55);
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .legal-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, 0.5);
+  }
+
+  .legal-link {
+    color: #818cf8;
+    text-decoration: underline;
+    text-decoration-color: rgba(129, 140, 248, 0.3);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .legal-link:hover {
+    text-decoration-color: #818cf8;
+  }
+
+  /* ─── Cookie category cards ────────────────────────────────────────── */
+  .legal-cookie-card {
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* ─── Badges ───────────────────────────────────────────────────────── */
+  .legal-badge {
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .legal-badge--required {
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.15);
+  }
+
+  .legal-badge--analytics {
+    background: rgba(99, 102, 241, 0.1);
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.15);
+  }
+
+  .legal-badge--marketing {
+    background: rgba(234, 179, 8, 0.1);
+    color: #facc15;
+    border: 1px solid rgba(234, 179, 8, 0.15);
+  }
+
+  /* ─── Tables ───────────────────────────────────────────────────────── */
+  .legal-table-wrapper {
+    overflow-x: auto;
+    margin-top: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .legal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+  }
+
+  .legal-table thead {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .legal-table th {
+    padding: 0.625rem 0.875rem;
+    text-align: left;
+    font-weight: 500;
+    color: rgba(250, 250, 250, 0.5);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    white-space: nowrap;
+  }
+
+  .legal-table td {
+    padding: 0.625rem 0.875rem;
+    color: rgba(250, 250, 250, 0.45);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    white-space: nowrap;
+  }
+
+  .legal-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .legal-table code {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    color: rgba(250, 250, 250, 0.7);
+  }
+
+  /* ─── Callout ──────────────────────────────────────────────────────── */
+  .legal-callout {
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    border-radius: 10px;
+    background: rgba(234, 179, 8, 0.04);
+    border: 1px solid rgba(234, 179, 8, 0.1);
+  }
+
+  /* ─── Mobile ───────────────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .legal-table {
+      font-size: 0.75rem;
+    }
+
+    .legal-table th,
+    .legal-table td {
+      padding: 0.5rem 0.625rem;
+    }
+  }
+</style>
