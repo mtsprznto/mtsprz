@@ -10,7 +10,7 @@ tags: ["agencia digital", "marketing digital", "Region de Los Lagos", "Puerto Va
 
 Elegir una agencia de marketing digital no es fácil. En la Región de Los Lagos hay opciones de todo tipo: desde freelancers que hacen todo, hasta agencias de Santiago que cobran precios del primer mundo y entregan resultados promedios.
 
-Esta guía te ayuda a elegir bien. No porque sí — sino porque una mala elección te cuesta meses de tiempo y plata que podrías haber invertido en hacer crecer tu negocio.
+Esta guía te ayuda a elegir bien. No porque sí — sino porque una mala elección te cuesta meses de tiempo y plata que podrías haber invertido en hacer crecer tu negocio. Si además quieres entender [cuánto cuesta una página web en Puerto Varas](/blog/cuanto-cuesta-pagina-web-puerto-varas), te recomendamos leer esa guía primero.
 
 ## Qué buscar en una agencia de marketing en Los Lagos
 
@@ -80,15 +80,15 @@ Estos precios son para la Región de Los Lagos. En Santiago probablemente pagues
 
 ### Desarrollo web moderno
 
-No más WordPress lento con 40 plugins. Las tecnologías modernas como Astro generan páginas que cargan en menos de 1.5 segundos. Esto no es un lujo — es la diferencia entre que un cliente se quede o se vaya.
+No más WordPress lento con 40 plugins. Las tecnologías modernas como [Astro generan páginas que cargan en menos de 1.5 segundos](/blog/paginas-web-rapidas-astro). Esto no es un lujo — es la diferencia entre que un cliente se quede o se vaya.
 
 ### SEO local
 
-Aparecer en Google Maps cuando alguien busca "negocio en Puerto Varas" o "servicio en Osorno" es lo que genera clientes reales. Sin SEO local, tu página web es una isla.
+Aparecer en Google Maps cuando alguien busca "negocio en Puerto Varas" o "servicio en Osorno" es lo que genera clientes reales. Sin SEO local, tu página web es una isla. Lee nuestra [guía de SEO local para pymes en Los Lagos](/blog/seo-local-pymes-region-los-lagos) para entender cómo funciona.
 
 ### Automatización
 
-Bots de WhatsApp que atienden 24/7, flujos de email que siguen vendiendo mientras duermes, integraciones con CRM. Esto es lo que separa a una agencia promedio de una que realmente entiende el negocio.
+Bots de WhatsApp que atienden 24/7, flujos de email que siguen vendiendo mientras duermes, integraciones con CRM. Esto es lo que separa a una agencia promedio de una que realmente entiende el negocio. Te explicamos [cómo automatizar WhatsApp en tu negocio](/blog/automatizar-whatsapp-negocio-puerto-varas) paso a paso.
 
 ### Contenido
 

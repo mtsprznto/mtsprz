@@ -39,7 +39,7 @@ Ahorra horas de trabajo cada semana con bots de WhatsApp que atienden a tus clie
 
 ## Por que elegir Mtsprz como tu agencia digital en Osorno
 
-A diferencia de las agencias de Santiago que aplican recetas genericas, en Mtsprz conocemos el mercado de la Region de Los Lagos porque trabajamos desde Puerto Varas. Sabemos lo que funciona para las pymes del sur de Chile: atencion cercana, precios justos y resultados reales.
+A diferencia de las agencias de Santiago que aplican recetas genericas, en Mtsprz conocemos el mercado de la Region de Los Lagos porque trabajamos desde Puerto Varas. Sabemos lo que funciona para las pymes del sur de Chile: atencion cercana, precios justos y resultados reales. Si estas evaluando opciones, te recomendamos leer nuestra [guia para elegir la mejor agencia de marketing en Los Lagos](/blog/mejor-agencia-marketing-los-lagos).
 
 Nuestro enfoque es practico: no te cobramos por horas de consultoria interminables. Te entregamos un sitio web que funciona desde el dia uno, te posicionamos en Google y te damos las herramientas para que tu negocio creca de forma sostenible.
 

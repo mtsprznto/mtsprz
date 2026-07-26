@@ -72,7 +72,7 @@ Si, los negocios turisticos en Puerto Varas, Chiloe y la Cuenca del Lago Llanqui
 
 ### Cuanto cuesta una estrategia SEO profesional para pymes
 
-Los precios varian segun la competencia de tu rubro y el estado actual de tu sitio. En Mtsprz ofrecemos planes de SEO local desde $150.000 mensuales para pymes en la Region de Los Lagos. Contactanos para una evaluacion gratuita de tu posicionamiento actual.
+Los precios varian segun la competencia de tu rubro y el estado actual de tu sitio. En Mtsprz ofrecemos planes de SEO local desde $150.000 mensuales para pymes en la Region de Los Lagos. Si quieres entender [cuánto cuesta una página web en Puerto Varas](/blog/cuanto-cuesta-pagina-web-puerto-varas), revisa esa guía. Contactanos para una evaluacion gratuita de tu posicionamiento actual.
 
 ## Conclusion
 

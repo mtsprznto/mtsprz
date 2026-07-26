@@ -43,7 +43,7 @@ Lee nuestra [guia completa de SEO para pymes](/blog/guia-seo-pymes-sur-chile) pa
 
 Somos una agencia digital con base en Puerto Varas, no en Santiago. Conocemos el mercado local y las necesidades reales de las pymes de la Region de Los Lagos. Todos nuestros sitios se construyen con Astro, lo que garantiza velocidad excepcional, seguridad y optimizacion SEO desde el primer dia.
 
-Ademas, al ser una agencia local, el soporte es directo y personalizado. No lidias con un call center ni con respuestas genericas por email. Hablas directamente con quien construye tu sitio.
+Ademas, al ser una agencia local, el soporte es directo y personalizado. No lidias con un call center ni con respuestas genericas por email. Hablas directamente con quien construye tu sitio. Si estas evaluando opciones, te recomendamos leer nuestra [guia para elegir la mejor agencia de marketing en Los Lagos](/blog/mejor-agencia-marketing-los-lagos).
 
 ## Comparativa: pagina web profesional vs opciones "economicass"
 

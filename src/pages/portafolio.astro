@@ -12,6 +12,25 @@ import projects from "../data/projects.json";
   description="Proyectos de desarrollo web y aplicaciones realizados por Mtsprz en la Región de Los Lagos. Sitios web modernos con Astro, React y Next.js para pymes en Chile."
   canonical="https://mtsprz.org/portafolio"
 >
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": "https://mtsprz.org/portafolio#collectionpage",
+    url: "https://mtsprz.org/portafolio",
+    name: "Portafolio — Mtsprz Soluciones Digitales",
+    description: "Proyectos de desarrollo web y aplicaciones realizados por Mtsprz en la Región de Los Lagos.",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: projects.length,
+      itemListElement: projects.map((p, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: p.title,
+        url: p.url,
+        description: p.description
+      }))
+    }
+  })} />
   <Header />
   <link rel="preload" as="video" href="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4" fetchpriority="high" />
   <main id="main-content">

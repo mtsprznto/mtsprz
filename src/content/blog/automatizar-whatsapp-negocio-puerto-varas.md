@@ -36,7 +36,7 @@ Un bot de WhatsApp no es un robot fisico ni una inteligencia artificial compleja
 
 Para una pyme en Puerto Varas, automatizar WhatsApp significa no perder ventas mientras duermes, mientras atiendes a otros clientes fisicos o cuando estas de vacaciones. Tus clientes del sur de Chile reciben respuesta inmediata, lo que mejora significativamente su experiencia y aumenta las probabilidades de compra.
 
-Esto es especialmente valioso en zonas turisticas como la Cuenca del Lago Llanquihue, donde los visitantes hacen consultas a cualquier hora y esperan respuestas rapidas para decidir donde comer, alojarse o comprar.
+Esto es especialmente valioso en zonas turisticas como la Cuenca del Lago Llanquihue, donde los visitantes hacen consultas a cualquier hora y esperan respuestas rapidas para decidir donde comer, alojarse o comprar. Si además quieres automatizar tu email marketing, revisa nuestra [guía de automatización de email marketing para pymes](/blog/automatizar-email-marketing-pymes).
 
 ## Tipos de automatizacion que ofrecemos en Mtsprz
 

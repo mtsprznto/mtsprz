@@ -52,7 +52,7 @@ Google premia los sitios que hablan de su zona y demostrando conocimiento del co
 - Historias de clientes locales
 - Problemas y soluciones especificas de tu comunidad
 
-Para entender mejor como estructurar tu contenido, revisa nuestra [Guia completa de SEO para pymes sur de Chile](/blog/guia-seo-pymes-sur-chile).
+Para entender mejor como estructurar tu contenido, revisa nuestra [Guia completa de SEO para pymes sur de Chile](/blog/guia-seo-pymes-sur-chile). Si además quieres saber [cómo posicionar tu negocio en Google Maps](/blog/como-posicionar-negocio-google-maps-los-lagos), tenemos una guía específica para eso.
 
 ### 4. Enlaces desde directorios y medios locales
 
