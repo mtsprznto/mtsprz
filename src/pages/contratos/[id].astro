@@ -4,8 +4,8 @@ export const prerender = false;
 const { id } = Astro.params;
 ---
 
-<BaseLayout title="Contrato" description="Revisar y firmar contrato">
-  <main class="min-h-screen bg-[#010101] px-4 py-8">
+<BaseLayout title="Contrato" description="Revisar y firmar contrato" noindex>
+  <main id="main-content" class="min-h-screen bg-[#010101] px-4 py-8">
     <div class="mx-auto max-w-4xl">
       <div id="loadingSign" style="text-align:center;padding:64px;color:rgba(250,250,250,0.3);">Cargando contrato...</div>
 

@@ -5,8 +5,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 const redirect = Astro.url.searchParams.get("redirect") || "/contratos";
 ---
 
-<BaseLayout title="Iniciar Sesión — Mtsprz" description="Accede a tu portal de contratos">
-  <main class="min-h-screen bg-[#010101] flex items-center justify-center px-4">
+<BaseLayout title="Iniciar Sesión — Mtsprz" description="Accede a tu portal de contratos" noindex>
+  <main id="main-content" class="min-h-screen bg-[#010101] flex items-center justify-center px-4">
     <div class="w-full max-w-md">
       <div class="text-center mb-8">
         <h1 class="text-3xl font-heading font-bold text-white tracking-[-1px]">MTSPRZ</h1>

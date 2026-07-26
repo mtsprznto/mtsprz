@@ -1,0 +1,96 @@
+---
+export const prerender = false;
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { getCollection } from "astro:content";
+
+const query = Astro.url.searchParams.get("q") || "";
+const allPosts = await getCollection("blog");
+
+const results = query.length >= 2
+  ? allPosts.filter((post) => {
+      const q = query.toLowerCase();
+      const searchable = [
+        post.data.title,
+        post.data.description,
+        ...(post.data.tags || []),
+      ]
+        .join(" ")
+        .toLowerCase();
+      return q.split(/\s+/).some((word) => searchable.includes(word));
+    })
+  : [];
+---
+
+<BaseLayout
+  title={`Resultados para "${query}"`}
+  description={`Busqueda de articulos en el blog de Mtsprz: ${query}`}
+  noindex
+>
+  <Header />
+  <main id="main-content" class="min-h-screen bg-[#010001]">
+    <section class="pt-32 pb-20 px-6">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl font-heading font-bold text-white mb-2 tracking-[-1px]">
+          Resultados para "<span class="text-accent">{query}</span>"
+        </h1>
+        <p class="text-white/40 text-sm mb-10">
+          {results.length} articulo{results.length !== 1 ? "s" : ""} encontrado{results.length !== 1 ? "s" : ""}
+        </p>
+
+        {results.length === 0 && (
+          <div class="text-center py-16">
+            <p class="text-white/30 text-sm mb-4">
+              No encontramos articulos relacionados con "{query}".
+            </p>
+            <a href="/blog" class="inline-flex items-center gap-2 text-accent text-sm hover:underline">
+              Ver todos los articulos del blog
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        )}
+
+        <div class="space-y-4">
+          {results.map((post) => {
+            const slug = post.id.replace(/\.(md|mdx)$/, "");
+            const tags = (post.data.tags || []).slice(0, 3);
+            return (
+              <a
+                href={`/blog/${slug}`}
+                class="block p-5 rounded-2xl border border-white/[0.06] bg-[#0a0a0b] hover:border-accent/20 hover:bg-accent/[0.02] transition-all duration-300 no-underline group"
+              >
+                <div class="flex flex-wrap gap-2 mb-3">
+                  {tags.map((tag: string) => (
+                    <span class="text-[10px] font-medium text-accent/60 bg-accent/[0.06] px-2 py-0.5 rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <h2 class="text-base font-heading font-semibold text-white group-hover:text-accent transition-colors mb-2 leading-snug">
+                  {post.data.title}
+                </h2>
+                <p class="text-sm text-white/40 leading-relaxed line-clamp-2">
+                  {post.data.description}
+                </p>
+                <div class="flex items-center gap-3 mt-3 text-[11px] text-white/20">
+                  <time datetime={post.data.pubDate.toISOString().split("T")[0]}>
+                    {post.data.pubDate.toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" })}
+                  </time>
+                  <span>{post.data.author}</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        {query.length < 2 && (
+          <div class="text-center py-16">
+            <p class="text-white/30 text-sm">Escribe al menos 2 caracteres para buscar.</p>
+          </div>
+        )}
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
