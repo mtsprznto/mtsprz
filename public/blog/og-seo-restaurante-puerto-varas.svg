@@ -1,0 +1,22 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="100%" stop-color="#111118"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#10b98188"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="900" cy="200" r="300" fill="#10b981" opacity="0.06"/>
+  <circle cx="100" cy="500" r="200" fill="#10b981" opacity="0.04"/>
+  <rect x="80" y="80" width="60" height="3" rx="1.5" fill="url(#accent)"/>
+  <text x="80" y="130" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="18" fill="#10b981" letter-spacing="3">MTSPRZ</text>
+  <text x="80" y="190" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="16" fill="white" opacity="0.4" letter-spacing="1">GUÍA PRÁCTICA DE SEO LOCAL</text>
+  <text x="80" y="270" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="48" fill="white" letter-spacing="-1">SEO para restaurantes en</text>
+    <text x="80" y="322" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="48" fill="white" letter-spacing="-1">Puerto Varas</text>
+  <rect x="0" y="590" width="1200" height="40" fill="#10b981" opacity="0.08"/>
+  <text x="80" y="615" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="13" fill="white" opacity="0.3">mtsprz.org · Soluciones Digitales · Región de Los Lagos, Chile</text>
+</svg>

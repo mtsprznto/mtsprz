@@ -4,7 +4,7 @@ description: "Guia definitiva para aparecer en Google Maps en Puerto Varas, Osor
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
 author: "Equipo Mtsprz"
-image: "/logo.jpg"
+image: "/blog/og-como-posicionar-negocio-google-maps-los-lagos.png"
 tags: ["google maps", "posicionamiento", "seo local", "region de los lagos", "google business", "pymes"]
 ---
 

@@ -1,10 +1,10 @@
 ---
 title: "SEO para restaurantes en Puerto Varas: como posicionar tu restaurante en Google Maps"
-description: "Guia practica de SEO local para restaurantes en Puerto Varas. Aprende a aparecer en Google Maps, recibir mas reservas y destacar frente a la competencia en la Región de Los Lagos."
+description: "SEO local para restaurantes en Puerto Varas: aparece en Google Maps y recibe más reservas."
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
 author: "Equipo Mtsprz"
-image: "/logo.jpg"
+image: "/blog/og-seo-restaurante-puerto-varas.png"
 tags: ["SEO local", "restaurantes", "Puerto Varas", "Google Maps", "marketing gastronomico", "Región de Los Lagos"]
 ---
 

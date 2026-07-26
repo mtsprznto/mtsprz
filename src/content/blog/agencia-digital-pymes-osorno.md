@@ -1,10 +1,10 @@
 ---
 title: "Agencia digital para pymes en Osorno: soluciones web y SEO"
-description: "Mtsprz es tu agencia digital en Osorno. Creamos paginas web, SEO local y automatizaciones para pymes de la Región de Los Lagos. Atencion personalizada sin importar el tamano de tu negocio."
+description: "Agencia digital en Osorno: páginas web, SEO local y automatizaciones para pymes de la Región de Los Lagos. Atención personalizada para tu negocio."
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
 author: "Equipo Mtsprz"
-image: "/logo.jpg"
+image: "/blog/og-agencia-digital-pymes-osorno.png"
 tags: ["agencia digital", "osorno", "paginas web", "seo", "pymes", "region de los lagos"]
 ---
 

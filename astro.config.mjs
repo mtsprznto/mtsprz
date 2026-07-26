@@ -6,7 +6,18 @@ import vercel from "@astrojs/vercel";
 
 export default defineConfig({
   site: "https://mtsprz.org",
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) =>
+        !page.includes("/admin") &&
+        !page.includes("/login") &&
+        !page.includes("/registro") &&
+        !page.includes("/contratos") &&
+        !page.includes("/buscar") &&
+        !page.includes("/cotizar"),
+    }),
+  ],
   output: "server",
   adapter: vercel(),
   vite: {

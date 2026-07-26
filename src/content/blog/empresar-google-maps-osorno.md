@@ -1,10 +1,10 @@
 ---
 title: "Como aparecer en Google Maps desde Osorno: guia para pymes"
-description: "Paso a paso para que tu negocio en Osorno aparezca en los primeros resultados de Google Maps. SEO local, Google Business Profile y estrategias que funcionan en la Región de Los Lagos."
+description: "Paso a paso para aparecer en Google Maps desde Osorno. SEO local, Google Business Profile y estrategias que funcionan en Los Lagos."
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
 author: "Equipo Mtsprz"
-image: "/logo.jpg"
+image: "/blog/og-empresar-google-maps-osorno.png"
 tags: ["SEO local", "Osorno", "Google Maps", "Google Business Profile", "pymes", "Región de Los Lagos"]
 ---
 

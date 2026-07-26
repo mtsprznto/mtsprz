@@ -43,22 +43,22 @@ function buildImageSitemap() {
     // Home
     {
       loc: SITE,
-      images: [`${SITE}/logo.jpg`],
+      images: [`${SITE}/seo/16_9.png`],
     },
     // Blog posts
     ...posts,
-    // Static pages
-    { loc: `${SITE}/contacto`, images: [`${SITE}/logo.jpg`] },
-    { loc: `${SITE}/servicios`, images: [`${SITE}/logo.jpg`] },
-    { loc: `${SITE}/nosotros`, images: [`${SITE}/logo.jpg`] },
-    { loc: `${SITE}/portafolio`, images: [`${SITE}/logo.jpg`] },
-    { loc: `${SITE}/desarrollo-web`, images: [`${SITE}/logo.jpg`] },
-    { loc: `${SITE}/seo-local`, images: [`${SITE}/logo.jpg`] },
-    { loc: `${SITE}/automatizacion`, images: [`${SITE}/logo.jpg`] },
+    // Static pages — use real images where available
+    { loc: `${SITE}/contacto`, images: [`${SITE}/seo/16_9_equipo.png`] },
+    { loc: `${SITE}/servicios`, images: [`${SITE}/seo/16_9_escritorio.png`] },
+    { loc: `${SITE}/nosotros`, images: [`${SITE}/seo/4_4_equipo.png`] },
+    { loc: `${SITE}/portafolio`, images: [`${SITE}/portafolio/blast-landing.png`] },
+    { loc: `${SITE}/desarrollo-web`, images: [`${SITE}/seo/16_9_escritorio.png`] },
+    { loc: `${SITE}/seo-local`, images: [`${SITE}/seo/16_9.png`] },
+    { loc: `${SITE}/automatizacion`, images: [`${SITE}/seo/16_9_espacio_min.png`] },
     // Regiones
-    { loc: `${SITE}/regiones/puerto-varas`, images: [`${SITE}/logo.jpg`] },
-    { loc: `${SITE}/regiones/osorno`, images: [`${SITE}/logo.jpg`] },
-    { loc: `${SITE}/regiones/valdivia`, images: [`${SITE}/logo.jpg`] },
+    { loc: `${SITE}/regiones/puerto-varas`, images: [`${SITE}/seo/16_9.png`] },
+    { loc: `${SITE}/regiones/osorno`, images: [`${SITE}/seo/16_9.png`] },
+    { loc: `${SITE}/regiones/valdivia`, images: [`${SITE}/seo/16_9.png`] },
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

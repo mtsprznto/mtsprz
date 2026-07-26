@@ -1,10 +1,10 @@
 ---
 title: "E-commerce en la Region de Los Lagos: como vender online desde el sur de Chile"
-description: "Guia completa para crear una tienda online en la Region de Los Lagos. Plataformas, costos, logistica y estrategias de venta online para pymes de Puerto Varas, Osorno, Puerto Montt y Valdivia."
+description: "Guía para crear tienda online en la Región de Los Lagos. Plataformas, costos y estrategias de venta online para pymes del sur de Chile."
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
 author: "Equipo Mtsprz"
-image: "/logo.jpg"
+image: "/blog/og-ecommerce-region-los-lagos.png"
 tags: ["e-commerce", "tienda online", "Region de Los Lagos", "venta online", "desarrollo web", "pymes"]
 ---
 

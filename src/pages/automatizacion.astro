@@ -30,7 +30,55 @@ const site = "https://mtsprz.org";
       { "@type": "City", "name": "Valdivia" },
       { "@type": "City", "name": "Puerto Montt" }
     ],
-    "serviceType": "Automatización de Procesos"
+    "serviceType": "Automatización de Procesos",
+    "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 290000, "highPrice": 690000, "offerCount": 3 }
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Qué procesos puedo automatizar en mi pyme?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots que atienden 24/7), email marketing (secuencias que nutren clientes), integración de CRM (datos que fluyen entre sistemas) y workflows completos con n8n."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Necesito conocimientos técnicos?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Nosotros configuramos todo. Tú solo usas las herramientas: tu bot de WhatsApp, tu dashboard, tus reportes automáticos. Incluimos capacitación básica."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cuesta un bot de WhatsApp?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Desde $290.000 para un bot básico con respuestas automáticas y menú interactivo. Planes avanzados con integración CRM y dashboard desde $690.000."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cuánto tiempo toma implementar una automatización?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Un bot de WhatsApp básico está listo en 3-5 días. Una automatización completa con CRM + dashboard toma 2-3 semanas."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Funciona con mi sistema actual?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí. Nos adaptamos a tus herramientas: Excel, Google Sheets, Salesforce, HubSpot, Mercado Pago, Transbank, y cualquier sistema con API o acceso a datos."
+        }
+      }
+    ]
   })} />
 
   <Header />

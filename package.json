@@ -28,6 +28,7 @@
     "tailwindcss": "^4.1.0"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.0",
     "sharp-cli": "^5.2.0",
     "typescript": "^5.8.0"
   },

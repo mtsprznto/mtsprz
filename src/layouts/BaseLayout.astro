@@ -63,9 +63,7 @@ const resolvedBreadcrumbs = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs 
 const personSameAs = [
   "https://www.linkedin.com/company/mtsprz",
   "https://github.com/mtsprz",
-  // TODO: Reemplazar con URL real de Google Business Profile verificado
-  // Buscar en google.com/maps → tu negocio → Compartir → Copiar enlace
-  "https://www.google.com/maps/place/?q=Mtsprz+Soluciones+Digitales+Puerto+Varas",
+  "https://www.google.com/maps/place/Mtsprz/@-41.3130329,-72.9944674,17z",
 ];
 ---
 
@@ -125,6 +123,42 @@ const personSameAs = [
           worksFor: { "@id": `${site}/#organization` },
         },
         {
+          "@type": "ProfessionalService",
+          "@id": `${site}/#localbusiness`,
+          name: "Mtsprz — Soluciones Digitales",
+          image: `${site}/logo.jpg`,
+          url: site,
+          telephone: "+56975475781",
+          email: "contacto@mtsprz.org",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Puerto Varas",
+            addressLocality: "Puerto Varas",
+            addressRegion: "Los Lagos",
+            addressCountry: "CL",
+          },
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: -41.3130329,
+            longitude: -72.9944674,
+          },
+          openingHoursSpecification: {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            opens: "09:00",
+            closes: "18:00",
+          },
+          priceRange: "$$",
+          areaServed: [
+            { "@type": "City", "name": "Puerto Varas" },
+            { "@type": "City", "name": "Osorno" },
+            { "@type": "City", "name": "Valdivia" },
+            { "@type": "City", "name": "Puerto Montt" },
+            { "@type": "AdministrativeArea", "name": "Región de Los Lagos" },
+          ],
+          sameAs: personSameAs,
+        },
+        {
           "@type": "Organization",
           "@id": `${site}/#organization`,
           name: "Mtsprz",
@@ -153,8 +187,8 @@ const personSameAs = [
           },
           geo: {
             "@type": "GeoCoordinates",
-            latitude: -41.319,
-            longitude: -72.985,
+            latitude: -41.3130329,
+            longitude: -72.9944674,
           },
           contactPoint: {
             "@type": "ContactPoint",
