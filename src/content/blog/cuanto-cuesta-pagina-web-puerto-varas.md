@@ -1,6 +1,6 @@
 ---
 title: "Cuanto cuesta una pagina web en Puerto Varas 2026"
-description: "Precios reales de una página web en Puerto Varas 2026. Desde $150.000 hasta $1.200.000 según el tipo de sitio. Guía actualizada."
+description: "Precios reales de una página web en Puerto Varas 2026. Desde $290.000 hasta $1.500.000 según el tipo de sitio. Guía actualizada."
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
 author: "Equipo Mtsprz"
@@ -18,9 +18,9 @@ Si estas buscando el precio de una pagina web en Puerto Varas, seguramente te ha
 
 El costo cambia segun la complejidad del proyecto. En Mtsprz clasificamos los proyectos en tres categorias principales:
 
-- **Landing page o sitio one-page**: desde $150.000. Ideal para negocios que necesitan presencia basica con informacion de contacto, servicios y enlace a WhatsApp. Recomendado para emprendedores que recien empiezan.
-- **Sitio web corporativo multi-pagina**: desde $350.000 hasta $550.000. Incluye inicio, servicios, blog, portafolio, contacto y secciones personalizadas. Es la opcion mas recomendada para pymes establecidas.
-- **Tienda online o e-commerce**: desde $650.000 hasta $1.200.000. Agrega catalogo de productos, carrito de compras, pasarela de pago como Webpay y gestion de inventario.
+- **Landing page o sitio one-page**: desde $290.000. Ideal para negocios que necesitan presencia basica con informacion de contacto, servicios y enlace a WhatsApp. Recomendado para emprendedores que recien empiezan.
+- **Sitio web corporativo multi-pagina**: desde $690.000. Incluye inicio, servicios, blog, portafolio, contacto y secciones personalizadas. Es la opcion mas recomendada para pymes establecidas.
+- **Tienda online o e-commerce**: desde $1.500.000. Agrega catalogo de productos, carrito de compras, pasarela de pago como Webpay y gestion de inventario.
 
 ### Tecnologia utilizada
 
@@ -54,13 +54,13 @@ Ademas, al ser una agencia local, el soporte es directo y personalizado. No lidi
 | Personalizacion | Total | Limitada a plantillas |
 | Soporte | Directo y personalizado | Generico / foros |
 | Posicionamiento Google | Alto (optimizado) | Variable |
-| Inversion inicial | Desde $150.000 | "Gratis" + costos ocultos |
+| Inversion inicial | Desde $290.000 | "Gratis" + costos ocultos |
 
 ## Preguntas frecuentes sobre precios de paginas web
 
 ### Cuanto cuesta el diseno de una pagina web en Puerto Varas
 
-Los precios parten desde $150.000 para una landing page basica hasta $1.200.000 para una tienda online completa. Cada proyecto es unico, por lo que siempre ofrecemos una cotizacion personalizada y sin compromiso.
+Los precios parten desde $290.000 para una landing page hasta $1.500.000 para una tienda online completa. Cada proyecto es unico, por lo que siempre ofrecemos una cotizacion personalizada y sin compromiso.
 
 ### Vale la pena invertir en una pagina web profesional
 

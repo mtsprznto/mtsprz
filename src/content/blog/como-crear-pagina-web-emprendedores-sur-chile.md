@@ -16,9 +16,9 @@ Si eres emprendedor en Puerto Varas, Osorno, Valdivia o cualquier ciudad del sur
 
 Antes de escribir codigo o contratar a alguien, preguntate: que quieres lograr con tu sitio web? La respuesta define todo lo demas:
 
-- **Landing page**: una sola pagina con tu informacion basica, servicios y contacto. Ideal para emprendedores que recien empiezan y necesitan presencia rapida en internet. Presupuesto desde $150.000.
-- **Sitio web multi-pagina**: incluye inicio, servicios, blog, portafolio y contacto. Perfecto para negocios establecidos que quieren mostrar su trabajo y atraer clientes mediante contenido. Presupuesto desde $350.000.
-- **Tienda online**: si vendes productos fisicos o digitales, necesitas un e-commerce con catalogo, carrito de compras y pasarela de pago como Webpay. Presupuesto desde $650.000.
+- **Landing page**: una sola pagina con tu informacion basica, servicios y contacto. Ideal para emprendedores que recien empiezan y necesitan presencia rapida en internet. Presupuesto desde $290.000.
+- **Sitio web multi-pagina**: incluye inicio, servicios, blog, portafolio y contacto. Perfecto para negocios establecidos que quieren mostrar su trabajo y atraer clientes mediante contenido. Presupuesto desde $690.000.
+- **Tienda online**: si vendes productos fisicos o digitales, necesitas un e-commerce con catalogo, carrito de compras y pasarela de pago como Webpay. Presupuesto desde $1.500.000.
 
 Para conocer los precios actualizados en la region, revisa nuestra guia de [cuanto cuesta una pagina web en Puerto Varas](/blog/cuanto-cuesta-pagina-web-puerto-varas).
 
@@ -67,7 +67,7 @@ No si trabajas con profesionales. En Mtsprz nos encargamos de todo: diseno, desa
 
 ### Cuanto cuesta una pagina web para emprendedores en el sur de Chile
 
-Los precios parten desde $150.000 para una landing page profesional. Incluye diseno, desarrollo, SEO basico, hosting del primer año y soporte. Cada proyecto se cotiza segun tus necesidades especificas.
+Los precios parten desde $290.000 para una landing page profesional. Incluye diseno, desarrollo, SEO basico, hosting del primer año y soporte. Cada proyecto se cotiza segun tus necesidades especificas.
 
 ### Puedo actualizar mi pagina web yo mismo
 

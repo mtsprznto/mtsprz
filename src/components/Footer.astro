@@ -21,7 +21,27 @@
         <a href="/regiones/puerto-varas" class="text-[13px] transition-colors hover:text-white">Pto. Varas</a>
         <a href="/regiones/osorno" class="text-[13px] transition-colors hover:text-white">Osorno</a>
         <a href="/regiones/valdivia" class="text-[13px] transition-colors hover:text-white">Valdivia</a>
+        <span class="text-white/20">|</span>
+        <button
+          type="button"
+          id="footer-cookie-prefs"
+          class="text-[13px] transition-colors hover:text-white cursor-pointer bg-transparent border-none p-0 font-body"
+        >
+          Cookies
+        </button>
       </div>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+(function() {
+  var btn = document.getElementById("footer-cookie-prefs");
+  if (!btn) return;
+  btn.addEventListener("click", function() {
+    var mgr = window.__cookieConsent;
+    if (mgr) mgr.showPreferences();
+    window.dispatchEvent(new CustomEvent("cookie-preferences:show"));
+  });
+})();
+</script>

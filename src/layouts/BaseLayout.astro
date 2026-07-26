@@ -3,6 +3,8 @@ import "../styles/global.css";
 import "../styles/fonts.css";
 import CotizarModal from "../components/CotizarModal.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
+import CookieBanner from "../components/CookieBanner.astro";
+import CookiePreferences from "../components/CookiePreferences.astro";
 
 export interface Props {
   title: string;
@@ -297,6 +299,14 @@ const personSameAs = [
     <slot />
     <CotizarModal />
     <WhatsAppButton />
+    <CookieBanner />
+    <CookiePreferences />
+
+    <!-- Cookie Consent Manager (must load before banner/preferences) -->
+    <script>
+      import "../lib/cookie-consent.ts";
+    </script>
+
     <script>
       const observer = new IntersectionObserver(
         (entries) => {

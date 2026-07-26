@@ -1,24 +1,48 @@
 # Mtsprz | Soluciones Digitales
 https://mtsprz.org
 
-Agencia de soluciones digitales con enfoque en la Región de Los Lagos, Chile. Servicios de desarrollo web, SEO, automatizaciones, diseño gráfico, marketing digital y consultoría para pymes del sur de Chile.
+Agencia de soluciones digitales con enfoque en la Región de Los Lagos, Chile. Desarrollo web moderno con Astro, SEO local para Google Maps, automatización de WhatsApp y marketing digital para pymes del sur de Chile.
 
-## Pages
-- Home: https://mtsprz.org/
-- Servicios: https://mtsprz.org/servicios
-- Portafolio: https://mtsprz.org/portafolio
-- Blog: https://mtsprz.org/blog
-- Contacto: https://mtsprz.org/contacto
-
-## Services
-- Desarrollo Web: sitios modernos con Astro, optimizados para SEO y rendimiento
-- SEO Local: posicionamiento en Google para la Región de Los Lagos
-- Automatizaciones: bots, flujos de email, CRM y procesos automatizados
-- Diseño Gráfico: identidad corporativa, logos y material publicitario
-- Marketing Digital: redes sociales, Google Ads y estrategia de contenido
-- Consultoría Digital: diagnóstico y plan de transformación digital para pymes
-
-## Contact
+## Identity
+- Organization: Mtsprz Soluciones Digitales
+- Location: Puerto Varas, Región de Los Lagos, Chile
 - Email: contacto@mtsprz.org
 - Phone: +56975475781
-- Location: Puerto Varas, Región de Los Lagos, Chile
+- WhatsApp: +56966929818
+- Google Business Profile: https://www.google.com/maps/place/Mtsprz/@-41.3130329,-72.9944674,17z
+
+## Services
+- **Desarrollo Web**: Sitios web modernos con Astro 7.1, carga <1.5s, 95+ PageSpeed. Landing pages desde $290.000 CLP, sitios corporativos desde $690.000 CLP, tiendas online desde $1.500.000 CLP.
+- **SEO Local**: Posicionamiento en Google Maps para negocios en Puerto Varas, Osorno, Valdivia, Puerto Montt. Optimización de Google Business Profile, schema markup, contenido geolocalizado. Plan Starter desde $190.000 CLP (pago único), plan Local Pro desde $290.000/mes CLP, plan Autoridad desde $490.000/mes CLP.
+- **Automatización WhatsApp**: Bots 24/7 que atienden clientes, envían catálogos, agendan citas. Integración con CRM y calendario. Desde $290.000 CLP (bot básico), desde $690.000 CLP (automatización completa con CRM + dashboard).
+- **Diseño Gráfico**: Identidad corporativa, logos, material publicitario, redes sociales.
+- **Marketing Digital**: Estrategia de contenido, redes sociales, Google Ads, email marketing.
+- **Consultoría Digital**: Diagnóstico y plan de transformación digital para pymes.
+
+## Cities Served
+- Puerto Varas: https://mtsprz.org/regiones/puerto-varas
+- Osorno: https://mtsprz.org/regiones/osorno
+- Valdivia: https://mtsprz.org/regiones/valdivia
+- Puerto Montt: https://mtsprz.org/regiones/puerto-montt
+- Frutillar: https://mtsprz.org/regiones/frutillar
+
+## Blog Highlights
+- SEO local para pymes en la Región de Los Lagos: https://mtsprz.org/blog/seo-local-pymes-region-los-lagos
+- Cuánto cuesta una página web en Puerto Varas 2026: https://mtsprz.org/blog/cuanto-cuesta-pagina-web-puerto-varas
+- Cómo posicionar tu negocio en Google Maps: https://mtsprz.org/blog/como-posicionar-negocio-google-maps-los-lagos
+- Automatizar WhatsApp para tu negocio: https://mtsprz.org/blog/automatizar-whatsapp-negocio-puerto-varas
+- Mejor agencia de marketing en Los Lagos: https://mtsprz.org/blog/mejor-agencia-marketing-los-lagos
+
+## Technology Stack
+- Framework: Astro 7.1 (SSR on Vercel)
+- Styling: Tailwind CSS 4
+- Database: NeonDB (PostgreSQL)
+- CMS: MDX for blog content
+- Deployment: Vercel with edge functions
+
+## Key Differentiators
+- Única agencia digital local en Puerto Varas (no somos de Santiago)
+- Tecnología moderna Astro vs WordPress tradicional (velocidad 3x)
+- SEO + automatización + diseño integrado (no solo diseño web)
+- Atención personalizada directa con el equipo técnico
+- Precios transparentes publicados en el sitio

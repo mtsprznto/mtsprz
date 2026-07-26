@@ -12,7 +12,7 @@ tags: ["e-commerce", "tienda online", "Region de Los Lagos", "venta online", "de
 
 La Region de Los Lagos tiene una economia diversificada: agricultura, pesca, turismo, artesania y servicios. Cada vez mas pymes de la region quieren vender sus productos online, pero no saben por donde empezar o creen que es demasiado caro.
 
-La realidad es que crear una tienda online en 2026 puede costar desde $650.000 y estar funcionando en 2-3 semanas. No necesitas ser experto en tecnologia — necesitas una buena estrategia y el proveedor adecuado.
+La realidad es que crear una tienda online en 2026 puede costar desde $1.500.000 y estar funcionando en 2-3 semanas. No necesitas ser experto en tecnologia — necesitas una buena estrategia y el proveedor adecuado.
 
 ## Plataformas para vender online en Chile
 
@@ -98,7 +98,7 @@ Basado en tendencias de la region:
 ## Caso real: tienda de artesanias en Frutillar
 
 Una artesana de Frutillar decidio vender sus tejidos online:
-- **Inversion inicial**: $650.000 (sitio Astro + pasarela de pago)
+- **Inversion inicial**: $1.500.000 (sitio Astro + pasarela de pago)
 - **Resultado mes 1**: 15 ventas online, $225.000 en ingresos
 - **Resultado mes 6**: 80 ventas online, $1.200.000 en ingresos
 - **ROI**: 84% en 6 meses
@@ -118,7 +118,7 @@ Una artesana de Frutillar decidio vender sus tejidos online:
 |----------|--------------|---------------|
 | Dominio .cl | $10.000/año | — |
 | Hosting | — | $30.000-$80.000 |
-| Desarrollo web | $650.000-$1.200.000 | — |
+| Desarrollo web | $1.500.000-$2.500.000 | — |
 | Pasarela de pago | $0-$50.000 | $10.000-$30.000 |
 | Marketing | — | $50.000-$200.000 |
 

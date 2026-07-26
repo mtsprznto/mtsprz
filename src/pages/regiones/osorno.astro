@@ -19,6 +19,17 @@ const site = "https://mtsprz.org";
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${site}/regiones/osorno#faq`,
+    mainEntity: [
+      { "@type": "Question", name: "¿Hacen páginas web para empresas en Osorno?", acceptedAnswer: { "@type": "Answer", text: "Sí. Trabajamos con empresas de retail, salud, ganadería, servicios profesionales y comercio de Osorno. Conocemos las necesidades del mercado del sur de Chile." }},
+      { "@type": "Question", name: "¿Cuánto cuesta una página web en Osorno?", acceptedAnswer: { "@type": "Answer", text: "Landing pages desde $290.000, sitios corporativos desde $690.000, tiendas online desde $1.500.000. Incluye diseño, dominio + hosting un año, SEO básico y Analytics." }},
+      { "@type": "Question", name: "¿Puedo aparecer primero en Google si soy de Osorno?", acceptedAnswer: { "@type": "Answer", text: "Sí. Optimizamos tu Google Business Profile y sitio web para búsquedas locales como 'empresa [rubro] Osorno'. Resultados visibles en 4-8 semanas." }},
+      { "@type": "Question", name: "¿Qué automatizaciones son más útiles para empresas de Osorno?", acceptedAnswer: { "@type": "Answer", text: "Bot de WhatsApp para atención al cliente, automatización de cotizaciones, integración con Excel/ERP y reportes de ventas automáticos. Sin conocimiento técnico de tu parte." }}
+    ]
+  })} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": `${site}/regiones/osorno#localbusiness`,
     name: "Mtsprz — Agencia Digital Osorno",
@@ -163,6 +174,32 @@ const site = "https://mtsprz.org";
       </a>
 
     </div>
+
+
+    <!-- GUÍAS RELACIONADAS — internal links -->
+    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="max-width:800px; margin:0 auto; padding:6rem 2.5rem;">
+        <p style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:2rem;">Guías para negocios en Osorno</p>
+        <div style="display:grid; gap:1rem;">
+          <a href="/blog/cuanto-cuesta-pagina-web-puerto-varas" style="display:block; padding:1.25rem 1.5rem; border:1px solid rgba(255,255,255,0.06); border-radius:0.75rem; text-decoration:none; transition:border-color 0.3s;"
+            onmouseover="this.style.borderColor='rgba(99,102,241,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
+            <p style="font-size:0.8rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); margin:0;">Cuánto cuesta una página web en 2026</p>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); margin:0.35rem 0 0;">Precios reales de desarrollo web en Puerto Varas, Osorno y el sur de Chile.</p>
+          </a>
+          <a href="/blog/seo-local-pymes-region-los-lagos" style="display:block; padding:1.25rem 1.5rem; border:1px solid rgba(255,255,255,0.06); border-radius:0.75rem; text-decoration:none; transition:border-color 0.3s;"
+            onmouseover="this.style.borderColor='rgba(16,185,129,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
+            <p style="font-size:0.8rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); margin:0;">SEO local para pymes en Los Lagos</p>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); margin:0.35rem 0 0;">Guía completa para posicionar tu negocio en Google Maps.</p>
+          </a>
+          <a href="/blog/automatizar-whatsapp-negocio-puerto-varas" style="display:block; padding:1.25rem 1.5rem; border:1px solid rgba(255,255,255,0.06); border-radius:0.75rem; text-decoration:none; transition:border-color 0.3s;"
+            onmouseover="this.style.borderColor='rgba(6,182,212,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)'">
+            <p style="font-size:0.8rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); margin:0;">Cómo automatizar WhatsApp para tu negocio</p>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); margin:0.35rem 0 0;">Bots 24/7 que atienden a tus clientes mientras duermes.</p>
+          </a>
+        </div>
+      </div>
+    </section>
 
 
     <!-- FAQ -->

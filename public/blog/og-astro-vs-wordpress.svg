@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#010101"/>
+      <stop offset="50%" stop-color="#0a0a1a"/>
+      <stop offset="100%" stop-color="#010101"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Noise texture overlay -->
+  <rect width="1200" height="630" fill="url(#bg)" opacity="0.025"/>
+  
+  <!-- Accent line top -->
+  <rect x="0" y="0" width="1200" height="2" fill="url(#accent)" opacity="0.4"/>
+  
+  <!-- Brand -->
+  <text x="80" y="80" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6366f1" letter-spacing="0.2em" text-transform="uppercase">MTSPRZ</text>
+  
+  <!-- VS badge -->
+  <circle cx="600" cy="200" r="35" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.1"/>
+  <text x="600" y="208" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle" opacity="0.6">VS</text>
+  
+  <!-- Astro -->
+  <text x="320" y="210" font-family="system-ui, sans-serif" font-size="48" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="-1">ASTRO</text>
+  <rect x="245" y="225" width="150" height="4" rx="2" fill="url(#green)"/>
+  <text x="320" y="260" font-family="system-ui, sans-serif" font-size="14" fill="#10b981" text-anchor="middle">⚡ &lt;1.5s carga</text>
+  
+  <!-- WordPress -->
+  <text x="880" y="210" font-family="system-ui, sans-serif" font-size="48" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="-1">WORDPRESS</text>
+  <rect x="775" y="225" width="210" height="4" rx="2" fill="#ef4444" opacity="0.6"/>
+  <text x="880" y="260" font-family="system-ui, sans-serif" font-size="14" fill="#ef4444" text-anchor="middle" opacity="0.8">🐌 3-6s carga</text>
+  
+  <!-- Stats comparison -->
+  <g transform="translate(80, 320)">
+    <!-- Speed -->
+    <text x="0" y="0" font-family="system-ui, sans-serif" font-size="12" fill="#ffffff" opacity="0.4" letter-spacing="0.1em">VELOCIDAD</text>
+    <text x="0" y="25" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#10b981">3x más rápido</text>
+    
+    <!-- Security -->
+    <text x="0" y="70" font-family="system-ui, sans-serif" font-size="12" fill="#ffffff" opacity="0.4" letter-spacing="0.1em">SEGURIDAD</text>
+    <text x="0" y="95" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#10b981">90% menos attack surface</text>
+    
+    <!-- SEO -->
+    <text x="0" y="140" font-family="system-ui, sans-serif" font-size="12" fill="#ffffff" opacity="0.4" letter-spacing="0.1em">SEO</text>
+    <text x="0" y="165" font-family="system-ui, sans-serif" font-size="20" font-weight="700" fill="#10b981">95+ PageSpeed Insights</text>
+  </g>
+  
+  <!-- PageSpeed comparison -->
+  <g transform="translate(600, 320)">
+    <text x="0" y="0" font-family="system-ui, sans-serif" font-size="12" fill="#ffffff" opacity="0.4" letter-spacing="0.1em">PAGESPEED</text>
+    
+    <!-- Astro bar -->
+    <text x="0" y="30" font-family="system-ui, sans-serif" font-size="14" fill="#ffffff" opacity="0.6">Astro</text>
+    <rect x="80" y="18" width="350" height="16" rx="8" fill="#1a1a1a"/>
+    <rect x="80" y="18" width="340" height="16" rx="8" fill="url(#green)"/>
+    <text x="435" y="30" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#10b981">98</text>
+    
+    <!-- WordPress bar -->
+    <text x="0" y="60" font-family="system-ui, sans-serif" font-size="14" fill="#ffffff" opacity="0.6">WordPress</text>
+    <rect x="80" y="48" width="350" height="16" rx="8" fill="#1a1a1a"/>
+    <rect x="80" y="48" width="180" height="16" rx="8" fill="#ef4444" opacity="0.6"/>
+    <text x="435" y="60" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#ef4444" opacity="0.8">52</text>
+    
+    <text x="0" y="100" font-family="system-ui, sans-serif" font-size="12" fill="#ffffff" opacity="0.4" letter-spacing="0.1em">COSTO ANUAL</text>
+    <text x="0" y="125" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="#10b981">$0 plugins + hosting barato</text>
+  </g>
+  
+  <!-- Bottom CTA -->
+  <rect x="0" y="580" width="1200" height="50" fill="#0a0a0a" opacity="0.8"/>
+  <text x="600" y="612" font-family="system-ui, sans-serif" font-size="14" fill="#ffffff" text-anchor="middle" opacity="0.5">Guía completa 2026 • Sur de Chile</text>
+  
+  <!-- Bottom accent line -->
+  <rect x="0" y="628" width="1200" height="2" fill="url(#accent)" opacity="0.4"/>
+</svg>

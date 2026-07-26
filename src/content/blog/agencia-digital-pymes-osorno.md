@@ -51,7 +51,7 @@ Hemos trabajado con negocios de Puerto Varas, Osorno y Valdivia. Cada proyecto i
 
 ### Cuanto cuesta una pagina web para mi pyme en Osorno
 
-Los precios parten desde $150.000 para una landing page profesional. Un sitio corporativo multi-pagina con blog y SEO integrado va desde $350.000. Cada proyecto se cotiza segun tus necesidades especificas. Revisa nuestra guia de [precios de paginas web en la region](/blog/cuanto-cuesta-pagina-web-puerto-varas).
+Los precios parten desde $290.000 para una landing page profesional. Un sitio corporativo multi-pagina con blog y SEO integrado va desde $690.000. Cada proyecto se cotiza segun tus necesidades especificas. Revisa nuestra guia de [precios de paginas web en la region](/blog/cuanto-cuesta-pagina-web-puerto-varas).
 
 ### Ofrecen SEO para negocios en Osorno
 

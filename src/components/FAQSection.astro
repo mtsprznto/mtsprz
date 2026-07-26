@@ -1,0 +1,75 @@
+---
+/**
+ * FAQSection.astro — Reusable FAQ with visible accordion + FAQPage schema
+ * Usage: <FAQSection items={[{ q: "...", a: "..." }, ...]} />
+ */
+export interface FAQItem {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  items: FAQItem[];
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  items,
+  title = "LO QUE\nNOS PREGUNTAN",
+  subtitle = "Preguntas frecuentes",
+} = Astro.props;
+
+const site = "https://mtsprz.org";
+---
+
+<!-- FAQPage schema — habilita rich results + GEO citability -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": items.map((faq) => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a,
+    },
+  })),
+})} />
+
+<!-- FAQ visible — editorial accordion, consistente con el design system -->
+<section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+  <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+  <div class="faq-glow" style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 0%, #6366f112 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, #8b5cf606 0%, transparent 50%);"></div>
+  <div class="faq-noise" style="position:absolute; inset:0; opacity:[0.012]; mix-blend-mode:overlay; pointer-events:none;"></div>
+
+  <div style="position:relative; max-width:800px; margin:0 auto; padding:6rem 2.5rem;">
+    <div class="reveal-group" style="margin-bottom:3rem;">
+      <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">{subtitle}</p>
+      <h2 class="reveal-item" style="font-size:clamp(2rem,5vw,4rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0; white-space:pre-line;">{title}</h2>
+    </div>
+
+    <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
+      {items.map((faq) => (
+        <details class="reveal-item faq-item" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+          <summary style="display:flex; cursor:pointer; align-items:center; justify-content:space-between; gap:1rem; padding:1.5rem 0; font-size:0.875rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); list-style:none; transition:color 0.2s;">
+            <span>{faq.q}</span>
+            <span class="faq-icon" style="flex-shrink:0; width:1.25rem; height:1.25rem; border:1px solid rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            </span>
+          </summary>
+          <p style="padding-bottom:1.5rem; font-size:0.8rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; line-height:1.8; max-width:600px;">{faq.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-item summary:hover { color: #fff !important; }
+  .faq-item[open] summary { color: #fff !important; }
+  .faq-item[open] .faq-icon {
+    border-color: rgba(255,255,255,0.3) !important;
+    transform: rotate(45deg);
+  }
+</style>

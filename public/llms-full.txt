@@ -10,13 +10,13 @@ https://mtsprz.org
 ## Services
 
 ### Desarrollo Web
-Creamos sitios web profesionales con Astro, el framework moderno que genera páginas ultrarrápidas. Carga en menos de 1.5 segundos, diseño responsive, SEO optimizado desde el día uno. Presupuestos desde $150.000 para landing pages hasta $1.200.000 para tiendas online completas con Webpay. Entregamos sitios en 2 a 4 semanas.
+Creamos sitios web profesionales con Astro, el framework moderno que genera páginas ultrarrápidas. Carga en menos de 1.5 segundos, diseño responsive, SEO optimizado desde el día uno. Presupuestos desde $290.000 CLP para landing pages hasta $1.500.000 CLP para tiendas online completas con Webpay. Entregamos sitios en 2 a 4 semanas.
 
 ### SEO Local
 Posicionamos tu negocio en Google Maps y búsquedas locales en la Región de Los Lagos. Incluye optimización de Google Business Profile, investigación de palabras clave con intención local, contenido geolocalizado y construcción de enlaces desde directorios chilenos. Resultados visibles en 2 a 4 meses.
 
 ### Automatizaciones
-Bots de WhatsApp inteligentes que atienden a tus clientes 24/7, flujos de email automatizados para seguimiento de ventas y CRM diseñados para pymes del sur de Chile. Respuestas automáticas a preguntas frecuentes, envío de catálogos, agendamiento de citas y transferencia a humano cuando sea necesario. Planes desde $80.000 mensuales.
+Bots de WhatsApp inteligentes que atienden a tus clientes 24/7, flujos de email automatizados para seguimiento de ventas y CRM diseñados para pymes del sur de Chile. Respuestas automáticas a preguntas frecuentes, envío de catálogos, agendamiento de citas y transferencia a humano cuando sea necesario. Planes desde $290.000 CLP para un bot básico con respuestas automáticas y menú interactivo. Planes avanzados con integración CRM y dashboard desde $690.000 CLP.
 
 ### Diseño Gráfico
 Identidad corporativa completa, logotipos, manual de marca y material publicitario. Construimos marcas que conectan con la audiencia de la Región de Los Lagos y el sur de Chile.
@@ -61,12 +61,24 @@ Servicios de agencia digital en Osorno: desarrollo web con Astro, SEO local, aut
 https://mtsprz.org/blog/agencia-digital-pymes-osorno
 
 ### Cuánto cuesta una página web en Puerto Varas 2026
-Guía de precios actualizada: landing page desde $150.000, sitio corporativo desde $350.000, tienda online desde $650.000. Factores que determinan el precio: tipo de sitio, tecnología, SEO incluido, costos ocultos (dominio, hosting, mantenimiento). Comparativa sitio profesional vs Wix/WordPress.
+Guía de precios actualizada: landing page desde $290.000, sitio corporativo desde $690.000, tienda online desde $1.500.000. Factores que determinan el precio: tipo de sitio, tecnología, SEO incluido, costos ocultos (dominio, hosting, mantenimiento). Comparativa sitio profesional vs Wix/WordPress.
 https://mtsprz.org/blog/cuanto-cuesta-pagina-web-puerto-varas
 
 ### Cómo crear una página web para emprendedores en el sur de Chile
 Guía paso a paso para emprendedores: definir tipo de sitio (landing, multi-página, e-commerce), elegir tecnología (Astro vs Wix vs WordPress), optimizar para búsquedas locales, diseño responsive y velocidad. Por qué los emprendedores del sur necesitan página web. Precios desde $150.000.
 https://mtsprz.org/blog/como-crear-pagina-web-emprendedores-sur-chile
+
+### Mejor agencia de marketing en la Región de Los Lagos: guía para elegir bien
+Cómo elegir la mejor agencia de marketing digital en Puerto Varas, Osorno y Valdivia. Criterios: mercado local, servicios completos, transparencia, presencia real, resultados medibles. Errores comunes y precios de referencia 2026.
+https://mtsprz.org/blog/mejor-agencia-marketing-los-lagos
+
+### SEO para restaurantes en Puerto Varas
+SEO local específico para restaurantes: aparecer en Google Maps, gestión de reseñas, menú digital, reservas online. Estrategias para temporada alta y baja en la Cuenca del Lago Llanquihue.
+https://mtsprz.org/blog/seo-restaurante-puerto-varas
+
+### E-commerce en la Región de Los Lagos
+Guía para crear tienda online en el sur de Chile: plataformas, costos, logística de envíos a regiones, integración con Webpay, estrategias de venta online para pymes.
+https://mtsprz.org/blog/ecommerce-region-los-lagos
 
 ## Portfolio
 

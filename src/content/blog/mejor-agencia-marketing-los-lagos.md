@@ -68,8 +68,8 @@ Los precios varían según el alcance del servicio:
 
 | Servicio | Rango de precio |
 |----------|----------------|
-| Landing page profesional | $150.000 - $300.000 |
-| Sitio web corporativo | $350.000 - $800.000 |
+| Landing page profesional | $290.000 - $400.000 |
+| Sitio web corporativo | $690.000 - $1.000.000 |
 | SEO local (mensual) | $190.000 - $490.000/mes |
 | Automatización WhatsApp | $290.000 - $690.000 |
 | Marketing digital integral | $400.000 - $900.000/mes |
@@ -108,7 +108,7 @@ Depende de lo que necesites. Para desarrollo web y SEO local, busca una agencia 
 
 ### Cuánto cuesta contratar una agencia de marketing digital
 
-Los precios en la Región de Los Lagos van desde $150.000 para una landing page hasta $900.000/mes para marketing integral. Lo importante es que el servicio genere más de lo que cuesta.
+Los precios en la Región de Los Lagos van desde $290.000 para una landing page hasta $900.000/mes para marketing integral. Lo importante es que el servicio genere más de lo que cuesta.
 
 ### Es mejor una agencia local o una de Santiago
 
