@@ -3,7 +3,7 @@ title: "Como automatizar WhatsApp para restaurantes en Puerto Varas"
 description: "Guia practica para automatizar WhatsApp en tu restaurante de Puerto Varas. Bots que atienden 24/7, agendas reservas y muestran el menu. Ahorra 10+ horas semanales."
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-automatizar-whatsapp-restaurantes-puerto-varas.svg"
 tags: ["automatizacion", "whatsapp", "bot", "puerto varas", "restaurantes", "hosteleria"]
 ---

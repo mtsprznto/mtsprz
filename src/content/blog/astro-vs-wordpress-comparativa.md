@@ -3,7 +3,7 @@ title: "Astro vs WordPress: por qué tu negocio en el sur de Chile necesita un s
 description: "Comparativa real Astro vs WordPress para pymes en Chile. Velocidad, SEO, seguridad y costos. Por qué los sitios con Astro cargan 3x más rápido y rankean mejor."
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-astro-vs-wordpress.svg"
 tags: ["Astro", "WordPress", "desarrollo web", "velocidad", "SEO", "pymes", "sur de Chile"]
 ---

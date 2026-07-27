@@ -5,6 +5,7 @@ import CotizarModal from "../components/CotizarModal.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import CookieBanner from "../components/CookieBanner.astro";
 import CookiePreferences from "../components/CookiePreferences.astro";
+import { author } from "../data/author";
 
 export interface Props {
   title: string;
@@ -17,6 +18,7 @@ export interface Props {
     modifiedTime?: string;
     author?: string;
     tags?: string[];
+    hasSpeakable?: boolean;
   };
   breadcrumbs?: { name: string; path: string }[];
   noindex?: boolean;
@@ -105,7 +107,7 @@ const personSameAs = [
     <meta name="twitter:image" content={ogImage} />
 
     <meta name="theme-color" content="#010101" />
-    <meta name="author" content="Mtsprz, Soluciones Digitales" />
+    <meta name="author" content={`${author.name}, ${author.company}`} />
     <meta name="geo.region" content="CL-LL" />
     <meta name="geo.placename" content="Puerto Varas" />
     {!noindex && <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
@@ -116,11 +118,12 @@ const personSameAs = [
         {
           "@type": "Person",
           "@id": `${site}/#person`,
-          name: "Equipo Mtsprz",
+          name: author.name,
           url: `${site}/nosotros`,
-          image: `${site}/logo.jpg`,
-          description: "Expertos en soluciones digitales para pymes en la Región de Los Lagos, Chile. Desarrollo web, SEO local, automatizaciones, diseño gráfico y marketing digital.",
-          sameAs: personSameAs,
+          image: `${site}${author.image}`,
+          description: author.bio,
+          jobTitle: author.role,
+          sameAs: author.sameAs,
           knowsAbout: "Desarrollo web con Astro, SEO local, automatización de procesos, diseño gráfico, marketing digital, transformación digital para pymes, Google Business Profile, optimización para motores de búsqueda, integraciones CRM",
           worksFor: { "@id": `${site}/#organization` },
         },
@@ -255,6 +258,14 @@ const personSameAs = [
                   "@type": "WebPage",
                   "@id": currentUrl,
                 },
+                ...(article.hasSpeakable
+                  ? {
+                      speakable: {
+                        "@type": "SpeakableSpecification",
+                        cssSelector: [".geo-answer"],
+                      },
+                    }
+                  : {}),
               },
             ]
           : []),

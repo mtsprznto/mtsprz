@@ -8,7 +8,14 @@ import path from "node:path";
 
 const SITE = "https://mtsprz.org";
 const BLOG_DIR = path.resolve("src/content/blog");
+const PUBLIC_DIR = path.resolve("public");
 const OUTPUT = path.resolve("public/image-sitemap.xml");
+
+function imageExists(imagePath) {
+  if (imagePath.startsWith("http")) return true;
+  const diskPath = path.join(PUBLIC_DIR, imagePath);
+  return fs.existsSync(diskPath);
+}
 
 function getBlogPosts() {
   if (!fs.existsSync(BLOG_DIR)) return [];
@@ -27,6 +34,12 @@ function getBlogPosts() {
       const slug = f.replace(/\.(md|mdx)$/, "");
       const image = imageMatch ? imageMatch[1] : "/logo.jpg";
       const imageUrl = image.startsWith("http") ? image : `${SITE}${image}`;
+
+      // Skip posts whose OG image doesn't exist on disk
+      if (!imageExists(image)) {
+        console.warn(`⚠️  Skipping ${slug} — image not found: ${image}`);
+        return null;
+      }
 
       return {
         loc: `${SITE}/blog/${slug}`,

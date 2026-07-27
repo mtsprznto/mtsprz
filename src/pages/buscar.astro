@@ -5,10 +5,37 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection } from "astro:content";
 
-const query = Astro.url.searchParams.get("q") || "";
+// ─── Backend sanitization — defense in depth ────────────────────────────────
+function sanitizeServer(raw: string): string {
+  let s = raw;
+  // Strip HTML tags
+  s = s.replace(/<[^>]*>/g, "");
+  // Remove script/event handlers
+  s = s.replace(/javascript:/gi, "");
+  s = s.replace(/on\w+\s*=/gi, "");
+  // Remove SQL injection chars
+  s = s.replace(/['";\\]/g, "");
+  // Remove comment markers
+  s = s.replace(/--/g, "");
+  s = s.replace(/\/\*|\*\//g, "");
+  // Remove angle brackets (XSS)
+  s = s.replace(/[<>]/g, "");
+  // Remove null bytes
+  s = s.replace(/\0/g, "");
+  // Collapse whitespace
+  s = s.replace(/\s+/g, " ").trim();
+  // Enforce max length
+  if (s.length > 100) s = s.slice(0, 100);
+  return s;
+}
+
+const rawQuery = Astro.url.searchParams.get("q") || "";
+const query = sanitizeServer(rawQuery);
+const MIN_LENGTH = 2;
+
 const allPosts = await getCollection("blog");
 
-const results = query.length >= 2
+const results = query.length >= MIN_LENGTH
   ? allPosts.filter((post) => {
       const q = query.toLowerCase();
       const searchable = [
@@ -18,7 +45,7 @@ const results = query.length >= 2
       ]
         .join(" ")
         .toLowerCase();
-      return q.split(/\s+/).some((word) => searchable.includes(word));
+      return q.split(/\s+/).some((word) => word.length >= 2 && searchable.includes(word));
     })
   : [];
 ---
@@ -29,23 +56,24 @@ const results = query.length >= 2
   noindex
 >
   <Header />
-  <main id="main-content" class="min-h-screen bg-[#010001]">
+  <main id="main-content" class="min-h-screen bg-[#0A0A0A]">
     <section class="pt-32 pb-20 px-6">
       <div class="max-w-3xl mx-auto">
-        <h1 class="text-3xl font-heading font-bold text-white mb-2 tracking-[-1px]">
-          Resultados para "<span class="text-accent">{query}</span>"
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-4" style="color: #6366f1aa;">Resultados de búsqueda</p>
+        <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-2 tracking-[-1px]">
+          "<span class="text-[#6366f1]">{query}</span>"
         </h1>
         <p class="text-white/40 text-sm mb-10">
-          {results.length} articulo{results.length !== 1 ? "s" : ""} encontrado{results.length !== 1 ? "s" : ""}
+          {results.length} artículo{results.length !== 1 ? "s" : ""} encontrado{results.length !== 1 ? "s" : ""}
         </p>
 
-        {results.length === 0 && (
+        {results.length === 0 && query.length >= MIN_LENGTH && (
           <div class="text-center py-16">
             <p class="text-white/30 text-sm mb-4">
-              No encontramos articulos relacionados con "{query}".
+              No encontramos artículos relacionados con "{query}".
             </p>
-            <a href="/blog" class="inline-flex items-center gap-2 text-accent text-sm hover:underline">
-              Ver todos los articulos del blog
+            <a href="/blog" class="inline-flex items-center gap-2 text-[#6366f1] text-sm hover:underline">
+              Ver todos los artículos del blog
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
           </div>
@@ -58,16 +86,16 @@ const results = query.length >= 2
             return (
               <a
                 href={`/blog/${slug}`}
-                class="block p-5 rounded-2xl border border-white/[0.06] bg-[#0a0a0b] hover:border-accent/20 hover:bg-accent/[0.02] transition-all duration-300 no-underline group"
+                class="block p-5 border border-white/[0.04] bg-[#111113] hover:border-white/[0.08] transition-all duration-300 no-underline group"
               >
                 <div class="flex flex-wrap gap-2 mb-3">
                   {tags.map((tag: string) => (
-                    <span class="text-[10px] font-medium text-accent/60 bg-accent/[0.06] px-2 py-0.5 rounded-full">
+                    <span class="text-[10px] font-medium text-[#6366f1]/60 bg-[#6366f1]/[0.06] px-2 py-0.5">
                       {tag}
                     </span>
                   ))}
                 </div>
-                <h2 class="text-base font-heading font-semibold text-white group-hover:text-accent transition-colors mb-2 leading-snug">
+                <h2 class="text-base font-heading font-semibold text-white group-hover:text-[#6366f1] transition-colors mb-2 leading-snug">
                   {post.data.title}
                 </h2>
                 <p class="text-sm text-white/40 leading-relaxed line-clamp-2">
@@ -84,9 +112,9 @@ const results = query.length >= 2
           })}
         </div>
 
-        {query.length < 2 && (
+        {query.length < MIN_LENGTH && (
           <div class="text-center py-16">
-            <p class="text-white/30 text-sm">Escribe al menos 2 caracteres para buscar.</p>
+            <p class="text-white/30 text-sm">Escribe al menos {MIN_LENGTH} caracteres para buscar.</p>
           </div>
         )}
       </div>

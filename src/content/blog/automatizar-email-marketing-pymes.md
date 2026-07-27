@@ -3,7 +3,7 @@ title: "Como automatizar el email marketing para pymes en Chile: guia practica 2
 description: "Automatiza tu email marketing con herramientas gratuitas. Guía paso a paso para pymes en la Región de Los Lagos que quieren vender más."
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-automatizar-email-marketing-pymes.png"
 tags: ["email marketing", "automatizacion", "pymes", "marketing digital", "Region de Los Lagos", "herramientas"]
 ---

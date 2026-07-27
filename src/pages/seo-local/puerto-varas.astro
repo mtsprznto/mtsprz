@@ -1,0 +1,194 @@
+---
+export const prerender = true;
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Footer from "../../components/Footer.astro";
+
+const waPhone = "56966929818";
+const waMsg = encodeURIComponent("Hola! Vi la página de SEO Local en Puerto Varas y quiero posicionar mi negocio en Google Maps.");
+const waUrl = `https://wa.me/${waPhone}?text=${waMsg}`;
+const site = "https://mtsprz.org";
+---
+
+<BaseLayout
+  title="SEO Local en Puerto Varas | Posicionamiento en Google Maps"
+  description="SEO local para negocios en Puerto Varas. Posiciona tu negocio primero en Google Maps. Atrae más clientes locales. Planes desde $190.000 CLP."
+  canonical="https://mtsprz.org/seo-local/puerto-varas"
+  breadcrumbs={[{ name: "SEO Local", path: "/seo-local" }, { name: "Puerto Varas", path: "/seo-local/puerto-varas" }]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${site}/seo-local/puerto-varas#service`,
+    "name": "SEO Local en Puerto Varas — Mtsprz",
+    "description": "Posicionamiento SEO local en Google Maps y búsquedas locales para negocios en Puerto Varas.",
+    "provider": { "@id": `${site}/#organization` },
+    "areaServed": { "@type": "City", "name": "Puerto Varas" },
+    "serviceType": "SEO Local",
+    "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 190000, "highPrice": 490000, "offerCount": 3 }
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cuesta el SEO local en Puerto Varas?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Desde $190.000 para optimización de Google Business Profile + SEO básico. El plan completo con gestión mensual y reportes va desde $290.000/mes." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿En cuánto tiempo apareceré en Google Maps?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Mejoras en Google Maps se ven en 2-4 semanas. Posicionamiento orgánico toma 2-3 meses. Entregamos reportes mensuales con evidencia de avances y posiciones." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Funciona para hoteles y restaurantes de Puerto Varas?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sí. Trabajamos con hoteles, restaurantes, cabañas y servicios turísticos. Optimizamos para búsquedas como 'hotel con vista al lago Puerto Varas' o 'mejor restaurante Puerto Varas'." }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué incluye el servicio de SEO local?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Optimización de Google Business Profile, schema LocalBusiness, citations en directorios locales, estrategia de reseñas, SEO on-page y reportes mensuales con métricas." }
+      }
+    ]
+  })} />
+
+  <Header />
+  <main id="main-content" style="overflow-x:hidden;">
+
+    <!-- HERO -->
+    <section style="position:relative; width:100vw; height:100dvh; min-height:100vh; overflow:hidden; background:#010101;">
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 80% 75%, #05301a18 0%, transparent 50%), radial-gradient(ellipse at 20% 20%, #04080f 0%, transparent 60%), linear-gradient(160deg, #010101 0%, #05080a 50%, #010101 100%);"></div>
+      <div style="position:absolute; inset:0; opacity:0.025; mix-blend-mode:overlay; background-image:url('data:image/svg+xml,%3Csvg viewBox=%220 0 256 256%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n%22/%3E%3C/svg%3E'); background-size:256px;"></div>
+      <div style="position:absolute; bottom:0; left:0; right:0; height:55%; background:linear-gradient(to top, #010101 0%, #010101 20%, transparent 100%); z-index:2;"></div>
+
+      <div style="position:absolute; bottom:0; left:0; right:0; z-index:10; padding:0 2.5rem 3.5rem;">
+        <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-body); margin-bottom:1rem;">Puerto Varas · Los Lagos</p>
+        <h1 style="font-size:clamp(4rem, 13vw, 15rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+          SEO LOCAL<br /><span style="color:rgba(255,255,255,0.18);">PUERTO VARAS</span>
+        </h1>
+        <p style="margin-top:1.25rem; font-size:0.75rem; color:rgba(255,255,255,0.35); font-family:var(--font-body); font-weight:300; max-width:400px; line-height:1.65;">
+          Posiciona tu negocio en Google Maps. Atrae clientes que buscan en Puerto Varas, sin pagar publicidad.
+        </p>
+        <div style="margin-top:1.75rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+            CONSULTAR AHORA
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/cotizar"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.5rem; background:transparent; color:rgba(255,255,255,0.45); font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; border:1px solid rgba(255,255,255,0.12); text-decoration:none; transition:all 0.2s;"
+            onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="this.style.color='rgba(255,255,255,0.45)'; this.style.borderColor='rgba(255,255,255,0.12)'">
+            VER PLANES
+          </a>
+        </div>
+      </div>
+
+      <div style="position:absolute; bottom:2rem; right:2.5rem; z-index:20;">
+        <Breadcrumbs items={[{ name: "SEO Local", path: "/seo-local" }, { name: "Puerto Varas", path: "/seo-local/puerto-varas" }]} />
+      </div>
+    </section>
+
+
+    <!-- QUÉ INCLUYE — 4 columnas -->
+    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 50% 40%, rgba(16,185,129,0.04) 0%, transparent 55%);"></div>
+
+      <div style="padding:5rem 2.5rem;">
+        <p class="reveal-item" style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.5rem;">Qué incluye</p>
+        <h2 class="reveal-item" style="font-size:clamp(2.5rem,6vw,5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.04em; text-transform:uppercase; margin:0; max-width:600px;">
+          TODO LO QUE<br /><span style="color:rgba(255,255,255,0.18);">NECESITAS</span>
+        </h2>
+
+        <div class="reveal-group" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:1px; margin-top:3rem; background:rgba(255,255,255,0.04); border-top:1px solid rgba(255,255,255,0.06);">
+          {[
+            { num: "01", title: "Google Business Profile", desc: "Optimización completa de tu ficha: categorías, fotos, horarios, servicios y zona de atención." },
+            { num: "02", title: "SEO On-Page Local", desc: "Schema LocalBusiness, contenido optimizado para búsquedas geolocalizadas de Puerto Varas." },
+            { num: "03", title: "Directorios Locales", desc: "Citations en directorios chilenos y locales de Los Lagos. Consistencia NAP en todo internet." },
+            { num: "04", title: "Reseñas y Reputation", desc: "Estrategia para obtener reseñas positivas y responder profesionalmente las negativas." },
+          ].map(item => (
+            <div class="reveal-item" style="padding:2rem; background:#0A0A0A;">
+              <p style="font-size:0.6rem; letter-spacing:0.2em; color:rgba(255,255,255,0.15); font-family:var(--font-body); margin-bottom:0.75rem;">{item.num}</p>
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; margin:0 0 0.5rem;">{item.title}</h3>
+              <p style="font-size:0.78rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; line-height:1.7; max-width:300px;">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- FAQ -->
+    <section style="width:100vw; background:#010101; position:relative;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="padding:5rem 2.5rem; max-width:720px; margin:0 auto;">
+        <p style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.5rem;">Preguntas frecuentes</p>
+        <h2 style="font-size:clamp(2rem,5vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.9; letter-spacing:-0.03em; text-transform:uppercase; margin:0 0 2.5rem;">
+          FAQ
+        </h2>
+        <div>
+          {[
+            { q: "¿Cuánto cuesta el SEO local en Puerto Varas?", a: "Desde $190.000 para optimización de Google Business Profile + SEO básico. El plan completo con gestión mensual va desde $290.000/mes." },
+            { q: "¿En cuánto tiempo apareceré en Google Maps?", a: "Mejoras visibles en 2-4 semanas. Posicionamiento orgánico en 2-3 meses. Entregamos reportes mensuales con evidencia de posiciones." },
+            { q: "¿Funciona para negocios turísticos?", a: "Sí. Trabajamos con hoteles, restaurantes, cabañas y tours de Puerto Varas. Optimizamos para búsquedas como 'hotel lago Llanquihue' o 'restaurante alemán Puerto Varas'." },
+            { q: "¿Qué diferencia hay con la publicidad pagada?", a: "El SEO local es orgánico — una vez posicionado, no pagas por clic. La publicidad cobra por cada visita. Con SEO local, los clientes llegan solos, todos los días." },
+          ].map(faq => (
+            <details class="reveal-item faq-item" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <summary style="display:flex; cursor:pointer; align-items:center; justify-content:space-between; gap:1rem; padding:1.5rem 0; font-size:0.875rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); list-style:none; transition:color 0.2s;">
+                <span>{faq.q}</span>
+                <span class="faq-icon" style="flex-shrink:0; width:1.25rem; height:1.25rem; border:1px solid rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </span>
+              </summary>
+              <p style="padding-bottom:1.5rem; font-size:0.8rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; line-height:1.8; max-width:600px;">{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- CTA FINAL -->
+    <section style="position:relative; width:100vw; min-height:75vh; overflow:hidden; background:#010101; display:flex; flex-direction:column; justify-content:flex-end;">
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 60%, rgba(16,185,129,0.05) 0%, transparent 55%);"></div>
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div class="reveal-group" style="position:relative; z-index:10; padding:4rem 2.5rem 5rem;">
+        <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Empieza hoy</p>
+        <h2 class="reveal-item" style="font-size:clamp(3rem,10vw,11rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+          MÁS CLIENTES<br /><span style="color:rgba(255,255,255,0.15);">EN GOOGLE</span>
+        </h2>
+        <p class="reveal-item" style="margin-top:1.25rem; font-size:0.78rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); font-weight:300; max-width:340px; line-height:1.7;">
+          Cuéntanos dónde está tu negocio en Puerto Varas. En 24 horas te decimos cómo posicionarte.
+        </p>
+        <div class="reveal-item" style="margin-top:2rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:#1A1A1A; color:#fff; font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+            WHATSAPP
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/cotizar"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:transparent; color:rgba(255,255,255,0.4); font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; border:1px solid rgba(255,255,255,0.1); text-decoration:none; transition:all 0.2s;"
+            onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.borderColor='rgba(255,255,255,0.1)'">
+            COTIZAR ONLINE
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+  <style>
+    .faq-item summary:hover { color: #fff !important; }
+    .faq-item[open] summary { color: #fff !important; }
+    .faq-item[open] .faq-icon { border-color: rgba(255,255,255,0.3) !important; transform: rotate(45deg); }
+  </style>
+
+</BaseLayout>

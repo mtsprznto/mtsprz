@@ -3,7 +3,7 @@ title: "Como posicionar tu negocio en Google Maps en la Region de Los Lagos"
 description: "Guia definitiva para aparecer en Google Maps en Puerto Varas, Osorno, Valdivia y toda la Region de Los Lagos. Aumenta tus clientes locales con SEO local."
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-como-posicionar-negocio-google-maps-los-lagos.png"
 tags: ["google maps", "posicionamiento", "seo local", "region de los lagos", "google business", "pymes"]
 ---

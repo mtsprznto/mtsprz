@@ -3,7 +3,7 @@ title: "Como automatizar WhatsApp para tu negocio en Puerto Varas"
 description: "Automatiza WhatsApp en tu negocio de Puerto Varas con bots 24/7. Respuestas automáticas y más ventas para pymes de la Región de Los Lagos."
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-automatizar-whatsapp-negocio-puerto-varas.png"
 tags: ["whatsapp", "automatizacion", "puerto varas", "bot", "pymes", "atencion al cliente"]
 ---

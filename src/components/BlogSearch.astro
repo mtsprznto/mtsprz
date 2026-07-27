@@ -1,0 +1,208 @@
+---
+// BlogSearch — Editorial search input with layered security
+---
+
+<div class="blog-search" id="blog-search">
+  <form id="blog-search-form" action="/buscar" method="GET" novalidate>
+    <div class="search-input-wrapper">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.35-4.35"/>
+      </svg>
+
+      <input
+        type="text"
+        name="q"
+        id="blog-search-input"
+        placeholder="Buscar artículos..."
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        maxlength="100"
+        class="search-input"
+      />
+
+      <button type="button" id="blog-search-clear" class="search-clear" aria-label="Limpiar búsqueda" style="display: none;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <input type="hidden" name="q" id="blog-search-sanitized" value="" />
+  </form>
+
+  <p class="search-feedback" id="blog-search-feedback" aria-live="polite"></p>
+</div>
+
+<script is:inline>
+(function() {
+  var form = document.getElementById("blog-search-form");
+  var input = document.getElementById("blog-search-input");
+  var hidden = document.getElementById("blog-search-sanitized");
+  var clear = document.getElementById("blog-search-clear");
+  var feedback = document.getElementById("blog-search-feedback");
+
+  if (!form || !input || !hidden) return;
+
+  var MAX_LENGTH = 100;
+  var MIN_LENGTH = 2;
+
+  function sanitize(value) {
+    var s = value;
+    s = s.replace(/<[^>]*>/g, "");
+    s = s.replace(/javascript:/gi, "");
+    s = s.replace(/on\w+\s*=/gi, "");
+    s = s.replace(/['";\\]/g, "");
+    s = s.replace(/--/g, "");
+    s = s.replace(/\/\*/g, "");
+    s = s.replace(/\*\//g, "");
+    s = s.replace(/[<>]/g, "");
+    s = s.replace(/\0/g, "");
+    s = s.replace(/\s+/g, " ").trim();
+    if (s.length > MAX_LENGTH) {
+      s = s.slice(0, MAX_LENGTH);
+    }
+    return s;
+  }
+
+  function validate(value) {
+    var sanitized = sanitize(value);
+    if (sanitized.length === 0 && value.length > 0) {
+      return { valid: false, sanitized: "", error: "Caracteres no válidos" };
+    }
+    if (sanitized.length > 0 && sanitized.length < MIN_LENGTH) {
+      return { valid: false, sanitized: sanitized, error: "Escribe al menos 2 caracteres" };
+    }
+    return { valid: true, sanitized: sanitized, error: "" };
+  }
+
+  input.addEventListener("input", function() {
+    var raw = input.value;
+    var result = validate(raw);
+    hidden.value = result.sanitized;
+    clear.style.display = raw.length > 0 ? "flex" : "none";
+    if (result.error) {
+      feedback.textContent = result.error;
+      feedback.style.color = "#ef4444";
+    } else if (result.sanitized.length >= MIN_LENGTH) {
+      feedback.textContent = result.sanitized.length + "/" + MAX_LENGTH;
+      feedback.style.color = "rgba(255,255,255,0.25)";
+    } else {
+      feedback.textContent = "";
+    }
+  });
+
+  clear.addEventListener("click", function() {
+    input.value = "";
+    hidden.value = "";
+    clear.style.display = "none";
+    feedback.textContent = "";
+    input.focus();
+  });
+
+  form.addEventListener("submit", function(e) {
+    var raw = input.value;
+    var result = validate(raw);
+    if (!result.valid || result.sanitized.length < MIN_LENGTH) {
+      e.preventDefault();
+      if (result.error) {
+        feedback.textContent = result.error;
+        feedback.style.color = "#ef4444";
+      }
+      return;
+    }
+    hidden.value = result.sanitized;
+    input.removeAttribute("name");
+  });
+
+  input.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      input.value = "";
+      hidden.value = "";
+      clear.style.display = "none";
+      feedback.textContent = "";
+      input.blur();
+    }
+  });
+})();
+</script>
+
+<style>
+  .blog-search {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    color: rgba(255, 255, 255, 0.25);
+    pointer-events: none;
+    transition: color 0.3s ease;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 14px 44px 14px 44px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #fafafa;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 300;
+  }
+
+  .search-input:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .search-input:focus ~ .search-icon,
+  .search-input-wrapper:focus-within .search-icon {
+    color: rgba(99, 102, 241, 0.6);
+  }
+
+  .search-clear {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0;
+  }
+
+  .search-clear:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .search-feedback {
+    margin-top: 6px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    min-height: 16px;
+  }
+</style>

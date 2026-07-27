@@ -8,7 +8,7 @@ const blog = defineCollection({
     pubDate: z.date(),
     modifiedTime: z.date().optional(),
     image: z.string().default("/logo.jpg"),
-    author: z.string().default("Equipo Mtsprz"),
+    author: z.string().default("Matías Pérez Nauto"),
     tags: z.array(z.string()).default([]),
   }),
 });

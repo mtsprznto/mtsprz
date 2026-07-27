@@ -3,7 +3,7 @@ title: "Guia completa de SEO para pymes en la Region de Los Lagos"
 description: "SEO local para pymes en la Región de Los Lagos. Posiciona tu negocio en Google desde Puerto Varas, Osorno, Valdivia."
 pubDate: 2026-07-17
 modifiedTime: 2026-07-18
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-guia-seo-pymes-sur-chile.png"
 tags: ["SEO", "marketing digital", "pymes", "region de los lagos", "posicionamiento web", "seo local"]
 ---

@@ -3,7 +3,7 @@ title: "Como posicionar mi negocio en Google Maps en Valdivia"
 description: "Guia paso a paso para posicionar tu negocio en Google Maps en Valdivia. SEO local, Google Business Profile y estrategias que funcionan para pymes de Los Rios."
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-posicionar-negocio-google-maps-valdivia.svg"
 tags: ["seo local", "google maps", "valdivia", "posicionamiento", "region de los rios", "pymes"]
 ---

@@ -3,7 +3,7 @@ title: "Como crear una pagina web para emprendedores en el sur de Chile"
 description: "Guía para crear tu página web profesional siendo emprendedor en el sur de Chile. Tu negocio merece estar en internet."
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-como-crear-pagina-web-emprendedores-sur-chile.png"
 tags: ["paginas web", "emprendedores", "sur de chile", "crear pagina web", "pymes", "region de los lagos"]
 ---

@@ -3,7 +3,7 @@ title: "Cuanto cuesta una pagina web en Osorno 2026"
 description: "Precios reales de una pagina web en Osorno 2026. Desde $290.000 hasta $1.500.000 segun el tipo de sitio. Guia actualizada con opciones para pymes de Los Lagos."
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-cuanto-cuesta-pagina-web-osorno.svg"
 tags: ["paginas web", "osorno", "precios", "diseno web", "region de los lagos", "pymes"]
 ---

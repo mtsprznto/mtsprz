@@ -3,7 +3,7 @@ title: "Paginas web rapidas con Astro: por que tu negocio en el sur de Chile nec
 description: "Páginas web con Astro: más rápidas que WordPress para negocios en la Región de Los Lagos. Velocidad, seguridad y SEO."
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-paginas-web-rapidas-astro.png"
 tags: ["desarrollo web", "Astro", "velocidad", "rendimiento", "WordPress", "Region de Los Lagos"]
 ---

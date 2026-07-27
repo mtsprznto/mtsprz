@@ -3,7 +3,7 @@ title: "Mejor agencia de marketing en la Región de Los Lagos: guía para elegir
 description: "Cómo elegir la mejor agencia de marketing digital en Puerto Varas, Osorno y Valdivia. Criterios, errores comunes y qué preguntar antes de contratar."
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
-author: "Equipo Mtsprz"
+author: "Matías Pérez Nauto"
 image: "/blog/og-mejor-agencia-marketing-los-lagos.png"
 tags: ["agencia digital", "marketing digital", "Region de Los Lagos", "Puerto Varas", "Osorno", "Valdivia", "pymes"]
 ---

@@ -25,6 +25,15 @@ Agencia de soluciones digitales con enfoque en la Región de Los Lagos, Chile. D
 - Valdivia: https://mtsprz.org/regiones/valdivia
 - Puerto Montt: https://mtsprz.org/regiones/puerto-montt
 - Frutillar: https://mtsprz.org/regiones/frutillar
+- Ancud: https://mtsprz.org/regiones/ancud
+- Castro: https://mtsprz.org/regiones/castro
+- Llanquihue: https://mtsprz.org/regiones/llanquihue
+- Calbuco: https://mtsprz.org/regiones/calbuco
+- Purranque: https://mtsprz.org/regiones/purranque
+- Maullín: https://mtsprz.org/regiones/maullin
+- Fresia: https://mtsprz.org/regiones/fresia
+- Chonchi: https://mtsprz.org/regiones/chonchi
+- Queilén: https://mtsprz.org/regiones/queilen
 
 ## Blog Highlights
 - SEO local para pymes en la Región de Los Lagos: https://mtsprz.org/blog/seo-local-pymes-region-los-lagos
@@ -32,6 +41,16 @@ Agencia de soluciones digitales con enfoque en la Región de Los Lagos, Chile. D
 - Cómo posicionar tu negocio en Google Maps: https://mtsprz.org/blog/como-posicionar-negocio-google-maps-los-lagos
 - Automatizar WhatsApp para tu negocio: https://mtsprz.org/blog/automatizar-whatsapp-negocio-puerto-varas
 - Mejor agencia de marketing en Los Lagos: https://mtsprz.org/blog/mejor-agencia-marketing-los-lagos
+- Mejor agencia de páginas web en Puerto Montt 2026: https://mtsprz.org/blog/mejor-agencia-web-puerto-montt-2026
+- Precio de página web en Osorno 2026: https://mtsprz.org/blog/precio-pagina-web-osorno-2026
+- Empresas de diseño web en Puerto Varas: https://mtsprz.org/blog/empresas-diseno-web-puerto-varas
+- Cómo vender por internet desde Puerto Montt: https://mtsprz.org/blog/como-vender-en-internet-desde-puerto-montt
+- Agencia SEO en Los Lagos: https://mtsprz.org/blog/agencia-seo-los-lagos
+- Crear tienda online en Chiloé: https://mtsprz.org/blog/crear-tienda-online-chiloe
+- Automatizar WhatsApp para restaurantes en Osorno: https://mtsprz.org/blog/automatizar-whatsapp-restaurantes-osorno
+- Diseño web para turismo en Puerto Varas: https://mtsprz.org/blog/diseno-web-turismo-puerto-varas
+- Posicionar negocio en Google Maps Puerto Montt: https://mtsprz.org/blog/posicionar-negocio-google-maps-puerto-montt
+- Agencia de marketing digital en el sur de Chile: https://mtsprz.org/blog/agencia-marketing-digital-sur-chile
 
 ## Technology Stack
 - Framework: Astro 7.1 (SSR on Vercel)
