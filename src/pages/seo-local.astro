@@ -4,6 +4,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Footer from "../components/Footer.astro";
+import CiudadesRelacionadas from "../components/CiudadesRelacionadas.astro";
 
 const waPhone = "56966929818";
 const waMsg = encodeURIComponent("Hola! Vi la página de SEO Local y quiero posicionar mi negocio en Google Maps.");
@@ -487,6 +488,8 @@ const site = "https://mtsprz.org";
       </div>
     </section>
 
+    <!-- CIUDADES RELACIONADAS -->
+    <CiudadesRelacionadas current="puerto-varas" />
   </main>
 
   <Footer />

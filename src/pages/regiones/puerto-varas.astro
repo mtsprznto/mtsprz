@@ -4,6 +4,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Footer from "../../components/Footer.astro";
+import CiudadesRelacionadas from "../../components/CiudadesRelacionadas.astro";
+import FaqPreview from "../../components/FaqPreview.astro";
 
 const waPhone = "56966929818";
 const waMsg = encodeURIComponent("Hola, vi la página de Puerto Varas en Mtsprz y quiero información sobre sus servicios digitales.");
@@ -234,7 +236,7 @@ const site = "https://mtsprz.org";
     <!-- ═══════════════════════════════════════════
          FAQ — editorial, full-width sin tarjetas
     ═══════════════════════════════════════════ -->
-    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+    <section id="faq-completo" style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
       <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
       <div style="max-width:800px; margin:0 auto; padding:6rem 2.5rem;">
 
@@ -243,6 +245,11 @@ const site = "https://mtsprz.org";
           <h2 class="reveal-item" style="font-size:clamp(2rem,5vw,4rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0;">
             LO QUE<br />NOS PREGUNTAN
           </h2>
+        </div>
+
+        <!-- FAQ Preview visible para LLMs (GEO) -->
+        <div class="reveal-item mb-8">
+          <FaqPreview city="Puerto Varas" />
         </div>
 
         <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
@@ -266,6 +273,11 @@ const site = "https://mtsprz.org";
       </div>
     </section>
 
+
+    <!-- ═══════════════════════════════════════════
+         CIUDADES RELACIONADAS — cross-linking GEO
+    ═══════════════════════════════════════════ -->
+    <CiudadesRelacionadas current="puerto-varas" />
 
     <!-- ═══════════════════════════════════════════
          CTA FINAL — viewport completo, título al pie

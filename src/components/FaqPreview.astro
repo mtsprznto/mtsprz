@@ -1,0 +1,57 @@
+---
+// GEO-visible FAQ: muestra Q&A en texto plano visible (no hidden en details)
+// Los LLMs extraen esto como contenido citable
+export interface Props {
+  city: string;
+}
+
+const { city } = Astro.props;
+
+// FAQ pairs específicos por ciudad (mismos que están en JSON-LD + details)
+const faqs: Record<string, { q: string; a: string }[]> = {
+  "puerto-varas": [
+    { q: `¿Cuánto cuesta una página web en Puerto Varas?`, a: `Desde $290.000 landing pages, $690.000 sitios corporativos y $1.500.000 tiendas online. Incluye diseño, dominio, hosting y SEO básico.` },
+    { q: `¿Puedo aparecer en Google Maps desde Puerto Varas?`, a: `Sí. Optimizamos tu Google Business Profile para búsquedas locales como "restaurante en Puerto Varas" o "hotel en Puerto Varas". Resultados en 4-8 semanas.` },
+  ],
+  osorno: [
+    { q: `¿Cuánto cuesta una página web en Osorno?`, a: `Desde $290.000 landing pages hasta $1.500.000 tiendas online. Incluye diseño, dominio + hosting un año, SEO básico y Analytics.` },
+    { q: `¿Puedo aparecer primero en Google si soy de Osorno?`, a: `Sí. Optimizamos tu Google Business Profile y sitio web para búsquedas locales como "empresa [rubro] Osorno". Resultados visibles en 4-8 semanas.` },
+  ],
+  valdivia: [
+    { q: `¿Cuánto cuesta una página web en Valdivia?`, a: `Landing pages desde $290.000, sitios corporativos desde $690.000, tiendas online desde $1.500.000. Incluye diseño, hosting y SEO.` },
+    { q: `¿Hacen SEO local para negocios en Valdivia?`, a: `Sí. Posicionamos tu negocio en Google Maps para búsquedas como "restaurante en Valdivia" o "tienda en Valdivia". Resultados medibles en 4-8 semanas.` },
+  ],
+  "puerto-montt": [
+    { q: `¿Cuánto cuesta una página web en Puerto Montt?`, a: `Desde $290.000 landing pages, $690.000 sitios corporativos, $1.500.000 tiendas online. Incluye diseño responsive, SEO y hosting.` },
+    { q: `¿Hacen SEO local para pymes en Puerto Montt?`, a: `Sí. Optimizamos Google Business Profile para búsquedas locales en Puerto Montt y la provincia de Llanquihue.` },
+  ],
+  ancud: [
+    { q: `¿Hacen páginas web para negocios en Ancud?`, a: `Sí. Trabajamos con hoteles, restaurantes, servicios turísticos y comercios de Ancud y Chiloé.` },
+    { q: `¿Cuánto cuesta una página web en Ancud?`, a: `Landing pages desde $290.000, sitios corporativos desde $690.000. Incluye diseño, hosting y SEO básico.` },
+  ],
+  castro: [
+    { q: `¿Hacen páginas web en Castro?`, a: `Sí. Trabajamos con negocios turísticos, hotelería, restaurantes y servicios profesionales en Castro y toda Chiloé.` },
+    { q: `¿Posicionan negocios en Google Maps en Castro?`, a: `Sí. Optimizamos tu perfil de Google Business Profile para aparecer en búsquedas locales de Castro y Chiloé.` },
+  ],
+};
+
+const defaultFaqs = [
+  { q: `¿Cuánto cuesta una página web en ${city}?`, a: `Desde $290.000 landing pages, $690.000 sitios corporativos y $1.500.000 tiendas online. Incluye diseño, hosting y SEO.` },
+  { q: `¿Hacen SEO local en ${city}?`, a: `Sí. Posicionamos tu negocio en Google Maps con optimización de Google Business Profile, palabras clave locales y reseñas.` },
+];
+
+const cityKey = city.toLowerCase().replace(/\s+/g, "-").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const pairs = faqs[cityKey] || faqs["puerto-varas"] || defaultFaqs;
+---
+
+<div class="mb-8 md:mb-10 grid gap-3">
+  {pairs.slice(0, 2).map((faq) => (
+    <div class="geo-answer relative pl-4 md:pl-5 border-l-2 border-[#6366f1]/30 py-2">
+      <p class="text-xs md:text-sm font-heading font-semibold text-white/70 mb-1">{faq.q}</p>
+      <p class="text-xs md:text-sm text-white/40 font-body font-light leading-relaxed">{faq.a}</p>
+    </div>
+  ))}
+  <p class="text-[10px] md:text-[11px] text-white/25 font-body mt-2">
+    <a href="#faq-completo" class="text-[#6366f1]/60 hover:text-[#6366f1] transition-colors">Ver todas las preguntas frecuentes →</a>
+  </p>
+</div>

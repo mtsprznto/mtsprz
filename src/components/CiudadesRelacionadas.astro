@@ -1,0 +1,121 @@
+---
+// Cross-linking regional: muestra ciudades cercanas según la actual
+// Cada página regional incluye esto para crear malla de internal links
+export interface Props {
+  current: string;
+}
+
+const { current } = Astro.props;
+
+const ciudades: Record<string, { name: string; slug: string }[]> = {
+  "puerto-varas": [
+    { name: "Puerto Montt", slug: "puerto-montt" },
+    { name: "Osorno", slug: "osorno" },
+    { name: "Frutillar", slug: "frutillar" },
+    { name: "Llanquihue", slug: "llanquihue" },
+  ],
+  osorno: [
+    { name: "Puerto Varas", slug: "puerto-varas" },
+    { name: "Valdivia", slug: "valdivia" },
+    { name: "Purranque", slug: "purranque" },
+  ],
+  valdivia: [
+    { name: "Osorno", slug: "osorno" },
+    { name: "Puerto Varas", slug: "puerto-varas" },
+    { name: "La Unión", slug: "" }, // placeholder, no tenemos página aún
+  ],
+  "puerto-montt": [
+    { name: "Puerto Varas", slug: "puerto-varas" },
+    { name: "Calbuco", slug: "calbuco" },
+    { name: "Ancud", slug: "ancud" },
+  ],
+  ancud: [
+    { name: "Castro", slug: "castro" },
+    { name: "Puerto Montt", slug: "puerto-montt" },
+    { name: "Chonchi", slug: "chonchi" },
+  ],
+  castro: [
+    { name: "Ancud", slug: "ancud" },
+    { name: "Queilén", slug: "queilen" },
+    { name: "Chonchi", slug: "chonchi" },
+  ],
+  frutillar: [
+    { name: "Puerto Varas", slug: "puerto-varas" },
+    { name: "Llanquihue", slug: "llanquihue" },
+    { name: "Puerto Montt", slug: "puerto-montt" },
+  ],
+  llanquihue: [
+    { name: "Puerto Varas", slug: "puerto-varas" },
+    { name: "Frutillar", slug: "frutillar" },
+    { name: "Puerto Montt", slug: "puerto-montt" },
+  ],
+  calbuco: [
+    { name: "Puerto Montt", slug: "puerto-montt" },
+    { name: "Puerto Varas", slug: "puerto-varas" },
+    { name: "Ancud", slug: "ancud" },
+  ],
+  purranque: [
+    { name: "Osorno", slug: "osorno" },
+    { name: "Puerto Varas", slug: "puerto-varas" },
+    { name: "Frutillar", slug: "frutillar" },
+  ],
+  fresia: [
+    { name: "Puerto Varas", slug: "puerto-varas" },
+    { name: "Frutillar", slug: "frutillar" },
+    { name: "Llanquihue", slug: "llanquihue" },
+  ],
+  maullin: [
+    { name: "Puerto Montt", slug: "puerto-montt" },
+    { name: "Calbuco", slug: "calbuco" },
+    { name: "Puerto Varas", slug: "puerto-varas" },
+  ],
+  queilen: [
+    { name: "Castro", slug: "castro" },
+    { name: "Chonchi", slug: "chonchi" },
+    { name: "Ancud", slug: "ancud" },
+  ],
+  chonchi: [
+    { name: "Castro", slug: "castro" },
+    { name: "Queilén", slug: "queilen" },
+    { name: "Ancud", slug: "ancud" },
+  ],
+};
+
+const related = ciudades[current] || [];
+---
+
+<section class="w-full bg-[#0A0A0A] relative overflow-hidden" style="border-top: 1px solid rgba(255,255,255,0.04);">
+  <div class="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 py-12 md:py-16">
+    <div class="reveal-group">
+      <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-5 md:mb-6" style="color: #6366f1aa;">
+        También trabajamos en
+      </p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        {related.filter(c => c.slug).map((ciudad) => (
+          <a
+            href={`/regiones/${ciudad.slug}`}
+            class="reveal-item group relative overflow-hidden rounded-lg bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 p-4 md:p-5 no-underline"
+          >
+            <p class="text-sm md:text-base font-heading font-semibold text-white/60 group-hover:text-white transition-colors duration-300">
+              {ciudad.name}
+            </p>
+            <p class="text-[10px] md:text-[11px] font-body text-white/25 group-hover:text-white/40 transition-colors mt-1">
+              Servicios digitales →
+            </p>
+          </a>
+        ))}
+        {related.filter(c => !c.slug).map((ciudad) => (
+          <div class="reveal-item relative overflow-hidden rounded-lg bg-white/[0.02] border border-white/[0.04] p-4 md:p-5 opacity-60">
+            <p class="text-sm md:text-base font-heading font-semibold text-white/40">
+              {ciudad.name}
+            </p>
+            <p class="text-[10px] md:text-[11px] font-body text-white/20 mt-1">
+              Próximamente
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

@@ -137,6 +137,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
                 alt={featured.data.title}
                 class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
                 loading="eager"
+                fetchpriority="high"
                 decoding="async"
               />
               <!-- Dark gradient overlay — bottom heavy for text legibility -->
@@ -204,7 +205,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
       </div>
 
       <!-- ─── Tier 1: Two large asymmetric columns ─── -->
-      <div class="w-full flex flex-col md:flex-row h-auto md:h-[75vh]">
+      <div class="w-full flex flex-col md:flex-row h-auto md:h-[75vh]" style="content-visibility:auto; contain-intrinsic-size: 600px;">
         {rest.slice(0, 2).map((post, i) => {
           const postSlug = post.id.replace(/\.(md|mdx)$/, "");
           const readMin = readingTime(post.body || "");
@@ -263,7 +264,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
       </div>
 
       <!-- ─── Tier 2: Three columns — varying widths ─── -->
-      <div class="w-full flex flex-col md:flex-row h-auto md:h-[65vh]">
+      <div class="w-full flex flex-col md:flex-row h-auto md:h-[65vh]" style="content-visibility:auto; contain-intrinsic-size: 520px;">
         {rest.slice(2, 5).map((post, i) => {
           const postSlug = post.id.replace(/\.(md|mdx)$/, "");
           const readMin = readingTime(post.body || "");
@@ -306,9 +307,9 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
         })}
       </div>
 
-      <!-- ─── Tier 3: Four columns — equal width, compact ─── -->
+      <!--       ─── Tier 3: Four columns — equal width, compact ─── -->
       {rest.length > 5 && (
-        <div class="w-full flex flex-col md:flex-row h-auto md:h-[50vh]">
+        <div class="w-full flex flex-col md:flex-row h-auto md:h-[50vh]" style="content-visibility:auto; contain-intrinsic-size: 400px;">
           {rest.slice(5, 9).map((post) => {
             const postSlug = post.id.replace(/\.(md|mdx)$/, "");
             const readMin = readingTime(post.body || "");

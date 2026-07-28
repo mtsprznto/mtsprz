@@ -4,6 +4,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Footer from "../../components/Footer.astro";
+import CiudadesRelacionadas from "../../components/CiudadesRelacionadas.astro";
+import FaqPreview from "../../components/FaqPreview.astro";
 
 const waPhone = "56966929818";
 const waMsg = encodeURIComponent("Hola, vi la página de Castro en Mtsprz y quiero información sobre sus servicios digitales.");
@@ -64,7 +66,7 @@ const site = "https://mtsprz.org";
         <div style="max-width:100%; display:flex; flex-direction:column; align-items:flex-start;">
           <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-body); margin-bottom:1rem;">Chiloé · Los Lagos · Chile</p>
           <h1 style="font-size:clamp(4.5rem, 14vw, 16rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
-            CA<br /><span style="color:rgba(255,255,255,0.15);">STRO</span>
+            CASTRO
           </h1>
           <p style="margin-top:1.25rem; font-size:0.75rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); font-weight:300; letter-spacing:0.05em;">
             Diseño web · SEO local · Automatización — Palafitos, gastronomía y artesanía chilota
@@ -173,7 +175,7 @@ const site = "https://mtsprz.org";
     </section>
 
     <!-- FAQ -->
-    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+    <section id="faq-completo" style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
       <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
       <div style="max-width:800px; margin:0 auto; padding:6rem 2.5rem;">
         <div class="reveal-group" style="margin-bottom:3rem;">
@@ -181,6 +183,11 @@ const site = "https://mtsprz.org";
           <h2 class="reveal-item" style="font-size:clamp(2rem,5vw,4rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0;">
             LO QUE<br />NOS PREGUNTAN
           </h2>
+        </div>
+
+        <!-- FAQ Preview visible para LLMs (GEO) -->
+        <div class="reveal-item mb-8">
+          <FaqPreview city="Castro" />
         </div>
         <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
           {[
@@ -203,6 +210,8 @@ const site = "https://mtsprz.org";
       </div>
     </section>
 
+    <!-- CIUDADES RELACIONADAS -->
+    <CiudadesRelacionadas current="castro" />
     <!-- CTA FINAL -->
     <section style="position:relative; width:100vw; min-height:70vh; overflow:hidden; background:#010101; display:flex; flex-direction:column; justify-content:flex-end;">
       <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 40% 60%, #06b6d40e 0%, transparent 55%);"></div>

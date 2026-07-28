@@ -114,3 +114,5 @@ Piensa como tus clientes: combina tu servicio con tu ubicacion. "Servicio de X e
 Absolutamente. De hecho, para negocios estacionales en zonas turisticas como Puerto Varas y la Region de Los Lagos, el SEO local bien ejecutado puede atraer clientes justo cuando mas los necesitas. Actualiza tus horarios de temporada en Google Business Profile y crea contenido sobre la experiencia de temporada.
 
 [Quiero mejorar mi SEO local en la Region de Los Lagos](/contacto) — solicita tu diagnostico SEO sin compromiso.
+
+Explora nuestras guias locales: [Puerto Varas](/regiones/puerto-varas), [Osorno](/regiones/osorno), [Valdivia](/regiones/valdivia) y [Puerto Montt](/regiones/puerto-montt).

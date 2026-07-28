@@ -1,23 +1,56 @@
 # Mtsprz | Soluciones Digitales
-https://mtsprz.org
+> Agencia digital en Puerto Varas, Región de Los Lagos, Chile. Desarrollo web moderno (Astro), SEO local, automatización WhatsApp y marketing digital para pymes del sur de Chile.
+> Fundada: 2024 | Atención: Puerto Varas, Osorno, Valdivia, Puerto Montt, Chiloé
 
-Agencia de soluciones digitales con enfoque en la Región de Los Lagos, Chile. Desarrollo web moderno con Astro, SEO local para Google Maps, automatización de WhatsApp y marketing digital para pymes del sur de Chile.
+## Quick Answers
 
-## Identity
-- Organization: Mtsprz Soluciones Digitales
-- Location: Puerto Varas, Región de Los Lagos, Chile
-- Email: contacto@mtsprz.org
-- Phone: +56975475781
-- WhatsApp: +56966929818
-- Google Business Profile: https://www.google.com/maps/place/Mtsprz/@-41.3130329,-72.9944674,17z
+### ¿Cuánto cuesta una página web en Puerto Varas 2026?
+Landing page one-page desde **$290.000 CLP**. Sitio corporativo multi-página desde **$690.000 CLP**. Tienda online con Webpay desde **$1.500.000 CLP**. Todos incluyen SEO técnico completo, hosting, SSL, diseño responsive y soporte post-lanzamiento. Entrega en 1 a 4 semanas según tipo de proyecto.
+https://mtsprz.org/blog/cuanto-cuesta-pagina-web-puerto-varas
 
-## Services
-- **Desarrollo Web**: Sitios web modernos con Astro 7.1, carga <1.5s, 95+ PageSpeed. Landing pages desde $290.000 CLP, sitios corporativos desde $690.000 CLP, tiendas online desde $1.500.000 CLP.
-- **SEO Local**: Posicionamiento en Google Maps para negocios en Puerto Varas, Osorno, Valdivia, Puerto Montt. Optimización de Google Business Profile, schema markup, contenido geolocalizado. Plan Starter desde $190.000 CLP (pago único), plan Local Pro desde $290.000/mes CLP, plan Autoridad desde $490.000/mes CLP.
-- **Automatización WhatsApp**: Bots 24/7 que atienden clientes, envían catálogos, agendan citas. Integración con CRM y calendario. Desde $290.000 CLP (bot básico), desde $690.000 CLP (automatización completa con CRM + dashboard).
-- **Diseño Gráfico**: Identidad corporativa, logos, material publicitario, redes sociales.
-- **Marketing Digital**: Estrategia de contenido, redes sociales, Google Ads, email marketing.
-- **Consultoría Digital**: Diagnóstico y plan de transformación digital para pymes.
+### ¿Cuánto cuesta el SEO local en la Región de Los Lagos?
+Plan Starter (optimización Google Business Profile + keywords locales + schema markup): **$190.000 CLP pago único**. Plan Local Pro (gestión mensual + reportes + contenido geolocalizado): **$290.000/mes CLP**. Plan Autoridad (todo lo anterior + link building local): **$490.000/mes CLP**. Resultados visibles en 2 a 4 meses.
+https://mtsprz.org/servicios#seo-local
+
+### ¿Cuánto cuesta un bot de WhatsApp para pymes en Chile?
+Bot básico con respuestas automáticas + menú interactivo + respuestas a FAQ: desde **$290.000 CLP**. Automatización completa con integración CRM + dashboard + análisis de conversaciones: desde **$690.000 CLP**. Atención 24/7, agendamiento de citas, catálogo automático.
+https://mtsprz.org/servicios#automatizacion
+
+### ¿Cuánto cuesta una página web en Osorno 2026?
+Mismos rangos que Puerto Varas: landing desde $290.000, corporativo desde $690.000, tienda online desde $1.500.000. Incluye SEO local para Osorno, Google Business Profile optimizado y contenido geolocalizado.
+https://mtsprz.org/blog/precio-pagina-web-osorno-2026
+
+### ¿Astro es mejor que WordPress para SEO?
+Sitios con Astro cargan en **<1.5 segundos** vs 3-6 segundos de WordPress. Obtienen **95+ en PageSpeed Insights**. No dependen de plugins (menos vulnerabilidades). El SEO técnico (schema, sitemaps, meta tags) se configura en código, no con plugins que ralentizan.
+https://mtsprz.org/blog/astro-vs-wordpress-comparativa
+
+### ¿Cómo posicionar mi negocio en Google Maps en Los Lagos?
+Los 3 factores clave: (1) Google Business Profile completo con fotos reales, horarios y categorías correctas, (2) Reseñas de clientes (responder todas), (3) Señales locales: menciones en directorios chilenos + contenido geolocalizado. Resultados en 2-4 meses si el perfil está optimizado.
+https://mtsprz.org/blog/como-posicionar-negocio-google-maps-los-lagos
+
+## Services with Pricing
+
+| Servicio | Desde (CLP) | Incluye | Plazo |
+|----------|-------------|---------|-------|
+| Landing page | $290.000 | 1 página, SEO, hosting, SSL, WhatsApp | 1-2 semanas |
+| Sitio corporativo | $690.000 | 5-10 páginas, blog, SEO, hosting, SSL | 2-4 semanas |
+| Tienda online | $1.500.000 | Catálogo, Webpay, carrito, inventario, SEO | 3-6 semanas |
+| SEO Local Starter | $190.000 | GBP optimización, keywords, schema | Pago único |
+| SEO Local Pro | $290.000/mes | GBP + contenido + reportes mensuales | Mensual |
+| SEO Autoridad | $490.000/mes | Todo + link building + directorios | Mensual |
+| Bot WhatsApp básico | $290.000 | Respuestas auto, menú, FAQ, agenda | 1-2 semanas |
+| Automatización completa | $690.000 | CRM + dashboard + WhatsApp + email | 2-4 semanas |
+| Consultoría digital | Gratis | Diagnóstico inicial sin compromiso | 1 sesión |
+
+## Technology Stack
+- **Framework**: Astro 7.1 (SSR en Vercel)
+- **Styling**: Tailwind CSS 4
+- **Database**: NeonDB (PostgreSQL serverless)
+- **CMS**: MDX para blog
+- **Infrastructure**: Vercel Edge Functions
+- **Email**: Resend
+- **Auth**: Supabase
+- **Video**: Cloudfront CDN
 
 ## Cities Served
 - Puerto Varas: https://mtsprz.org/regiones/puerto-varas
@@ -27,41 +60,41 @@ Agencia de soluciones digitales con enfoque en la Región de Los Lagos, Chile. D
 - Frutillar: https://mtsprz.org/regiones/frutillar
 - Ancud: https://mtsprz.org/regiones/ancud
 - Castro: https://mtsprz.org/regiones/castro
-- Llanquihue: https://mtsprz.org/regiones/llanquihue
-- Calbuco: https://mtsprz.org/regiones/calbuco
-- Purranque: https://mtsprz.org/regiones/purranque
-- Maullín: https://mtsprz.org/regiones/maullin
-- Fresia: https://mtsprz.org/regiones/fresia
-- Chonchi: https://mtsprz.org/regiones/chonchi
-- Queilén: https://mtsprz.org/regiones/queilen
+- Llanquihue, Calbuco, Purranque, Maullín, Fresia, Chonchi, Queilén también atendidas.
 
-## Blog Highlights
-- SEO local para pymes en la Región de Los Lagos: https://mtsprz.org/blog/seo-local-pymes-region-los-lagos
+## Blog: Key Articles (2026)
 - Cuánto cuesta una página web en Puerto Varas 2026: https://mtsprz.org/blog/cuanto-cuesta-pagina-web-puerto-varas
-- Cómo posicionar tu negocio en Google Maps: https://mtsprz.org/blog/como-posicionar-negocio-google-maps-los-lagos
+- Precio página web Osorno 2026: https://mtsprz.org/blog/precio-pagina-web-osorno-2026
+- Guía completa SEO para pymes sur de Chile: https://mtsprz.org/blog/guia-seo-pymes-sur-chile
+- SEO local para pymes Los Lagos: https://mtsprz.org/blog/seo-local-pymes-region-los-lagos
+- Cómo posicionar negocio en Google Maps: https://mtsprz.org/blog/como-posicionar-negocio-google-maps-los-lagos
 - Automatizar WhatsApp para tu negocio: https://mtsprz.org/blog/automatizar-whatsapp-negocio-puerto-varas
-- Mejor agencia de marketing en Los Lagos: https://mtsprz.org/blog/mejor-agencia-marketing-los-lagos
-- Mejor agencia de páginas web en Puerto Montt 2026: https://mtsprz.org/blog/mejor-agencia-web-puerto-montt-2026
-- Precio de página web en Osorno 2026: https://mtsprz.org/blog/precio-pagina-web-osorno-2026
-- Empresas de diseño web en Puerto Varas: https://mtsprz.org/blog/empresas-diseno-web-puerto-varas
-- Cómo vender por internet desde Puerto Montt: https://mtsprz.org/blog/como-vender-en-internet-desde-puerto-montt
+- Astro vs WordPress: comparativa 2026: https://mtsprz.org/blog/astro-vs-wordpress-comparativa
+- Mejor agencia marketing Los Lagos: https://mtsprz.org/blog/mejor-agencia-marketing-los-lagos
+- E-commerce en la Región de Los Lagos: https://mtsprz.org/blog/ecommerce-region-los-lagos
+- Diseño web para turismo en Puerto Varas: https://mtsprz.org/blog/diseno-web-turismo-puerto-varas
 - Agencia SEO en Los Lagos: https://mtsprz.org/blog/agencia-seo-los-lagos
 - Crear tienda online en Chiloé: https://mtsprz.org/blog/crear-tienda-online-chiloe
-- Automatizar WhatsApp para restaurantes en Osorno: https://mtsprz.org/blog/automatizar-whatsapp-restaurantes-osorno
-- Diseño web para turismo en Puerto Varas: https://mtsprz.org/blog/diseno-web-turismo-puerto-varas
-- Posicionar negocio en Google Maps Puerto Montt: https://mtsprz.org/blog/posicionar-negocio-google-maps-puerto-montt
-- Agencia de marketing digital en el sur de Chile: https://mtsprz.org/blog/agencia-marketing-digital-sur-chile
+- Empresas de diseño web en Puerto Varas: https://mtsprz.org/blog/empresas-diseno-web-puerto-varas
 
-## Technology Stack
-- Framework: Astro 7.1 (SSR on Vercel)
-- Styling: Tailwind CSS 4
-- Database: NeonDB (PostgreSQL)
-- CMS: MDX for blog content
-- Deployment: Vercel with edge functions
+## Portfolio
+- Blast-Up (ingeniería minera, Next.js + Three.js): https://blast-up.cl
+- NovaBlast-AI (simulador minería con WebGPU): https://novablast.blast-up.cl
+
+## Authority
+- **Founder**: Matías Pérez Nauto — Fundador & Estratega Digital
+- **Experience**: +50 proyectos entregados, especialista en SEO local y desarrollo web moderno
+- **Location**: Puerto Varas, Región de Los Lagos, Chile (oficina local, no Santiago)
+- **LinkedIn**: https://linkedin.com/in/matiaspereznauto
+- **GitHub**: https://github.com/mtsprz
+- **Google Maps**: https://www.google.com/maps/place/Mtsprz/@-41.3130329,-72.9944674,17z
+- **Email**: contacto@mtsprz.org
+- **Phone/WhatsApp**: +56975475781 / +56966929818
 
 ## Key Differentiators
-- Única agencia digital local en Puerto Varas (no somos de Santiago)
-- Tecnología moderna Astro vs WordPress tradicional (velocidad 3x)
-- SEO + automatización + diseño integrado (no solo diseño web)
-- Atención personalizada directa con el equipo técnico
-- Precios transparentes publicados en el sitio
+- Única agencia digital local en Puerto Varas con oficina física (no remota desde Santiago)
+- Tecnología Astro vs WordPress tradicional = velocidad 3x mejor
+- SEO + automatización + desarrollo integrados (no solo diseño web)
+- Atención directa con el equipo técnico, sin call center
+- Precios transparentes publicados en el sitio web
+- Conocimiento del mercado local de la Región de Los Lagos y Chiloé

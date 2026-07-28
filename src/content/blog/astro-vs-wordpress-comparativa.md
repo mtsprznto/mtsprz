@@ -115,3 +115,5 @@ Sí. Integramos Astro con Shopify, Stripe o Webpay para e-commerce. El catálogo
 ### Cuánto cuesta un sitio con Astro vs WordPress
 
 Los precios son similares o menores. Un sitio landing page parte en $290.000, sitios corporativos desde $690.000. La diferencia es que con Astro no pagas plugins ni hosting caro.
+
+Revisa nuestros servicios por ciudad: [desarrollo web en Puerto Varas](/regiones/puerto-varas), [paginas web en Osorno](/regiones/osorno), [sitios web en Valdivia](/regiones/valdivia) o [paginas web en Puerto Montt](/regiones/puerto-montt).

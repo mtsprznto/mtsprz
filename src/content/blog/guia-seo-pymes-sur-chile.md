@@ -79,3 +79,5 @@ Los precios varian segun la competencia de tu rubro y el estado actual de tu sit
 El SEO no es magia, es trabajo consistente. Pero para las pymes del sur de Chile, la buena noticia es que la competencia digital es menor que en Santiago, lo que significa que con una estrategia bien ejecutada puedes posicionarte mas rapido y con menor inversion. Cada mencion local, cada resena respondida, cada contenido geolocalizado suma puntos frente a Google.
 
 [Contactanos para una asesoria SEO sin compromiso](/contacto) y descubre como llevar tu negocio a los primeros resultados en la Region de Los Lagos.
+
+Visita nuestras guias de SEO local por comuna: [Puerto Varas](/regiones/puerto-varas), [Osorno](/regiones/osorno), [Valdivia](/regiones/valdivia) y [Puerto Montt](/regiones/puerto-montt) para estrategias adaptadas a tu zona.
