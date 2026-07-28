@@ -22,17 +22,40 @@ const site = "https://mtsprz.org";
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${site}/seo-local#service`,
-    "name": "SEO Local — Mtsprz",
-    "description": "Posicionamiento SEO local en Google Maps y búsquedas locales para pymes en la Región de Los Lagos y Los Ríos.",
+    "name": "SEO Local y Posicionamiento en Google Maps — Mtsprz",
+    "description": "Posicionamiento SEO local en Google Maps y búsquedas locales para pymes en la Región de Los Lagos y Los Ríos. Aparece primero cuando buscan tu rubro en tu comuna.",
     "provider": { "@id": `${site}/#organization` },
+    "category": "Marketing Digital / SEO Local",
+    "serviceType": "Posicionamiento SEO Local en Google Maps",
+    "audience": {
+      "@type": "BusinessAudience",
+      "audienceType": "Pequeñas y medianas empresas (pymes) con presencia física en el sur de Chile"
+    },
     "areaServed": [
-      { "@type": "City", "name": "Puerto Varas" },
-      { "@type": "City", "name": "Osorno" },
-      { "@type": "City", "name": "Valdivia" },
-      { "@type": "City", "name": "Puerto Montt" }
+      { "@type": "City", "@id": `${site}/#city-puerto-varas`, "name": "Puerto Varas" },
+      { "@type": "City", "@id": `${site}/#city-osorno`, "name": "Osorno" },
+      { "@type": "City", "@id": `${site}/#city-valdivia`, "name": "Valdivia" },
+      { "@type": "City", "@id": `${site}/#city-puerto-montt`, "name": "Puerto Montt" }
     ],
-    "serviceType": "SEO Local",
-    "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 190000, "highPrice": 490000, "offerCount": 3 }
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Planes de SEO Local",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "SEO Local Starter" }, "price": "190000", "priceCurrency": "CLP", "description": "Optimización Google Business Profile completo + palabras clave locales + consistencia NAP (Nombre, Dirección, Teléfono) en directorios. Ideal para negocios que nunca han hecho SEO local. 1 semana." },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Plan Crecimiento Local" }, "price": "290000", "priceCurrency": "CLP", "description": "GBP optimizado + gestión reseñas + citas en directorios clave + landing page local + seguimiento semanal de posiciones. Resultados visibles en 30-60 días." },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Plan Dominio Local" }, "price": "490000", "priceCurrency": "CLP", "description": "Gestión completa GBP + estrategia de reseñas + link building local + contenido SEO para web + reportes mensuales + atención prioritaria. Dominas tu comuna en 3-6 meses." }
+      ]
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "CLP",
+      "lowPrice": 190000,
+      "highPrice": 490000,
+      "offerCount": 3,
+      "availability": "https://schema.org/InStock"
+    },
+    "termsOfService": `${site}/politica-de-cookies`,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `${site}/seo-local` }
   })} />
 
   <script type="application/ld+json" set:html={JSON.stringify({

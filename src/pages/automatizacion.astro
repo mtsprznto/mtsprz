@@ -22,17 +22,40 @@ const site = "https://mtsprz.org";
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${site}/automatizacion#service`,
-    "name": "Automatización de Procesos — Mtsprz",
-    "description": "Bots de WhatsApp, automatización de Excel, flujos de email marketing, integraciones CRM, dashboards de datos y workflows con n8n para pymes en la Región de Los Lagos.",
+    "name": "Automatización de Procesos con IA y n8n — Mtsprz",
+    "description": "Bots de WhatsApp 24/7, automatización de Excel, flujos de email marketing, integraciones CRM, dashboards de datos en tiempo real y workflows con n8n para pymes en la Región de Los Lagos. Ahorra 10+ horas semanales.",
     "provider": { "@id": `${site}/#organization` },
+    "category": "Transformación Digital / Automatización con IA",
+    "serviceType": "Automatización de Procesos e Integración con IA",
+    "audience": {
+      "@type": "BusinessAudience",
+      "audienceType": "Pequeñas y medianas empresas (pymes) que buscan eficiencia operativa en el sur de Chile"
+    },
     "areaServed": [
-      { "@type": "City", "name": "Puerto Varas" },
-      { "@type": "City", "name": "Osorno" },
-      { "@type": "City", "name": "Valdivia" },
-      { "@type": "City", "name": "Puerto Montt" }
+      { "@type": "City", "@id": `${site}/#city-puerto-varas`, "name": "Puerto Varas" },
+      { "@type": "City", "@id": `${site}/#city-osorno`, "name": "Osorno" },
+      { "@type": "City", "@id": `${site}/#city-valdivia`, "name": "Valdivia" },
+      { "@type": "City", "@id": `${site}/#city-puerto-montt`, "name": "Puerto Montt" }
     ],
-    "serviceType": "Automatización de Procesos",
-    "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 290000, "highPrice": 690000, "offerCount": 3 }
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Soluciones de Automatización",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bot WhatsApp 24/7 con IA" }, "price": "290000", "priceCurrency": "CLP", "description": "Chatbot inteligente para WhatsApp Business API. Atiende clientes 24/7: cotizaciones, agendamiento, FAQ. Integración con Google Sheets. Responde en segundos. Implementación en 5-7 días." },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Automatización de Reportes y CRM" }, "price": "490000", "priceCurrency": "CLP", "description": "Reportes Excel automatizados + integración CRM (HubSpot/Salesforce) + email marketing secuencial + webhooks. Workflows n8n personalizados. Elimina tareas manuales repetitivas. Implementación en 2-3 semanas." },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Workflow Completo + Dashboard Tiempo Real" }, "price": "690000", "priceCurrency": "CLP", "description": "Automatización integral: bot WhatsApp + CRM + email marketing + dashboard en tiempo real (Metabase) + webhooks + Backup automático. Flujos orquestados con n8n, datos actualizados al segundo, alertas inteligentes. 4-8 semanas." }
+      ]
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "CLP",
+      "lowPrice": 290000,
+      "highPrice": 690000,
+      "offerCount": 3,
+      "availability": "https://schema.org/InStock"
+    },
+    "termsOfService": `${site}/politica-de-cookies`,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `${site}/automatizacion` }
   })} />
 
   <script type="application/ld+json" set:html={JSON.stringify({

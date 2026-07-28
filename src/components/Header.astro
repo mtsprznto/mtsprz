@@ -26,9 +26,6 @@
 
   <!-- Full-screen mobile overlay -->
   <div id="nav-overlay" class="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#010101] opacity-0 pointer-events-none transition-all duration-300 ease-out md:hidden">
-    <button id="nav-overlay-close" class="absolute top-6 right-6 flex items-center justify-center w-10 h-10 text-white/40 hover:text-white transition-colors" aria-label="Cerrar menú">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
     <nav class="flex flex-col items-center gap-8">
       <a href="/servicios" class="text-2xl sm:text-3xl font-heading font-bold text-white/80 hover:text-white transition-colors">Servicios</a>
       <a href="/portafolio" class="text-2xl sm:text-3xl font-heading font-bold text-white/80 hover:text-white transition-colors">Portafolio</a>
@@ -43,7 +40,6 @@
 (function() {
   var toggle = document.getElementById("nav-toggle");
   var overlay = document.getElementById("nav-overlay");
-  var overlayClose = document.getElementById("nav-overlay-close");
   var openIcon = document.getElementById("nav-icon-open");
   var closeIcon = document.getElementById("nav-icon-close");
   if (!toggle || !overlay) return;
@@ -71,10 +67,6 @@
       open();
     }
   });
-
-  if (overlayClose) {
-    overlayClose.addEventListener("click", close);
-  }
 
   overlay.querySelectorAll("a").forEach(function(link) {
     link.addEventListener("click", close);

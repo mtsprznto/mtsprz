@@ -23,16 +23,39 @@ const site = "https://mtsprz.org";
     "@type": "Service",
     "@id": `${site}/desarrollo-web#service`,
     "name": "Desarrollo Web Profesional — Mtsprz",
-    "description": "Páginas web ultrarrápidas con Astro para pymes en la Región de Los Lagos. Diseño responsive, SEO local incluido y optimización Core Web Vitals.",
+    "description": "Páginas web ultrarrápidas con Astro para pymes en la Región de Los Lagos. Diseño responsive, SEO local incluido y optimización Core Web Vitals. Carga en 1.5s, 95+ PageSpeed.",
     "provider": { "@id": `${site}/#organization` },
+    "category": "Desarrollo y Diseño Web",
+    "serviceType": "Desarrollo Web Profesional",
+    "audience": {
+      "@type": "BusinessAudience",
+      "audienceType": "Pequeñas y medianas empresas (pymes) del sur de Chile"
+    },
     "areaServed": [
-      { "@type": "City", "name": "Puerto Varas" },
-      { "@type": "City", "name": "Osorno" },
-      { "@type": "City", "name": "Valdivia" },
-      { "@type": "City", "name": "Puerto Montt" }
+      { "@type": "City", "@id": `${site}/#city-puerto-varas`, "name": "Puerto Varas" },
+      { "@type": "City", "@id": `${site}/#city-osorno`, "name": "Osorno" },
+      { "@type": "City", "@id": `${site}/#city-valdivia`, "name": "Valdivia" },
+      { "@type": "City", "@id": `${site}/#city-puerto-montt`, "name": "Puerto Montt" }
     ],
-    "serviceType": "Desarrollo Web",
-    "offers": { "@type": "AggregateOffer", "priceCurrency": "CLP", "lowPrice": 290000, "highPrice": 1500000, "offerCount": 3 }
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Tipos de Sitio Web",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Landing Page" }, "price": "290000", "priceCurrency": "CLP", "description": "1 página de alto impacto. Ideal para capturar leads. Incluye diseño responsive, SEO local básico, hosting + SSL, formulario de contacto, Google Analytics. 5-7 días hábiles." },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sitio Corporativo" }, "price": "690000", "priceCurrency": "CLP", "description": "5-10 páginas. Blog, galería, formularios. Posiciona tu empresa en Google con SEO completo. Incluye diseño responsive, hosting + SSL + CDN. 2-3 semanas." },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "E-commerce y App Web" }, "price": "1500000", "priceCurrency": "CLP", "description": "Tienda online completa con catálogo, carrito, checkout. Transbank/Mercado Pago integrado. Panel de administración, SEO avanzado, sistema de usuarios. 4-8 semanas." }
+      ]
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "CLP",
+      "lowPrice": 290000,
+      "highPrice": 1500000,
+      "offerCount": 3,
+      "availability": "https://schema.org/InStock"
+    },
+    "termsOfService": `${site}/politica-de-cookies`,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `${site}/desarrollo-web` }
   })} />
 
   <script type="application/ld+json" set:html={JSON.stringify({
