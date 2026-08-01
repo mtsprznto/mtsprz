@@ -4,12 +4,6 @@
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.mtsprz.org" }],
-      "destination": "https://mtsprz.org/:path*",
-      "permanent": true
     }
   ],
   "headers": [
