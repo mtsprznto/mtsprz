@@ -1,15 +1,17 @@
-"""WhatsAppCampaign — Envío de WhatsApp vía Evolution API.
+"""WhatsAppCampaign — Envío de WhatsApp vía WAHA (WhatsApp HTTP API).
 
-Requiere Evolution API corriendo (local o VPS).
+Requiere WAHA corriendo (local o VPS): docker compose up -d en scripts/waha/.
 
 Uso:
     from prospector.outreach.whatsapp_campaign import WhatsAppCampaign
     camp = WhatsAppCampaign(
-        base_url="http://localhost:8080",
-        api_key="mtsprz-evolution-key-2026",
-        instance="mtsprz-bot"
+        base_url="http://localhost:3000",
+        api_key="<WAHA_API_KEY>",
+        session="mtsprz"
     )
     camp.run(prospects, limit=5)
+
+Docs WAHA: https://waha.devlike.pro/docs/overview/introduction/
 """
 
 from __future__ import annotations
@@ -143,22 +145,22 @@ def _get_wa_template(rubro: str):
 
 
 class WhatsAppCampaign:
-    """Envía WhatsApp a prospects vía Evolution API.
+    """Envía WhatsApp a prospects vía WAHA.
 
     Args:
-        base_url: URL de Evolution API (ej: http://localhost:8080)
-        api_key: API key configurada en AUTHENTICATION_API_KEY
-        instance: Nombre de la instancia (ej: mtsprz)
+        base_url: URL de WAHA (ej: http://localhost:3000)
+        api_key: API key de WAHA (env WAHA_API_KEY)
+        session: Nombre de la sesión WAHA (ej: mtsprz)
     """
 
-    def __init__(self, base_url: str = "http://localhost:8080",
+    def __init__(self, base_url: str = "http://localhost:3000",
                  api_key: Optional[str] = None,
-                 instance: str = "mtsprz"):
+                 session: str = "mtsprz"):
         self.base_url = base_url.rstrip("/")
-        self.api_key = api_key or os.environ.get("EVOLUTION_API_KEY", "mtsprz-evolution-key-2026")
-        self.instance = instance
+        self.api_key = api_key or os.environ.get("WAHA_API_KEY", "")
+        self.session = session
         self.headers = {
-            "apikey": self.api_key,
+            "X-Api-Key": self.api_key,
             "Content-Type": "application/json",
         }
 
@@ -167,41 +169,40 @@ class WhatsAppCampaign:
     # ------------------------------------------------------------------
 
     def health(self) -> bool:
-        """Check if Evolution API is running."""
+        """Check if WAHA is running."""
         try:
-            req = urllib.request.Request(f"{self.base_url}/", headers=self.headers)
+            req = urllib.request.Request(f"{self.base_url}/health", headers=self.headers)
             with urllib.request.urlopen(req, timeout=5) as resp:
                 return resp.status == 200
         except Exception:
             return False
 
     # ------------------------------------------------------------------
-    # Instance management
+    # Session management
     # ------------------------------------------------------------------
 
-    def instance_exists(self) -> bool:
-        """Check if instance is created."""
+    def session_exists(self) -> bool:
+        """Check if WAHA session is created."""
         req = urllib.request.Request(
-            f"{self.base_url}/instance/fetchInstances",
+            f"{self.base_url}/api/sessions?all=true",
             headers=self.headers,
         )
         try:
             with urllib.request.urlopen(req, timeout=10) as resp:
                 data = json.loads(resp.read().decode())
-                instances = data if isinstance(data, list) else []
-                return any(i.get("instance", {}).get("instanceName") == self.instance for i in instances)
+                sessions = data if isinstance(data, list) else []
+                return any(s.get("name") == self.session for s in sessions)
         except Exception:
             return False
 
-    def create_instance(self) -> bool:
-        """Create instance in Evolution API."""
+    def create_session(self) -> bool:
+        """Create session in WAHA (sin iniciar — se escanea QR después)."""
         payload = json.dumps({
-            "instanceName": self.instance,
-            "integration": "WHATSAPP-BAILEYS",
-            "qrcode": True,
+            "name": self.session,
+            "start": False,
         }).encode("utf-8")
         req = urllib.request.Request(
-            f"{self.base_url}/instance/create",
+            f"{self.base_url}/api/sessions",
             data=payload,
             headers=self.headers,
             method="POST",
@@ -211,43 +212,23 @@ class WhatsAppCampaign:
                 return resp.status in (200, 201)
         except urllib.error.HTTPError as e:
             body = e.read().decode(errors="replace")
-            log.error("Error creando instancia: {code} {body}", code=e.code, body=body)
+            log.error("Error creando sesión: {code} {body}", code=e.code, body=body)
             return False
 
-    def get_qr_url(self) -> str:
-        """URL para ver/descargar QR (manager dashboard)."""
-        # Primero obtener instanceId
-        req = urllib.request.Request(
-            f"{self.base_url}/instance/fetchInstances",
-            headers=self.headers,
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                data = json.loads(resp.read().decode())
-                instances = data if isinstance(data, list) else []
-                for inst in instances:
-                    if inst.get("name") == self.instance:
-                        iid = inst.get("id")
-                        if iid:
-                            return f"{self.base_url}/manager/instance/{iid}/dashboard"
-        except Exception:
-            pass
-        return f"{self.base_url}/manager/"
+    def get_dashboard_url(self) -> str:
+        """URL del dashboard WAHA para escanear el QR."""
+        return f"{self.base_url}/dashboard"
 
     def is_connected(self) -> bool:
-        """Check if WhatsApp is connected via fetchInstances."""
+        """Check if WhatsApp session is connected (status WORKING)."""
         req = urllib.request.Request(
-            f"{self.base_url}/instance/fetchInstances",
+            f"{self.base_url}/api/sessions/{self.session}",
             headers=self.headers,
         )
         try:
             with urllib.request.urlopen(req, timeout=10) as resp:
                 data = json.loads(resp.read().decode())
-                instances = data if isinstance(data, list) else []
-                for inst in instances:
-                    if inst.get("name") == self.instance:
-                        return inst.get("connectionStatus") == "open"
-                return False
+                return data.get("status") == "WORKING"
         except Exception:
             return False
 
@@ -256,14 +237,15 @@ class WhatsAppCampaign:
     # ------------------------------------------------------------------
 
     def send_message(self, phone: str, text: str) -> bool:
-        """Send a WhatsApp text message via Evolution API.
+        """Send a WhatsApp text message via WAHA /api/sendText.
 
         Args:
             phone: Chilean number (e.g. 56912345678 — without + or spaces)
             text: Message text
         """
-        # Normalize phone: remove +, spaces, dashes
+        # Normalize phone: remove +, spaces, dashes y sufijos de chat ID
         phone = phone.replace("+", "").replace(" ", "").replace("-", "")
+        phone = phone.replace("@c.us", "").replace("@s.whatsapp.net", "")
         # Ensure it starts with 56 (Chile)
         if not phone.startswith("56"):
             if phone.startswith("9"):
@@ -273,18 +255,17 @@ class WhatsAppCampaign:
             else:
                 phone = f"56{phone}"
 
-        # Evolution API v2 accepts "text" directly (not textMessage)
+        # WAHA requiere chatId con sufijo @c.us
+        chat_id = f"{phone}@c.us"
+
         payload = json.dumps({
-            "number": phone,
+            "session": self.session,
+            "chatId": chat_id,
             "text": text,
-            "options": {
-                "delay": random.randint(1000, 3000),
-                "presence": "composing",
-            },
         }).encode("utf-8")
 
         req = urllib.request.Request(
-            f"{self.base_url}/message/sendText/{self.instance}",
+            f"{self.base_url}/api/sendText",
             data=payload,
             headers=self.headers,
             method="POST",
@@ -299,8 +280,12 @@ class WhatsAppCampaign:
                 return False
         except urllib.error.HTTPError as e:
             body = e.read().decode(errors="replace")
-            log.error("  ✗ Error WhatsApp a {phone}: {code} {body}",
-                      phone=phone, code=e.code, body=body[:150])
+            if e.code == 463:
+                log.error("  ⛔ Reachout Timelock activo (463) — pausar outreach a contactos "
+                          "nuevos hasta timeEnforcementEnds. Mensajear chats existentes sí funciona.")
+            else:
+                log.error("  ✗ Error WhatsApp a {phone}: {code} {body}",
+                          phone=phone, code=e.code, body=body[:150])
             return False
         except Exception as e:
             log.error("  ✗ Excepción enviando a {phone}: {e}", phone=phone, e=e)
@@ -394,36 +379,36 @@ class WhatsAppCampaign:
         return {"sent": sent, "total": len(candidates), "errors": errors}
 
     # ------------------------------------------------------------------
-    # Set up instance (full flow)
+    # Set up session (full flow)
     # ------------------------------------------------------------------
 
     def setup(self) -> bool:
-        """Full setup: create instance and show QR URL."""
-        log.info("Verificando Evolution API...")
+        """Full setup: create WAHA session and show QR dashboard URL."""
+        log.info("Verificando WAHA...")
         if not self.health():
-            log.error("Evolution API no responde en {url}", url=self.base_url)
-            log.error("¿Está corriendo? docker compose up -d")
+            log.error("WAHA no responde en {url}", url=self.base_url)
+            log.error("¿Está corriendo? docker compose up -d (en scripts/waha)")
             return False
 
         log.info("✓ API responde")
 
-        if not self.instance_exists():
-            log.info("Creando instancia '{inst}'...", inst=self.instance)
-            if not self.create_instance():
-                log.error("No se pudo crear la instancia")
+        if not self.session_exists():
+            log.info("Creando sesión '{sess}'...", sess=self.session)
+            if not self.create_session():
+                log.error("No se pudo crear la sesión")
                 return False
-            log.info("✓ Instancia creada")
+            log.info("✓ Sesión creada")
         else:
-            log.info("✓ Instancia ya existe")
+            log.info("✓ Sesión ya existe")
 
         log.info("")
         log.info("══════════════ ESCANEA EL QR ══════════════")
-        log.info("Abre el dashboard de la instancia:")
+        log.info("Abre el dashboard de WAHA:")
         log.info("")
-        log.info("  {url}", url=self.get_qr_url())
+        log.info("  {url}", url=self.get_dashboard_url())
         log.info("")
-        log.info("Si no ves QR, haz click en 'Connect' o 'Generate QR'")
-        log.info("Escanea el QR con WhatsApp (como WhatsApp Web)")
+        log.info("Crea/inicia la sesión '{sess}' y escanea el QR "
+                 "con WhatsApp (como WhatsApp Web)", sess=self.session)
         log.info("============================================")
         log.info("")
 
@@ -435,7 +420,7 @@ class WhatsAppCampaign:
                 return True
             time.sleep(2)
             if i % 15 == 0 and i > 0:
-                log.info("  Esperando... ({i}s) — revisa el QR en el navegador", i=i * 2)
+                log.info("  Esperando... ({i}s) — revisa el QR en el dashboard", i=i * 2)
 
         log.error("Tiempo de espera agotado. Revisa el QR en el dashboard")
         return False

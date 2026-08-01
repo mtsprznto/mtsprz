@@ -1,122 +1,60 @@
 /**
- * Evolution API client + WhatsApp auto-responder engine.
- * Docs: https://doc.evolution-api.com/v2.3/api
+ * WhatsApp — Capa de dominio (auto-responder + notificaciones).
+ *
+ * Consume el módulo de infraestructura `lib/waha` (transporte WAHA).
+ * El dominio NO conoce detalles de transporte: solo números y textos.
+ *
+ * WAHA: https://waha.devlike.pro/docs/overview/introduction/
  */
 
-import type { LeadRecord } from "./leads";
+import { wahaClient } from "./waha";
+import type { WahaMessage, WahaSession } from "./waha";
+import { extractPhoneNumber, toChatId } from "./waha";
 
-const WABA_URL = import.meta.env.WABA_URL || "http://localhost:8080";
-const WABA_API_KEY = import.meta.env.WABA_API_KEY || "mtsprz-evolution-key-2026";
-const INSTANCE = "mtsprz";
 const ADMIN_NUMBER = "56966929818";
-// Sender por navegador real (web.whatsapp.com oficial — anti-detección).
-// Script: scripts/whatsapp-browser/sender.py (uv run). Desactiva con "".
-const WHATSAPP_BROWSER_URL = import.meta.env.WHATSAPP_BROWSER_URL || "http://127.0.0.1:8899";
+const WAHA_URL = import.meta.env.WAHA_URL || "http://localhost:3000";
+const WAHA_API_KEY = import.meta.env.WAHA_API_KEY || "";
+const WAHA_SESSION = import.meta.env.WAHA_SESSION || "mtsprz";
 
-/* ── Types ── */
+/* ── Estado de conexión ── */
 
-export interface SendMessageResult {
-  key?: { remoteJid: string; fromMe: boolean; id: string };
-  status: string;
-  messageType?: string;
-  messageTimestamp?: number;
-  instanceId?: string;
+export interface ConnectionState {
+  /** Estado de sesión WAHA: WORKING = lista. */
+  state: string;
+  reason?: string;
+  /** reachoutTimelock activo (anti-bloqueo WhatsApp). */
+  timelocked?: boolean;
 }
 
-export interface WebhookPayload {
-  event: "MESSAGES_UPSERT";
-  instance: string;
-  data: {
-    key: { remoteJid: string; fromMe: boolean; id: string; participant?: string };
-    pushName?: string;
-    message?: {
-      conversation?: string;
-      extendedTextMessage?: { text: string };
-      imageMessage?: { caption?: string };
-      documentMessage?: { caption?: string };
-    };
-    messageType: "conversation" | "extendedTextMessage" | "imageMessage" | "documentMessage";
-    messageTimestamp: number;
-  };
-}
-
-/* ── HTTP client ── */
-
-async function evolutionPost(endpoint: string, body: unknown): Promise<Response> {
-  return fetch(`${WABA_URL}${endpoint}`, {
-    method: "POST",
-    headers: {
-      apikey: WABA_API_KEY,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-}
-
-/* ── Sending ── */
-
-/** Estado de conexión de la instancia (open/close) — pre-validación de envíos */
-export async function getConnectionState(): Promise<{ state: string; reason?: string }> {
+/** Estado real de la sesión WAHA — pre-validación de envíos. */
+export async function getConnectionState(): Promise<ConnectionState> {
   try {
-    const res = await fetch(`${WABA_URL}/instance/connectionState/${INSTANCE}`, {
-      headers: { apikey: WABA_API_KEY },
-    });
-    if (!res.ok) return { state: "unknown" };
-    const data = await res.json();
-    const state = data?.instance?.state || "unknown";
-    const reason = data?.instance?.disconnectionReasonCode ? `(código ${data.instance.disconnectionReasonCode})` : undefined;
-    return { state, reason };
-  } catch {
-    return { state: "unknown" };
+    const session: WahaSession = await wahaClient.getSession();
+    return {
+      state: session.status,
+      reason: session.status === "FAILED" ? "Sesión fallida — restart o logout + start" : undefined,
+      timelocked: Boolean(session.me?.reachoutTimelock?.isActive),
+    };
+  } catch (err) {
+    return { state: "unknown", reason: (err as Error).message };
   }
 }
 
-/** Envía vía navegador real (web.whatsapp.com oficial) — puente a sender.py */
-export async function sendTextBrowser(number: string, text: string): Promise<SendMessageResult> {
-  if (!WHATSAPP_BROWSER_URL) {
-    throw new Error("WHATSAPP_BROWSER_URL vacío — sender browser desactivado");
-  }
-  const res = await fetch(`${WHATSAPP_BROWSER_URL}/send`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ number, text }),
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Sender browser error ${res.status}: ${err}`);
-  }
-  return res.json();
-}
+/* ── Envío ── */
 
-export async function sendText(number: string, text: string): Promise<SendMessageResult> {
-  // Browser-first: el cliente oficial (Chrome real) entrega sin shadow-block.
-  if (WHATSAPP_BROWSER_URL) {
-    try {
-      return await sendTextBrowser(number, text);
-    } catch (err) {
-      throw new Error(
-        `Sender browser no disponible (${(err as Error).message}). Arranca el script: cd scripts/whatsapp-browser && uv run python sender.py`
-      );
-    }
-  }
-
-  // Fallback Evolution/Baileys (solo si WHATSAPP_BROWSER_URL="").
+export async function sendText(number: string, text: string): Promise<WahaMessage> {
   const state = await getConnectionState();
-  if (state.state !== "open") {
+  if (state.state !== "WORKING") {
     throw new Error(
-      `Instancia WhatsApp desconectada (${state.state} ${state.reason || ""}). Reconecta escaneando el QR en http://localhost:8080/manager`
+      `Sesión WhatsApp ${WAHA_SESSION} no está lista (${state.state}). ` +
+        `Escanea el QR en http://localhost:3000/dashboard`
     );
   }
-
-  const res = await evolutionPost(`/message/sendText/${INSTANCE}`, {
-    number,
-    text,
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Evolution API error ${res.status}: ${err}`);
+  if (state.timelocked) {
+    // WhatsApp shadow-restringe outreach a contactos nuevos; el envío puede fallar con 463.
+    console.warn("[WhatsApp] reachoutTimelock activo — envíos a contactos nuevos pueden fallar");
   }
-  return res.json();
+  return wahaClient.sendText(toChatId(number), text);
 }
 
 /* ── Auto-responder engine ── */
@@ -188,9 +126,11 @@ const KEYWORD_MAP: { keywords: string[]; service: string }[] = [
 export function getAutoResponse(message: string): string {
   const lower = message.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-  // Check for pricing
-  if (KEYWORD_MAP[6].keywords.some((k) => lower.includes(k))) {
-    return `💵 *Precios Mtsprz*
+  // Match specific service
+  for (const { keywords, service } of KEYWORD_MAP) {
+    if (keywords.some((k) => lower.includes(k))) {
+      if (service === "pricing") {
+        return `💵 *Precios Mtsprz*
 
 Cada proyecto es distinto, pero para darte una referencia:
 • Desarrollo web: desde $150.000
@@ -200,12 +140,7 @@ Cada proyecto es distinto, pero para darte una referencia:
 • Marketing Digital: desde $200.000/mes
 
 Para darte un precio exacto, cuéntame un poco más de tu proyecto y te envío una propuesta personalizada ✨`;
-  }
-
-  // Match specific service
-  for (const { keywords, service } of KEYWORD_MAP) {
-    if (keywords.some((k) => lower.includes(k))) {
-      if (service === "pricing") continue;
+      }
       return SERVICE_RESPONSES[service];
     }
   }
@@ -226,15 +161,16 @@ Estos son nuestros servicios principales:
 ¿En cuál de estos te puedo ayudar? Así te doy más información 😊`;
 }
 
-export function extractPhoneNumber(remoteJid: string): string {
-  return remoteJid.replace(/@s\.whatsapp\.net$/, "");
-}
-
-export function notifyAdmin(leadName: string, phone: string, serviceInterest: string | null, message: string | null): Promise<SendMessageResult> {
+export function notifyAdmin(
+  leadName: string,
+  phone: string,
+  serviceInterest: string | null,
+  message: string | null
+): Promise<WahaMessage> {
   return sendText(
     ADMIN_NUMBER,
     `🔔 *Nuevo Lead Mtsprz*\n\n👤 ${leadName}\n📱 ${phone}\n🔧 ${serviceInterest || "No especificado"}\n💬 ${(message || "").slice(0, 200)}`
   );
 }
 
-export { ADMIN_NUMBER, INSTANCE, WABA_API_KEY, WABA_URL };
+export { ADMIN_NUMBER, WAHA_URL, WAHA_API_KEY, WAHA_SESSION, extractPhoneNumber };

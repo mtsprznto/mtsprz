@@ -5,6 +5,7 @@ import Header from "../../components/Header.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Footer from "../../components/Footer.astro";
 import CiudadesRelacionadas from "../../components/CiudadesRelacionadas.astro";
+import LocalidadDatos from "../../components/LocalidadDatos.astro";
 import FaqPreview from "../../components/FaqPreview.astro";
 
 const waPhone = "56966929818";
@@ -37,7 +38,7 @@ const site = "https://mtsprz.org";
     name: "Mtsprz — Agencia Digital Puerto Montt",
     description: "Agencia digital en Puerto Montt. Páginas web, SEO local y automatizaciones para pymes de Puerto Montt y la Región de Los Lagos.",
     url: `${site}/regiones/puerto-montt`,
-    telephone: "+56975475781",
+    telephone: "+56966929818",
     email: "contacto@mtsprz.org",
     areaServed: [
       { "@type": "City", name: "Puerto Montt" },
@@ -240,6 +241,8 @@ const site = "https://mtsprz.org";
 
 
     <!-- CIUDADES RELACIONADAS -->
+    <LocalidadDatos slug="puerto-montt" />
+
     <CiudadesRelacionadas current="puerto-montt" />
 
     <!-- CTA FINAL -->

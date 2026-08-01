@@ -196,3 +196,23 @@ export async function getConversations(leadId: number): Promise<ConversationReco
   );
   return result.rows as unknown as ConversationRecord[];
 }
+
+/** Busca una conversación por wa_message_id — para dedupe de webhooks. */
+export async function findConversationByWaMessageId(waMessageId: string): Promise<ConversationRecord | null> {
+  await initDb();
+  const result = await query(
+    `SELECT * FROM whatsapp_conversations WHERE wa_message_id = $1 LIMIT 1`,
+    [waMessageId]
+  );
+  return (result.rows[0] as unknown as ConversationRecord) || null;
+}
+
+/** Actualiza el estado de entrega de un mensaje (eventos message.ack de WAHA). */
+export async function updateConversationStatus(waMessageId: string, status: string): Promise<ConversationRecord | null> {
+  await initDb();
+  const result = await query(
+    `UPDATE whatsapp_conversations SET status = $2, updated_at = NOW() WHERE wa_message_id = $1 RETURNING *`,
+    [waMessageId, status]
+  );
+  return (result.rows[0] as unknown as ConversationRecord) || null;
+}

@@ -5,7 +5,7 @@
 ```
 Nombre: Mtsprz Soluciones Digitales
 Dirección: Puerto Varas, Región de Los Lagos, Chile
-Teléfono: +56975475781
+Teléfono: +56966929818
 WhatsApp: +56966929818
 Email: contacto@mtsprz.org
 Sitio web: https://mtsprz.org
@@ -95,10 +95,10 @@ Sitio web: https://mtsprz.org
 
 | # | Directorio | Estado | Fecha | Notas |
 |---|-----------|--------|-------|-------|
-| 1 | Google Business Profile | Pendiente | | Categoría: Agencia de marketing digital |
-| 2 | Bing Places | Pendiente | | |
+| 1 | Google Business Profile | ✅ Verificado | 2026-08-01 | Áreas: Osorno, Los Lagos, Valdivia, Los Ríos +4. Completar: categoría, teléfono, web, descripción, fotos, link reseñas |
+| 2 | Bing Places | Pendiente | | Alimenta Copilot. Mismo NAP |
 | 3 | Apple Maps | Pendiente | | |
-| 4 | ChilePymes.cl | Pendiente | | |
+| 4 | ChilePymes.cl | ✅ Editado | 2026-08-01 | Rubro programación, dirección única, web+tel |
 | 5 | Yelu.cl | Pendiente | | |
 | 6 | GuíaEmpresas.cl | Pendiente | | |
 | 7 | Empresario.cl | Pendiente | | |
@@ -111,11 +111,12 @@ Sitio web: https://mtsprz.org
 | 14 | ListadoLocal | Pendiente | | |
 | 15 | Instagram Business | Pendiente | | |
 | 16 | Facebook Business | Pendiente | | |
+| + | EmpresaChile | ✅ Editado | 2026-08-01 | Ciudad PV, categoría desarrollo software, web mtsprz.org |
 
 ## Estrategia de reseñas
 
-1. Pedir reseña a cada cliente satisfecho vía WhatsApp
-2. Enviar link directo de Google Maps para dejar reseña
-3. Responder TODAS las reseñas en <24h
-4. Meta: 20 reseñas en 3 meses, 50 en 6 meses
-5. Ofrecer pequeño incentivo (ej: 10% descuento en mantención por reseña)
+1. **Link directo de reseña (verificado 2026-08-01)**: https://g.page/r/CTtH8EKjoy9cEBM/review
+2. Pedir reseña a cada cliente satisfecho vía WhatsApp
+3. Enviar link directo de Google Maps para dejar reseña
+4. Responder TODAS las reseñas en <24h
+5. Meta: 20 reseñas en 3 meses, 50 en 6 meses

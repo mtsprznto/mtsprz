@@ -1,0 +1,51 @@
+# Mtsprz — WAHA (WhatsApp HTTP API) — Docker Compose
+# ===================================================
+# Docs oficiales: https://waha.devlike.pro/docs/overview/introduction/
+# v2026.6.1+: Core + Plus fusionados → todo open source y gratis (devlikeapro/waha)
+#
+# Uso:
+#   docker compose up -d
+#   docker compose logs -f
+#   docker compose down
+#
+# Después del primer arranque: crear sesión + escanear QR
+#   Dashboard: http://localhost:3000/dashboard
+#   O via API: ver README.md
+
+services:
+  waha:
+    image: ${WAHA_IMAGE:-devlikeapro/waha:latest}
+    container_name: ${WAHA_CONTAINER_NAME:-mtsprz_waha}
+    restart: unless-stopped
+    ports:
+      - "${WAHA_PORT:-3000}:3000"
+    environment:
+      # Engine: WEBJS (Chromium via Puppeteer) = default, más features.
+      # Alternativas: WPP | GOWS | NOWEB
+      - WHATSAPP_DEFAULT_ENGINE=${WHATSAPP_DEFAULT_ENGINE:-WEBJS}
+      # API key obligatoria — header X-Api-Key en todas las llamadas
+      - WAHA_API_KEY=${WAHA_API_KEY:?set WAHA_API_KEY en .env}
+      - WHATSAPP_API_HOSTNAME=0.0.0.0
+      - WHATSAPP_API_PORT=3000
+      # Device name: cómo aparece en WhatsApp → Linked Devices (solo QR scan)
+      - WAHA_CLIENT_DEVICE_NAME=${WAHA_CLIENT_DEVICE_NAME:-Mtsprz WAHA}
+      - WAHA_CLIENT_BROWSER_NAME=${WAHA_CLIENT_BROWSER_NAME:-Chrome}
+      # Logs
+      - WAHA_LOG_FORMAT=${WAHA_LOG_FORMAT:-JSON}
+      - WAHA_LOG_LEVEL=${WAHA_LOG_LEVEL:-info}
+      # Zona horaria
+      - TZ=${TZ:-America/Santiago}
+    volumes:
+      # CRÍTICO: persistir sesiones — sin esto se pierde el auth de WhatsApp al reiniciar
+      - ./.sessions:/app/.sessions
+    # Chromium renderiza en /dev/shm; el default de Docker (64MB) crashea
+    shm_size: "256mb"
+    security_opt:
+      # Chromium necesita syscalls que el seccomp default bloquea
+      - seccomp:unconfined
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health',{headers:{'X-Api-Key':process.env.WAHA_API_KEY}}).then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s

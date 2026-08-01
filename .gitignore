@@ -25,3 +25,7 @@ seo-strategy/GHOST-CITATIONS.md
 scripts/whatsapp-browser/profile/
 scripts/whatsapp-browser/logs/
 scripts/whatsapp-browser/.venv/
+
+# waha
+scripts/waha/.env
+scripts/waha/.sessions/

@@ -843,28 +843,28 @@ def send_campaign(ctx: Context, rubro: Optional[str], comuna: Optional[str],
 
 @cli.group()
 def whatsapp():
-    """Envía WhatsApp a prospectos vía Evolution API.
+    """Envía WhatsApp a prospectos vía WAHA.
 
-    Requiere Evolution API corriendo (docker compose up -d
-    en scripts/prospector/evolution-api/).
+    Requiere WAHA corriendo (docker compose up -d
+    en scripts/waha/).
     """
 
 
 @whatsapp.command("setup")
-@click.option("--base-url", default="http://localhost:8080", help="URL de Evolution API")
-@click.option("--api-key", default=None, help="API key de Evolution API")
-@click.option("--instance", default="mtsprz", help="Nombre de instancia (default: mtsprz)")
+@click.option("--base-url", default="http://localhost:3000", help="URL de WAHA")
+@click.option("--api-key", default=None, help="API key de WAHA (default: WAHA_API_KEY env)")
+@click.option("--session", default="mtsprz", help="Nombre de sesión WAHA (default: mtsprz)")
 @click.pass_obj
-def whatsapp_setup(ctx: Context, base_url: str, api_key: Optional[str], instance: str):
-    """Configura instancia de Evolution API y muestra QR para escanear.
+def whatsapp_setup(ctx: Context, base_url: str, api_key: Optional[str], session: str):
+    """Configura sesión de WAHA y muestra QR para escanear.
 
-    1. Crea instancia en Evolution API
-    2. Muestra URL del QR para escanear con WhatsApp
+    1. Crea sesión en WAHA
+    2. Muestra el dashboard con el QR para escanear con WhatsApp
     3. Espera que se conecte
     """
     from prospector.outreach.whatsapp_campaign import WhatsAppCampaign
 
-    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, instance=instance)
+    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, session=session)
     ok = wa.setup()
     if not ok:
         sys.exit(1)
@@ -877,14 +877,14 @@ def whatsapp_setup(ctx: Context, base_url: str, api_key: Optional[str], instance
 @click.option("--dry-run", "dry_run", is_flag=True, help="Previsualizar sin enviar")
 @click.option("--delay-min", default=30, type=int, help="Delay mínimo entre mensajes (segundos)")
 @click.option("--delay-max", default=90, type=int, help="Delay máximo entre mensajes (segundos)")
-@click.option("--base-url", default="http://localhost:8080", help="URL de Evolution API")
-@click.option("--api-key", default=None, help="API key de Evolution API")
-@click.option("--instance", default="mtsprz", help="Nombre de instancia (default: mtsprz)")
+@click.option("--base-url", default="http://localhost:3000", help="URL de WAHA")
+@click.option("--api-key", default=None, help="API key de WAHA (default: WAHA_API_KEY env)")
+@click.option("--session", default="mtsprz", help="Nombre de sesión WAHA (default: mtsprz)")
 @click.pass_obj
 def whatsapp_send(ctx: Context, rubro: Optional[str], comuna: Optional[str],
                   limit: int, dry_run: bool,
                   delay_min: int, delay_max: int,
-                  base_url: str, api_key: Optional[str], instance: str):
+                  base_url: str, api_key: Optional[str], session: str):
     """Envía campaña de WhatsApp a prospectos.
 
     Ejemplos:
@@ -918,7 +918,7 @@ def whatsapp_send(ctx: Context, rubro: Optional[str], comuna: Optional[str],
         import time
         time.sleep(5)
 
-    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, instance=instance)
+    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, session=session)
     result = wa.run(prospects, rubro=rubro, limit=limit, dry_run=dry_run,
                     delay_range=(delay_min, delay_max))
 
@@ -937,14 +937,14 @@ def whatsapp_send(ctx: Context, rubro: Optional[str], comuna: Optional[str],
 @click.option("--dry-run", "dry_run", is_flag=True, help="Previsualizar sin enviar")
 @click.option("--delay-min", default=30, type=int)
 @click.option("--delay-max", default=90, type=int)
-@click.option("--base-url", default="http://localhost:8080")
+@click.option("--base-url", default="http://localhost:3000")
 @click.option("--api-key", default=None)
-@click.option("--instance", default="mtsprz")
+@click.option("--session", default="mtsprz")
 @click.pass_obj
 def send_whatsapp(ctx: Context, rubro: Optional[str], comuna: Optional[str],
                    limit: int, dry_run: bool,
                    delay_min: int, delay_max: int,
-                   base_url: str, api_key: Optional[str], instance: str):
+                   base_url: str, api_key: Optional[str], session: str):
     """Envía campaña de WhatsApp a prospectos (alias directo).
 
     Es lo mismo que 'whatsapp send'. Útil para scripting.
@@ -975,7 +975,7 @@ def send_whatsapp(ctx: Context, rubro: Optional[str], comuna: Optional[str],
         import time
         time.sleep(5)
 
-    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, instance=instance)
+    wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, session=session)
     result = wa.run(prospects, rubro=rubro, limit=limit, dry_run=dry_run,
                     delay_range=(delay_min, delay_max))
 

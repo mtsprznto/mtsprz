@@ -229,6 +229,17 @@ END
 WHERE phone IS NOT NULL AND phone <> '';
 `,
   },
+  {
+    name: "017_wa_conversations_ack",
+    sql: `
+ALTER TABLE whatsapp_conversations ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT NOW();
+DELETE FROM whatsapp_conversations a
+USING whatsapp_conversations b
+WHERE a.id > b.id AND a.wa_message_id = b.wa_message_id AND b.wa_message_id IS NOT NULL;
+DROP INDEX IF EXISTS idx_wa_conv_wa_msg;
+CREATE UNIQUE INDEX idx_wa_conv_wa_msg ON whatsapp_conversations(wa_message_id) WHERE wa_message_id IS NOT NULL;
+`,
+  },
 ];
 
 let _sql: ReturnType<typeof neon> | null = null;

@@ -21,7 +21,7 @@ export const author = {
   ],
   location: "Puerto Varas, Región de Los Lagos, Chile",
   email: "contacto@mtsprz.org",
-  phone: "+56975475781",
+  phone: "+56966929818",
   sameAs: [
     "https://www.linkedin.com/in/matiaspereznauto/",
     "https://github.com/mtsprz",

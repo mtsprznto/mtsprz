@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const site = "https://mtsprz.org";
+
+const faq = [
+  {
+    q: "¿Cómo dejo una reseña de Mtsprz en Google?",
+    a: "Puedes dejar tu reseña directamente en nuestro perfil de Google Maps usando el botón de esta página. Solo necesitas una cuenta de Google. Toma menos de 2 minutos.",
+  },
+  {
+    q: "¿Qué tipo de reseñas son útiles?",
+    a: "Las más valiosas mencionan el servicio contratado (página web, SEO local, bot de WhatsApp), la experiencia de trabajo y el resultado obtenido. La honestidad es lo más importante.",
+  },
+  {
+    q: "¿Mtsprz responde las reseñas?",
+    a: "Sí. Leemos y respondemos cada reseña personalmente. Tu opinión nos ayuda a mejorar y a otros negocios a decidir con confianza.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<BaseLayout
+  title="Reseñas Mtsprz — Opiniones de Clientes en Puerto Varas y Los Lagos"
+  description="Lee lo que dicen nuestros clientes de Mtsprz: desarrollo web, SEO local y automatizaciones en la Región de Los Lagos. Deja tu reseña en Google Maps."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <main class="min-h-screen bg-[#010101] text-white font-body">
+    <!-- Hero -->
+    <section class="relative px-6 pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.12),transparent_60%)]" />
+      <div class="max-w-4xl mx-auto relative">
+        <p class="text-[0.65rem] md:text-xs tracking-[0.3em] uppercase text-accent font-mono mb-4">
+          Puerto Varas · Los Lagos · Chile
+        </p>
+        <h1 class="font-heading text-4xl md:text-6xl font-bold leading-tight tracking-tight mb-6">
+          Reseñas de <span class="text-accent">Mtsprz</span>
+        </h1>
+        <p class="text-white/60 text-base md:text-lg leading-relaxed max-w-2xl">
+          Opiniones reales de pymes del sur de Chile que ya trabajan con nosotros. Si eres cliente y tu experiencia fue buena, una reseña en Google Maps nos ayuda enormemente.
+        </p>
+      </div>
+    </section>
+
+    <!-- CTA dejar reseña -->
+    <section class="px-6 pb-16">
+      <div class="max-w-4xl mx-auto">
+        <div class="liquid-glass rounded-2xl p-8 md:p-10 text-center">
+          <h2 class="font-heading text-2xl md:text-3xl font-bold mb-3">¿Trabajaste con nosotros?</h2>
+          <p class="text-white/60 mb-8 max-w-xl mx-auto">
+            Cuéntale a otros negocios de la Región de Los Lagos cómo fue tu experiencia.
+          </p>
+          <a
+            href="https://www.google.com/maps/place/Mtsprz/@-41.3130329,-72.9944674,17z"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 px-8 py-4 bg-accent/10 hover:bg-accent/20 border border-accent/30 rounded-xl text-accent font-medium tracking-wide transition-all duration-300"
+          >
+            Dejar reseña en Google Maps
+          </a>
+          <p class="text-white/30 text-xs mt-6 font-mono">
+            Enlace directo: se genera al verificar el perfil de Google Business (g.page/r/...)
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="px-6 pb-24">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="font-heading text-2xl md:text-3xl font-bold mb-8">Preguntas frecuentes</h2>
+        <div class="space-y-4">
+          {
+            faq.map((f) => (
+              <details class="liquid-glass rounded-xl p-5 group">
+                <summary class="cursor-pointer font-medium text-white/90 flex justify-between items-center">
+                  {f.q}
+                  <span class="text-accent group-open:rotate-45 transition-transform">+</span>
+                </summary>
+                <p class="text-white/60 text-sm leading-relaxed mt-4">{f.a}</p>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .liquid-glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

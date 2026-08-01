@@ -44,6 +44,7 @@ const POSTS = [
   { slug: "automatizar-email-marketing-pymes", title: "Automatizar email marketing para pymes", subtitle: "Guía práctica 2026", accent: "#06b6d4" },
   { slug: "agencia-digital-pymes-osorno", title: "Agencia digital para pymes en Osorno", subtitle: "Soluciones digitales a medida", accent: "#8b5cf6" },
   { slug: "mejor-agencia-marketing-los-lagos", title: "Mejor agencia de marketing en Los Lagos", subtitle: "Guía para elegir bien", accent: "#8b5cf6" },
+  { slug: "precios-reales-paginas-web-chile-2026", title: "Precios reales de páginas web en Chile", subtitle: "Actualizado 2026 — datos propios", accent: "#6366f1" },
 ];
 
 function wrapText(text, maxChars) {

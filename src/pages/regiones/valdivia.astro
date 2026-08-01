@@ -5,6 +5,7 @@ import Header from "../../components/Header.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Footer from "../../components/Footer.astro";
 import CiudadesRelacionadas from "../../components/CiudadesRelacionadas.astro";
+import LocalidadDatos from "../../components/LocalidadDatos.astro";
 import FaqPreview from "../../components/FaqPreview.astro";
 
 const waPhone = "56966929818";
@@ -37,7 +38,7 @@ const site = "https://mtsprz.org";
     name: "Mtsprz — Agencia Digital Valdivia",
     description: "Agencia digital en Valdivia. Páginas web, SEO local y automatizaciones para pymes de Valdivia y la Región de Los Ríos.",
     url: `${site}/regiones/valdivia`,
-    telephone: "+56975475781",
+    telephone: "+56966929818",
     email: "contacto@mtsprz.org",
     areaServed: [
       { "@type": "City", name: "Valdivia" },
@@ -242,6 +243,8 @@ const site = "https://mtsprz.org";
 
 
     <!-- CIUDADES RELACIONADAS -->
+    <LocalidadDatos slug="valdivia" />
+
     <CiudadesRelacionadas current="valdivia" />
 
     <!-- CTA FINAL -->

@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { sendText, getConnectionState, ADMIN_NUMBER } from "../../../lib/whatsapp";
+import { sendText, getConnectionState, ADMIN_NUMBER, WAHA_URL, WAHA_SESSION } from "../../../lib/whatsapp";
 import { logConversation, findLeadByPhone } from "../../../lib/leads";
 
 export const prerender = false;
@@ -33,11 +33,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (lead) {
       await logConversation({
         lead_id: lead.id,
-        wa_message_id: result.key?.id || `manual_${Date.now()}`,
+        wa_message_id: result.id || `manual_${Date.now()}`,
         direction: "outgoing",
         message_type: "text",
         content: text,
-        status: result.status || "sent",
+        status: "sent",
       });
     }
 
@@ -54,7 +54,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 };
 
-/** Health check — estado real de la instancia Evolution */
+/** Health check — estado real de la sesión WAHA */
 export const GET: APIRoute = async ({ locals }) => {
   if (!locals.user || locals.user.role !== "super_admin") {
     return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403 });
@@ -63,11 +63,15 @@ export const GET: APIRoute = async ({ locals }) => {
   const state = await getConnectionState();
   return new Response(
     JSON.stringify({
-      status: state.state === "open" ? "connected" : state.state,
-      instance: "mtsprz",
+      status: state.state === "WORKING" ? "connected" : state.state,
+      session: WAHA_SESSION,
       admin_number: ADMIN_NUMBER,
-      evolution_api: import.meta.env.WABA_URL || "http://localhost:8080",
-      connection_reason: state.reason || null,
+      waha: {
+        base_url: WAHA_URL,
+        session_status: state.state,
+        reachout_timelock: state.timelocked,
+        connection_reason: state.reason || null,
+      },
     }),
     { status: 200, headers: { "Content-Type": "application/json" } }
   );
