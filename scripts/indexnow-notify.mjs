@@ -26,13 +26,37 @@ const ENDPOINT = "https://api.indexnow.org/indexnow";
 const urlArg = process.argv.find((a) => a.startsWith("--url="));
 const SITEMAP = path.join(ROOT, "dist", "sitemap-index.xml");
 
-function extractUrlsFromSitemap(filePath) {
-  if (!fs.existsSync(filePath)) {
-    console.warn(`⚠ No sitemap en dist: ${filePath}`);
-    console.warn("  Ejecuta primero: pnpm build (genera dist/)");
+async function fetchText(url) {
+  const res = await fetch(url, { headers: { "user-agent": "indexnow-notify/1.0" } });
+  if (!res.ok) throw new Error(`HTTP ${res.status} ${url}`);
+  return res.text();
+}
+
+async function extractUrlsFromSitemap(filePath) {
+  // 1) sitemap local (dist/) si existe — build Windows
+  if (fs.existsSync(filePath)) {
+    const xml = fs.readFileSync(filePath, "utf-8");
+    return urlsFromXml(xml);
+  }
+  // 2) fallback: sitemap live de producción (funciona en WSL sin build)
+  console.warn(`⚠ No sitemap en dist: ${filePath}`);
+  console.warn("  Fallback: usando sitemap live de producción");
+  try {
+    const index = await fetchText(`${SITE}/sitemap-index.xml`);
+    const children = [...index.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+    const all = [];
+    for (const child of children) {
+      const xml = await fetchText(child.startsWith("http") ? child : `${SITE}${child}`);
+      all.push(...urlsFromXml(xml));
+    }
+    return all;
+  } catch (e) {
+    console.error("  Fallback fallido:", e.message);
     return [];
   }
-  const xml = fs.readFileSync(filePath, "utf-8");
+}
+
+function urlsFromXml(xml) {
   const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   // IndexNow acepta hasta 10.000 URLs por batch
   return urls.filter((u) => u.startsWith(SITE)).slice(0, 10000);
@@ -72,6 +96,5 @@ async function notify(urls) {
 if (urlArg) {
   notify([urlArg]);
 } else {
-  const urls = extractUrlsFromSitemap(SITEMAP);
-  notify(urls);
+  extractUrlsFromSitemap(SITEMAP).then((urls) => notify(urls));
 }
