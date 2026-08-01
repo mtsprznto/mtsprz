@@ -3,7 +3,7 @@ title: "Ley de Proteccion de Datos en Chile 2026: lo que tu pyme debe hacer ante
 description: "La Ley 21.719 crea la Agencia de Proteccion de Datos Personales en Chile. Descubre que obligaciones tiene tu pyme, como prepararte y las multas por no cumplir."
 pubDate: 2026-08-01
 author: "Matias Perez Nauto"
-image: "/blog/og-ley-proteccion-datos.png"
+image: "/blog/og-ley-proteccion-datos.svg"
 tags: ["ley", "proteccion datos", "legal", "pymes", "privacidad", "chile", "2026"]
 ---
 

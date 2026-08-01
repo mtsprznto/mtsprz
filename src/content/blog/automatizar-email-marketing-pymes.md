@@ -4,7 +4,7 @@ description: "Automatiza tu email marketing con herramientas gratuitas. Guía pa
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
 author: "Matías Pérez Nauto"
-image: "/blog/og-automatizar-email-marketing-pymes.png"
+image: "/blog/og-automatizar-email-marketing-pymes.svg"
 tags: ["email marketing", "automatizacion", "pymes", "marketing digital", "Region de Los Lagos", "herramientas"]
 ---
 

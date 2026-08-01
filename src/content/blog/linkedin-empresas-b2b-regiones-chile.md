@@ -3,7 +3,7 @@ title: "LinkedIn para empresas B2B en regiones: como conseguir clientes sin esta
 description: "LinkedIn 2026 actualizó su algoritmo. Guia para empresas B2B en regiones de Chile: como conseguir clientes, construir autoridad y vender sin estar en Santiago."
 pubDate: 2026-08-01
 author: "Matias Perez Nauto"
-image: "/blog/og-linkedin-b2b-regiones.png"
+image: "/blog/og-linkedin-b2b-regiones.svg"
 tags: ["linkedin", "b2b", "redes sociales", "regiones", "pymes", "chile", "ventas"]
 ---
 

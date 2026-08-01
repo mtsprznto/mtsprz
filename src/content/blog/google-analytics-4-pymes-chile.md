@@ -3,7 +3,7 @@ title: "Google Analytics 4 para pymes chilenas: las unicas 5 metricas que import
 description: "Google Analytics 4 simplificado para pymes en Chile. Olvidate del resto del dashboard y enfocate en las 5 metricas que realmente te dicen si tu web funciona."
 pubDate: 2026-08-02
 author: "Matias Perez Nauto"
-image: "/blog/og-google-analytics-4-pymes.png"
+image: "/blog/og-google-analytics-4-pymes.svg"
 tags: ["google analytics", "ga4", "metricas", "datos", "pymes", "web", "chile"]
 ---
 

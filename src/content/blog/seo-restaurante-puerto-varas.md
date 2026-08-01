@@ -4,7 +4,7 @@ description: "SEO local para restaurantes en Puerto Varas: aparece en Google Map
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
 author: "Matías Pérez Nauto"
-image: "/blog/og-seo-restaurante-puerto-varas.png"
+image: "/blog/og-seo-restaurante-puerto-varas.svg"
 tags: ["SEO local", "restaurantes", "Puerto Varas", "Google Maps", "marketing gastronomico", "Región de Los Lagos"]
 ---
 

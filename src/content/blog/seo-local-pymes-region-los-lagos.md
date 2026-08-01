@@ -4,7 +4,7 @@ description: "Aprende como posicionar tu negocio en Google con SEO local en la R
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
 author: "Matías Pérez Nauto"
-image: "/blog/og-seo-local-pymes-region-los-lagos.png"
+image: "/blog/og-seo-local-pymes-region-los-lagos.svg"
 tags: ["seo local", "region de los lagos", "posicionamiento web", "google maps", "pymes", "marketing digital"]
 ---
 

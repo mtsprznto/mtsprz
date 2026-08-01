@@ -3,7 +3,7 @@ title: "Agentes de IA para empresas en Chile: que son y como pueden ayudarte (20
 description: "Descubre que son los agentes de IA, como funcionan y como las empresas chilenas estan usandolos para automatizar tareas, vender mas y reducir costos. Guia 2026 para pymes."
 pubDate: 2026-07-30
 author: "Matias Perez Nauto"
-image: "/blog/og-agentes-ia-empresas.png"
+image: "/blog/og-agentes-ia-empresas.svg"
 tags: ["ia", "agentes ia", "automatizacion", "pymes", "ia agentica", "chile", "tendencias 2026"]
 ---
 

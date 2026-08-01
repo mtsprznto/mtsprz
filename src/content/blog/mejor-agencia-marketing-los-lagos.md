@@ -4,7 +4,7 @@ description: "Cómo elegir la mejor agencia de marketing digital en Puerto Varas
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
 author: "Matías Pérez Nauto"
-image: "/blog/og-mejor-agencia-marketing-los-lagos.png"
+image: "/blog/og-mejor-agencia-marketing-los-lagos.svg"
 tags: ["agencia digital", "marketing digital", "Region de Los Lagos", "Puerto Varas", "Osorno", "Valdivia", "pymes"]
 ---
 

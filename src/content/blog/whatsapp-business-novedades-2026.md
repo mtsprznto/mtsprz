@@ -3,7 +3,7 @@ title: "WhatsApp Business 2026: todas las novedades que cambian como vendes (use
 description: "WhatsApp Business 2026 trae 3 cambios importantes: nombres de usuario, inteligencia artificial integrada y nuevos precios desde octubre. Guia completa para pymes chilenas."
 pubDate: 2026-07-31
 author: "Matias Perez Nauto"
-image: "/blog/og-whatsapp-business-2026.png"
+image: "/blog/og-whatsapp-business-2026.svg"
 tags: ["whatsapp", "whatsapp business", "ia", "precios", "pymes", "chile", "2026"]
 ---
 

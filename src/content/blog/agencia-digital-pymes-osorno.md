@@ -4,7 +4,7 @@ description: "Agencia digital en Osorno: páginas web, SEO local y automatizacio
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
 author: "Matías Pérez Nauto"
-image: "/blog/og-agencia-digital-pymes-osorno.png"
+image: "/blog/og-agencia-digital-pymes-osorno.svg"
 tags: ["agencia digital", "osorno", "paginas web", "seo", "pymes", "region de los lagos"]
 ---
 

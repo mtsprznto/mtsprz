@@ -3,7 +3,7 @@ title: "Catalogo de WhatsApp Business: convierte tu chat en una tienda 24/7 (gui
 description: "Aprende a crear y optimizar el catalogo de WhatsApp Business para vender productos directamente desde el chat. Guia paso a paso para pymes chilenas."
 pubDate: 2026-07-31
 author: "Matias Perez Nauto"
-image: "/blog/og-catalogo-whatsapp-business.png"
+image: "/blog/og-catalogo-whatsapp-business.svg"
 tags: ["whatsapp", "whatsapp business", "catalogo", "ventas", "ecommerce", "pymes", "chile"]
 ---
 

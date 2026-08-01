@@ -3,7 +3,7 @@ title: "WhatsApp Business API vs App: cual necesita tu negocio en Chile (guia 20
 description: "WhatsApp Business API vs App gratuita: diferencias, costos y cuando migrar. Guia para pymes chilenas que necesitan escalar su atencion por WhatsApp."
 pubDate: 2026-08-01
 author: "Matias Perez Nauto"
-image: "/blog/og-whatsapp-api-vs-app.png"
+image: "/blog/og-whatsapp-api-vs-app.svg"
 tags: ["whatsapp", "whatsapp business", "api", "pymes", "atencion cliente", "chile"]
 ---
 

@@ -3,7 +3,7 @@ title: "Los mejores CRM gratis para pymes chilenas en 2026: compara y elige el t
 description: "Comparativa de los mejores CRM gratuitos para pymes chilenas en 2026. HubSpot, Zoho, Monday, Bitrix24 y mas. Cual elegir segun tu tipo de negocio."
 pubDate: 2026-08-01
 author: "Matias Perez Nauto"
-image: "/blog/og-crm-gratis-pymes.png"
+image: "/blog/og-crm-gratis-pymes.svg"
 tags: ["crm", "herramientas", "gratis", "pymes", "ventas", "gestion clientes", "chile"]
 ---
 

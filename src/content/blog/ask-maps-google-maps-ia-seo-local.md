@@ -3,7 +3,7 @@ title: "Ask Maps: la nueva busqueda por IA en Google Maps que cambia el SEO loca
 description: "Google Maps lanzo Ask Maps con IA Gemini. Ahora los usuarios preguntan en lenguaje natural y la IA elige el negocio. Descubre como adaptar tu SEO local para 2026."
 pubDate: 2026-07-31
 author: "Matias Perez Nauto"
-image: "/blog/og-ask-maps-google-maps.png"
+image: "/blog/og-ask-maps-google-maps.svg"
 tags: ["google maps", "ask maps", "gemini", "seo local", "ia", "pymes", "chile"]
 ---
 

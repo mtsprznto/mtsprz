@@ -3,7 +3,7 @@ title: "TikTok para negocios locales en Chile: ¿sirve o es perder tiempo? (2026
 description: "TikTok para negocios locales en Chile: analisis realista de si vale la pena, que tipo de negocio funciona y como empezar sin perder tiempo. Guia 2026 para pymes."
 pubDate: 2026-08-01
 author: "Matias Perez Nauto"
-image: "/blog/og-tiktok-negocios-locales.png"
+image: "/blog/og-tiktok-negocios-locales.svg"
 tags: ["tiktok", "redes sociales", "pymes", "marketing", "video", "chile"]
 ---
 

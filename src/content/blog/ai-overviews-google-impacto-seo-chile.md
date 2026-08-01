@@ -3,7 +3,7 @@ title: "AI Overviews de Google 2026: como afectan a tu negocio y como adaptarte"
 description: "Los AI Overviews de Google reducen el trafico organico hasta 89% en algunas busquedas. Aprende como afectan a tu pyme chilena y que hacer para no perder visibilidad."
 pubDate: 2026-07-30
 author: "Matias Perez Nauto"
-image: "/blog/og-ai-overviews-google.png"
+image: "/blog/og-ai-overviews-google.svg"
 tags: ["google", "ai overviews", "seo", "ia", "busqueda", "pymes", "chile"]
 ---
 

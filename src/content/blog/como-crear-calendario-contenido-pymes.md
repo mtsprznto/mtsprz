@@ -3,7 +3,7 @@ title: "Como crear un calendario de contenido que realmente genere clientes (gui
 description: "Aprende a crear un calendario de contenido para tu pyme chilena que genere clientes reales. Plantilla gratuita, ejemplos por rubro y estrategia de publicacion."
 pubDate: 2026-08-01
 author: "Matias Perez Nauto"
-image: "/blog/og-calendario-contenido-pymes.png"
+image: "/blog/og-calendario-contenido-pymes.svg"
 tags: ["contenido", "calendario", "marketing", "redes sociales", "blog", "pymes", "chile"]
 ---
 

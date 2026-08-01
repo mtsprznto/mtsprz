@@ -3,7 +3,7 @@ title: "Como calcular el ROI de la automatizacion con IA antes de invertir (guia
 description: "Aprende a calcular el retorno de inversion (ROI) de la automatizacion con IA para tu pyme chilena. Formula simple, ejemplos reales y calculadora gratuita."
 pubDate: 2026-07-30
 author: "Matias Perez Nauto"
-image: "/blog/og-roi-automatizacion-ia.png"
+image: "/blog/og-roi-automatizacion-ia.svg"
 tags: ["ia", "automatizacion", "roi", "inversion", "pymes", "negocios", "chile"]
 ---
 

@@ -4,7 +4,7 @@ description: "Precios reales de una página web en Puerto Varas 2026. Desde $290
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
 author: "Matías Pérez Nauto"
-image: "/blog/og-cuanto-cuesta-pagina-web-puerto-varas.png"
+image: "/blog/og-cuanto-cuesta-pagina-web-puerto-varas.svg"
 tags: ["paginas web", "puerto varas", "precios", "diseno web", "region de los lagos", "pymes"]
 ---
 

@@ -10,7 +10,7 @@
   <url>
     <loc>https://mtsprz.org/blog/agencia-digital-pymes-osorno</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-agencia-digital-pymes-osorno.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-agencia-digital-pymes-osorno.svg</image:loc>
     </image:image>
   </url>
   <url>
@@ -26,21 +26,45 @@
     </image:image>
   </url>
   <url>
+    <loc>https://mtsprz.org/blog/agentes-de-ia-empresas-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-agentes-ia-empresas.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/ai-overviews-google-impacto-seo-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-ai-overviews-google.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/ask-maps-google-maps-ia-seo-local</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-ask-maps-google-maps.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://mtsprz.org/blog/astro-vs-wordpress-comparativa</loc>
     <image:image>
       <image:loc>https://mtsprz.org/blog/og-astro-vs-wordpress.svg</image:loc>
     </image:image>
   </url>
   <url>
+    <loc>https://mtsprz.org/blog/automatizacion-con-ia-pymes-chile-guia</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-automatizacion-ia-pymes.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://mtsprz.org/blog/automatizar-email-marketing-pymes</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-automatizar-email-marketing-pymes.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-automatizar-email-marketing-pymes.svg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://mtsprz.org/blog/automatizar-whatsapp-negocio-puerto-varas</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-automatizar-whatsapp-negocio-puerto-varas.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-automatizar-whatsapp-negocio-puerto-varas.svg</image:loc>
     </image:image>
   </url>
   <url>
@@ -56,15 +80,45 @@
     </image:image>
   </url>
   <url>
+    <loc>https://mtsprz.org/blog/catalogo-whatsapp-business-tienda-247</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-catalogo-whatsapp-business.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/como-calcular-roi-automatizacion-ia</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-roi-automatizacion-ia.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/como-crear-calendario-contenido-pymes</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-calendario-contenido-pymes.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/como-crear-landing-page-que-venda</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-landing-page-que-venda.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://mtsprz.org/blog/como-crear-pagina-web-emprendedores-sur-chile</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-como-crear-pagina-web-emprendedores-sur-chile.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-como-crear-pagina-web-emprendedores-sur-chile.svg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://mtsprz.org/blog/como-posicionar-negocio-google-maps-los-lagos</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-como-posicionar-negocio-google-maps-los-lagos.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-como-posicionar-negocio-google-maps-los-lagos.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/como-usar-chatgpt-en-tu-pyme-chilena</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-chatgpt-pyme-chilena.svg</image:loc>
     </image:image>
   </url>
   <url>
@@ -88,7 +142,7 @@
   <url>
     <loc>https://mtsprz.org/blog/cuanto-cuesta-pagina-web-puerto-varas</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-cuanto-cuesta-pagina-web-puerto-varas.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-cuanto-cuesta-pagina-web-puerto-varas.svg</image:loc>
     </image:image>
   </url>
   <url>
@@ -100,13 +154,13 @@
   <url>
     <loc>https://mtsprz.org/blog/ecommerce-region-los-lagos</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-ecommerce-region-los-lagos.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-ecommerce-region-los-lagos.svg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://mtsprz.org/blog/empresar-google-maps-osorno</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-empresar-google-maps-osorno.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-empresar-google-maps-osorno.svg</image:loc>
     </image:image>
   </url>
   <url>
@@ -116,15 +170,51 @@
     </image:image>
   </url>
   <url>
+    <loc>https://mtsprz.org/blog/google-ads-pymes-presupuesto-ajustado-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-google-ads-pymes-presupuesto.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/google-analytics-4-pymes-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-google-analytics-4-pymes.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://mtsprz.org/blog/guia-seo-pymes-sur-chile</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-guia-seo-pymes-sur-chile.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-guia-seo-pymes-sur-chile.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/guia-seo-tecnico-2026-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-seo-tecnico-2026.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/instagram-para-pymes-2026-algoritmo</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-instagram-pymes-2026.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/ley-proteccion-datos-chile-2026-pymes</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-ley-proteccion-datos.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/linkedin-empresas-b2b-regiones-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-linkedin-b2b-regiones.svg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://mtsprz.org/blog/mejor-agencia-marketing-los-lagos</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-mejor-agencia-marketing-los-lagos.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-mejor-agencia-marketing-los-lagos.svg</image:loc>
     </image:image>
   </url>
   <url>
@@ -134,9 +224,27 @@
     </image:image>
   </url>
   <url>
+    <loc>https://mtsprz.org/blog/mejores-asistentes-ia-gratis-pymes-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-asistentes-ia-gratis-pymes.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/mejores-crm-gratis-pymes-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-crm-gratis-pymes.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/nuevos-precios-whatsapp-business-octubre-2026</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-precios-whatsapp-octubre-2026.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://mtsprz.org/blog/paginas-web-rapidas-astro</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-paginas-web-rapidas-astro.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-paginas-web-rapidas-astro.svg</image:loc>
     </image:image>
   </url>
   <url>
@@ -164,15 +272,45 @@
     </image:image>
   </url>
   <url>
+    <loc>https://mtsprz.org/blog/que-es-geo-generative-engine-optimization-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-geo-generative-engine-optimization.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/seo-local-chile-2026-guia-pymes</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-seo-local-2026.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://mtsprz.org/blog/seo-local-pymes-region-los-lagos</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-seo-local-pymes-region-los-lagos.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-seo-local-pymes-region-los-lagos.svg</image:loc>
     </image:image>
   </url>
   <url>
     <loc>https://mtsprz.org/blog/seo-restaurante-puerto-varas</loc>
     <image:image>
-      <image:loc>https://mtsprz.org/blog/og-seo-restaurante-puerto-varas.png</image:loc>
+      <image:loc>https://mtsprz.org/blog/og-seo-restaurante-puerto-varas.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/tiktok-negocios-locales-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-tiktok-negocios-locales.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/whatsapp-business-api-vs-app-chile</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-whatsapp-api-vs-app.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/whatsapp-business-novedades-2026</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-whatsapp-business-2026.svg</image:loc>
     </image:image>
   </url>
   <url>

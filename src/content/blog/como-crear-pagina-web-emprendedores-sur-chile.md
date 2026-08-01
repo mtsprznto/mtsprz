@@ -4,7 +4,7 @@ description: "Guía para crear tu página web profesional siendo emprendedor en 
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
 author: "Matías Pérez Nauto"
-image: "/blog/og-como-crear-pagina-web-emprendedores-sur-chile.png"
+image: "/blog/og-como-crear-pagina-web-emprendedores-sur-chile.svg"
 tags: ["paginas web", "emprendedores", "sur de chile", "crear pagina web", "pymes", "region de los lagos"]
 ---
 

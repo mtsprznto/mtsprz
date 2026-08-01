@@ -4,7 +4,7 @@ description: "SEO local para pymes en la Región de Los Lagos. Posiciona tu nego
 pubDate: 2026-07-17
 modifiedTime: 2026-07-18
 author: "Matías Pérez Nauto"
-image: "/blog/og-guia-seo-pymes-sur-chile.png"
+image: "/blog/og-guia-seo-pymes-sur-chile.svg"
 tags: ["SEO", "marketing digital", "pymes", "region de los lagos", "posicionamiento web", "seo local"]
 ---
 

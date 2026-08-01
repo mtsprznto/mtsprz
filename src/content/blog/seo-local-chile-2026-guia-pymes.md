@@ -3,7 +3,7 @@ title: "SEO local 2026: guia actualizada para pymes chilenas que quieren cliente
 description: "El SEO local cambio en 2026. Descubre como posicionar tu negocio en Google Maps y busquedas locales en Chile con estrategias que funcionan este ano."
 pubDate: 2026-08-02
 author: "Matias Perez Nauto"
-image: "/blog/og-seo-local-2026.png"
+image: "/blog/og-seo-local-2026.svg"
 tags: ["seo local", "google maps", "google business profile", "pymes", "posicionamiento", "chile", "2026"]
 ---
 

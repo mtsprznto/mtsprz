@@ -3,7 +3,7 @@ title: "Que es GEO: como optimizar tu web para aparecer en ChatGPT, Perplexity y
 description: "El GEO (Generative Engine Optimization) es el nuevo SEO para la era de la IA. Aprende a optimizar tu web para ser citado por ChatGPT, Perplexity, Gemini y Google AI Overviews."
 pubDate: 2026-07-31
 author: "Matias Perez Nauto"
-image: "/blog/og-geo-generative-engine-optimization.png"
+image: "/blog/og-geo-generative-engine-optimization.svg"
 tags: ["geo", "generative engine optimization", "seo", "ia", "chatgpt", "perplexity", "gemini", "chile"]
 ---
 

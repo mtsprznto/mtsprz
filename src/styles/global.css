@@ -481,6 +481,66 @@ button:focus-visible {
   background: rgba(255, 255, 255, 0.06);
 }
 
+/* Tablas markdown — Astro renderiza <table> plano dentro de .prose-blog.
+   Sin wrapper posible (posts son .md, no .mdx), se usa display:block + overflow
+   para scroll horizontal en móvil y bordes sutiles en escritorio. */
+.prose-blog table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin-top: 1.5rem;
+  border-collapse: collapse;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.015);
+  white-space: nowrap;
+}
+
+.prose-blog thead {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.prose-blog thead th {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(250, 250, 250, 0.75);
+  text-align: left;
+}
+
+.prose-blog th,
+.prose-blog td {
+  padding: 0.875rem 1.125rem;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.prose-blog tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.prose-blog tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.prose-blog tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.prose-blog tbody td {
+  color: rgba(250, 250, 250, 0.72);
+  white-space: normal;
+}
+
+.prose-blog tbody td strong {
+  color: rgba(250, 250, 250, 0.9);
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .prose-blog {
     font-size: 1rem;

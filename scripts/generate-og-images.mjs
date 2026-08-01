@@ -1,19 +1,24 @@
 #!/usr/bin/env node
 
 /**
- * Generate OG Images — crea PNGs 1200×630 únicos para cada post del blog
+ * Generate OG Images — crea imágenes OG (SVG siempre, PNG si @resvg/resvg-js
+ * está instalado) para TODOS los posts del blog.
  *
- * Uso (desde Windows):
+ * Lee los posts directamente del frontmatter de src/content/blog/*.md
+ * (title + image), así el generador nunca se desincroniza del contenido.
+ *
+ * Uso (desde Windows para PNGs):
  *   pnpm install                              # instalar @resvg/resvg-js
  *   node scripts/generate-og-images.mjs       # generar todas
  *   node scripts/generate-og-images.mjs --dry-run
  *   node scripts/generate-og-images.mjs --post=slug
  *
- * Output: public/blog/og-{slug}.png
- * Requisitos: @resvg/resvg-js (WASM, cero binarios nativos)
+ * Output: public/blog/<nombre-que-refiere-el-frontmatter> (.svg o .png)
+ * Requisitos: @resvg/resvg-js (WASM, cero binarios nativos) — opcional,
+ *             sin él se generan SVGs (válidos en navegador y og:image).
  *
  * Autor: Mtsprz SEO
- * Fecha: 2026-07
+ * Fecha: 2026-08
  */
 
 import fs from "fs";
@@ -24,28 +29,42 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const PUBLIC = path.join(ROOT, "public");
 const BLOG_DIR = path.join(PUBLIC, "blog");
+const CONTENT_DIR = path.join(ROOT, "src", "content", "blog");
 
 const DRY_RUN = process.argv.includes("--dry-run");
 const postArg = process.argv.find((a) => a.startsWith("--post="));
 const ONLY_POST = postArg ? postArg.split("=")[1] : null;
 
-// ── Posts data ──
-const POSTS = [
-  { slug: "seo-restaurante-puerto-varas", title: "SEO para restaurantes en Puerto Varas", subtitle: "Guía práctica de SEO local", accent: "#10b981" },
-  { slug: "seo-local-pymes-region-los-lagos", title: "SEO local para pymes en la Región de Los Lagos", subtitle: "Posiciona tu negocio en Google Maps", accent: "#10b981" },
-  { slug: "paginas-web-rapidas-astro", title: "Páginas web rápidas con Astro", subtitle: "Por qué tu negocio necesita velocidad", accent: "#6366f1" },
-  { slug: "guia-seo-pymes-sur-chile", title: "Guía SEO para pymes del sur de Chile", subtitle: "Todo lo que necesitas saber en 2026", accent: "#10b981" },
-  { slug: "empresar-google-maps-osorno", title: "Empresarial en Google Maps — Osorno", subtitle: "Guía paso a paso", accent: "#10b981" },
-  { slug: "ecommerce-region-los-lagos", title: "E-commerce en la Región de Los Lagos", subtitle: "Vende online desde el sur de Chile", accent: "#8b5cf6" },
-  { slug: "cuanto-cuesta-pagina-web-puerto-varas", title: "¿Cuánto cuesta una página web?", subtitle: "Precios en Puerto Varas 2026", accent: "#6366f1" },
-  { slug: "como-posicionar-negocio-google-maps-los-lagos", title: "Cómo posicionar tu negocio en Google Maps", subtitle: "Región de Los Lagos", accent: "#10b981" },
-  { slug: "como-crear-pagina-web-emprendedores-sur-chile", title: "Cómo crear tu página web", subtitle: "Para emprendedores del sur de Chile", accent: "#6366f1" },
-  { slug: "automatizar-whatsapp-negocio-puerto-varas", title: "Automatizar WhatsApp para tu negocio", subtitle: "Puerto Varas & Región de Los Lagos", accent: "#06b6d4" },
-  { slug: "automatizar-email-marketing-pymes", title: "Automatizar email marketing para pymes", subtitle: "Guía práctica 2026", accent: "#06b6d4" },
-  { slug: "agencia-digital-pymes-osorno", title: "Agencia digital para pymes en Osorno", subtitle: "Soluciones digitales a medida", accent: "#8b5cf6" },
-  { slug: "mejor-agencia-marketing-los-lagos", title: "Mejor agencia de marketing en Los Lagos", subtitle: "Guía para elegir bien", accent: "#8b5cf6" },
-  { slug: "precios-reales-paginas-web-chile-2026", title: "Precios reales de páginas web en Chile", subtitle: "Actualizado 2026 — datos propios", accent: "#6366f1" },
-];
+/** Accent por keyword del título — mantiene coherencia con el design system. */
+function pickAccent(title, slug) {
+  const t = `${slug} ${title}`.toLowerCase();
+  if (/seo|maps|posicion/.test(t)) return "#10b981"; // emerald
+  if (/whatsapp|waba|chat/.test(t)) return "#06b6d4"; // cyan
+  if (/marketing|ads|instagram|tiktok|linkedin|redes|publicidad/.test(t)) return "#8b5cf6"; // violet
+  if (/ia|ai|chatgpt|agente|automat/.test(t)) return "#f59e0b"; // amber
+  if (/precio|cuesta|crm|geo/.test(t)) return "#6366f1"; // indigo
+  return "#6366f1";
+}
+
+/** Lee todos los posts del blog: slug (nombre archivo) + title + image. */
+function readPosts() {
+  if (!fs.existsSync(CONTENT_DIR)) return [];
+  return fs
+    .readdirSync(CONTENT_DIR)
+    .filter((f) => f.endsWith(".md"))
+    .map((file) => {
+      const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
+      const title = raw.match(/^title:\s*["']?(.*?)["']?\s*$/m)?.[1] || file.replace(/\.md$/, "");
+      const image = raw.match(/^image:\s*["']?(.*?)["']?\s*$/m)?.[1] || "";
+      return {
+        slug: file.replace(/\.md$/, ""),
+        title,
+        image,
+        imageName: image ? path.basename(image) : `og-${file.replace(/\.md$/, "")}.png`,
+        accent: pickAccent(title, file),
+      };
+    });
+}
 
 function wrapText(text, maxChars) {
   const words = text.split(" ");
@@ -90,7 +109,7 @@ function generateSVG(post) {
   <circle cx="100" cy="500" r="200" fill="${post.accent}" opacity="0.04"/>
   <rect x="80" y="80" width="60" height="3" rx="1.5" fill="url(#accent)"/>
   <text x="80" y="130" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="18" fill="${post.accent}" letter-spacing="3">MTSPRZ</text>
-  <text x="80" y="190" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="16" fill="white" opacity="0.4" letter-spacing="1">${escapeXml(post.subtitle.toUpperCase())}</text>
+  <text x="80" y="190" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="16" fill="white" opacity="0.4" letter-spacing="1">SOLUCIONES DIGITALES · REGIÓN DE LOS LAGOS · CHILE</text>
   ${titleSpans}
   <rect x="0" y="590" width="1200" height="40" fill="${post.accent}" opacity="0.08"/>
   <text x="80" y="615" font-family="system-ui, -apple-system, sans-serif" font-weight="400" font-size="13" fill="white" opacity="0.3">mtsprz.org · Soluciones Digitales · Región de Los Lagos, Chile</text>
@@ -99,22 +118,48 @@ function generateSVG(post) {
 
 async function generatePost(post, resvg) {
   const svg = generateSVG(post);
-  const pngPath = path.join(BLOG_DIR, `og-${post.slug}.png`);
-  const svgPath = path.join(BLOG_DIR, `og-${post.slug}.svg`);
+  const base = path.join(BLOG_DIR, post.imageName);
+  const pngPath = base.replace(/\.svg$/, ".png");
+  const svgPath = base.replace(/\.png$/, ".svg");
 
   if (DRY_RUN) {
-    console.log(`[dry-run] Would create: ${pngPath}`);
+    console.log(`[dry-run] ${post.slug} → ${path.basename(base)}`);
     return;
   }
 
-  if (resvg) {
-    const pngData = resvg.render(svg, 1200, 630);
-    fs.writeFileSync(pngPath, pngData);
-    console.log(`✓ ${pngPath}`);
+  // Formato de salida según disponibilidad: PNG si resvg, si no SVG.
+  const target = resvg ? pngPath : svgPath;
+  const targetName = path.basename(target);
+
+  // Regenerar solo si el target no existe.
+  if (!fs.existsSync(target)) {
+    if (resvg) {
+      fs.writeFileSync(pngPath, resvg.render(svg, 1200, 630));
+      console.log(`✓ ${targetName}`);
+    } else {
+      fs.writeFileSync(svgPath, svg, "utf-8");
+      console.log(`~ ${targetName} (SVG — resvg no instalado)`);
+    }
   } else {
-    // Fallback: save SVG only
-    fs.writeFileSync(svgPath, svg, "utf-8");
-    console.log(`~ ${svgPath} (SVG — resvg not installed, run: pnpm install)`);
+    console.log(`· ${targetName} (ya existe)`);
+  }
+
+  // Auto-sincronizar frontmatter → el `image:` apunta al archivo real generado.
+  const ref = `/blog/${targetName}`;
+  if (post.image !== ref) {
+    patchFrontmatterImage(post.slug, ref);
+  }
+}
+
+/** Reemplaza la línea `image:` del frontmatter de un post. */
+function patchFrontmatterImage(slug, newImage) {
+  const file = path.join(CONTENT_DIR, `${slug}.md`);
+  if (!fs.existsSync(file)) return;
+  let raw = fs.readFileSync(file, "utf-8");
+  const updated = raw.replace(/^image:\s*.*$/m, `image: "${newImage}"`);
+  if (updated !== raw) {
+    fs.writeFileSync(file, updated, "utf-8");
+    console.log(`   frontmatter → ${newImage}`);
   }
 }
 
@@ -128,12 +173,15 @@ try {
   const mod = await import("@resvg/resvg-js");
   resvg = mod;
 } catch {
-  console.log("⚠ @resvg/resvg-js not installed. Run: pnpm install\n");
+  console.log("⚠ @resvg/resvg-js no instalado — se generarán SVGs (funcionan en web/og:image).\n");
 }
 
-const posts = ONLY_POST ? POSTS.filter((p) => p.slug.includes(ONLY_POST)) : POSTS;
+let posts = readPosts();
+posts = ONLY_POST
+  ? posts.filter((p) => p.slug.includes(ONLY_POST) || p.imageName.includes(ONLY_POST))
+  : posts;
 
-console.log(`\nGenerating ${posts.length} OG images...\n`);
+console.log(`\nGenerando OG images para ${posts.length} posts...\n`);
 
 for (const post of posts) {
   await generatePost(post, resvg);
@@ -141,5 +189,5 @@ for (const post of posts) {
 
 console.log(`\n✓ Done`);
 if (!resvg) {
-  console.log(`  SVGs generated. For PNGs, run: pnpm install && node scripts/generate-og-images.mjs`);
+  console.log(`  Para PNGs reales: pnpm install && node scripts/generate-og-images.mjs (en Windows)`);
 }

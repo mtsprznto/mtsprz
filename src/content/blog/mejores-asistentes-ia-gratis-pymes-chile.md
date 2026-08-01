@@ -3,7 +3,7 @@ title: "Los 7 mejores asistentes de IA gratis para tu negocio en Chile (2026)"
 description: "Descubre los 7 mejores asistentes de inteligencia artificial gratuitos para pymes chilenas. ChatGPT, Claude, Gemini y mas herramientas IA sin costo para tu negocio."
 pubDate: 2026-07-30
 author: "Matias Perez Nauto"
-image: "/blog/og-asistentes-ia-gratis-pymes.png"
+image: "/blog/og-asistentes-ia-gratis-pymes.svg"
 tags: ["ia", "herramientas", "gratis", "pymes", "chatgpt", "productividad", "chile"]
 ---
 

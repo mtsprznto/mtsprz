@@ -3,7 +3,7 @@ title: "Guia de SEO tecnico 2026: lo que Google realmente mide para posicionar t
 description: "SEO tecnico 2026: Core Web Vitals, mobile first, indexacion, schema markup, velocidad y mas. Guia practica para posicionar tu web en Google Chile."
 pubDate: 2026-07-31
 author: "Matias Perez Nauto"
-image: "/blog/og-seo-tecnico-2026.png"
+image: "/blog/og-seo-tecnico-2026.svg"
 tags: ["seo", "seo tecnico", "core web vitals", "velocidad web", "google", "pymes", "chile"]
 ---
 

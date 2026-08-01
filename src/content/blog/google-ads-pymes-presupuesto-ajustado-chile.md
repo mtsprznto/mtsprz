@@ -3,7 +3,7 @@ title: "Google Ads para pymes con presupuesto ajustado: como no quemar plata en 
 description: "Guia practica de Google Ads para pymes chilenas con presupuesto limitado. Segmentacion local, keywords de baja competencia, optimizacion de campañas y como evitar errores que cuestan plata."
 pubDate: 2026-07-31
 author: "Matias Perez Nauto"
-image: "/blog/og-google-ads-pymes-presupuesto.png"
+image: "/blog/og-google-ads-pymes-presupuesto.svg"
 tags: ["google ads", "sem", "publicidad", "pymes", "presupuesto", "chile"]
 ---
 

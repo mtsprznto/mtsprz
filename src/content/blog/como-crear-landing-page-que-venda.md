@@ -3,7 +3,7 @@ title: "Como crear una landing page que venda: guia para pymes que no son disena
 description: "Aprende a crear una landing page que convierta visitantes en clientes. Guia paso a paso para pymes chilenas sin experiencia en diseno web. Ejemplos y plantilla."
 pubDate: 2026-08-02
 author: "Matias Perez Nauto"
-image: "/blog/og-landing-page-que-venda.png"
+image: "/blog/og-landing-page-que-venda.svg"
 tags: ["landing page", "conversion", "diseno web", "ventas", "pymes", "chile"]
 ---
 

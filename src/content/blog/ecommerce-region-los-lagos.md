@@ -4,7 +4,7 @@ description: "Guía para crear tienda online en la Región de Los Lagos. Platafo
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
 author: "Matías Pérez Nauto"
-image: "/blog/og-ecommerce-region-los-lagos.png"
+image: "/blog/og-ecommerce-region-los-lagos.svg"
 tags: ["e-commerce", "tienda online", "Region de Los Lagos", "venta online", "desarrollo web", "pymes"]
 ---
 

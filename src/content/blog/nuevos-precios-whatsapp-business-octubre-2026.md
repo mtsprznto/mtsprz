@@ -3,7 +3,7 @@ title: "Nuevos precios de WhatsApp Business desde octubre 2026: todo lo que camb
 description: "Meta cobrara por mensajes de servicio en WhatsApp Business desde octubre 2026. Calcula cuanto pagara tu pyme chilena y como reducir el impacto."
 pubDate: 2026-08-01
 author: "Matias Perez Nauto"
-image: "/blog/og-precios-whatsapp-octubre-2026.png"
+image: "/blog/og-precios-whatsapp-octubre-2026.svg"
 tags: ["whatsapp", "whatsapp business", "precios", "pymes", "meta", "chile", "2026"]
 ---
 

@@ -3,7 +3,7 @@ title: "Instagram para pymes en 2026: el algoritmo actual y como usarlo a tu fav
 description: "El algoritmo de Instagram 2026 prioriza Reels, contenido original y conexiones reales. Guia practica para pymes chilenas que quieren vender en Instagram sin gastar en anuncios."
 pubDate: 2026-08-01
 author: "Matias Perez Nauto"
-image: "/blog/og-instagram-pymes-2026.png"
+image: "/blog/og-instagram-pymes-2026.svg"
 tags: ["instagram", "redes sociales", "algoritmo", "pymes", "marketing", "chile"]
 ---
 

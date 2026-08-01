@@ -3,7 +3,7 @@ title: "Como usar ChatGPT en tu pyme chilena: guia practica 2026"
 description: "Guia practica para usar ChatGPT en tu pyme chilena. Aprende a automatizar tareas, crear contenido y optimizar procesos con IA. Ejemplos reales para negocios en Chile."
 pubDate: 2026-07-30
 author: "Matias Perez Nauto"
-image: "/blog/og-chatgpt-pyme-chilena.png"
+image: "/blog/og-chatgpt-pyme-chilena.svg"
 tags: ["ia", "chatgpt", "pymes", "automatizacion", "herramientas", "productividad", "chile"]
 ---
 
