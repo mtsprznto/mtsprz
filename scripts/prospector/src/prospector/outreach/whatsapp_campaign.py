@@ -148,12 +148,12 @@ class WhatsAppCampaign:
     Args:
         base_url: URL de Evolution API (ej: http://localhost:8080)
         api_key: API key configurada en AUTHENTICATION_API_KEY
-        instance: Nombre de la instancia (ej: mtsprz-bot)
+        instance: Nombre de la instancia (ej: mtsprz)
     """
 
     def __init__(self, base_url: str = "http://localhost:8080",
                  api_key: Optional[str] = None,
-                 instance: str = "mtsprz-bot"):
+                 instance: str = "mtsprz"):
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key or os.environ.get("EVOLUTION_API_KEY", "mtsprz-evolution-key-2026")
         self.instance = instance
@@ -273,12 +273,10 @@ class WhatsAppCampaign:
             else:
                 phone = f"56{phone}"
 
+        # Evolution API v2 accepts "text" directly (not textMessage)
         payload = json.dumps({
             "number": phone,
-            "textMessage": {
-                "text": text,
-            },
-            # Simular typing y delay realista
+            "text": text,
             "options": {
                 "delay": random.randint(1000, 3000),
                 "presence": "composing",

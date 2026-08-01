@@ -160,6 +160,75 @@ ALTER TABLE clients ADD COLUMN IF NOT EXISTS search_vector tsvector
   ) STORED;
 CREATE INDEX IF NOT EXISTS idx_clients_search ON clients USING GIN(search_vector)`,
   },
+  {
+    name: "012_add_honorarios_fields",
+    sql: `
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS template_type VARCHAR(50);
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS net_amount INT;
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS retention_rate NUMERIC(5,2);
+ALTER TABLE contracts ADD COLUMN IF NOT EXISTS gross_amount INT`,
+  },
+  {
+    name: "014_lead_management",
+    sql: `
+CREATE TABLE IF NOT EXISTS leads (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  email VARCHAR(255),
+  source VARCHAR(50) NOT NULL DEFAULT 'web'
+    CHECK (source IN ('whatsapp','web','contact','quote')),
+  service_interest VARCHAR(255),
+  message TEXT,
+  status VARCHAR(20) NOT NULL DEFAULT 'new'
+    CHECK (status IN ('new','contacted','qualified','lost')),
+  notes TEXT,
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+CREATE TABLE IF NOT EXISTS whatsapp_conversations (
+  id SERIAL PRIMARY KEY,
+  lead_id INT REFERENCES leads(id),
+  wa_message_id VARCHAR(255),
+  direction VARCHAR(10) NOT NULL
+    CHECK (direction IN ('incoming','outgoing')),
+  message_type VARCHAR(20) NOT NULL DEFAULT 'text'
+    CHECK (message_type IN ('text','image','document','audio','video')),
+  content TEXT,
+  status VARCHAR(20) DEFAULT 'sent',
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMP DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_leads_phone ON leads(phone);
+CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
+CREATE INDEX IF NOT EXISTS idx_leads_source ON leads(source);
+CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at);
+CREATE INDEX IF NOT EXISTS idx_wa_conv_lead ON whatsapp_conversations(lead_id);
+CREATE INDEX IF NOT EXISTS idx_wa_conv_wa_msg ON whatsapp_conversations(wa_message_id);
+`,
+  },
+  {
+    name: "015_widen_lead_source",
+    sql: `
+ALTER TABLE leads DROP CONSTRAINT IF EXISTS leads_source_check;
+ALTER TABLE leads ADD CONSTRAINT leads_source_check
+  CHECK (source IN ('whatsapp','web','contact','quote','google_maps','manual'));
+`,
+  },
+  {
+    name: "016_normalize_lead_phone",
+    sql: `
+UPDATE leads
+SET phone = CASE
+  WHEN regexp_replace(phone, '\\D', '', 'g') = '' THEN NULL
+  WHEN regexp_replace(phone, '\\D', '', 'g') ~ '^9\\d{8}$'
+    THEN '56' || regexp_replace(phone, '\\D', '', 'g')
+  ELSE regexp_replace(phone, '\\D', '', 'g')
+END
+WHERE phone IS NOT NULL AND phone <> '';
+`,
+  },
 ];
 
 let _sql: ReturnType<typeof neon> | null = null;

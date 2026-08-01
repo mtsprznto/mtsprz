@@ -1,5 +1,6 @@
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import type { PDFPage } from "pdf-lib";
+import { generateHonorariosPdf } from "./contract-pdf-honorarios";
 
 // ── Data Model ──────────────────────────────────────────────────────────────
 
@@ -45,6 +46,27 @@ export interface ContractData {
   clientRepresentante?: string;  // "[nombre], RUT [rut], según consta en escritura/estatutos" — para SpA/SA/Ltda
   clientNotifEmail?: string;     // correo formal del cliente para notificaciones (si distinto a clientEmail)
   prestadorNotifEmail?: string;  // correo formal del prestador (default: contacto@mtsprz.org)
+
+  // NUEVOS — contrato boleta honorarios
+  templateType?: string;          // tipo de plantilla (proyecto_unico, boleta_honorarios, etc.)
+  netAmount?: number;             // monto líquido (ej: 450000)
+  retentionRate?: number;         // tasa retención porcentual (ej: 15.25)
+  grossAmount?: number;           // monto bruto calculado (neto / (1 - rate/100))
+
+  // Oculta precios individuales en tabla de servicios (ej: Blast-Up)
+  hidePrices?: boolean;
+
+  // Blast-Up mode: license IP, $450k líquidos, obligation of means, no hosting
+  blastUpMode?: boolean;
+
+  // NUEVOS — Blast-Up 007: período único, horas, pagaré, contraparte
+  hourCap?: number;              // tope horas período (default 40)
+  extraHourRate?: number;        // tarifa hora adicional bruta (default 11250)
+  clientTechName?: string;       // contraparte técnica nombre
+  clientTechEmail?: string;      // contraparte técnica correo
+  revisionRounds?: number;       // rondas revisión incluidas (default 2)
+  includePagare?: boolean;       // incluir pagaré como garantía
+  signingDate?: string;          // fecha firma (ISO)
 }
 
 // ── Layout Helpers ──────────────────────────────────────────────────────────
@@ -317,6 +339,35 @@ function drawClause2_Declarations(ctx: LayoutCtx, data: ContractData): void {
 function drawClause3_Object(ctx: LayoutCtx, data: ContractData): void {
   drawClauseTitle(ctx, 2, "OBJETO DEL CONTRATO");
 
+  if (data.blastUpMode) {
+    drawClauseParagraph(ctx, "Objeto: ",
+      "El Prestador se obliga a prestar al Cliente servicios digitales de desarrollo, programación, " +
+      "diseño y automatización, bajo la modalidad de obligación de medios y alcance dinámico, " +
+      "ejecutando las tareas que el Cliente le asigne a través de la plataforma Notion u otra " +
+      "herramienta de gestión que las partes acuerden, de conformidad con las cláusulas del " +
+      "presente contrato."
+    );
+
+    drawClauseParagraph(ctx, "Naturaleza de la obligación: ",
+      "Las partes expresamente declaran que la obligación del Prestador es de MEDIOS, no de " +
+      "resultado. El Prestador se compromete a emplear su mejor esfuerzo profesional, conocimiento " +
+      "técnico y diligencia para ejecutar las tareas encomendadas, sin garantizar la obtención " +
+      "de un resultado específico, producto final determinado, funcionalidad concreta, ni el " +
+      "cumplimiento de hitos u objetivos de negocio del Cliente. El alcance del trabajo se define " +
+      "dinámicamente según las tareas priorizadas por el Cliente en la herramienta de gestión, " +
+      "pudiendo variar durante la vigencia del contrato sin que ello constituya modificación del " +
+      "mismo."
+    );
+
+    drawClauseParagraph(ctx, "Relación con el Anexo A: ",
+      "El Anexo A del presente contrato describe los servicios contratados a título informativo " +
+      "y referencial, sin que sus entregables constituyan obligaciones de resultado ni hitos " +
+      "cerrados. El detalle de las tareas específicas, su prioridad y plazos se definirá " +
+      "dinámicamente en la herramienta de gestión durante la ejecución del contrato."
+    );
+    return;
+  }
+
   const objectText =
     data.templateType === "jornada_dedicada"
       ? `El Prestador se obliga a prestar al Cliente los servicios profesionales de diseño web, mantenimiento de sitios web, y programación de sistemas de gestión de datos, bajo la modalidad de jornada dedicada remota, de conformidad con las cláusulas del presente contrato.`
@@ -344,22 +395,89 @@ function drawClause3_Object(ctx: LayoutCtx, data: ContractData): void {
 function drawClause4_Services(ctx: LayoutCtx, data: ContractData): void {
   drawClauseTitle(ctx, 3, "SERVICIOS CONTRATADOS");
 
-  // P1: Filtrar servicios con valor <= 0
+  const hidePrices = !!data.hidePrices;
   const activeServices = (data.services || []).filter(s => (s.price || 0) > 0);
   const monthlySvcs = activeServices.filter(s => s.is_monthly);
   const punctualSvcs = activeServices.filter(s => !s.is_monthly);
   const duration = data.durationMonths || 1;
 
-  // P2: Compute effective total (monthly × months)
   const monthlyTotal = monthlySvcs.reduce((sum, s) => sum + (s.price || 0) * duration, 0);
   const punctualTotal = punctualSvcs.reduce((sum, s) => sum + (s.price || 0), 0);
   const effectiveTotal = monthlyTotal + punctualTotal;
 
-  const colValorX = PAGE_W - MARGIN - 90;   // Subtotal column
-  const colModalX = colValorX - 90;           // Modalidad column
-  const colVUnitX = colModalX - 74;           // Valor unitario column
+  // Cuando hidePrices, se muestra un honorario fijo (el totalAmount del contrato)
+  const flatAmount = hidePrices ? (data.netAmount || data.totalAmount || 0) : effectiveTotal;
 
-  // Helper: determine block label for a punctual service by name
+  if (hidePrices) {
+    // ── Modo oculto: solo nombres de servicios, sin precios ──
+    if (data.blastUpMode) {
+      const blastSvcName = data.services?.[0]?.name || "servicio de mantención evolutiva y soporte de aplicación web existente";
+      drawClauseParagraph(ctx, "Servicio contratado: ",
+        `El Prestador prestará al Cliente el servicio de ${blastSvcName.toLowerCase()}, ` +
+        `conforme al detalle y alcance establecidos en el Anexo A del presente contrato. ` +
+        `Las tareas y requerimientos serán publicados por el Cliente en la plataforma Notion ` +
+        `u otra herramienta de gestión que las partes acuerden. El Prestador ejecutará las tareas ` +
+        "según el orden de prioridad que el Cliente defina, realizando avances progresivos y " +
+        "poniéndolos a disposición en entorno de pruebas (staging) para revisión. " +
+        "Las partes expresamente declaran que: (a) la obligación del Prestador es de MEDIOS, no " +
+        "de resultado, comprometiéndose a emplear su mejor esfuerzo profesional sin garantizar " +
+        "la obtención de un producto final específico, funcionalidad determinada o resultado " +
+        "concreto; (b) no existe un producto final comprometido ni entregables cerrados; " +
+        "(c) el alcance se define dinámicamente según las tareas asignadas en Notion, pudiendo " +
+        "variar durante la vigencia del contrato; (d) la aceptación de cada avance se rige por " +
+        "el plazo de revisión de 5 días hábiles de la cláusula NOVENA, entendiéndose aprobado " +
+        "tácitamente si no hay observaciones en dicho plazo."
+      );
+      ctx.y -= 4;
+    }
+    // Encabezado simple
+    ctx.page.drawRectangle({ x: MARGIN, y: ctx.y - 4, width: CONTENT_W, height: 24, color: SECTION_BG });
+    ctx.page.drawText("Servicios incluidos", { x: MARGIN + 8, y: ctx.y + 4, size: SMALL_SIZE, font: ctx.fontBold, color: TEXT });
+    ctx.y -= 28;
+
+    for (const svc of activeServices) {
+      const nameLines = countLines(svc.name, CONTENT_W - 16, SMALL_SIZE, ctx.font);
+      const rowH = Math.max(18, nameLines * 13 + 4);
+      ensureSpace(ctx, rowH + 2);
+      ctx.page.drawRectangle({ x: MARGIN, y: ctx.y - 2, width: CONTENT_W, height: rowH, color: WHITE });
+      drawWrappedText(ctx, `— ${svc.name}`, MARGIN + 8, ctx.y + 2, CONTENT_W - 16, SMALL_SIZE, ctx.font, 13);
+      ctx.y -= rowH + 2;
+    }
+
+    ensureSpace(ctx, 50);
+    ctx.y -= 8;
+    ctx.page.drawLine({
+      start: { x: MARGIN, y: ctx.y },
+      end: { x: PAGE_W - MARGIN, y: ctx.y },
+      thickness: 1,
+      color: BORDER,
+    });
+    ctx.y -= 20;
+
+    // Total plano (sin precios individuales)
+    ctx.page.drawText("Honorarios fijos (líquidos)", {
+      x: MARGIN + 8,
+      y: ctx.y,
+      size: NORMAL_SIZE,
+      font: ctx.fontBold,
+      color: PRIMARY,
+    });
+    ctx.page.drawText(`$${flatAmount.toLocaleString("es-CL")}`, {
+      x: PAGE_W - MARGIN - 90,
+      y: ctx.y,
+      size: NORMAL_SIZE,
+      font: ctx.fontBold,
+      color: PRIMARY,
+    });
+    ctx.y -= 24;
+    return;
+  }
+
+  // ── Modo normal: tabla 4-columnas con precios ──
+  const colValorX = PAGE_W - MARGIN - 90;
+  const colModalX = colValorX - 90;
+  const colVUnitX = colModalX - 74;
+
   const fundacionKeys = ["diagnóstico", "diagnostico", "logo", "identidad", "auditoría", "auditoria", "seo", "marca"];
   const plataformaKeys = ["sitio web", "landing", "tienda", "ecommerce", "aplicación", "aplicacion", "web app", "api", "backend", "dashboard", "panel"];
   const automatizacionKeys = ["automatización", "automatizacion", "excel", "n8n", "make", "bot", "whatsapp", "email marketing", "crm", "ocr", "scrap", "etl"];
@@ -374,7 +492,7 @@ function drawClause4_Services(ctx: LayoutCtx, data: ContractData): void {
     return "Bloque 1";
   };
 
-  // ── HEADER: 4-column (Servicio | Valor unitario | Modalidad | Subtotal) ──
+  // ── HEADER ──
   ctx.page.drawRectangle({ x: MARGIN, y: ctx.y - 4, width: CONTENT_W, height: 24, color: SECTION_BG });
   ctx.page.drawText("Servicio", { x: MARGIN + 8, y: ctx.y + 4, size: SMALL_SIZE, font: ctx.fontBold, color: TEXT });
   ctx.page.drawText("Valor unitario", { x: colVUnitX, y: ctx.y + 4, size: 7, font: ctx.fontBold, color: MUTED });
@@ -382,7 +500,6 @@ function drawClause4_Services(ctx: LayoutCtx, data: ContractData): void {
   ctx.page.drawText("Subtotal", { x: colValorX, y: ctx.y + 4, size: 7, font: ctx.fontBold, color: MUTED });
   ctx.y -= 28;
 
-  // ── All services: unified 4-column loop ──
   for (const svc of activeServices) {
     const isMonthly = !!svc.is_monthly;
     const subtotal = isMonthly ? (svc.price || 0) * duration : (svc.price || 0);
@@ -422,7 +539,6 @@ function drawClause4_Services(ctx: LayoutCtx, data: ContractData): void {
   });
   ctx.y -= 20;
 
-  // Total row
   ctx.page.drawText("TOTAL", {
     x: colVUnitX - 8,
     y: ctx.y,
@@ -465,7 +581,14 @@ function drawClause4_Services(ctx: LayoutCtx, data: ContractData): void {
 function drawClause5_ObligationsPrestador(ctx: LayoutCtx, data: ContractData): void {
   drawClauseTitle(ctx, 4, "OBLIGACIONES DEL PRESTADOR");
 
-  const items = [
+  const items = data.blastUpMode ? [
+    "Ejecutar los servicios con estándar profesional y la diligencia exigible conforme al Artículo 1547 del Código Civil (culpa leve).",
+    "Cumplir los plazos y condiciones pactadas en el presente contrato, de conformidad con los Artículos 1545 y 1547 del Código Civil.",
+    "Mantener informado al Cliente del estado de avance de los servicios y cualquier eventualidad que pudiera afectar su ejecución.",
+    "Poner a disposición del Cliente los avances parciales en un entorno de pruebas (staging) o vista previa durante la ejecución del proyecto para su revisión. El Prestador no está obligado a entregar códigos fuentes, archivos editables, repositorios ni credenciales de administración, cuya transferencia se regirá por lo dispuesto en la cláusula DÉCIMA PRIMERA.",
+    "Emitir boleta electrónica de honorarios por cada pago recibido, conforme al Artículo 88 del Código Tributario.",
+    "No utilizar información del Cliente para fines distintos al objeto del contrato.",
+  ] : [
     "Ejecutar los servicios con estándar profesional y la diligencia exigible conforme al Artículo 1547 del Código Civil (culpa leve).",
     "Cumplir los plazos y condiciones pactadas en el presente contrato, de conformidad con los Artículos 1545 y 1547 del Código Civil.",
     "Mantener informado al Cliente del estado de avance de los servicios y cualquier eventualidad que pudiera afectar su ejecución.",
@@ -509,7 +632,8 @@ function drawClause6_ObligationsClient(ctx: LayoutCtx, data: ContractData): void
 function drawClause7_Payment(ctx: LayoutCtx, data: ContractData): void {
   drawClauseTitle(ctx, 6, "HONORARIOS Y FORMA DE PAGO");
 
-  // Recompute effective total igual que en CUARTA (monthly × duration)
+  const hidePrices = !!data.hidePrices;
+  const blastUp = !!data.blastUpMode;
   const activeServices = (data.services || []).filter(s => (s.price || 0) > 0);
   const monthlySvcs = activeServices.filter(s => s.is_monthly);
   const punctualSvcs = activeServices.filter(s => !s.is_monthly);
@@ -517,8 +641,71 @@ function drawClause7_Payment(ctx: LayoutCtx, data: ContractData): void {
   const monthlyTotal = monthlySvcs.reduce((sum, s) => sum + (s.price || 0) * duration, 0);
   const punctualTotal = punctualSvcs.reduce((sum, s) => sum + (s.price || 0), 0);
   const effectiveTotal = monthlyTotal + punctualTotal;
-  const total = effectiveTotal.toLocaleString("es-CL");
+  const displayTotal = hidePrices ? (data.netAmount || data.totalAmount || effectiveTotal) : effectiveTotal;
+  const total = displayTotal.toLocaleString("es-CL");
   const retentionRate = "15,25%";
+
+  if (blastUp) {
+    const netAmount = data.netAmount || data.totalAmount || 450000;
+    const rate = data.retentionRate ?? 15.25;
+    const grossAmount = data.grossAmount || Math.round(netAmount / (1 - rate / 100));
+    const netStr = netAmount.toLocaleString("es-CL");
+    const grossStr = grossAmount.toLocaleString("es-CL");
+
+    drawClauseParagraph(ctx, "Monto: ",
+      `El valor de $${netStr} corresponde al monto líquido a recibir por el Prestador. ` +
+      `La boleta se emitirá por el valor bruto de $${grossStr} que, aplicada la retención ` +
+      `del ${retentionRate} (Ley N° 21.133), arroje dicho líquido. El Prestador es persona ` +
+      `natural que emite boleta de honorarios, exenta de IVA.`
+    );
+
+    drawClauseParagraph(ctx, "Obligación de pago y plazo: ",
+      `El pago único por $${netStr} líquidos se efectuará dentro de los 5 días corridos siguientes ` +
+      "a la suscripción del contrato, y en todo caso con anterioridad al inicio de la ejecución " +
+      "de los servicios. Si el último día del plazo fuere inhábil bancario, el pago deberá " +
+      "efectuarse el día hábil inmediatamente anterior. El solo transcurso del plazo constituirá " +
+      "al Cliente en mora de pleno derecho (Art. 1551 N°1 CC)."
+    );
+
+    drawClauseParagraph(ctx, "Pacto comisorio calificado: ",
+      "El no pago íntegro del honorario dentro del plazo establecido producirá de pleno derecho " +
+      "la resolución del contrato, sin necesidad de declaración judicial ni de requerimiento " +
+      "previo (Art. 1489 CC). Para hacer valer la resolución bastará comunicación escrita del " +
+      "Prestador al correo de notificaciones del Cliente. En tal caso, el Prestador no estará " +
+      "obligado a iniciar ni continuar la ejecución de los servicios, y el Cliente deberá cesar " +
+      "todo uso de los entregables y avances recibidos, eliminar todas las copias en su poder " +
+      "y certificar por escrito dicha eliminación dentro de tercero día."
+    );
+
+    drawClauseParagraph(ctx, "Medio de pago: ",
+      "Transferencia electrónica a la cuenta bancaria del Prestador indicada en la boleta de honorarios."
+    );
+
+    const grossAdjustNote = data.retentionRate ? ", y si la tasa de retención variare durante la vigencia del contrato, el monto bruto de la boleta se ajustará de modo que el líquido percibido por el Prestador se mantenga en $" + netStr : "";
+    drawClauseText(ctx,
+      `Boleta de honorarios: El Prestador emitirá una (1) boleta electrónica de honorarios ` +
+      `por el valor bruto de $${grossStr}, conforme al Artículo 88 del Código Tributario. ` +
+      `El Cliente, como contribuyente de Primera Categoría obligado a contabilidad completa, ` +
+      `enterará la retención del ${retentionRate} en el SII conforme a la Ley N° 21.133.` +
+      grossAdjustNote
+    );
+
+    drawClauseParagraph(ctx, "Reajuste por IPC: ",
+      "Todas las sumas adeudadas se reajustarán según la variación del IPC entre la fecha de " +
+      "exigibilidad y la fecha de pago efectivo. Este reajuste es independiente de los intereses " +
+      "y de la cláusula penal, y procede aunque no medie mora."
+    );
+
+    drawClauseParagraph(ctx, "Cláusula penal por mora del Cliente: ",
+      `En caso de mora en el pago, el Cliente pagará al Prestador una penalidad del 2% del monto ` +
+      `adeudado por cada mes calendario de atraso, con un máximo del 20% del honorario líquido ` +
+      `del período, esto es, $${Math.round(netAmount * 0.2).toLocaleString("es-CL")}. La pena ` +
+      `convencional reemplaza toda otra indemnización por daños moratorios, sin perjuicio del ` +
+      `reajuste por IPC. El Prestador podrá exigir simultáneamente el cumplimiento de la ` +
+      `obligación principal y la pena (Art. 1537 inc. 2° CC).`
+    );
+    return;
+  }
 
   drawClauseParagraph(ctx, "Monto: ",
     `El valor total de los servicios asciende a $${total} CLP (${total} pesos chilenos). El Prestador es persona natural que emite boleta de honorarios, por lo que estos servicios no están afectos a IVA a la fecha de suscripción, sin perjuicio de la cláusula de ajuste tributario de la presente cláusula. El valor corresponde al monto bruto de las boletas de honorarios; la retención legal se descuenta de dicho monto.`
@@ -640,6 +827,33 @@ function drawClause8_Term(ctx: LayoutCtx, data: ContractData): void {
   const startDate = data.startDate || "—";
   const endDate = data.endDate || "—";
 
+  if (data.blastUpMode) {
+    drawClauseParagraph(ctx, "Vigencia del período: ",
+      "El presente contrato rige para un período único de 31 días corridos, contados desde " +
+      "la fecha de acreditación del pago. NO existe renovación automática. Las partes podrán " +
+      "suscribir un nuevo contrato para períodos futuros si así lo acuerdan."
+    );
+    drawClauseParagraph(ctx, "Perfeccionamiento: ",
+      "El contrato se perfecciona con su suscripción. La ejecución de los servicios comenzará " +
+      "una vez recibido el pago íntegro del honorario del período."
+    );
+    drawClauseParagraph(ctx, "Término anticipado: ",
+      "Cualquiera de las partes podrá poner término anticipado al contrato mediante aviso " +
+      "escrito con al menos 10 días de anticipación. En caso de desistimiento unilateral " +
+      "del Cliente sin el aviso referido, se deberá pagar la totalidad del honorario del " +
+      "período en curso. En caso de término anticipado imputable al Prestador, éste " +
+      "restituirá el honorario proporcional a las horas no consumidas."
+    );
+    drawClauseParagraph(ctx, "Efectos del término: ",
+      "Al término del contrato por cualquier causa, el Prestador pondrá a disposición del " +
+      "Cliente los avances parciales producidos hasta esa fecha y devolverá la información " +
+      "confidencial del Cliente en su poder, salvo aquella que deba conservar por obligación " +
+      "legal o tributaria. La garantía sobrevive al término del contrato respecto de los " +
+      "avances aprobados antes del término."
+    );
+    return;
+  }
+
   // B4: entrada en vigor unificada — funciona con o sin bloques
   const hasBlocks = (data.services || []).some(s => (s.price || 0) > 0 && !s.is_monthly);
   const entradaVigorText = hasBlocks
@@ -740,6 +954,29 @@ function drawClause9_Deliverables(ctx: LayoutCtx, data: ContractData): void {
 
   const revisionDays = data.revisionDays || 5;
 
+  if (data.blastUpMode) {
+    drawClauseText(ctx,
+      "Los servicios se prestan por avances y bajo obligación de medios, conforme a las tareas " +
+      "definidas por el Cliente en la herramienta de gestión. La aceptación recae sobre los avances " +
+      "efectivamente ejecutados en cada período, y no sobre un producto final terminado."
+    );
+
+    drawClauseParagraph(ctx, "Aprobación tácita: ",
+      "El Cliente dispondrá de un plazo de " + revisionDays + " días hábiles para revisar cada avance " +
+      "y formular observaciones por escrito. Si el Cliente no formula observaciones dentro de dicho " +
+      "plazo, el avance se entenderá recibido conforme y aprobado tácitamente. La aprobación —expresa " +
+      "o tácita— de cada avance no implica la exigibilidad de un producto final terminado, aplicación " +
+      "completa ni resultado determinado dentro del período de vigencia del contrato."
+    );
+
+    drawClauseParagraph(ctx, "Rondas de revisión: ",
+      "Se incluye una ronda de correcciones por avance. Las revisiones o cambios que excedan " +
+      "dicho límite se considerarán tareas adicionales y se regirán por la cláusula DÉCIMA CUARTA " +
+      "(Modificaciones), estando sujetas a cotización separada."
+    );
+    return;
+  }
+
   drawClauseText(ctx,
     "El Prestador entregará los productos y activos digitales conforme a las especificaciones acordadas. " +
     "El Cliente dispondrá de un plazo de " + revisionDays + " días hábiles para revisar cada entregable " +
@@ -792,6 +1029,48 @@ function drawClause10_Independence(ctx: LayoutCtx, data: ContractData): void {
 }
 
 function drawClause11_IntellectualProperty(ctx: LayoutCtx, data: ContractData): void {
+  if (data.blastUpMode) {
+    drawClauseTitle(ctx, 10, "PROPIEDAD INTELECTUAL");
+
+    drawClauseParagraph(ctx, "Cesión de derechos patrimoniales: ",
+      "Conforme al Artículo 8 inciso 3° de la Ley N° 17.336, los derechos patrimoniales sobre " +
+      "los incrementos de código desarrollados durante cada período mensual se ceden al Cliente " +
+      "una vez percibido el pago íntegro de dicho período. Para efectos de esta cláusula, " +
+      "se entiende por pago total el pago íntegro del período mensual respectivo."
+    );
+
+    drawClauseParagraph(ctx, "Entrega técnica y staging: ",
+      "El Prestador pondrá a disposición del Cliente el código desarrollado en un entorno de " +
+      "pruebas (staging) para su revisión. El entorno de pruebas constituye únicamente el flujo " +
+      "de trabajo de revisión previa a la puesta en producción y no un mecanismo de retención " +
+      "de los derechos cedidos conforme al párrafo anterior. Una vez percibido el pago del " +
+      "período respectivo, el Cliente tiene derecho a recibir el código fuente de los incrementos " +
+      "desarrollados en dicho período."
+    );
+
+    drawClauseParagraph(ctx, "Derechos morales: ",
+      "Se reservan al Prestador los derechos morales reconocidos en el Artículo 14 de la Ley " +
+      "N° 17.336, incluyendo el derecho a ser identificado como autor de las obras y a oponerse " +
+      "a toda deformación, mutilación u otra modificación de las mismas."
+    );
+
+    drawClauseParagraph(ctx, "Portafolio: ",
+      "El Prestador podrá incluir los trabajos realizados en su portafolio profesional, sin " +
+      "revelar información confidencial del Cliente."
+    );
+
+    drawClauseParagraph(ctx, "Componentes de terceros: ",
+      "Los componentes de terceros, librerías y frameworks de código abierto se rigen por sus " +
+      "respectivas licencias."
+    );
+
+    drawClauseParagraph(ctx, "Dominio y cuentas: ",
+      "El nombre de dominio se registrará directamente a nombre del Cliente. Las cuentas de " +
+      "plataforma serán titularidad del Cliente desde su creación."
+    );
+    return;
+  }
+
   drawClauseTitle(ctx, 10, "PROPIEDAD INTELECTUAL");
 
   // ── Layer 1: Software — cesión directa vía Art. 8 inc. 3° Ley 17.336 ──
@@ -923,9 +1202,17 @@ function drawClause12_Confidentiality(ctx: LayoutCtx, data: ContractData): void 
     "No constituye Información Confidencial: (a) la que sea o llegue a ser de dominio público sin infracción de la Parte Receptora; (b) la requerida por orden judicial o autoridad competente.",
     "Al término del contrato, la Parte Receptora deberá devolver o destruir toda la Información Confidencial recibida, salvo (i) aquella que deba conservar por obligación legal o tributaria; (ii) los accesos que subsistan conforme a la cláusula de supervivencia para prestar soporte y garantía; y (iii) la información que el Prestador requiera conservar para acreditar la ejecución del contrato ante terceros o autoridades, plazo durante el cual mantendrá la reserva.",
   ];
-  const letters = "abcde".split("");
+  const confLetters = "abcde".split("");
   for (let i = 0; i < confItems.length; i++) {
-    drawClauseItem(ctx, letters[i], confItems[i]);
+    drawClauseItem(ctx, confLetters[i], confItems[i]);
+  }
+
+  if (data.blastUpMode) {
+    drawClauseParagraph(ctx, "Excepción para portafolio: ",
+      "No obstante lo anterior, el Prestador podrá incluir los trabajos realizados en su portafolio " +
+      "profesional, incluyendo descripciones funcionales generales y capturas de pantalla del entorno " +
+      "visual, sin revelar código fuente, datos del Cliente, información financiera ni secretos comerciales."
+    );
   }
 }
 
@@ -946,7 +1233,7 @@ function drawClause13_DataProtection(ctx: LayoutCtx, data: ContractData): void {
   const dpItems = [
     "Los datos personales a los que tenga acceso el Prestador serán utilizados exclusivamente para la ejecución del objeto del contrato.",
     "El Prestador adoptará las medidas de seguridad técnicas y organizativas necesarias para proteger los datos personales contra acceso no autorizado, pérdida o destrucción.",
-    "El Prestador notificará al Cliente cualquier incidente de seguridad que involucre datos personales en un plazo máximo de 72 horas desde que tome conocimiento del mismo. Las partes adoptan este plazo como obligación contractual entre ellas, independientemente del plazo que establezca la normativa de protección de datos vigente a la fecha de cada incidente.",
+    "El Prestador notificará al Cliente cualquier incidente de seguridad que involucre datos personales sin dilaciones indebidas desde que tome conocimiento del mismo, y en todo caso dentro de las 72 horas siguientes. Las partes adoptan los plazos indicados como obligación contractual entre ellas, independientemente del plazo que establezca la normativa de protección de datos vigente a la fecha de cada incidente.",
     "Cuando el Prestador acceda a bases de datos o contactos del Cliente (por ejemplo, en integraciones CRM), actuará como encargado de tratamiento: tratará los datos exclusivamente bajo instrucciones del Cliente, no los utilizará para fines propios ni los comunicará a terceros sin autorización, y al término del contrato los devolverá o eliminará, salvo obligación legal de conservación.",
     "El Prestador deberá informar al Cliente la identidad de sus subencargados de tratamiento (proveedores de hosting, CRM en la nube, servicios de OCR, plataformas de email y cualquier otro tercero que trate datos personales del Cliente o de sus clientes) y obtener autorización previa del Cliente antes de incorporar nuevos subencargados. El Prestador responde solidariamente por el cumplimiento de estos subencargados, sin poder eximirse alegando que delegó el tratamiento.",
     "Queda expresamente prohibido al Prestador enviar, procesar o transmitir datos personales del Cliente o de sus clientes a herramientas de inteligencia artificial de terceros sin autorización escrita previa del Cliente, ni utilizar dichos datos para entrenamiento de modelos de IA.",
@@ -1014,6 +1301,36 @@ function drawClause16_Warranty(ctx: LayoutCtx, data: ContractData): void {
     "relativa a soporte \"continuo\", \"durante toda la campaña\" o \"prioritario\" pueda interpretarse " +
     "como obligación de duración indefinida."
   );
+
+  if (data.blastUpMode) {
+    drawClauseParagraph(ctx, "Objeto de la garantía: ",
+      "La garantía cubre exclusivamente los incrementos de software y avances aprobados por el " +
+      "Cliente durante la ejecución del contrato. No cubre funcionalidades no solicitadas, no " +
+      "aprobadas o no ejecutadas. Al no existir un producto final terminado, la garantía recae " +
+      "sobre los avances individualmente aprobados y no sobre el conjunto."
+    );
+
+    drawClauseParagraph(ctx, "Período de garantía: ",
+      `El plazo de garantía para cada avance aprobado es de ${warrantyDays} días corridos contados ` +
+      `desde su aprobación expresa o tácita. Este período define el alcance de las correcciones sin ` +
+      `costo y no altera los plazos de prescripción legal de las acciones de las partes.`
+    );
+
+    drawClauseParagraph(ctx, "Cobertura: ",
+      "La garantía cubre defectos de implementación y errores de programación en los avances " +
+      "expresamente aprobados."
+    );
+
+    drawClauseParagraph(ctx, "Exclusiones: ",
+      "No están cubiertos por la garantía: (a) modificaciones realizadas por el Cliente o terceros " +
+      "sin autorización del Prestador; (b) cambios de requerimiento posteriores a la aprobación " +
+      "del avance; (c) problemas derivados de la infraestructura tecnológica del Cliente o de " +
+      "terceros; (d) tareas, funcionalidades o desarrollos no solicitados ni aprobados durante " +
+      "la vigencia del contrato; (e) defectos originados en código o infraestructura preexistentes " +
+      "al inicio del período contratado."
+    );
+    return;
+  }
 
   drawClauseParagraph(ctx, "Período de garantía: ",
     `El plazo de garantía para cada servicio es el indicado expresamente en el Anexo A bajo la etiqueta ` +
@@ -1155,7 +1472,9 @@ function drawClause21_Assignment(ctx: LayoutCtx, data: ContractData): void {
 }
 
 async function drawClause19_Signatures(ctx: LayoutCtx, data: ContractData): Promise<void> {
-  drawClauseTitle(ctx, 21, "FIRMAS");
+  // FIRMAS siempre VIGÉSIMA SEGUNDA (21) — tras Acuerdo Íntegro (18), Cesión (19), Divisibilidad (20)
+  const sigIndex = 21;
+  drawClauseTitle(ctx, sigIndex, "FIRMAS");
 
   ensureSpace(ctx, 200);
   ctx.y -= 10;
@@ -1527,10 +1846,220 @@ function sanitizeDeliverable(d: string): string | null {
   return d;
 }
 
+// ── Anexo A: Blast-Up (Mantención Evolutiva) ────────────────────────────────
+
+function drawBlastUpAnnex(ctx: LayoutCtx, data: ContractData): void {
+  const s = data.services?.[0];
+  const svcName = s?.name || "Mantención evolutiva y soporte de aplicación web existente";
+
+  const subsectionTitle = (title: string) => {
+    ensureSpace(ctx, 28);
+    ctx.y -= 2;
+    ctx.page.drawText(title, {
+      x: MARGIN,
+      y: ctx.y,
+      size: 9,
+      font: ctx.fontBold,
+      color: PRIMARY,
+    });
+    ctx.y -= 16;
+  };
+
+  // ── Introducción ──
+  drawClauseText(ctx,
+    "El presente anexo forma parte integrante del contrato y regula el alcance, " +
+    "entregables y condiciones específicas del servicio de mantención evolutiva y soporte."
+  );
+  ctx.y -= 8;
+
+  // ── 1.1 Calendario del período ──
+  subsectionTitle("1.1  Calendario del período");
+  drawClauseText(ctx,
+    "El período de ejecución único es de 31 días corridos, " +
+    "contados desde la fecha de acreditación del pago. " +
+    "Semana 1 (días 1-7), Semana 2 (días 8-14), Semana 3 (días 15-21), " +
+    "Semana 4 (días 22-28), Cierre (días 29-31). No existe renovación automática."
+  );
+  ctx.y -= 4;
+
+  // ── 1.2 Identificación del servicio ──
+  subsectionTitle("1.2  Identificación del servicio");
+
+  // ── 1.3 Línea base ──
+  subsectionTitle("1.3  Línea base");
+  drawClauseText(ctx,
+    "La línea base del servicio la constituyen los activos digitales preexistentes del Cliente " +
+    "(repositorios, base de datos, infraestructura, dominio), respecto de los cuales las partes " +
+    "declaran conocer su estado actual. El Prestador no garantiza la calidad, seguridad ni " +
+    "disponibilidad del código o infraestructura preexistentes."
+  );
+  ctx.y -= 4;
+
+  // ── 1.5 Naturaleza del servicio (obligación de medios) ──
+  subsectionTitle("1.5  Naturaleza del servicio (obligación de medios)");
+  drawClauseParagraph(ctx, "Obligación de medios: ",
+    "El Prestador se obliga a desplegar los mejores esfuerzos técnicos y profesionales para " +
+    "ejecutar las tareas encomendadas, sin que ello implique una obligación de resultados " +
+    "respecto de la completitud, corrección o desempeño de la aplicación como un todo dentro " +
+    "del plazo del contrato. Cada avance se evalúa individualmente conforme a la cláusula NOVENA."
+  );
+  ctx.y -= 4;
+
+  // ── 1.6 Límite de horas ──
+  subsectionTitle("1.6  Límite de horas");
+  const hourCap = data.hourCap || 40;
+  drawClauseParagraph(ctx, "Tope de horas del período: ",
+    `El alcance del servicio comprende hasta ${hourCap} horas de trabajo efectivo durante el ` +
+    "período único del contrato. Las horas se contabilizan exclusivamente como tiempo de desarrollo, " +
+    "revisión y reuniones de coordinación. Las horas no consumidas no son acumulables " +
+    "ni reembolsables. Alcanzado el tope, los requerimientos pendientes " +
+    "se reprograman o cotizan por separado. El Prestador pondrá a disposición del Cliente un " +
+    "registro del tiempo invertido, actualizado al menos semanalmente."
+  );
+  ctx.y -= 4;
+
+  // ── 1.7 Vía de ingreso de requerimientos ──
+  subsectionTitle("1.7  Vía de ingreso de requerimientos");
+  drawClauseText(ctx,
+    "El Cliente ingresa sus requerimientos a través de la plataforma Notion, u otra herramienta " +
+    "de gestión de proyectos que las partes acuerden por escrito. Cada requerimiento debe incluir " +
+    "una descripción suficiente y, cuando corresponda, los criterios de aceptación específicos. " +
+    "El Prestador estimará las horas necesarias para cada requerimiento y las comunicará al " +
+    "Cliente. El requerimiento se entenderá aprobado y pasará a ejecución una vez que el Cliente " +
+    "confirme por escrito su conformidad con la estimación."
+  );
+  ctx.y -= 4;
+
+  // ── 1.8 Entregables del período ──
+  subsectionTitle("1.8  Entregables del período");
+  drawClauseText(ctx,
+    "El Prestador ejecutará los requerimientos aprobados y pondrá a disposición del Cliente " +
+    "los siguientes entregables durante la vigencia del contrato:"
+  );
+  ctx.y -= 2;
+
+  const delimHeaderBg = rgb(0.12, 0.12, 0.14);
+  const colX = [MARGIN, MARGIN + 150, MARGIN + 280];
+  const colW = [140, 130, CONTENT_W - 290];
+  const rowH = 16;
+  const tableTop = ctx.y;
+
+  // Table header
+  ensureSpace(ctx, 50);
+  ctx.page.drawRectangle({
+    x: MARGIN, y: ctx.y - 2, width: CONTENT_W, height: rowH + 4, color: delimHeaderBg,
+  });
+  ctx.page.drawText("Entregable", { x: colX[0] + 4, y: ctx.y + 2, size: 7.5, font: ctx.fontBold, color: WHITE });
+  ctx.page.drawText("Descripción", { x: colX[1] + 4, y: ctx.y + 2, size: 7.5, font: ctx.fontBold, color: WHITE });
+  ctx.page.drawText("Plazo / Condición", { x: colX[2] + 4, y: ctx.y + 2, size: 7.5, font: ctx.fontBold, color: WHITE });
+  ctx.y -= rowH + 6;
+
+  const deliverableRows: [string, string, string][] = [
+    ["Incrementos de código", "Código puesto a disposición en entorno de pruebas (staging) para revisión del Cliente, o desplegado directamente en producción cuando la naturaleza del cambio lo requiera", "Dentro del tope de " + (data.hourCap || 40) + " horas del período"],
+    ["Registro de horas", "Reporte del tiempo invertido con desglose por requerimiento", "Semanal, cada viernes"],
+    ["Reunión de coordinación", "Videollamada de hasta 1 hora para priorizar, planificar y revisar avances", "1 vez por semana, día hábil a convenir"],
+    ["Revisión y correcciones", "Ajustes sobre observaciones del Cliente a los avances, antes de su aprobación final. " + (data.revisionRounds || 2) + " rondas por avance", "Dentro de 5 días hábiles desde la solicitud"],
+    ["Atención de incidentes", "Correctivos sobre fallas que impiden la operación normal de la aplicación", "Prioridad máxima, respuesta inicial dentro de 8 horas hábiles"],
+    ["Informe de cierre", "Resumen de tareas ejecutadas, horas consumidas, estado de pendientes y recomendaciones", "Al término del período contratado"],
+  ];
+
+  for (let ri = 0; ri < deliverableRows.length; ri++) {
+    const [ent, desc, plazo] = deliverableRows[ri];
+    const linesP = countLines(desc, colW[1] - 8, 7, ctx.font);
+    const linesZ = countLines(plazo, colW[2] - 8, 7, ctx.font);
+    const rH = Math.max(rowH, Math.max(linesP, linesZ) * 10 + 6);
+    ensureSpace(ctx, rH + 4);
+    if (ri % 2 === 0) {
+      ctx.page.drawRectangle({
+        x: MARGIN, y: ctx.y - 2, width: CONTENT_W, height: rH, color: SECTION_BG,
+      });
+    }
+    ctx.page.drawText(ent, { x: colX[0] + 4, y: ctx.y + 1, size: 7, font: ctx.fontBold, color: TEXT });
+    drawWrappedText(ctx, desc, colX[1] + 4, ctx.y + 1, colW[1] - 8, 7, ctx.font, 10);
+    drawWrappedText(ctx, plazo, colX[2] + 4, ctx.y + 1, colW[2] - 8, 7, ctx.font, 10);
+    ctx.y -= rH + 2;
+  }
+
+  ctx.y -= 2;
+
+  // ── Aceptación ──
+  const revisionRounds = data.revisionRounds || 2;
+  drawClauseParagraph(ctx, "Aceptación: ",
+    `La aceptación de los entregables por parte del Cliente determina el inicio del período ` +
+    `de garantía de hasta ${revisionRounds} ronda(s) de correcciones sobre dicho avance. Dicha ` +
+    `aceptación no condiciona ni suspende la obligación de pago del período, la que es anticipada ` +
+    `conforme a la cláusula SÉPTIMA, y no constituye renuncia a formular observaciones sobre ` +
+    `entregables posteriores.`
+  );
+
+  ctx.y -= 1;
+
+  // ── 1.7 Clasificación de tareas ──
+  subsectionTitle("1.7  Clasificación de tareas");
+  drawClauseParagraph(ctx, "Correctivo: ",
+    "Fallas o errores que impiden la operación normal de la aplicación. Tendrán prioridad " +
+    "máxima de atención, con compromiso de respuesta inicial dentro de 4 horas hábiles. Su " +
+    "corrección se imputa al tope de horas contratado."
+  );
+  ctx.y -= 1;
+  drawClauseParagraph(ctx, "Evolutivo: ",
+    "Modificaciones, mejoras o nuevas funcionalidades solicitadas por el Cliente. Se ejecutan " +
+    "contra el tope de horas contratado, previa estimación y aprobación conforme al punto 1.5."
+  );
+  ctx.y -= 1;
+  drawClauseParagraph(ctx, "Excluido: ",
+    "Quedan excluidos del servicio y requieren cotización separada: (a) cambios de arquitectura " +
+    "o migraciones; (b) integraciones no previstas con servicios de terceros; (c) desarrollo de " +
+    "funcionalidades cuya estimación exceda las horas disponibles del período; (d) tareas " +
+    "recurrentes o de administración que no constituyan desarrollo (gestión de contenidos, " +
+    "soporte a usuarios finales); y (e) cualquier servicio no comprendido en la naturaleza " +
+    "del presente Anexo A."
+  );
+  ctx.y -= 4;
+
+  // ── 1.8 Disponibilidad ──
+  subsectionTitle("1.8  Disponibilidad");
+  drawClauseText(ctx,
+    "El Prestador organiza libremente su tiempo. Se compromete a acusar recibo de las " +
+    "comunicaciones del Cliente dentro de un plazo máximo de 8 horas hábiles y, tratándose " +
+    "de incidentes correctivos calificados como críticos, a iniciar su atención dentro de " +
+    "8 horas hábiles. Las horas dedicadas a incidentes correctivos consumen el tope de " +
+    "horas del período."
+  );
+  ctx.y -= 4;
+
+  // ── 1.9 Propiedad intelectual ──
+  subsectionTitle("1.9  Propiedad intelectual sobre activos preexistentes");
+  drawClauseText(ctx,
+    "Los activos digitales preexistentes del Cliente (código, base de datos, infraestructura, " +
+    "dominio, marca y demás) son y seguirán siendo de exclusiva titularidad del Cliente o de " +
+    "quien corresponda. El presente contrato no altera dicha titularidad. La cláusula DÉCIMA " +
+    "PRIMERA (Propiedad Intelectual) se aplica exclusivamente a los incrementos de código " +
+    "desarrollados durante el período contratado, sin afectar la propiedad del código preexistente."
+  );
+  ctx.y -= 6;
+
+  // ── Línea de cierre ──
+  ctx.page.drawLine({
+    start: { x: MARGIN, y: ctx.y },
+    end: { x: ctx.width - MARGIN, y: ctx.y },
+    thickness: 1,
+    color: BORDER,
+  });
+  ctx.y -= 12;
+
+  drawClauseText(ctx,
+    "Las partes declaran conocer y aceptar el contenido del presente Anexo A, que prevalece " +
+    "sobre cualquier disposición contraria del cuerpo del contrato, en especial las cláusulas " +
+    "CUARTA, QUINTA, NOVENA y DÉCIMA PRIMERA, conforme a la cláusula de prelación del contrato."
+  );
+}
+
 // ── Anexo A: Entregables y Plazos ────────────────────────────────────────────
 
 function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
   if (!data.services || data.services.length === 0) return;
+  const hidePrices = !!data.hidePrices;
 
   // Salto de página para el anexo
   addNewPage(ctx);
@@ -1543,7 +2072,7 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
     height: 36,
     color: rgb(0.01, 0.01, 0.01),
   });
-  ctx.page.drawText("ANEXO A — ENTREGABLES Y PLAZOS", {
+  ctx.page.drawText("ANEXO A — ALCANCE, ENTREGABLES Y PLAZOS", {
     x: MARGIN,
     y: ctx.y + 12,
     size: 13,
@@ -1560,6 +2089,11 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
   });
   ctx.y -= 24;
 
+  if (data.blastUpMode) {
+    drawBlastUpAnnex(ctx, data);
+    return;
+  }
+
   drawClauseText(ctx,
     "El presente anexo forma parte integrante del contrato y detalla los entregables, " +
     "plazos y criterios de aceptación de cada servicio contratado."
@@ -1575,15 +2109,24 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
   const activeServices = billableServices;
   const monthlyNames = activeServices.filter(s => s.is_monthly).map(s => s.name);
   const punctualNames = activeServices.filter(s => !s.is_monthly).map(s => s.name);
-  ensureSpace(ctx, 100);
-  ctx.page.drawText("AGRUPACIÓN EN BLOQUES", {
-    x: MARGIN,
-    y: ctx.y,
-    size: CLAUSE_TITLE_SIZE,
-    font: ctx.fontBold,
-    color: PRIMARY,
-  });
-  ctx.y -= 18;
+
+  // Cuando hidePrices, salta agrupación en bloques (sin precios no tiene sentido)
+  if (hidePrices) {
+    drawClauseText(ctx,
+      "Los servicios contratados y sus entregables se detallan a continuación. " +
+      "El valor total corresponde al honorario fijo pactado en la cláusula SÉPTIMA."
+    );
+    ctx.y -= 8;
+  } else {
+    ensureSpace(ctx, 100);
+    ctx.page.drawText("AGRUPACIÓN EN BLOQUES", {
+      x: MARGIN,
+      y: ctx.y,
+      size: CLAUSE_TITLE_SIZE,
+      font: ctx.fontBold,
+      color: PRIMARY,
+    });
+    ctx.y -= 18;
 
   const BORDER_THIN = rgb(0.85, 0.85, 0.87);
   const drawBlockRow = (block: string, services: string, value: string) => {
@@ -1643,13 +2186,16 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
       : "Los servicios mensuales se devengan y pagan de forma independiente a los servicios puntuales."
   );
   ctx.y -= 8;
+  } // ← fin else (hidePrices = false)
 
   // ── Individual service details ── (B3: solo billableServices, no $0)
+  // (En hidePrices los bloques no se muestran, pero los servicios individuales sí con sus entregables)
   for (let idx = 0; idx < billableServices.length; idx++) {
     const svc = billableServices[idx];
-    const priceStr = (svc.price || 0).toLocaleString("es-CL");
     const monthlyTag = svc.is_monthly ? " (mensual)" : "";
-    const svcHeaderText = `${idx + 1}. ${svc.name} — $${priceStr}${monthlyTag}`;
+    const svcHeaderText = hidePrices
+      ? `${idx + 1}. ${svc.name}${monthlyTag}`
+      : `${idx + 1}. ${svc.name} — $${(svc.price || 0).toLocaleString("es-CL")}${monthlyTag}`;
     const svcHeaderLines = countLines(svcHeaderText, CONTENT_W - 16, NORMAL_SIZE, ctx.fontBold);
     const svcHeaderH = Math.max(24, svcHeaderLines * 14 + 10);
     ensureSpace(ctx, svcHeaderH + 20);
@@ -1663,13 +2209,19 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
     drawWrappedText(ctx, svcHeaderText, MARGIN + 8, ctx.y + 4, CONTENT_W - 16, NORMAL_SIZE, ctx.fontBold, 14);
     ctx.y -= svcHeaderH + 4;
 
-    // Plazo de ejecución
     if (svc.is_monthly) {
-      drawClauseParagraph(ctx, "Modalidad: ",
-        `Servicio recurrente mensual. El valor de $${priceStr} corresponde a cada mes de servicio. ` +
-        `Se factura y paga mensualmente por adelantado. El servicio se presta durante todo el ` +
-        `período del contrato.`
-      );
+      if (hidePrices) {
+        drawClauseParagraph(ctx, "Modalidad: ",
+          `Servicio recurrente mensual. Se factura y paga conforme al honorario fijo pactado en la cláusula SÉPTIMA. ` +
+          `El servicio se presta durante todo el período del contrato.`
+        );
+      } else {
+        drawClauseParagraph(ctx, "Modalidad: ",
+          `Servicio recurrente mensual. El valor de $${priceStr} corresponde a cada mes de servicio. ` +
+          `Se factura y paga mensualmente por adelantado. El servicio se presta durante todo el ` +
+          `período del contrato.`
+        );
+      }
     } else {
       drawClauseParagraph(ctx, "Plazo de ejecución: ",
         `Plazo de ejecución: ${endD}. ` +
@@ -1681,17 +2233,19 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
       );
     }
 
-    // Hitos de pago 40/30/30 para servicios de alto valor
-    const svcNameLow = (svc.name || "").toLowerCase();
-    const isHighValue = svcNameLow.includes("aplicación") || svcNameLow.includes("aplicacion") ||
-      svcNameLow.includes("app web") || svcNameLow.includes("tienda") ||
-      svcNameLow.includes("ecommerce") || svcNameLow.includes("plataforma");
-    if (!svc.is_monthly && isHighValue && (svc.price || 0) >= 500000) {
-      drawClauseParagraph(ctx, "Hitos de pago de este servicio: ",
-        "40% al inicio, 30% contra entrega del sistema funcional en entorno de pruebas (staging), " +
-        "y 30% contra recepción conforme final. Cada hito se rige por las reglas de recepción y " +
-        "mora de las cláusulas SÉPTIMA y NOVENA."
-      );
+    // Hitos de pago 40/30/30 para servicios de alto valor (omitir en hidePrices)
+    if (!hidePrices) {
+      const svcNameLow = (svc.name || "").toLowerCase();
+      const isHighValue = svcNameLow.includes("aplicación") || svcNameLow.includes("aplicacion") ||
+        svcNameLow.includes("app web") || svcNameLow.includes("tienda") ||
+        svcNameLow.includes("ecommerce") || svcNameLow.includes("plataforma");
+      if (!svc.is_monthly && isHighValue && (svc.price || 0) >= 500000) {
+        drawClauseParagraph(ctx, "Hitos de pago de este servicio: ",
+          "40% al inicio, 30% contra entrega del sistema funcional en entorno de pruebas (staging), " +
+          "y 30% contra recepción conforme final. Cada hito se rige por las reglas de recepción y " +
+          "mora de las cláusulas SÉPTIMA y NOVENA."
+        );
+      }
     }
 
     // Deliverables list or fallback
@@ -1721,19 +2275,19 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
         ctx.y = drawWrappedText(ctx, bulletText, MARGIN + 22, ctx.y, CONTENT_W - 22, SMALL_SIZE, ctx.font, 14);
       }
     } else {
-      ctx.page.drawText(
-        "Entregables y especificaciones por definir entre las partes. Se entenderán incorporados " +
-        "al presente anexo una vez acordados por escrito.",
-        {
-          x: MARGIN + 4,
-          y: ctx.y,
-          size: SMALL_SIZE,
-          font: ctx.font,
-          color: MUTED,
-        }
-      );
-      ctx.y -= 14;
-    }
+        ctx.page.drawText(
+          "Entregables y especificaciones por definir entre las partes. Se entenderán incorporados " +
+          "al presente anexo una vez acordados por escrito.",
+          {
+            x: MARGIN + 4,
+            y: ctx.y,
+            size: SMALL_SIZE,
+            font: ctx.font,
+            color: MUTED,
+          }
+        );
+        ctx.y -= 14;
+      }
 
     ctx.y -= 4;
     // Acceptance criteria
@@ -2120,6 +2674,11 @@ export function validateContractData(data: ContractData, strict = true): string[
 }
 
 export async function generateContractPdf(data: ContractData): Promise<Uint8Array> {
+  // Dispatch especializado para honorarios (excepto Blast-Up que usa template completo)
+  if (data.templateType === "boleta_honorarios" && !data.blastUpMode) {
+    return generateHonorariosPdf(data);
+  }
+
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const fontBold = await doc.embedFont(StandardFonts.HelveticaBold);
@@ -2228,22 +2787,69 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
   drawClause17_ForceMajeure(ctx, data);
   drawClause18_Jurisdiction(ctx, data);
 
-  // DÉCIMA NOVENA — Obligaciones que subsisten al término
-  drawClause20_Survival(ctx, data);
+  if (data.blastUpMode) {
+    // DÉCIMA NOVENA (18) — ACUERDO ÍNTEGRO (con prevalencia con excepciones)
+    drawClauseTitle(ctx, 18, "ACUERDO ÍNTEGRO");
+    drawClauseText(ctx,
+      "El presente contrato constituye el acuerdo íntegro entre las partes respecto de su objeto, " +
+      "y reemplaza cualquier acuerdo o entendimiento previo, verbal o escrito, sobre la misma " +
+      "materia. Las partes declaran que no existen ni se considerarán incorporadas otras " +
+      "declaraciones, promesas o garantías distintas de las contenidas en este instrumento."
+    );
+    drawClauseItem(ctx, "a",
+      "Modificación: Cualquier modificación del presente contrato requerirá acuerdo por escrito " +
+      "entre las partes."
+    );
+    drawClauseItem(ctx, "b",
+      "Prevalencia: En caso de conflicto entre el cuerpo principal del contrato y el Anexo A, " +
+      "prevalecerán las disposiciones del cuerpo principal, salvo respecto de la definición de " +
+      "días hábiles, la descripción de la línea base y la clasificación de tareas contenidas " +
+      "en el Anexo A, que prevalecerán en todo caso."
+    );
 
-  // VIGÉSIMA — Cesión del contrato
-  drawClause21_Assignment(ctx, data);
+    // VIGÉSIMA (19) — CESIÓN (recíproca)
+    drawClauseTitle(ctx, 19, "CESIÓN DE POSICIÓN CONTRACTUAL");
+    drawClauseText(ctx,
+      "Ninguna de las partes podrá ceder ni transferir su posición contractual ni las obligaciones " +
+      "derivadas del presente contrato sin el consentimiento previo, expreso y por escrito de la " +
+      "otra parte."
+    );
+    drawClauseItem(ctx, "a",
+      "La cesión no libera al cedente de sus obligaciones contractuales, salvo pacto expreso en " +
+      "contrario."
+    );
+    drawClauseItem(ctx, "b",
+      "Cualquier cesión no autorizada será nula y no producirá efecto alguno entre las partes."
+    );
 
-  // VIGÉSIMA PRIMERA — Cláusulas Especiales
-  drawClauseTitle(ctx, 20, "CLÁUSULAS ESPECIALES");
+    // VIGÉSIMA PRIMERA (20) — DIVISIBILIDAD
+    drawClauseTitle(ctx, 20, "DIVISIBILIDAD");
+    drawClauseText(ctx,
+      "Si cualquiera de las cláusulas del presente contrato fuere declarada nula, ilegal o " +
+      "inexigible por autoridad administrativa o judicial competente, dicha declaración no " +
+      "afectará la validez ni exigibilidad de las restantes cláusulas, las que subsistirán en " +
+      "pleno vigor y efecto. La cláusula afectada se tendrá por no escrita, y las partes se " +
+      "obligan a negociar de buena fe una cláusula sustitutoria que refleje la intención " +
+      "original de la cláusula invalidada."
+    );
+  } else {
+    // DÉCIMA NOVENA — Obligaciones que subsisten al término
+    drawClause20_Survival(ctx, data);
 
-  // Auto clauses (scraping indemnity, ads spend exclusion) — injected by service type
-  drawAutoSpecialClauses(ctx, data);
+    // VIGÉSIMA — Cesión del contrato
+    drawClause21_Assignment(ctx, data);
 
-  // Manual special clauses (free text from admin)
-  drawSpecialClauses(ctx, data);
+    // VIGÉSIMA PRIMERA — Cláusulas Especiales
+    drawClauseTitle(ctx, 20, "CLÁUSULAS ESPECIALES");
 
-  // VIGÉSIMA SEGUNDA — Firmas
+    // Auto clauses (scraping indemnity, ads spend exclusion)
+    drawAutoSpecialClauses(ctx, data);
+
+    // Manual special clauses
+    drawSpecialClauses(ctx, data);
+  }
+
+  // VIGÉSIMA SEGUNDA (21) — Firmas
   await drawClause19_Signatures(ctx, data);
 
   // Anexo A: Entregables y Plazos (nueva página, después de las firmas)

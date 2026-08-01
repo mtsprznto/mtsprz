@@ -169,6 +169,19 @@ const { id } = Astro.params;
       document.getElementById("statusBadge").innerHTML = statusDot(c.status);
       document.getElementById("statusText").textContent = statusLabels[c.status] || c.status;
 
+      // Type badge
+      var isBlastUp = /blast[-\s]?up/i.test(c.client_name || "");
+      var typeBadgeHtml = "";
+      if (c.template_type === "boleta_honorarios") {
+        typeBadgeHtml = '<span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-sky-400 border border-sky-400/20 px-2 py-1 ml-3"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Honorarios</span>';
+      } else if (isBlastUp) {
+        typeBadgeHtml = '<span class="inline-flex items-center gap-1.5 text-[10px] font-medium text-amber-400 border border-amber-400/20 px-2 py-1 ml-3"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Honorario fijo</span>';
+      }
+      var statusTextEl = document.getElementById("statusText");
+      if (statusTextEl && typeBadgeHtml) {
+        statusTextEl.insertAdjacentHTML("afterend", typeBadgeHtml);
+      }
+
       document.getElementById("clientInfo").innerHTML =
         "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Cliente</span><span class='text-sm text-white/80'>" + c.client_name + "</span></div>" +
         "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>RUT</span><span class='text-sm text-white/80'>" + (c.client_rut || "\u2014") + "</span></div>" +
@@ -177,8 +190,11 @@ const { id } = Astro.params;
         "<div class='sm:col-span-2'><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Direcci\u00f3n</span><span class='text-sm text-white/80'>" + (c.client_address || "\u2014") + "</span></div>";
 
       var svcs = typeof c.services === "string" ? JSON.parse(c.services) : c.services;
+      var isHonorarios = c.template_type === "boleta_honorarios";
+      var isBlastUp = /blast[-\s]?up/i.test(c.client_name || "");
+      var hidePrices = isHonorarios || isBlastUp;
       var svcHtml = [];
-      if (svcs) {
+      if (svcs && svcs.length > 0 && !hidePrices) {
         for (var i = 0; i < svcs.length; i++) {
           var s = svcs[i];
           svcHtml.push("<tr class='border-b border-white/[0.03]'>");
@@ -186,21 +202,47 @@ const { id } = Astro.params;
           svcHtml.push("<td class='py-3 text-sm text-white/60 font-mono text-right'>" + formatCurrency(s.price) + "</td>");
           svcHtml.push("</tr>");
         }
+      } else if (hidePrices) {
+        svcHtml.push("<tr><td colspan='2' class='py-6 text-center text-sm text-sky-400/60'>");
+        svcHtml.push("<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' class='inline mr-2 mb-1'><path d='M12 2L2 7l10 5 10-5-10-5z'/><path d='M2 17l10 5 10-5'/><path d='M2 12l10 5 10-5'/></svg>");
+        svcHtml.push(isHonorarios
+          ? "Contrato de honorarios — pago único por prestación profesional sin servicio desglosado"
+          : "Contrato honorario fijo — servicios incluidos en alcance sin desglose de precios");
+        svcHtml.push("</td></tr>");
       }
       document.getElementById("servicesTable").innerHTML = svcHtml.join("");
 
+      var totalDisplay = hidePrices ? (c.net_amount || c.total_amount || 0) : c.total_amount;
       document.getElementById("totalFooter").innerHTML =
-        "<tr><td class='pt-3 text-sm font-medium text-white/40'>Total</td>" +
-        "<td class='pt-3 text-lg font-bold text-accent font-mono text-right'>" + formatCurrency(c.total_amount) + "<\/td><\/tr>";
+        "<tr><td class='pt-3 text-sm font-medium text-white/40'>" + (hidePrices ? "Neto (líquido)" : "Total") + "</td>" +
+        "<td class='pt-3 text-lg font-bold " + (hidePrices ? "text-sky-400" : "text-accent") + " font-mono text-right'>" + formatCurrency(totalDisplay) + "<\/td><\/tr>";
 
+      var isHonorarios = c.template_type === "boleta_honorarios";
+      var isBlastUp = /blast[-\s]?up/i.test(c.client_name || "");
+      var hidePrices = isHonorarios || isBlastUp;
+      var honorariosHtml = [];
+      if (hidePrices) {
+        if (isHonorarios) {
+          var neto = c.net_amount || c.total_amount || 0;
+          var tasa = c.retention_rate || 15.25;
+          var bruto = c.gross_amount || Math.round(neto / (1 - tasa / 100));
+          honorariosHtml.push("<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Tipo</span><span class='inline-flex items-center gap-1.5 text-sm text-sky-400'><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M12 2L2 7l10 5 10-5-10-5z'/><path d='M2 17l10 5 10-5'/><path d='M2 12l10 5 10-5'/></svg> Honorarios</span></div>");
+          honorariosHtml.push("<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Neto (líquido)</span><span class='text-sm text-white/80 font-mono'>$" + neto.toLocaleString('es-CL') + "</span></div>");
+          honorariosHtml.push("<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Retención</span><span class='text-sm text-white/80 font-mono'>" + tasa + "%</span></div>");
+          honorariosHtml.push("<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Bruto (boleta)</span><span class='text-sm text-sky-400 font-mono'>$" + bruto.toLocaleString('es-CL') + "</span></div>");
+        } else if (isBlastUp) {
+          honorariosHtml.push("<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Tipo</span><span class='inline-flex items-center gap-1.5 text-sm text-sky-400'><svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M12 2L2 7l10 5 10-5-10-5z'/><path d='M2 17l10 5 10-5'/><path d='M2 12l10 5 10-5'/></svg> Honorario fijo</span></div>");
+          honorariosHtml.push("<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Neto (líquido)</span><span class='text-sm text-sky-400 font-mono'>$" + ((c.net_amount || c.total_amount || 0)).toLocaleString('es-CL') + "</span></div>");
+        }
+      }
       document.getElementById("conditions").innerHTML = [
-        "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Duraci\u00f3n</span><span class='text-sm text-white/80'>" + (c.duration_months || "\u2014") + " meses</span></div>",
-        "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Inicio</span><span class='text-sm text-white/80'>" + formatDate(c.start_date) + "</span></div>",
-        "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>T\u00e9rmino</span><span class='text-sm text-white/80'>" + formatDate(c.end_date) + "</span></div>",
-        "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Forma de Pago</span><span class='text-sm text-white/80'>" + ({"contado":"Contado","50_50":"50% Inicio + 50% Entrega","hitos":"Por Hitos"}[c.payment_method] || c.payment_terms || "\u2014") + "</span></div>",
-        c.schedule ? "<div class='sm:col-span-2'><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Jornada</span><span class='text-sm text-white/80'>" + c.schedule + "</span></div>" : "",
-        c.special_clauses ? "<div class='sm:col-span-2'><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Cl\u00e1usulas Especiales</span><span class='text-sm text-white/80'>" + c.special_clauses + "</span></div>" : "",
-      ].join("");
+        hidePrices ? "" : "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Duraci\u00f3n</span><span class='text-sm text-white/80'>" + (c.duration_months || "\u2014") + " meses</span></div>",
+        hidePrices ? "" : "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Inicio</span><span class='text-sm text-white/80'>" + formatDate(c.start_date) + "</span></div>",
+        hidePrices ? "" : "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>T\u00e9rmino</span><span class='text-sm text-white/80'>" + formatDate(c.end_date) + "</span></div>",
+        hidePrices ? "" : "<div><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Forma de Pago</span><span class='text-sm text-white/80'>" + ({"contado":"Contado","50_50":"50% Inicio + 50% Entrega","hitos":"Por Hitos"}[c.payment_method] || c.payment_terms || "\u2014") + "</span></div>",
+        hidePrices ? "" : (c.schedule ? "<div class='sm:col-span-2'><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Jornada</span><span class='text-sm text-white/80'>" + c.schedule + "</span></div>" : ""),
+        hidePrices ? "" : (c.special_clauses ? "<div class='sm:col-span-2'><span class='text-[10px] text-white/25 uppercase tracking-[0.12em] block mb-1'>Cl\u00e1usulas Especiales</span><span class='text-sm text-white/80'>" + c.special_clauses + "</span></div>" : ""),
+      ].join("") + honorariosHtml.join("");
 
       var adminSigned = !!c.admin_signature_data;
       var clientSigned = !!c.client_signature_data;

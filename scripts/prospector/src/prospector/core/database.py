@@ -140,6 +140,7 @@ class JSONDatabase:
 
     def add(self, prospect: Prospect, auto_flush: bool = True) -> Prospect:
         """Agrega un prospecto (desduplicado por empresa+comuna+teléfono)."""
+        self.load()  # cargar datos existentes ANTES de buscar duplicados
         existing = self._find_duplicate(prospect)
         if existing:
             log.debug("Duplicado encontrado: {e} en {c} — fusionando", e=prospect.empresa, c=prospect.comuna)
@@ -153,6 +154,7 @@ class JSONDatabase:
 
     def add_batch(self, prospects: list[Prospect], auto_flush: bool = True) -> int:
         """Agrega múltiples prospectos en lote. Retorna cantidad de nuevos."""
+        self.load()  # cargar datos existentes ANTES de buscar duplicados
         count = 0
         for p in prospects:
             if not self._find_duplicate(p):

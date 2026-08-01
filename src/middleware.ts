@@ -10,6 +10,8 @@ const PUBLIC_API_ROUTES: string[] = [
   "/api/contracts/sign-by-token",
   "/api/biometric/verify",
   "/api/contact",
+  "/api/whatsapp/webhook",
+  "/api/leads",
 ];
 
 /** Patterns that match dynamic segments: /api/contracts/[id]/sign, /api/contracts/[id]/pdf */

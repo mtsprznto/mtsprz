@@ -9,6 +9,7 @@ data/backups/
 data/checkpoints/
 data/exports/
 data/report.json
+data/mtsprz_sync_log.json
 
 # Python cache
 __pycache__/

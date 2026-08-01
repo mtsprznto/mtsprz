@@ -359,6 +359,27 @@ const seedServices = [
     maintenance_description: "",
     is_monthly: false
   },
+  {
+    slug: "blast-up",
+    name: "Mantención evolutiva y soporte de aplicación web existente \u2014 Agosto 2026",
+    category: "Desarrollo Web",
+    description: "Mantención evolutiva y soporte de aplicación web existente. Servicio por suscripción mensual con obligación de medios, hasta 40 horas de trabajo efectivo. Ideal para mejoras continuas, correcciones y soporte técnico de sistemas en producción.",
+    price: 450000,
+    promo_price: 0,
+    deliverables: [
+      "Incrementos de código puestos a disposición para revisión del Cliente",
+      "Registro de horas de trabajo con desglose por requerimiento (cadencia semanal)",
+      "Reunión de coordinación semanal (hasta 1 hora)",
+      "Revisión y correcciones sobre observaciones del Cliente, antes de aprobación final (2 rondas por avance)",
+      "Atención de incidentes en producción con prioridad máxima",
+      "Informe de cierre del período: resumen de tareas, horas consumidas y estado de pendientes"
+    ],
+    includes_maintenance: false,
+    maintenance_price: 0,
+    maintenance_description: "",
+    is_monthly: true,
+    is_popular: false
+  },
 
   // ════════════════════════════════════════════
   // MARKETING DIGITAL

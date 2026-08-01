@@ -1,0 +1,159 @@
+---
+/**
+ * QuoteForm — Solicitud de cotización.
+ * Envía POST /api/leads con fuente "quote".
+ * Incluye selector de servicio y rango de presupuesto.
+ */
+export interface Props {
+  successMessage?: string;
+  class?: string;
+}
+
+const { successMessage = "¡Cotización solicitada! Te enviaremos una propuesta por WhatsApp en las próximas 24 hrs." } = Astro.props;
+
+const SERVICES = [
+  { value: "web", label: "Desarrollo Web" },
+  { value: "seo", label: "SEO / Posicionamiento" },
+  { value: "whatsapp", label: "WhatsApp Business" },
+  { value: "automation", label: "Automatización con IA" },
+  { value: "marketing", label: "Marketing Digital" },
+  { value: "other", label: "Otro" },
+];
+
+const BUDGET_RANGES = [
+  { value: "", label: "Selecciona un rango..." },
+  { value: "menor-250", label: "Menos de $250.000" },
+  { value: "250-500", label: "$250.000 - $500.000" },
+  { value: "500-1m", label: "$500.000 - $1.000.000" },
+  { value: "1m-3m", label: "$1.000.000 - $3.000.000" },
+  { value: "mas-3m", label: "Más de $3.000.000" },
+  { value: "no-seguro", label: "Aún no lo sé" },
+];
+---
+
+<form id="quote-form" class="space-y-4 {Astro.props.class || ''}" novalidate>
+  <input type="hidden" name="source" value="quote" />
+
+  <div>
+    <label for="qf-name" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Nombre *</label>
+    <input id="qf-name" name="name" type="text" required maxlength="255" placeholder="Tu nombre"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+  </div>
+
+  <div>
+    <label for="qf-phone" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">WhatsApp *</label>
+    <input id="qf-phone" name="phone" type="tel" required placeholder="+56 9 1234 5678"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+  </div>
+
+  <div>
+    <label for="qf-email" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Email</label>
+    <input id="qf-email" name="email" type="email" maxlength="254" placeholder="correo@ejemplo.cl"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+  </div>
+
+  <div>
+    <label for="qf-company" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Empresa</label>
+    <input id="qf-company" name="company" type="text" maxlength="255" placeholder="Nombre de tu empresa"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+  </div>
+
+  <div>
+    <label for="qf-service" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Servicio *</label>
+    <select id="qf-service" name="service_interest" required
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body focus:outline-none focus:border-accent/50 transition-colors appearance-none">
+      {SERVICES.map((s) => (
+        <option value={s.value}>{s.label}</option>
+      ))}
+    </select>
+  </div>
+
+  <div>
+    <label for="qf-budget" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Presupuesto estimado</label>
+    <select id="qf-budget" name="budget"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body focus:outline-none focus:border-accent/50 transition-colors appearance-none">
+      {BUDGET_RANGES.map((b) => (
+        <option value={b.value} selected={b.value === ''}>{b.label}</option>
+      ))}
+    </select>
+  </div>
+
+  <div>
+    <label for="qf-description" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Descripción del proyecto *</label>
+    <textarea id="qf-description" name="message" required maxlength="5000" rows="4"
+      placeholder="Cuéntanos en detalle qué necesitas..."
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors resize-y min-h-[100px]"></textarea>
+  </div>
+
+  <button id="qf-submit" type="submit"
+    class="w-full px-6 py-3 bg-accent text-[#010101] text-[11px] font-bold tracking-[0.15em] uppercase transition-all duration-300 hover:bg-accent/90 disabled:opacity-30 disabled:cursor-not-allowed">
+    Solicitar Cotización
+  </button>
+
+  <div id="qf-status" class="hidden text-sm"></div>
+</form>
+
+<script is:inline>
+  (function () {
+    const form = document.getElementById("quote-form");
+    if (!form) return;
+
+    const submitBtn = document.getElementById("qf-submit");
+    const statusEl = document.getElementById("qf-status");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = form.querySelector("[name='name']").value.trim();
+      const phone = form.querySelector("[name='phone']").value.trim();
+      const service = form.querySelector("[name='service_interest']").value;
+      const description = form.querySelector("[name='message']").value.trim();
+
+      if (!name || !phone || !description) {
+        statusEl.className = "text-sm text-red-400";
+        statusEl.textContent = "Completa los campos obligatorios.";
+        statusEl.classList.remove("hidden");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+      statusEl.classList.add("hidden");
+
+      try {
+        const body = {
+          name,
+          phone,
+          email: form.querySelector("[name='email']").value.trim() || null,
+          source: "quote",
+          service_interest: service,
+          message: `[${service}] ${form.querySelector("[name='company']").value ? "Empresa: " + form.querySelector("[name='company']").value.trim() + " | " : ""}Presupuesto: ${form.querySelector("[name='budget']").value || "no especificado"} | ${description}`,
+        };
+
+        const res = await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          statusEl.className = "text-sm text-emerald-400";
+          statusEl.textContent = "{successMessage}";
+          form.reset();
+        } else {
+          statusEl.className = "text-sm text-red-400";
+          statusEl.textContent = data.error || "Error al enviar. Intenta de nuevo.";
+        }
+      } catch {
+        statusEl.className = "text-sm text-red-400";
+        statusEl.textContent = "Error de conexión. Intenta de nuevo.";
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Solicitar Cotización";
+      statusEl.classList.remove("hidden");
+    });
+  })();
+</script>

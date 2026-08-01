@@ -59,8 +59,9 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
                       {tpl.type === 'proyecto_unico' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 group-has-checked:text-accent transition-colors"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>}
                       {tpl.type === 'recurrente' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 group-has-checked:text-accent transition-colors"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
                       {tpl.type === 'jornada_dedicada' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 group-has-checked:text-accent transition-colors"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>}
+                      {tpl.type === 'boleta_honorarios' && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/40 group-has-checked:text-accent transition-colors"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>}
                     </span>
-                    <span class="text-[9px] font-medium text-white/25 uppercase tracking-[0.12em]">{tpl.type === 'proyecto_unico' ? 'Proyecto' : tpl.type === 'recurrente' ? 'Recurrente' : 'Dedicada'}</span>
+                    <span class="text-[9px] font-medium text-white/25 uppercase tracking-[0.12em]">{tpl.type === 'proyecto_unico' ? 'Proyecto' : tpl.type === 'recurrente' ? 'Recurrente' : tpl.type === 'jornada_dedicada' ? 'Dedicada' : tpl.type === 'boleta_honorarios' ? 'Honorarios' : ''}</span>
                   </div>
                   <span class="text-sm font-medium text-white/80 group-has-checked:text-white leading-snug">{tpl.name}</span>
                   <p class="text-[10px] text-white/25 font-body leading-relaxed flex-1">{tpl.description || ''}</p>
@@ -125,6 +126,22 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
               <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Correo Notificaciones Cliente <span class="text-white/15 font-normal normal-case">(formal)</span></label>
               <input name="client_notif_email" type="email" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="legal@blast-up.cl (si distinto al email principal)" />
               <p class="text-[10px] text-white/20 mt-1 font-body">Email válido para comunicaciones formales. Si vacío, se usará el email principal.</p>
+            </div>
+            <div id="contraparteGroup" class="sm:col-span-2 hidden">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="text-[10px] font-medium text-amber-400/60 uppercase tracking-[0.12em]">Contraparte Técnica</span>
+                <span class="text-[10px] text-white/20 font-body">(facultada solo para requerimientos, revisión y coordinación)</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Nombre Completo</label>
+                  <input name="client_tech_name" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="Pedro González López" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Correo</label>
+                  <input name="client_tech_email" type="email" maxlength="255" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 placeholder:text-white/15 font-body" placeholder="pedro@blast-up.cl" />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -293,6 +310,72 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
                 </div>
               </label>
             </div>
+            <!-- Blast-Up fields (hidden by default, shown when client name matches) -->
+            <div id="blastupFields" class="hidden sm:col-span-2 border border-amber-400/20 p-4 bg-amber-400/[0.02]">
+              <div class="flex items-center gap-2 mb-4">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-amber-400"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <span class="text-[10px] font-medium text-amber-400 uppercase tracking-[0.12em]">Blast-Up — Configuración del Período Único</span>
+                <span class="text-[10px] text-amber-300/50 font-body">(contrato por período único, sin renovación automática)</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Tope de Horas</label>
+                  <input name="hour_cap" type="number" min="0" max="10000" value="40" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-amber-400/40 placeholder:text-white/15 font-mono" placeholder="40" />
+                  <p class="text-[10px] text-white/20 mt-1 font-body">Horas totales del período. Ref: 40h → $11.250/h</p>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Valor Hora Adicional <span class="text-white/20 font-normal normal-case">($CLP)</span></label>
+                  <input name="extra_hour_rate" type="number" min="0" max="999999" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-amber-400/40 placeholder:text-white/15 font-mono" placeholder="11250" />
+                  <p class="text-[10px] text-white/20 mt-1 font-body">Precio por hora extra sobre tope contratado</p>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Rondas Revisión</label>
+                  <input name="revision_rounds" type="number" min="1" max="10" value="2" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-amber-400/40 placeholder:text-white/15 font-mono" />
+                  <p class="text-[10px] text-white/20 mt-1 font-body">Rondas de correcciones menores incluidas</p>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Fecha de Firma</label>
+                  <input name="signing_date" type="date" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-amber-400/40 font-body" />
+                  <p class="text-[10px] text-white/20 mt-1 font-body">Fecha en que se suscribe el contrato</p>
+                </div>
+              </div>
+              <div class="mt-3 flex items-center gap-3 pt-3 border-t border-amber-400/10">
+                <input id="includePagare" name="include_pagare" type="checkbox" class="w-3.5 h-3.5 border-white/[0.08] bg-transparent text-amber-400 focus:ring-amber-400/30" />
+                <label for="includePagare" class="text-[10px] text-white/30 font-body cursor-pointer select-none">Incluir Pagaré (Anexo B) — <span class="text-amber-300/60">requiere firma ante notario</span></label>
+              </div>
+            </div>
+
+            <!-- Honorarios fields (hidden by default, shown when boleta_honorarios selected) -->
+            <div id="honorariosFields" class="hidden sm:col-span-2 border border-sky-400/20 p-4 bg-sky-400/[0.02]">
+              <div class="flex items-center gap-2 mb-4">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-sky-400"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                <span class="text-[10px] font-medium text-sky-400 uppercase tracking-[0.12em]">Honorarios — Retención Boleta</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Neto <span class="text-red-400/60">*</span></label>
+                  <input name="net_amount" type="number" min="0" max="2147483647" step="1" value="450000" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-sky-400/40 placeholder:text-white/15 font-mono" placeholder="450000" oninput="updateHonorarios()" />
+                  <p class="text-[10px] text-white/20 mt-1 font-body">Monto líquido a recibir</p>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Retención <span class="text-red-400/60">*</span></label>
+                  <div class="flex items-center gap-2">
+                    <input name="retention_rate" type="number" min="0" max="100" step="0.01" value="15.25" class="w-24 bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-white outline-none transition-all duration-200 focus:border-sky-400/40 placeholder:text-white/15 font-mono" oninput="updateHonorarios()" />
+                    <span class="text-sm text-white/30">%</span>
+                  </div>
+                  <p class="text-[10px] text-white/20 mt-1 font-body">Tasa retención SII (15.25% en 2026)</p>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Bruto <span class="text-white/20 font-normal normal-case">(calculado)</span></label>
+                  <input name="gross_amount" type="number" min="0" class="w-full bg-transparent border-b border-white/[0.08] py-2.5 text-sm text-sky-400 outline-none font-mono" readonly id="grossAmountDisplay" />
+                  <p class="text-[10px] text-white/20 mt-1 font-body">Neto ÷ (1 − tasa/100)</p>
+                </div>
+              </div>
+              <div class="mt-3 pt-3 border-t border-sky-400/10">
+                <p class="text-[10px] text-sky-300/50 leading-relaxed">No se requieren servicios ni tabla de entregables. El contrato de honorarios es un pago único por prestación profesional sin subordinación.</p>
+              </div>
+            </div>
+
             <div id="scheduleGroup" style="display:none;" class="sm:col-span-2">
               <label class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-2">Jornada / Horario</label>
               <div class="flex flex-wrap items-center gap-1.5 mb-2">
@@ -760,7 +843,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
   }
 
   function updatePreview() {
-    var templateLabels = { proyecto_unico: "Proyecto \u00danico", recurrente: "Servicio Recurrente", jornada_dedicada: "Jornada Dedicada" };
+    var templateLabels = { proyecto_unico: "Proyecto \u00danico", recurrente: "Servicio Recurrente", jornada_dedicada: "Jornada Dedicada", boleta_honorarios: "Boleto Honorarios" };
     var selected = document.querySelector("input[name='templateType']:checked");
     var typeEl = document.getElementById("previewType");
     if (selected && selected.value) {
@@ -769,8 +852,17 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       typeEl.textContent = "—";
     }
 
-    var clientName = document.querySelector("[name='client_name']").value || "—";
-    document.getElementById("previewClient").textContent = clientName;
+    var clientName = document.querySelector("[name='client_name']").value || "";
+    var isBlastUp = /blast[-\s]?up/i.test(clientName);
+    document.getElementById("previewClient").textContent = clientName || "—";
+
+    // Show/hide contraparte técnica group
+    var ctGroup = document.getElementById("contraparteGroup");
+    if (ctGroup) ctGroup.classList.toggle("hidden", !isBlastUp);
+
+    // Show/hide Blast-Up config fields
+    var buFields = document.getElementById("blastupFields");
+    if (buFields) buFields.classList.toggle("hidden", !isBlastUp);
 
     var svcs = getServices();
     var svcCount = svcs.filter(function(s) { return s.name; }).length;
@@ -784,8 +876,19 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var pmEl = document.getElementById("previewPayment");
     if (pmEl) pmEl.textContent = pm ? (pmLabels[pm] || pm) : "—";
 
-    var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
-    document.getElementById("previewTotal").textContent = "$" + total.toLocaleString("es-CL");
+    if (isBlastUp) {
+      var flatAmount = parseInt(document.querySelector("[name='total_amount']")?.value) || 450000;
+      document.getElementById("previewTotal").textContent = "$" + flatAmount.toLocaleString("es-CL") + " líquidos";
+      var psEl = document.getElementById("previewServices");
+      psEl.innerHTML = svcCount > 0 ? svcCount + ' servicio(s) <span class="text-[10px] text-sky-400/60">(honorario fijo)</span>' : "—";
+    } else {
+      var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
+      document.getElementById("previewTotal").textContent = "$" + total.toLocaleString("es-CL");
+      var psEl = document.getElementById("previewServices");
+      if (psEl.innerHTML.indexOf("honorario") !== -1) {
+        psEl.textContent = svcCount > 0 ? svcCount + " servicio(s)" : "—";
+      }
+    }
   }
 
   function updateClauseCount() {
@@ -992,6 +1095,20 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     updateScheduleDisplay();
   }
 
+  function updateHonorarios() {
+    var netInput = document.querySelector("[name='net_amount']");
+    var rateInput = document.querySelector("[name='retention_rate']");
+    var grossInput = document.getElementById("grossAmountDisplay");
+    if (!netInput || !rateInput || !grossInput) return;
+    var net = parseFloat(netInput.value) || 0;
+    var rate = parseFloat(rateInput.value) || 0;
+    var gross = rate >= 100 ? 0 : Math.round(net / (1 - rate / 100));
+    grossInput.value = gross;
+    // Auto-fill total_amount
+    var totalInput = document.querySelector("[name='total_amount']");
+    if (totalInput) totalInput.value = String(net);
+  }
+
   function selectTemplate(tplId, tplType) {
     var radio = document.querySelector("input[name='templateType'][value='" + tplType + "']");
     if (radio) radio.checked = true;
@@ -1009,6 +1126,17 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     if (sg) {
       sg.style.display = isJornada ? "block" : "none";
     }
+    var isHonorarios = tplType === "boleta_honorarios";
+    var hf = document.getElementById("honorariosFields");
+    if (hf) {
+      hf.classList.toggle("hidden", !isHonorarios);
+    }
+    var sections = ["section2b", "section3", "section4", "section5"];
+    sections.forEach(function(s) {
+      var el = document.querySelector("[data-section='" + s + "']");
+      if (el) el.style.display = isHonorarios ? "none" : "";
+    });
+    if (isHonorarios) updateHonorarios();
     updatePreview();
   }
 
@@ -1116,7 +1244,14 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     });
   }
 
-  document.querySelector("[name='client_name']").addEventListener("input", updatePreview);
+  document.querySelector("[name='client_name']").addEventListener("input", function() {
+    updatePreview();
+    // Auto-set warranty_days to 30 for Blast-Up
+    var isBlast = /blast[-\s]?up/i.test(this.value);
+    var wd = document.querySelector("[name='warranty_days']");
+    if (wd && isBlast && parseInt(wd.value) < 30) wd.value = "30";
+    if (wd && !isBlast && wd.value === "30") wd.value = "15";
+  });
   document.querySelector("[name='duration_months']").addEventListener("input", function() { updatePreview(); checkPrecioAmbiguo(getServices()); });
 
   togglePaymentTerms();
@@ -1149,6 +1284,17 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
   // ── Preview: 19 cláusulas ────────────────────────────────────────────────
   function renderContractPreview() {
     var clientName = document.querySelector("[name='client_name']").value || "—";
+    var isBlastUp = /blast[-\s]?up/i.test(clientName);
+    var blastNet = isBlastUp ? parseInt(document.querySelector("[name='total_amount']")?.value) || 450000 : 0;
+    var blastRate = 15.25;
+    var blastGross = isBlastUp ? Math.round(blastNet / (1 - blastRate / 100)) : 0;
+    var hourCap = isBlastUp ? parseInt(document.querySelector("[name='hour_cap']")?.value) || 40 : 0;
+    var extraHourRate = isBlastUp ? parseInt(document.querySelector("[name='extra_hour_rate']")?.value) || 11250 : 0;
+    var revisionRounds = isBlastUp ? parseInt(document.querySelector("[name='revision_rounds']")?.value) || 2 : 1;
+    var includePagare = isBlastUp ? document.querySelector("[name='include_pagare']")?.checked === true : false;
+    var clientTechName = isBlastUp ? document.querySelector("[name='client_tech_name']")?.value || "" : "";
+    var clientTechEmail = isBlastUp ? document.querySelector("[name='client_tech_email']")?.value || "" : "";
+    var signingDate = isBlastUp ? document.querySelector("[name='signing_date']")?.value || "" : "";
     var clientRut = document.querySelector("[name='client_rut']").value || "—";
     var clientNationality = document.querySelector("[name='client_nationality']")?.value || "Chilena";
     var clientProfession = document.querySelector("[name='client_profession']")?.value || "";
@@ -1175,7 +1321,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     function fmt(n) { return "$" + n.toLocaleString("es-CL"); }
 
     // Helper: clause header
-    var ordinals = ["PRIMERA","SEGUNDA","TERCERA","CUARTA","QUINTA","SEXTA","SÉPTIMA","OCTAVA","NOVENA","DÉCIMA","DÉCIMA PRIMERA","DÉCIMA SEGUNDA","DÉCIMA TERCERA","DÉCIMA CUARTA","DÉCIMA QUINTA","DÉCIMA SEXTA","DÉCIMA SÉPTIMA","DÉCIMA OCTAVA","DÉCIMA NOVENA","VIGÉSIMA","VIGÉSIMA PRIMERA","VIGÉSIMA SEGUNDA"];
+    var ordinals = ["PRIMERA","SEGUNDA","TERCERA","CUARTA","QUINTA","SEXTA","SÉPTIMA","OCTAVA","NOVENA","DÉCIMA","DÉCIMA PRIMERA","DÉCIMA SEGUNDA","DÉCIMA TERCERA","DÉCIMA CUARTA","DÉCIMA QUINTA","DÉCIMA SEXTA","DÉCIMA SÉPTIMA","DÉCIMA OCTAVA","DÉCIMA NOVENA","VIGÉSIMA","VIGÉSIMA PRIMERA","VIGÉSIMA SEGUNDA","VIGÉSIMA TERCERA"];
     function clauseTitle(idx, title) {
       return '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e5e7eb;">' + ordinals[idx] + '. — ' + title + '</h3>';
     }
@@ -1195,7 +1341,12 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     html += '<div style="text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #4f46e5;">';
     html += '<h1 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 2px;">CONTRATO DE PRESTACIÓN DE SERVICIOS</h1>';
     html += '<p style="font-size:11px;color:#6b7280;margin:0;">Mtsprz — Soluciones Digitales</p>';
-    html += '<p style="font-size:10px;color:#9ca3af;margin:6px 0 0;">Fecha: ' + dateStr + ' | N° Contrato: (se generará al crear)</p>';
+    if (isBlastUp && signingDate) {
+      var sd = new Date(signingDate + 'T12:00:00').toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' });
+      html += '<p style="font-size:10px;color:#9ca3af;margin:6px 0 0;">En Puerto Varas, a ' + sd + ' | Per\u00edodo \u00fanico: 31 d\u00edas corridos desde la acreditaci\u00f3n del pago</p>';
+    } else {
+      html += '<p style="font-size:10px;color:#9ca3af;margin:6px 0 0;">Fecha: ' + dateStr + ' | N° Contrato: (se generará al crear)</p>';
+    }
     html += '</div>';
 
     // ── 1. IDENTIFICACIÓN DE LAS PARTES ──
@@ -1219,6 +1370,10 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CORREO:</td><td style="padding:2px 0;color:#111827;">' + clientEmail + '</td></tr>';
     if (clientNotifEmail && clientNotifEmail !== clientEmail) html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">CORREO NOTIF.:</td><td style="padding:2px 0;color:#111827;">' + clientNotifEmail + '</td></tr>';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;">TELÉFONO:</td><td style="padding:2px 0;color:#111827;">' + clientPhone + '</td></tr>';
+    if (isBlastUp && clientTechName) {
+      html += '<tr><td colspan="2" style="padding:4px 0;"></td></tr>';
+      html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;vertical-align:top;font-size:10px;">CONTRAPARTE TÉCNICA:</td><td style="padding:2px 0;color:#111827;font-size:10px;">' + clientTechName + (clientTechEmail ? ', correo ' + clientTechEmail : '') + '<br><span style="color:#6b7280;">Facultado exclusivamente para requerimientos, revisión y coordinación. NO para ampliar alcance, modificar precio ni alterar plazos.</span></td></tr>';
+    }
     html += '</table>';
 
     // ── 2. DECLARACIONES ──
@@ -1228,28 +1383,51 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
     // ── 3. OBJETO DEL CONTRATO ──
     html += clauseTitle(2, 'OBJETO DEL CONTRATO');
-    html += clauseText('El Prestador se obliga a prestar al Cliente los servicios digitales detallados en la cláusula siguiente, conforme a las especificaciones acordadas.');
-    html += clauseBold('Alcance incluido: ', 'Los servicios contratados se detallan en la cláusula CUARTA. Los entregables, plazos y especificaciones de cada servicio se describen en el Anexo A adjunto, que forma parte integrante de este contrato.');
-    html += clauseBold('Alcance excluido: ', 'Quedan excluidos: (a) servicios no listados; (b) modificaciones no acordadas por escrito; (c) licencias de software de terceros, costos de suscripción o infraestructura tecnológica, salvo que se incluyan expresamente como entregable en el Anexo A del presente contrato.');
+    if (isBlastUp) {
+      html += clauseBold('Objeto: ', 'El Prestador se obliga a prestar al Cliente servicios digitales de desarrollo, programaci\u00f3n, dise\u00f1o y automatizaci\u00f3n, bajo la modalidad de obligaci\u00f3n de medios y alcance din\u00e1mico, ejecutando las tareas que el Cliente asigne a trav\u00e9s de la plataforma Notion u otra herramienta de gesti\u00f3n que las partes acuerden. El presente contrato rige para un per\u00edodo \u00fanico de 31 d\u00edas corridos contados desde la fecha de acreditaci\u00f3n del pago \u00edntegro del honorario, sin renovaci\u00f3n autom\u00e1tica.');
+      html += clauseBold('Naturaleza de la obligaci\u00f3n: ', 'La obligaci\u00f3n del Prestador es de MEDIOS, no de resultado. El Prestador se compromete a emplear su mejor esfuerzo profesional, conocimiento t\u00e9cnico y diligencia para ejecutar las tareas encomendadas, sin garantizar la obtenci\u00f3n de un resultado espec\u00edfico, producto final determinado ni el cumplimiento de hitos u objetivos de negocio del Cliente.');
+      html += clauseBold('Relaci\u00f3n con el Anexo A: ', 'El Anexo A describe los servicios contratados a t\u00edtulo informativo y referencial, sin que sus entregables constituyan obligaciones de resultado. El detalle de las tareas espec\u00edficas, prioridad y plazos se definir\u00e1 din\u00e1micamente en la herramienta de gesti\u00f3n durante la ejecuci\u00f3n del contrato.');
+    } else {
+      html += clauseText('El Prestador se obliga a prestar al Cliente los servicios digitales detallados en la cláusula siguiente, conforme a las especificaciones acordadas.');
+      html += clauseBold('Alcance incluido: ', 'Los servicios contratados se detallan en la cláusula CUARTA. Los entregables, plazos y especificaciones de cada servicio se describen en el Anexo A adjunto, que forma parte integrante de este contrato.');
+      html += clauseBold('Alcance excluido: ', 'Quedan excluidos: (a) servicios no listados; (b) modificaciones no acordadas por escrito; (c) licencias de software de terceros, costos de suscripción o infraestructura tecnológica, salvo que se incluyan expresamente como entregable en el Anexo A del presente contrato.');
+    }
 
     // ── 4. SERVICIOS CONTRATADOS ──
     html += clauseTitle(3, 'SERVICIOS CONTRATADOS');
-    html += '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:8px;">';
-    html += '<thead><tr style="background:#f9fafb;"><th style="text-align:left;padding:6px 8px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;font-size:10px;">SERVICIO</th><th style="text-align:right;padding:6px 8px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;font-size:10px;">VALOR</th></tr></thead><tbody>';
-    for (var si = 0; si < svcs.length; si++) {
-      var s = svcs[si];
-      html += '<tr><td style="padding:5px 8px;border-bottom:1px solid #f3f4f6;color:#111827;">' + (s.name || 'Servicio') + '</td><td style="padding:5px 8px;border-bottom:1px solid #f3f4f6;color:#374151;text-align:right;font-family:monospace;">' + fmt(s.price) + '</td></tr>';
+    if (isBlastUp) {
+      html += '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:8px;">';
+      html += '<thead><tr style="background:#f9fafb;"><th style="text-align:left;padding:6px 8px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;font-size:10px;">SERVICIO</th></tr></thead><tbody>';
+      for (var si = 0; si < svcs.length; si++) {
+        var s = svcs[si];
+        html += '<tr><td style="padding:5px 8px;border-bottom:1px solid #f3f4f6;color:#111827;">' + (s.name || 'Servicio') + '</td></tr>';
+      }
+      html += '</tbody>';
+      html += '<tfoot><tr><td style="padding:6px 8px;font-weight:700;color:#4f46e5;border-top:2px solid #e5e7eb;font-size:13px;">Honorarios fijos del per\u00edodo (l\u00edquidos): $' + blastNet.toLocaleString('es-CL') + '</td></tr></tfoot>';
+      html += '</table>';
+      html += clauseText('Los servicios contratados est\u00e1n incluidos en el honorario fijo del per\u00edodo. No existe desglose de precios individuales.');
+    } else {
+      html += '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:8px;">';
+      html += '<thead><tr style="background:#f9fafb;"><th style="text-align:left;padding:6px 8px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;font-size:10px;">SERVICIO</th><th style="text-align:right;padding:6px 8px;font-weight:600;color:#374151;border-bottom:1px solid #e5e7eb;font-size:10px;">VALOR</th></tr></thead><tbody>';
+      for (var si = 0; si < svcs.length; si++) {
+        var s = svcs[si];
+        html += '<tr><td style="padding:5px 8px;border-bottom:1px solid #f3f4f6;color:#111827;">' + (s.name || 'Servicio') + '</td><td style="padding:5px 8px;border-bottom:1px solid #f3f4f6;color:#374151;text-align:right;font-family:monospace;">' + fmt(s.price) + '</td></tr>';
+      }
+      html += '</tbody>';
+      html += '<tfoot><tr><td style="padding:6px 8px;font-weight:700;color:#111827;border-top:2px solid #e5e7eb;">TOTAL</td><td style="padding:6px 8px;font-weight:700;color:#4f46e5;text-align:right;font-family:monospace;border-top:2px solid #e5e7eb;font-size:13px;">' + fmt(total) + '</td></tr></tfoot>';
+      html += '</table>';
     }
-    html += '</tbody>';
-    html += '<tfoot><tr><td style="padding:6px 8px;font-weight:700;color:#111827;border-top:2px solid #e5e7eb;">TOTAL</td><td style="padding:6px 8px;font-weight:700;color:#4f46e5;text-align:right;font-family:monospace;border-top:2px solid #e5e7eb;font-size:13px;">' + fmt(total) + '</td></tr></tfoot>';
-    html += '</table>';
 
     // ── 5. OBLIGACIONES DEL PRESTADOR ──
     html += clauseTitle(4, 'OBLIGACIONES DEL PRESTADOR');
     html += clauseItem('a', 'Ejecutar los servicios con estándar profesional y diligencia (Art. 1547 CC, culpa leve).');
-    html += clauseItem('b', 'Cumplir los plazos pactados (Art. 2009 CC).');
+    html += clauseItem('b', 'Cumplir los plazos que expresamente se pacten por escrito respecto de tareas determinadas.');
     html += clauseItem('c', 'Mantener informado al Cliente del estado de avance.');
-    html += clauseItem('d', 'Entregar códigos fuentes, archivos editables y activos digitales. Los avances parciales se pondrán a disposición en entorno de pruebas (staging) o vista previa durante la ejecución para revisión y aprobación progresiva. La entrega definitiva se realizará al momento del pago total, mediante repositorio privado (GitHub/GitLab) o descarga directa, en formatos estándar de la industria.');
+    if (isBlastUp) {
+      html += clauseItem('d', 'Poner a disposición del Cliente los avances parciales en un entorno de pruebas (staging) o vista previa para su revisión. El Prestador no está obligado a entregar códigos fuentes, archivos editables, repositorios ni credenciales de administración, cuya transferencia se regirá por la cláusula de Propiedad Intelectual.');
+    } else {
+      html += clauseItem('d', 'Entregar códigos fuentes, archivos editables y activos digitales. Los avances parciales se pondrán a disposición en entorno de pruebas (staging) o vista previa durante la ejecución para revisión y aprobación progresiva. La entrega definitiva se realizará al momento del pago total, mediante repositorio privado (GitHub/GitLab) o descarga directa, en formatos estándar de la industria.');
+    }
     html += clauseItem('e', 'Emitir boleta electrónica por cada pago (Art. 88 Código Tributario).');
     html += clauseItem('f', 'No usar información del Cliente fuera del objeto del contrato.');
 
@@ -1263,30 +1441,61 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
     // ── 7. HONORARIOS Y FORMA DE PAGO ──
     html += clauseTitle(6, 'HONORARIOS Y FORMA DE PAGO');
-    html += clauseBold('Monto: ', 'El valor total asciende a ' + fmt(total) + ' CLP. El Prestador es persona natural que emite boleta de honorarios, por lo que estos servicios no están afectos a IVA. El valor corresponde al monto bruto de las boletas; la retención legal se descuenta de dicho monto.');
-    var payDetail = paymentMethod === 'contado' ? 'Pago único al contado contra aceptación del contrato.' : paymentMethod === '50_50' ? '50% al inicio y 50% a la entrega conforme.' : paymentMethod === 'hitos' ? (paymentTerms || 'Según hitos acordados.') : (paymentTerms || 'Según lo acordado.');
-    html += clauseBold('Modalidad: ', payDetail);
-    var hasMonthly = svcs.some(function(s) { return s.is_monthly; });
-    if (hasMonthly) {
-      html += clauseBold('Servicios recurrentes: ', 'Los servicios marcados como "(mensual)" en el Anexo A se facturan y pagan por mes adelantado, de forma independiente al pago de los servicios puntuales. El valor indicado corresponde al valor mensual de cada servicio recurrente.');
+    if (isBlastUp) {
+      var boletaBruto = blastGross.toLocaleString('es-CL');
+      var blastNetFmt = blastNet.toLocaleString('es-CL');
+      var extraHrBruto = Math.round(extraHourRate / (1 - blastRate / 100));
+      html += clauseBold('Monto del per\u00edodo: ', 'El honorario \u00fanico del per\u00edodo es de $' + blastNetFmt + ' l\u00edquidos ($' + boletaBruto + ' brutos). El Prestador es persona natural que emite boleta de honorarios, exenta de IVA. La retenci\u00f3n legal del 15,25% se descuenta del monto bruto (Ley N\u00b0 21.133).');
+      html += clauseBold('Tope de horas: ', 'El honorario cubre hasta ' + hourCap + ' horas de trabajo efectivo durante el per\u00edodo. Las horas adicionales se pagar\u00e1n a raz\u00f3n de $' + extraHrBruto.toLocaleString('es-CL') + ' brutos ($' + extraHourRate.toLocaleString('es-CL') + ' l\u00edquidos) cada una, previa autorizaci\u00f3n del Cliente. Las horas se contabilizar\u00e1n semanalmente y se informar\u00e1n al Cliente a trav\u00e9s de la herramienta de gesti\u00f3n. Las reuniones de coordinaci\u00f3n y las tareas correctivas consumen el tope de horas del per\u00edodo.');
+      html += clauseBold('Obligaci\u00f3n de pago y plazo: ', 'El pago \u00fanico por $' + blastNetFmt + ' l\u00edquidos se efectuar\u00e1 dentro de los 5 d\u00edas corridos siguientes a la suscripci\u00f3n del contrato, y en todo caso con anterioridad al inicio de la ejecuci\u00f3n de los servicios. Si el \u00faltimo d\u00eda del plazo fuere inh\u00e1bil bancario, el pago deber\u00e1 efectuarse el d\u00eda h\u00e1bil inmediatamente anterior. El solo transcurso del plazo constituir\u00e1 al Cliente en mora de pleno derecho (Art. 1551 N\u00b01 CC).');
+      html += clauseBold('Pacto comisorio calificado: ', 'El no pago \u00edntegro del honorario dentro del plazo establecido, o el no otorgamiento del pagar\u00e9 si fuere aplicable, producir\u00e1 de pleno derecho la resoluci\u00f3n del contrato, sin necesidad de declaraci\u00f3n judicial ni de requerimiento previo (Art. 1489 CC). Para hacer valer la resoluci\u00f3n bastar\u00e1 comunicaci\u00f3n escrita del Prestador al correo de notificaciones del Cliente. En tal caso, el Prestador no estar\u00e1 obligado a iniciar ni continuar la ejecuci\u00f3n de los servicios, y el Cliente deber\u00e1 cesar todo uso de los entregables y avances recibidos, eliminar todas las copias en su poder y certificar por escrito dicha eliminaci\u00f3n dentro de tercero d\u00eda.');
+      html += clauseBold('Medio de pago: ', 'Transferencia electr\u00f3nica a la cuenta bancaria del Prestador indicada en la boleta de honorarios.');
+      html += clauseText('Boleta de honorarios: El Prestador emitir\u00e1 una (1) boleta electr\u00f3nica de honorarios por el valor bruto de $' + boletaBruto + ', conforme al Art\u00edculo 88 del C\u00f3digo Tributario. El Cliente, como contribuyente de Primera Categor\u00eda obligado a contabilidad completa, enterar\u00e1 la retenci\u00f3n del 15,25% en el SII conforme a la Ley N\u00b0 21.133. Si la tasa de retenci\u00f3n variare durante la vigencia del contrato, el monto bruto de la boleta se ajustar\u00e1 de modo que el l\u00edquido percibido por el Prestador se mantenga en $' + blastNetFmt + '.');
+      html += clauseBold('Reajuste por IPC: ', 'Todas las sumas adeudadas se reajustar\u00e1n seg\u00fan la variaci\u00f3n del IPC entre la fecha de exigibilidad y la fecha de pago efectivo. Este reajuste es independiente de los intereses y de la cl\u00e1usula penal, y procede aunque no medie mora.');
+      html += clauseBold('Cl\u00e1usula penal por mora del Cliente: ', 'En caso de mora en el pago, el Cliente pagar\u00e1 al Prestador una penalidad del 2% del monto adeudado por cada mes calendario de atraso, con un m\u00e1ximo del 20% del honorario l\u00edquido del per\u00edodo, esto es, $' + Math.round(blastNet * 0.2).toLocaleString('es-CL') + '. La pena convencional reemplaza toda otra indemnizaci\u00f3n por da\u00f1os moratorios, sin perjuicio del reajuste por IPC. El Prestador podr\u00e1 exigir simult\u00e1neamente el cumplimiento de la obligaci\u00f3n principal y la pena (Art. 1537 inc. 2\u00b0 CC).');
+      if (includePagare) {
+        html += clauseBold('Garant\u00eda de pago (Pagar\u00e9): ', 'Como garant\u00eda del pago, el Cliente suscribir\u00e1 un pagar\u00e9 por el honorario bruto de $' + boletaBruto + ' a la orden del Prestador, con vencimiento dentro de los 5 d\u00edas corridos siguientes a la suscripci\u00f3n del contrato. El pagar\u00e9 se otorga como garant\u00eda de pago, y ser\u00e1 devuelto al Cliente una vez efectuado el pago \u00edntegro del honorario. Si el Cliente no suscribe el pagar\u00e9 al momento de la firma del contrato, el Prestador no estar\u00e1 obligado a iniciar la prestaci\u00f3n de servicios.');
+      }
+      html += clauseBold('Pr\u00f3rroga por mora del Cliente en insumos: ', 'Si el Cliente incurre en mora en la entrega de informaci\u00f3n, accesos o insumos necesarios para la ejecuci\u00f3n de los servicios, el t\u00e9rmino del per\u00edodo se prorrogar\u00e1 autom\u00e1ticamente en igual n\u00famero de d\u00edas de retraso, sin que ello constituya incumplimiento del Prestador ni descuente del tope de horas del per\u00edodo.');
+    } else {
+      html += clauseBold('Monto: ', 'El valor total asciende a ' + fmt(total) + ' CLP. El Prestador es persona natural que emite boleta de honorarios, por lo que estos servicios no están afectos a IVA. El valor corresponde al monto bruto de las boletas; la retención legal se descuenta de dicho monto.');
+      var payDetail = paymentMethod === 'contado' ? 'Pago único al contado contra aceptación del contrato.' : paymentMethod === '50_50' ? '50% al inicio y 50% a la entrega conforme.' : paymentMethod === 'hitos' ? (paymentTerms || 'Según hitos acordados.') : (paymentTerms || 'Según lo acordado.');
+      html += clauseBold('Modalidad: ', payDetail);
+      var hasMonthly = svcs.some(function(s) { return s.is_monthly; });
+      if (hasMonthly) {
+        html += clauseBold('Servicios recurrentes: ', 'Los servicios marcados como "(mensual)" en el Anexo A se facturan y pagan por mes adelantado, de forma independiente al pago de los servicios puntuales. El valor indicado corresponde al valor mensual de cada servicio recurrente.');
+      }
+      html += clauseBold('Medio de pago: ', 'Transferencia a cuenta del Prestador indicada en boleta de honorarios.');
+      html += clauseText('Boleta de honorarios: El Prestador emitirá boleta electrónica (Art. 88 CT). El Cliente, en su calidad de contribuyente con contabilidad completa, enterará retención 15,25% en SII, conforme a la tasa vigente a la fecha del presente contrato (Ley 21.133).');
+      html += clauseBold('Mora: ', 'Interés corriente para operaciones reajustables desde la exigibilidad (Art. 1559 CC).');
+      html += clauseBold('Cláusula penal por mora del Cliente (Art. 1535 CC): ', 'El Cliente en mora pagará al Prestador el 5% del monto adeudado por semana de atraso, con máximo del 20% del total del contrato. La pena convencional reemplaza toda otra indemnización moratoria, salvo el reajuste (Art. 1559 CC). El Prestador podrá exigir simultáneamente el cumplimiento y la pena (Art. 1537 CC inc. 2°).');
+      html += clauseBold('Cláusula penal por retraso en entrega de insumos: ', 'Si el Cliente incurre en mora en la entrega de información, accesos o insumos, el plazo de entrega del Prestador se prorroga automáticamente en igual número de días hábiles, sin que ello constituya incumplimiento del Prestador.');
     }
-    html += clauseBold('Medio de pago: ', 'Transferencia a cuenta del Prestador indicada en boleta de honorarios.');
-    html += clauseText('Boleta de honorarios: El Prestador emitirá boleta electrónica (Art. 88 CT). El Cliente, en su calidad de contribuyente con contabilidad completa, enterará retención 15,25% en SII, conforme a la tasa vigente a la fecha del presente contrato (Ley 21.133).');
-    html += clauseBold('Mora: ', 'Interés corriente para operaciones reajustables desde la exigibilidad (Art. 1559 CC).');
-    html += clauseBold('Cláusula penal por mora del Cliente (Art. 1535 CC): ', 'El Cliente en mora pagará al Prestador el 5% del monto adeudado por semana de atraso, con máximo del 20% del total del contrato. La pena convencional reemplaza toda otra indemnización moratoria, salvo el reajuste (Art. 1559 CC). El Prestador podrá exigir simultáneamente el cumplimiento y la pena (Art. 1537 CC inc. 2°).');
-    html += clauseBold('Cláusula penal por retraso en entrega de insumos: ', 'Si el Cliente incurre en mora en la entrega de información, accesos o insumos, el plazo de entrega del Prestador se prorroga automáticamente en igual número de días hábiles, sin que ello constituya incumplimiento del Prestador.');
 
     // ── 8. PLAZO, VIGENCIA Y TÉRMINO ──
     html += clauseTitle(7, 'PLAZO, VIGENCIA Y TÉRMINO');
-    html += clauseBold('Duración: ', duration + ' mes(es) desde ' + (startDate || '—') + ' hasta ' + (endDate || '—') + '.');
-    html += clauseBold('Término anticipado: ', 'Por: (a) mutuo acuerdo escrito; (b) incumplimiento grave (Art. 1489 CC); (c) fuerza mayor; (d) aviso con 30 días de anticipación.');
-    html += clauseBold('Efectos del término: ', 'Pago de servicios ejecutados y recibidos conforme + entrega de avances de servicios no concluidos con pago proporcional según avance acreditado + devolución de información confidencial. En caso de desacuerdo sobre el avance, las partes se someterán a mediación.');
+    if (isBlastUp) {
+      html += clauseBold('Vigencia del per\u00edodo: ', 'El presente contrato rige para un per\u00edodo \u00fanico de 31 d\u00edas corridos, contados desde la fecha de acreditaci\u00f3n del pago. NO existe renovaci\u00f3n autom\u00e1tica. Las partes podr\u00e1n suscribir un nuevo contrato para per\u00edodos siguientes si as\u00ed lo acuerdan.');
+      html += clauseBold('Perfeccionamiento: ', 'El contrato se perfecciona con su suscripci\u00f3n. La ejecuci\u00f3n de los servicios comenzar\u00e1 una vez recibido el pago \u00edntegro del honorario del per\u00edodo.');
+      html += clauseBold('T\u00e9rmino anticipado: ', 'Cualquiera de las partes podr\u00e1 poner t\u00e9rmino anticipado al contrato mediante aviso escrito con al menos 10 d\u00edas de anticipaci\u00f3n. En caso de desistimiento unilateral del Cliente sin el aviso referido, se deber\u00e1 pagar la totalidad del honorario del per\u00edodo en curso. En caso de t\u00e9rmino anticipado imputable al Prestador, \u00e9ste restituir\u00e1 el honorario proporcional a las horas no consumidas.');
+      html += clauseBold('Efectos del t\u00e9rmino: ', 'Al t\u00e9rmino del contrato por cualquier causa, el Prestador pondr\u00e1 a disposici\u00f3n del Cliente los avances parciales producidos hasta esa fecha y devolver\u00e1 la informaci\u00f3n confidencial del Cliente en su poder, salvo aquella que deba conservar por obligaci\u00f3n legal o tributaria. La garant\u00eda de la cl\u00e1usula D\u00c9CIMA SEXTA sobrevive al t\u00e9rmino del contrato respecto de los avances aprobados antes del t\u00e9rmino.');
+    } else {
+      html += clauseBold('Duración: ', duration + ' mes(es) desde ' + (startDate || '—') + ' hasta ' + (endDate || '—') + '.');
+      html += clauseBold('Término anticipado: ', 'Por: (a) mutuo acuerdo escrito; (b) incumplimiento grave (Art. 1489 CC); (c) fuerza mayor; (d) aviso con 30 días de anticipación.');
+      html += clauseBold('Efectos del término: ', 'Pago de servicios ejecutados y recibidos conforme + entrega de avances de servicios no concluidos con pago proporcional según avance acreditado + devolución de información confidencial. En caso de desacuerdo sobre el avance, las partes se someterán a mediación.');
+    }
 
     // ── 9. ENTREGABLES Y RECEPCIÓN ──
     html += clauseTitle(8, 'ENTREGABLES Y RECEPCIÓN');
-    html += clauseText('El Prestador entregará los productos conforme a especificaciones. El Cliente dispone de ' + revisionDays + ' días hábiles para revisar y formular observaciones.');
-    html += clauseText('Correcciones menores (1 ronda) incluidas. Modificaciones sustanciales se rigen por la cláusula de Modificaciones.');
-    html += clauseBold('Aprobación tácita: ', 'Si el Cliente no formula observaciones en ' + revisionDays + ' días hábiles, se entiende recibido conforme.');
+    if (isBlastUp) {
+      html += clauseText('Los servicios se prestan por avances y bajo obligaci\u00f3n de medios, conforme a las tareas definidas por el Cliente en la herramienta de gesti\u00f3n. La aceptaci\u00f3n recae sobre los avances efectivamente ejecutados en cada per\u00edodo, y no sobre un producto final terminado.');
+      html += clauseBold('Aprobaci\u00f3n t\u00e1cita: ', 'El Cliente dispondr\u00e1 de ' + revisionDays + ' d\u00edas h\u00e1biles para revisar cada avance y formular observaciones. Si el Cliente no formula observaciones dentro de dicho plazo, el avance se entender\u00e1 recibido conforme y aprobado t\u00e1citamente.');
+      html += clauseBold('Rondas de revisi\u00f3n: ', 'Se incluyen ' + revisionRounds + ' ronda(s) de correcciones por avance. Las revisiones o cambios que excedan dicho l\u00edmite se considerar\u00e1n tareas adicionales y se facturar\u00e1n por separado seg\u00fan tarifa acordada.');
+    } else {
+      html += clauseText('El Prestador entregará los productos conforme a especificaciones. El Cliente dispone de ' + revisionDays + ' días hábiles para revisar y formular observaciones.');
+      html += clauseText('Correcciones menores (1 ronda) incluidas. Modificaciones sustanciales se rigen por la cláusula de Modificaciones.');
+      html += clauseBold('Aprobación tácita: ', 'Si el Cliente no formula observaciones en ' + revisionDays + ' días hábiles, se entiende recibido conforme.');
+    }
 
     // ── 10. INDEPENDENCIA DEL PRESTADOR (CRÍTICA) ──
     html += clauseTitle(9, 'INDEPENDENCIA DEL PRESTADOR');
@@ -1299,10 +1508,18 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
     // ── 11. PROPIEDAD INTELECTUAL ──
     html += clauseTitle(10, 'PROPIEDAD INTELECTUAL');
-    html += clauseText('El Prestador cede los derechos patrimoniales sobre códigos fuentes, diseños y activos creados (Ley 17.336).');
-    html += clauseBold('Transferencia efectiva: ', 'Contra el pago total de los honorarios. Mientras no se complete el pago total: (i) el uso de los entregables es licencia precaria y revocable, limitada a revisión y prueba, sin explotación comercial; (ii) el paso a producción, la activación de herramientas de indexación y posicionamiento (incluyendo Google Search Console, datos estructurados y SEO que requieran el sitio publicado), las credenciales de administración y el acceso a entornos productivos se producirán únicamente contra el pago total. Hasta ese momento, los sistemas permanecerán en staging o acceso restringido, sin uso productivo ni indexación.');
-    html += clauseBold('Derechos morales: ', 'El Prestador los conserva (Art. 14 Ley 17.336).');
-    html += clauseBold('Portafolio: ', 'El Prestador puede usar los trabajos en su portafolio, salvo acuerdo en contrario.');
+    if (isBlastUp) {
+      html += clauseBold('Cesión de derechos patrimoniales: ', 'Para los efectos del Art\u00edculo 8\u00b0 inciso tercero de la Ley N\u00b0 17.336, las partes estipulan expresamente que los derechos patrimoniales sobre los incrementos de c\u00f3digo desarrollados durante el per\u00edodo \u00fanico del presente contrato NO se reputan cedidos por el solo encargo. La cesi\u00f3n queda sujeta a la condici\u00f3n suspensiva del pago \u00edntegro del honorario del per\u00edodo. Verificado el pago, la cesi\u00f3n opera retroactivamente sobre todos los incrementos del per\u00edodo.');
+      html += clauseBold('Entrega técnica y staging: ', 'El Prestador pondrá a disposición del Cliente el código desarrollado en un entorno de pruebas (staging) para su revisión. El entorno de pruebas constituye \u00fanicamente el flujo de trabajo de revisi\u00f3n previa a la puesta en producci\u00f3n. Mientras no se verifique la condici\u00f3n suspensiva del pago \u00edntegro, el Cliente no adquiere derecho alguno sobre el c\u00f3digo fuente ni puede utilizarlo en producci\u00f3n. Verificado el pago \u00edntegro del honorario, el Cliente tiene derecho a recibir el c\u00f3digo fuente de los incrementos desarrollados durante el per\u00edodo.');
+      html += clauseBold('Derechos morales: ', 'El Prestador los conserva (Art. 14 Ley 17.336).');
+      html += clauseBold('Portafolio: ', 'El Prestador puede usar los trabajos en su portafolio, salvo acuerdo en contrario.');
+      html += clauseBold('Dominio y cuentas: ', 'El nombre de dominio se registrar\u00e1 directamente a nombre del Cliente. Las cuentas de plataforma ser\u00e1n titularidad del Cliente, pero las credenciales de administraci\u00f3n se entregar\u00e1n \u00fanicamente una vez verificado el pago \u00edntegro del honorario del per\u00edodo. Hasta ese momento, el Prestador mantendr\u00e1 el control operacional de las cuentas para fines de ejecuci\u00f3n de los servicios.');
+    } else {
+      html += clauseText('El Prestador cede los derechos patrimoniales sobre códigos fuentes, diseños y activos creados (Ley 17.336).');
+      html += clauseBold('Transferencia efectiva: ', 'Contra el pago total de los honorarios. Mientras no se complete el pago total: (i) el uso de los entregables es licencia precaria y revocable, limitada a revisión y prueba, sin explotación comercial; (ii) el paso a producción, la activación de herramientas de indexación y posicionamiento (incluyendo Google Search Console, datos estructurados y SEO que requieran el sitio publicado), las credenciales de administración y el acceso a entornos productivos se producirán únicamente contra el pago total. Hasta ese momento, los sistemas permanecerán en staging o acceso restringido, sin uso productivo ni indexación.');
+      html += clauseBold('Derechos morales: ', 'El Prestador los conserva (Art. 14 Ley 17.336).');
+      html += clauseBold('Portafolio: ', 'El Prestador puede usar los trabajos en su portafolio, salvo acuerdo en contrario.');
+    }
 
     // ── 12. CONFIDENCIALIDAD ──
     html += clauseTitle(11, 'CONFIDENCIALIDAD');
@@ -1336,10 +1553,17 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
     // ── 16. GARANTÍA Y RESPONSABILIDAD ──
     html += clauseTitle(15, 'GARANTÍA Y RESPONSABILIDAD');
-    html += clauseBold('Período de garantía: ', warrantyDays + ' días corridos desde la entrega conforme.');
-    html += clauseBold('Cobertura: ', 'Defectos de implementación y no conformidad con especificaciones.');
-    html += clauseBold('Exclusiones: ', 'Modificaciones del Cliente, cambios de requerimiento, problemas de infraestructura.');
-    html += clauseBold('Límite: ', 'Responsabilidad total limitada al monto de honorarios pagados. Excluye daños indirectos y lucro cesante. No aplica a dolo o culpa grave (Art. 44 CC).');
+    if (isBlastUp) {
+      html += clauseBold('Período de garantía: ', warrantyDays + ' días corridos desde la aprobación de cada avance individual.');
+      html += clauseBold('Cobertura: ', 'Defectos de implementación en cada avance aprobado. Al no existir un producto final, la garantía se aplica individualmente sobre cada entregable. Las correcciones ejecutadas en período de garantía se limitan a defectos de implementación del avance aprobado y no comprenden nuevos requerimientos ni cambios de especificación.');
+      html += clauseBold('Exclusiones: ', 'Modificaciones del Cliente, cambios de requerimiento, problemas de infraestructura, tareas no incluidas en el alcance del período.');
+      html += clauseBold('Límite: ', 'Responsabilidad total limitada al monto del honorario del período respectivo. Excluye daños indirectos y lucro cesante. No aplica a dolo o culpa grave (Art. 44 CC).');
+    } else {
+      html += clauseBold('Período de garantía: ', warrantyDays + ' días corridos desde la entrega conforme.');
+      html += clauseBold('Cobertura: ', 'Defectos de implementación y no conformidad con especificaciones.');
+      html += clauseBold('Exclusiones: ', 'Modificaciones del Cliente, cambios de requerimiento, problemas de infraestructura.');
+      html += clauseBold('Límite: ', 'Responsabilidad total limitada al monto de honorarios pagados. Excluye daños indirectos y lucro cesante. No aplica a dolo o culpa grave (Art. 44 CC).');
+    }
 
     // ── 17. FUERZA MAYOR ──
     html += clauseTitle(16, 'FUERZA MAYOR');
@@ -1355,18 +1579,55 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     html += clauseText('Se rige por las leyes de la República de Chile. Domicilio: Puerto Varas, Región de Los Lagos. Las partes se someten a sus tribunales ordinarios (prórroga de competencia válida conforme Art. 181 COT).');
     html += clauseBold('Firma electrónica: ', 'La firma electrónica simple utilizada produce efectos jurídicos entre las partes conforme a la Ley 19.799. No cuenta con la presunción de integridad y autoría de la firma electrónica avanzada (certificada); su valor probatorio será apreciado por el tribunal según las reglas generales.');
 
-    // ── ANEXO A: ENTREGABLES Y PLAZOS ──
+    // ── 19. ACUERDO ÍNTEGRO (DÉCIMA NOVENA) ──
+    html += clauseTitle(18, 'ACUERDO ÍNTEGRO');
+    html += clauseText('El presente contrato constituye el acuerdo íntegro entre las partes respecto de su objeto, y reemplaza cualquier acuerdo o entendimiento previo, verbal o escrito, sobre la misma materia. Las partes declaran que no existen ni se considerarán incorporadas otras declaraciones, promesas o garantías distintas de las contenidas en este instrumento.');
+    html += clauseItem('a', 'Modificación: Cualquier modificación del presente contrato requerirá acuerdo por escrito entre las partes.');
+    html += clauseItem('b', 'Prevalencia: En caso de conflicto entre el cuerpo principal del contrato y el Anexo A, prevalecer\u00e1n las disposiciones del presente cuerpo principal, salvo respecto de la definici\u00f3n de d\u00edas h\u00e1biles, la descripci\u00f3n de la l\u00ednea base y la clasificaci\u00f3n de tareas contenidas en el Anexo A, que prevalecer\u00e1n en todo caso.');
+
+    // ── 20. CESIÓN (VIGÉSIMA) — recíproca ──
+    html += clauseTitle(19, 'CESIÓN DE POSICIÓN CONTRACTUAL');
+    html += clauseText('Ninguna de las partes podrá ceder ni transferir su posición contractual ni las obligaciones derivadas del presente contrato sin el consentimiento previo, expreso y por escrito de la otra parte.');
+    html += clauseItem('a', 'La cesión no libera al cedente de sus obligaciones contractuales, salvo pacto expreso en contrario.');
+    html += clauseItem('b', 'Cualquier cesión no autorizada será nula y no producirá efecto alguno entre las partes.');
+
+    // ── 21. DIVISIBILIDAD (VIGÉSIMA PRIMERA) ──
+    html += clauseTitle(20, 'DIVISIBILIDAD');
+    html += clauseText('Si cualquiera de las cláusulas del presente contrato fuere declarada nula, ilegal o inexigible por autoridad administrativa o judicial competente, dicha declaración no afectará la validez ni exigibilidad de las restantes cláusulas, las que subsistirán en pleno vigor y efecto. La cláusula afectada se tendrá por no escrita, y las partes se obligan a negociar de buena fe una cláusula sustitutoria que refleje la intención original de la cláusula invalidada.');
+
+    // ── 22. FIRMAS (VIGÉSIMA SEGUNDA) ──
+    html += '<div style="margin-top:24px;padding-top:16px;border-top:2px solid #e5e7eb;">';
+    html += '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:0 0 12px;">VIG\u00C9SIMA SEGUNDA. — FIRMAS</h3>';
+    html += '<p style="font-size:10px;color:#6b7280;margin:0 0 14px;font-style:italic;">"Las partes firman en señal de aprobación, aceptando todas y cada una de las cláusulas del presente contrato."</p>';
+    html += '<div style="display:flex;justify-content:space-between;gap:20px;">';
+    html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">Mtsprz — Soluciones Digitales</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">PRESTADOR</p></div>';
+    html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">' + clientName + '</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">CLIENTE</p></div>';
+    html += '</div></div>';
+
+    // ── ANEXO A: ENTREGABLES Y PLAZOS (después de firmas) ──
     html += '<div style="margin-top:20px;padding-top:16px;border-top:2px solid #e5e7eb;">';
     html += '<h3 style="font-size:13px;font-weight:700;color:#111827;margin:0 0 8px;">ANEXO A — ENTREGABLES Y PLAZOS</h3>';
-    html += clauseText('El presente anexo forma parte integrante del contrato y detalla los entregables, plazos y criterios de aceptación de cada servicio contratado.');
+    html += clauseText('El presente anexo forma parte integrante del contrato y detalla los entregables, plazos y condiciones espec\u00edficas del servicio contratado.');
+    html += clauseText('Para efectos del presente contrato, se entender\u00e1 por "d\u00edas h\u00e1biles" los d\u00edas lunes a viernes, excluidos los festivos en Chile.');
+    if (isBlastUp) {
+      html += clauseBold('Calendario del per\u00edodo: ', 'El per\u00edodo de ejecuci\u00f3n \u00fanico es de <strong>31 d\u00edas corridos</strong>, contados desde la fecha de acreditaci\u00f3n del pago. Semana 1 (d\u00edas 1-7), Semana 2 (d\u00edas 8-14), Semana 3 (d\u00edas 15-21), Semana 4 (d\u00edas 22-28), Cierre (d\u00edas 29-31).');
+      html += clauseBold('Tope de horas del per\u00edodo: ', 'El honorario cubre hasta <strong>' + hourCap + ' horas</strong> de trabajo efectivo durante todo el per\u00edodo. Las horas no consumidas no son acumulables ni reembolsables. El Prestador pondr\u00e1 a disposici\u00f3n un registro del tiempo invertido, actualizado al menos semanalmente.');
+      html += clauseBold('L\u00ednea base: ', 'La l\u00ednea base del servicio la constituyen los activos digitales preexistentes del Cliente (repositorios, base de datos, infraestructura, dominio), respecto de los cuales las partes declaran conocer su estado actual. El Prestador no garantiza la calidad, seguridad ni disponibilidad del c\u00f3digo o infraestructura preexistentes.');
+      html += clauseBold('Naturaleza del servicio (obligaci\u00f3n de medios): ', 'El Prestador se obliga a desplegar los mejores esfuerzos t\u00e9cnicos y profesionales para ejecutar las tareas encomendadas, sin que ello implique una obligaci\u00f3n de resultados respecto de la completitud, correcci\u00f3n o desempe\u00f1o de la aplicaci\u00f3n como un todo.');
+      html += clauseBold('V\u00eda de ingreso de requerimientos: ', 'El Cliente ingresa sus requerimientos a trav\u00e9s de la plataforma Notion. Cada requerimiento debe incluir una descripci\u00f3n suficiente y, cuando corresponda, criterios de aceptaci\u00f3n espec\u00edficos.');
+    }
     for (var ai = 0; ai < svcs.length; ai++) {
       var asvc = svcs[ai];
-      var monthlyTag = asvc.is_monthly ? ' <span style="color:#6b7280;font-weight:400;font-size:10px;">(mensual)</span>' : '';
-      html += '<h4 style="font-size:12px;font-weight:600;color:#4f46e5;margin:12px 0 6px;">' + (ai + 1) + '. ' + asvc.name + ' — $' + (asvc.price || 0).toLocaleString('es-CL') + monthlyTag + '</h4>';
+      var monthlyTag = (asvc.is_monthly && !isBlastUp) ? ' <span style="color:#6b7280;font-weight:400;font-size:10px;">(mensual)</span>' : '';
+      html += '<h4 style="font-size:12px;font-weight:600;color:#4f46e5;margin:12px 0 6px;">' + (ai + 1) + '. ' + asvc.name + monthlyTag + '</h4>';
       var plazoInicio = startDate || 'la fecha de inicio';
       var plazoFin = endDate || 'la fecha de término';
-      if (asvc.is_monthly) {
+      if (asvc.is_monthly && !isBlastUp) {
         html += clauseBold('Modalidad: ', 'Servicio recurrente mensual. El valor de $' + (asvc.price || 0).toLocaleString('es-CL') + ' corresponde a cada mes de servicio. Se factura y paga mensualmente por adelantado.');
+      } else if (asvc.is_monthly && isBlastUp) {
+        html += clauseBold('Modalidad: ', 'Incluido en honorario fijo del per\u00edodo \u00fanico de 31 d\u00edas corridos desde la acreditaci\u00f3n del pago, por $' + blastNet.toLocaleString('es-CL') + ' l\u00edquidos. No existe renovaci\u00f3n autom\u00e1tica.');
+      } else if (isBlastUp) {
+        html += clauseBold('Plazo de ejecución: ', 'Per\u00edodo \u00fanico de 31 d\u00edas corridos desde la acreditaci\u00f3n del pago. Las partes acuerdan definir los hitos espec\u00edficos y sus fechas de entrega mediante comunicaci\u00f3n escrita dentro de los 3 d\u00edas h\u00e1biles siguientes a la fecha de acreditaci\u00f3n del pago.');
       } else {
         html += clauseBold('Plazo de ejecución: ', 'Fecha de inicio: ' + plazoInicio + ' — Fecha de término estimada: ' + plazoFin + '. Las partes acuerdan definir los hitos específicos y sus fechas de entrega mediante comunicación escrita dentro de los 5 días hábiles siguientes a la firma del contrato, los que se entenderán incorporados al presente Anexo A. La falta de definición en dicho plazo habilitará al Prestador para gestionar los entregables en el orden y tiempos que estime convenientes, dentro del plazo total.');
       }
@@ -1374,34 +1635,35 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
         html += '<strong style="font-size:11px;color:#111827;">Entregables:</strong>';
         html += '<ul style="margin:4px 0 8px;padding-left:20px;font-size:11px;color:#374151;line-height:1.6;">';
         for (var di = 0; di < asvc.deliverables.length; di++) {
-          html += '<li>' + asvc.deliverables[di] + '</li>';
+          var dl = asvc.deliverables[di];
+          if (isBlastUp) dl = dl.replace(/\b1 ronda\b/g, revisionRounds + ' rondas');
+          html += '<li>' + dl + '</li>';
         }
         html += '</ul>';
       } else {
         html += '<p style="font-size:11px;color:#9ca3af;font-style:italic;margin:2px 0 8px;">Entregables y especificaciones por definir entre las partes. Se entenderán incorporados al presente anexo una vez acordados por escrito.</p>';
       }
-      html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Criterio de aceptación:</strong> Cada entregable se considerará recibido conforme tras su revisión y aprobación por escrito del Cliente, o transcurrido el plazo de revisión sin observaciones (aprobación tácita).</p>';
-      if (asvc.deliverables && asvc.deliverables.some(function(d) { return d.toLowerCase().indexOf('hosting') !== -1 || d.toLowerCase().indexOf('cdn') !== -1; })) {
+      if (isBlastUp) {
+        html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Criterio de aceptaci\u00f3n:</strong> La aceptaci\u00f3n de los entregables determina el inicio del per\u00edodo de garant\u00eda (' + warrantyDays + ' d\u00edas) durante el cual el Prestador corregir\u00e1 defectos de implementaci\u00f3n, con hasta ' + revisionRounds + ' ronda(s) de correcciones por avance. Dicha aceptaci\u00f3n no condiciona ni suspende la obligaci\u00f3n de pago del per\u00edodo, conforme a la cl\u00e1usula S\u00c9PTIMA.</p>';
+        html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Clasificaci\u00f3n de tareas:</strong> Correctivo (fallas que impiden operaci\u00f3n normal — prioridad m\u00e1xima) | Evolutivo (mejoras y nuevas funcionalidades contra tope de horas) | Excluido (cambios de arquitectura, integraciones no previstas, tareas que excedan horas disponibles del per\u00edodo). Las horas dedicadas a tareas correctivas consumen el tope de horas del per\u00edodo.</p>';
+        html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Disponibilidad:</strong> El Prestador organiza libremente su tiempo. Se compromete a acusar recibo de las comunicaciones del Cliente dentro de un plazo m\u00e1ximo de 8 horas h\u00e1biles y, trat\u00e1ndose de incidentes correctivos calificados como cr\u00edticos, a iniciar su atenci\u00f3n dentro de 8 horas h\u00e1biles. Las horas dedicadas a incidentes correctivos consumen el tope de horas del per\u00edodo.</p>';
+      } else {
+        html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Criterio de aceptación:</strong> Cada entregable se considerará recibido conforme tras su revisión y aprobación por escrito del Cliente, o transcurrido el plazo de revisión sin observaciones (aprobación tácita).</p>';
+      }
+      if (!isBlastUp && asvc.deliverables && asvc.deliverables.some(function(d) { return d.toLowerCase().indexOf('hosting') !== -1 || d.toLowerCase().indexOf('cdn') !== -1; })) {
         html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Nota sobre hosting:</strong> El servicio incluye alojamiento web con SSL y CDN por el período indicado en los entregables. Dicho período se contará desde la puesta en producción del sitio (una vez recibido el pago total). Transcurrido el período incluido, la renovación será por cuenta del Cliente. El Prestador no será responsable por caídas imputables al proveedor de infraestructura. El Cliente podrá solicitar migración a un proveedor de su elección. La titularidad del contenido alojado corresponde al Cliente desde el pago total de los honorarios.</p>';
       }
     }
     html += clauseText('Las partes declaran conocer y aceptar el contenido del presente Anexo A, que forma parte integrante del contrato para todos los efectos legales.');
     html += '</div>';
 
-    // ── CLAUSULAS ESPECIALES ──
+    // ── CLAUSULAS ESPECIALES (después de Anexo A) ──
     if (specialClauses) {
-      html += clauseTitle(20, 'CLÁUSULAS ESPECIALES ADICIONALES');
+      html += '<div style="margin-top:20px;padding-top:16px;border-top:2px solid #e5e7eb;">';
+      html += '<h3 style="font-size:13px;font-weight:700;color:#111827;margin:0 0 8px;">CL\u00C1USULAS ESPECIALES ADICIONALES</h3>';
       html += '<p style="font-size:11px;color:#374151;margin:0;line-height:1.6;white-space:pre-wrap;">' + specialClauses + '</p>';
+      html += '</div>';
     }
-
-    // ── 22. FIRMAS (VIGÉSIMA SEGUNDA) ──
-    html += '<div style="margin-top:24px;padding-top:16px;border-top:2px solid #e5e7eb;">';
-    html += '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:0 0 12px;">VIGÉSIMA SEGUNDA. — FIRMAS</h3>';
-    html += '<p style="font-size:10px;color:#6b7280;margin:0 0 14px;font-style:italic;">"Las partes firman en señal de aprobación, aceptando todas y cada una de las cláusulas del presente contrato."</p>';
-    html += '<div style="display:flex;justify-content:space-between;gap:20px;">';
-    html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">Mtsprz — Soluciones Digitales</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">PRESTADOR</p></div>';
-    html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">' + clientName + '</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">CLIENTE</p></div>';
-    html += '</div></div>';
 
     document.getElementById("previewDocument").innerHTML = html;
   }
@@ -1455,12 +1717,20 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     document.querySelectorAll("input[name='template_id']").forEach(function(inp) {
       if (inp.value) tplId = parseInt(inp.value);
     });
+    var selectedType = document.querySelector("input[name='templateType']:checked")?.value || "";
+    var isHonorarios = selectedType === "boleta_honorarios";
+    var isBlastUp = /blast[-\s]?up/i.test(formData.get("client_name"));
+    var netAmount = isHonorarios ? parseInt(formData.get("net_amount")) || 450000 : undefined;
+    var retentionRate = isHonorarios ? parseFloat(formData.get("retention_rate")) || 15.25 : undefined;
+    var grossAmount = isHonorarios ? parseInt(formData.get("gross_amount")) || Math.round(netAmount / (1 - retentionRate / 100)) : undefined;
+
     var body = {
       template_id: tplId,
+      template_type: selectedType || undefined,
       client_name: formData.get("client_name"),
       client_rut: formData.get("client_rut"),
-      client_nationality: formData.get("client_nationality") || "Chilena",
-      client_profession: formData.get("client_profession"),
+      client_nationality: (isHonorarios && !isBlastUp) ? undefined : (formData.get("client_nationality") || "Chilena"),
+      client_profession: (isHonorarios && !isBlastUp) ? undefined : formData.get("client_profession"),
       client_email: formData.get("client_email"),
       client_phone: formData.get("client_phone"),
       client_address: formData.get("client_address"),
@@ -1468,18 +1738,28 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       prestador_nombre_civil: formData.get("prestador_nombre_civil") || undefined,
       client_representante: formData.get("client_representante") || undefined,
       client_notif_email: formData.get("client_notif_email") || undefined,
-      services: services,
-      total_amount: parseInt(formData.get("total_amount")) || total,
-      payment_method: formData.get("payment_method"),
-      payment_terms: formData.get("payment_terms"),
-      warranty_days: parseInt(formData.get("warranty_days")) || 15,
-      revision_days: parseInt(formData.get("revision_days")) || 5,
-      subcontracting_allowed: formData.get("subcontracting_allowed") === "on",
+      services: (isHonorarios && !isBlastUp) ? [] : services,
+      total_amount: isHonorarios ? netAmount : (parseInt(formData.get("total_amount")) || total),
+      net_amount: netAmount,
+      retention_rate: retentionRate,
+      gross_amount: grossAmount,
+      payment_method: isHonorarios ? "contado" : formData.get("payment_method"),
+      payment_terms: (isHonorarios && !isBlastUp) ? undefined : formData.get("payment_terms"),
+      warranty_days: (isHonorarios && !isBlastUp) ? undefined : (parseInt(formData.get("warranty_days")) || 15),
+      revision_days: (isHonorarios && !isBlastUp) ? undefined : (parseInt(formData.get("revision_days")) || 5),
+      subcontracting_allowed: (isHonorarios && !isBlastUp) ? undefined : formData.get("subcontracting_allowed") === "on",
       start_date: formData.get("start_date"),
       end_date: formData.get("end_date"),
-      duration_months: parseInt(formData.get("duration_months")) || 1,
-      schedule: formData.get("schedule"),
-      special_clauses: formData.get("special_clauses"),
+      duration_months: (isHonorarios && !isBlastUp) ? 1 : (parseInt(formData.get("duration_months")) || 1),
+      schedule: (isHonorarios && !isBlastUp) ? undefined : formData.get("schedule"),
+      special_clauses: (isHonorarios && !isBlastUp) ? undefined : formData.get("special_clauses"),
+      hour_cap: formData.get("hour_cap") ? parseInt(formData.get("hour_cap")) : undefined,
+      extra_hour_rate: formData.get("extra_hour_rate") ? parseInt(formData.get("extra_hour_rate")) : undefined,
+      client_tech_name: formData.get("client_tech_name") || undefined,
+      client_tech_email: formData.get("client_tech_email") || undefined,
+      revision_rounds: formData.get("revision_rounds") ? parseInt(formData.get("revision_rounds")) : undefined,
+      include_pagare: formData.get("include_pagare") === "on",
+      signing_date: formData.get("signing_date") || undefined,
     };
 
     try {

@@ -97,6 +97,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
     prestador_nombre_civil,
     client_representante,
     client_notif_email,
+    template_type,
+    net_amount,
+    retention_rate,
+    gross_amount,
+    hour_cap,
+    extra_hour_rate,
+    client_tech_name,
+    client_tech_email,
+    revision_rounds,
+    include_pagare,
+    signing_date,
   } = body as any;
 
   if (!client_name || !client_email || !services || !total_amount) {
@@ -122,8 +133,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
         client_nationality, client_profession, payment_method,
         warranty_days, revision_days, acceptance_email, subcontracting_allowed,
         signing_token, token_expires_at, prestador_rut,
-        prestador_nombre_civil, client_representante, client_notif_email
-      ) VALUES ($1,$2,$3,'pending',$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30)
+        prestador_nombre_civil, client_representante, client_notif_email,
+        template_type, net_amount, retention_rate, gross_amount,
+        hour_cap, extra_hour_rate, client_tech_name, client_tech_email,
+        revision_rounds, include_pagare, signing_date
+      ) VALUES ($1,$2,$3,'pending',$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41)
       RETURNING *`,
       [
         template_id || null,
@@ -156,6 +170,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
         prestador_nombre_civil || null,
         client_representante || null,
         client_notif_email || null,
+        template_type || null,
+        net_amount != null ? net_amount : null,
+        retention_rate != null ? retention_rate : null,
+        gross_amount != null ? gross_amount : null,
+        hour_cap != null ? hour_cap : null,
+        extra_hour_rate != null ? extra_hour_rate : null,
+        client_tech_name || null,
+        client_tech_email || null,
+        revision_rounds != null ? revision_rounds : null,
+        include_pagare != null ? include_pagare : false,
+        signing_date || null,
       ]
     );
 

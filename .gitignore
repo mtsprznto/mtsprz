@@ -20,3 +20,8 @@ OSINT-PROTECTION/*
 docs/marketing/estrategia-marketing-2026-07-26.md
 seo-test-results/*
 seo-strategy/GHOST-CITATIONS.md
+
+# whatsapp-browser sender
+scripts/whatsapp-browser/profile/
+scripts/whatsapp-browser/logs/
+scripts/whatsapp-browser/.venv/

@@ -32,7 +32,9 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  /* clip (no hidden): evita scroll horizontal SIN crear scroll container,
+     que rompería position: sticky en sidebars/headers */
+  overflow-x: clip;
 }
 
 body {
@@ -42,7 +44,7 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 

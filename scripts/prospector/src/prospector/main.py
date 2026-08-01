@@ -22,6 +22,7 @@ Modo dry-run (sin modificar datos):
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 from typing import Optional
@@ -506,7 +507,7 @@ def enrich_all(ctx: Context, limit: int):
             enriched = enricher.enrichen(p)
             ctx.db.update(
                 p.id,
-                senales_digitales=enriched.senales_digitales.model_dump(),
+                senales_digitales=enriched.senales_digitales,  # objeto, no dict
             )
             if (i + 1) % 10 == 0:
                 log.info("Progreso: {i}/{n}", i=i + 1, n=len(prospects))
@@ -852,7 +853,7 @@ def whatsapp():
 @whatsapp.command("setup")
 @click.option("--base-url", default="http://localhost:8080", help="URL de Evolution API")
 @click.option("--api-key", default=None, help="API key de Evolution API")
-@click.option("--instance", default="mtsprz-bot", help="Nombre de instancia")
+@click.option("--instance", default="mtsprz", help="Nombre de instancia (default: mtsprz)")
 @click.pass_obj
 def whatsapp_setup(ctx: Context, base_url: str, api_key: Optional[str], instance: str):
     """Configura instancia de Evolution API y muestra QR para escanear.
@@ -878,7 +879,7 @@ def whatsapp_setup(ctx: Context, base_url: str, api_key: Optional[str], instance
 @click.option("--delay-max", default=90, type=int, help="Delay máximo entre mensajes (segundos)")
 @click.option("--base-url", default="http://localhost:8080", help="URL de Evolution API")
 @click.option("--api-key", default=None, help="API key de Evolution API")
-@click.option("--instance", default="mtsprz-bot", help="Nombre de instancia")
+@click.option("--instance", default="mtsprz", help="Nombre de instancia (default: mtsprz)")
 @click.pass_obj
 def whatsapp_send(ctx: Context, rubro: Optional[str], comuna: Optional[str],
                   limit: int, dry_run: bool,
@@ -938,7 +939,7 @@ def whatsapp_send(ctx: Context, rubro: Optional[str], comuna: Optional[str],
 @click.option("--delay-max", default=90, type=int)
 @click.option("--base-url", default="http://localhost:8080")
 @click.option("--api-key", default=None)
-@click.option("--instance", default="mtsprz-bot")
+@click.option("--instance", default="mtsprz")
 @click.pass_obj
 def send_whatsapp(ctx: Context, rubro: Optional[str], comuna: Optional[str],
                    limit: int, dry_run: bool,
@@ -977,6 +978,51 @@ def send_whatsapp(ctx: Context, rubro: Optional[str], comuna: Optional[str],
     wa = WhatsAppCampaign(base_url=base_url, api_key=api_key, instance=instance)
     result = wa.run(prospects, rubro=rubro, limit=limit, dry_run=dry_run,
                     delay_range=(delay_min, delay_max))
+
+
+@cli.command()
+@click.option("--rubro", default=None, help="Filtrar por rubro")
+@click.option("--limit", default=0, type=int, help="Máx a sincronizar (0 = todos)")
+@click.option("--min-score", default=0, type=int, help="Score digital mínimo (0-100)")
+@click.option("--dry-run", "dry_run", is_flag=True, help="Previsualizar sin enviar")
+@click.option("--delay", default=0.5, type=float, help="Delay entre requests (segundos)")
+@click.option("--api-url", default="http://localhost:4321", help="URL del sitio Mtsprz")
+@click.option("--api-token", default=None, help="Bearer token JWT de admin")
+@click.pass_obj
+def push_leads(ctx: Context, rubro: Optional[str], limit: int, min_score: int,
+               dry_run: bool, delay: float,
+               api_url: str, api_token: Optional[str]):
+    """Sincroniza prospects → leads en panel Mtsprz.
+
+    Toma prospects de la base JSON del prospector y los crea como leads
+    en el sistema Mtsprz (NeonDB) para gestionarlos desde /admin/leads.
+
+    Ejemplos:
+        prospector push-leads --rubro inmobiliaria --limit 10
+        prospector push-leads --min-score 40 --dry-run
+        prospector push-leads --api-url http://localhost:4321 --api-token TU_TOKEN
+        prospector push-leads --rubro abogado --limit 5 --delay 1.0
+    """
+    from prospector.outreach.mtsprz_sync import MtsprzSync
+
+    token = api_token or os.environ.get("MTSPRZ_API_TOKEN")
+    if not token and not dry_run:
+        log.error("Se necesita --api-token o MTSPRZ_API_TOKEN (usa --dry-run para previsualizar)")
+        return
+
+    prospects = ctx.db.all()
+    log.info("Total prospects en DB: {n}", n=len(prospects))
+
+    sync = MtsprzSync(api_url=api_url, api_token=token)
+    result = sync.push_prospects(
+        prospects, rubro=rubro, limit=limit,
+        min_score=min_score, dry_run=dry_run, delay=delay,
+    )
+
+    if dry_run:
+        log.info("Ejecuta sin --dry-run para sincronizar los prospects mostrados.")
+    else:
+        log.info("Revisa los leads en {url}/admin/leads", url=api_url)
 
 
 # ===================================================================

@@ -46,6 +46,19 @@ const templates = [
       defaultDurationMonths: 1,
     },
   },
+  {
+    name: "Boleta de Honorarios — Prestación Servicios Profesionales",
+    type: "boleta_honorarios",
+    description: "Para contratos a honorarios con retención: persona natural emite boleta, cliente retiene 15,25% (Ley 21.133). Sin subordinación, sin entrega de código fuente, licencia revocable.",
+    content_json: {
+      category: "Honorarios",
+      hasSchedule: true,
+      defaultDurationMonths: 1,
+      renewable: false,
+      defaultRetentionRate: 15.25,
+      defaultNetAmount: 450000,
+    },
+  },
 ];
 
 export const POST: APIRoute = async ({ locals }) => {

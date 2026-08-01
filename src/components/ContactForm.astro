@@ -1,0 +1,144 @@
+---
+/**
+ * ContactForm — Captura leads desde el sitio web.
+ * Envía POST /api/leads con fuente "contact".
+ * Notifica al admin por WhatsApp automáticamente.
+ */
+export interface Props {
+  /** Override the success message */
+  successMessage?: string;
+  /** Additional CSS class */
+  class?: string;
+  /** Service interest pre-select */
+  serviceInterest?: string;
+}
+
+const { successMessage = "¡Mensaje enviado! Te contactaremos pronto por WhatsApp.", serviceInterest } = Astro.props;
+---
+
+<form id="contact-form" class="space-y-4 {Astro.props.class || ''}" novalidate>
+  <input type="hidden" name="source" value="contact" />
+  <input type="hidden" name="service_interest" value={serviceInterest || ''} />
+
+  <div>
+    <label for="cf-name" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Nombre *</label>
+    <input
+      id="cf-name"
+      name="name"
+      type="text"
+      required
+      maxlength="255"
+      placeholder="Tu nombre"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors"
+    />
+  </div>
+
+  <div>
+    <label for="cf-email" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Email</label>
+    <input
+      id="cf-email"
+      name="email"
+      type="email"
+      maxlength="254"
+      placeholder="correo@ejemplo.cl"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors"
+    />
+  </div>
+
+  <div>
+    <label for="cf-phone" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">WhatsApp *</label>
+    <input
+      id="cf-phone"
+      name="phone"
+      type="tel"
+      required
+      placeholder="+56 9 1234 5678"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors"
+    />
+  </div>
+
+  <div>
+    <label for="cf-message" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Mensaje *</label>
+    <textarea
+      id="cf-message"
+      name="message"
+      required
+      maxlength="5000"
+      rows="4"
+      placeholder="Cuéntanos en qué podemos ayudarte..."
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors resize-y min-h-[100px]"
+    ></textarea>
+  </div>
+
+  <button
+    id="cf-submit"
+    type="submit"
+    class="w-full px-6 py-3 bg-accent text-[#010101] text-[11px] font-bold tracking-[0.15em] uppercase transition-all duration-300 hover:bg-accent/90 disabled:opacity-30 disabled:cursor-not-allowed"
+  >
+    Enviar Mensaje
+  </button>
+
+  <div id="cf-status" class="hidden text-sm"></div>
+</form>
+
+<script is:inline>
+  (function () {
+    const form = document.getElementById("contact-form");
+    if (!form) return;
+
+    const submitBtn = document.getElementById("cf-submit");
+    const statusEl = document.getElementById("cf-status");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = form.querySelector("[name='name']").value.trim();
+      const phone = form.querySelector("[name='phone']").value.trim();
+      const message = form.querySelector("[name='message']").value.trim();
+
+      if (!name || !phone || !message) {
+        statusEl.className = "text-sm text-red-400";
+        statusEl.textContent = "Completa los campos obligatorios.";
+        statusEl.classList.remove("hidden");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+      statusEl.classList.add("hidden");
+
+      try {
+        const res = await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            phone,
+            email: form.querySelector("[name='email']").value.trim() || null,
+            source: "contact",
+            service_interest: form.querySelector("[name='service_interest']").value || null,
+            message,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          statusEl.className = "text-sm text-emerald-400";
+          statusEl.textContent = "{successMessage}";
+          form.reset();
+        } else {
+          statusEl.className = "text-sm text-red-400";
+          statusEl.textContent = data.error || "Error al enviar. Intenta de nuevo.";
+        }
+      } catch {
+        statusEl.className = "text-sm text-red-400";
+        statusEl.textContent = "Error de conexión. Intenta de nuevo.";
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Enviar Mensaje";
+      statusEl.classList.remove("hidden");
+    });
+  })();
+</script>

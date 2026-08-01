@@ -1,0 +1,39 @@
+# Mtsprz — WhatsApp Web Browser Sender (Docker Compose)
+# =====================================================
+# Genérico para cualquier VPS. Uso:
+#   docker compose up -d --build
+#   docker compose logs -f
+#
+# Después del primer arranque: escanear el QR
+#   curl http://localhost:8899/qr.png -o qr.png   # abrir PNG + escanear con el teléfono
+#   curl http://localhost:8899/status             # esperar {"state": "ready"}
+#
+# La app (Astro) debe apuntar a:  WHATSAPP_BROWSER_URL=http://<VPS_IP>:8899
+# (si la app corre en otro container, usa el nombre de servicio "sender:8899")
+
+services:
+  sender:
+    build: .
+    container_name: mtsprz_sender
+    restart: unless-stopped
+    # init: tini como PID 1 -> reenvía SIGTERM a python y Chrome cierra limpio
+    # (evita SingletonLock corrupto en el profile al hacer down/rebuild)
+    init: true
+    ports:
+      - "8899:8899"
+    environment:
+      # 0.0.0.0 para que el container acepte conexiones desde fuera
+      - SENDER_HOST=0.0.0.0
+      - SENDER_PORT=8899
+    volumes:
+      - sender_profile:/app/profile
+      - sender_logs:/app/logs
+    # Chrome renderiza en /dev/shm; el default de Docker (64MB) crashea
+    shm_size: "256mb"
+    security_opt:
+      # undetected-chromedriver necesita syscalls que el seccomp default bloquea
+      - seccomp:unconfined
+
+volumes:
+  sender_profile:
+  sender_logs:

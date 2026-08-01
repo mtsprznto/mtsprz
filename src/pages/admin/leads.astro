@@ -1,0 +1,575 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Leads" description="Gestión de leads y prospectos">
+  <div class="mb-8 flex items-start justify-between">
+    <div>
+      <p class="text-[11px] font-medium text-accent tracking-[0.15em] uppercase mb-2">CRM</p>
+      <h1 class="font-heading text-3xl sm:text-4xl font-bold text-white tracking-tight">Leads</h1>
+      <p class="mt-2 text-sm text-white/30 font-body max-w-md">Prospectos captados desde WhatsApp, web y formularios</p>
+    </div>
+    <button id="btn-nuevo-lead"
+      class="shrink-0 px-5 py-2.5 bg-accent text-[#010101] text-[10px] font-bold tracking-[0.15em] uppercase hover:bg-accent/90 transition-all">
+      + Nuevo Lead
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="flex flex-wrap gap-3 mb-6 items-center">
+    <select id="filter-status"
+      class="px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white/60 text-[11px] font-medium uppercase tracking-wider focus:outline-none focus:border-accent/50">
+      <option value="">Todos los estados</option>
+      <option value="new">Nuevo</option>
+      <option value="contacted">Contactado</option>
+      <option value="qualified">Calificado</option>
+      <option value="lost">Perdido</option>
+    </select>
+    <select id="filter-source"
+      class="px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white/60 text-[11px] font-medium uppercase tracking-wider focus:outline-none focus:border-accent/50">
+      <option value="">Todas las fuentes</option>
+      <option value="whatsapp">WhatsApp</option>
+      <option value="web">Web</option>
+      <option value="contact">Contacto</option>
+      <option value="quote">Cotización</option>
+    </select>
+    <div class="flex-1 min-w-[200px]">
+      <input id="filter-search" type="text" placeholder="Buscar por nombre, teléfono o email..."
+        class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+    </div>
+    <button id="btn-export"
+      class="px-4 py-2 bg-white/[0.04] hover:bg-white/[0.07] text-white/40 hover:text-white/60 text-[10px] font-medium tracking-[0.15em] uppercase transition-all duration-200">
+      Exportar CSV
+    </button>
+  </div>
+
+  <!-- Stats row -->
+  <div class="grid grid-cols-4 gap-px bg-white/[0.04] mb-6">
+    <div class="bg-[#010101] p-4">
+      <div class="font-heading text-2xl font-bold text-white tracking-tight" id="stat-total">—</div>
+      <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium mt-1">Total</div>
+    </div>
+    <div class="bg-[#010101] p-4">
+      <div class="font-heading text-2xl font-bold text-amber-300 tracking-tight" id="stat-new">—</div>
+      <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium mt-1">Nuevos</div>
+    </div>
+    <div class="bg-[#010101] p-4">
+      <div class="font-heading text-2xl font-bold text-emerald-400 tracking-tight" id="stat-qualified">—</div>
+      <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium mt-1">Calificados</div>
+    </div>
+    <div class="bg-[#010101] p-4">
+      <div class="font-heading text-2xl font-bold text-red-400/70 tracking-tight" id="stat-lost">—</div>
+      <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium mt-1">Perdidos</div>
+    </div>
+  </div>
+
+  <!-- Leads table -->
+  <div class="overflow-x-auto border border-white/[0.04]">
+    <table class="w-full text-left" id="leads-table">
+      <thead>
+        <tr class="border-b border-white/[0.04]">
+          <th class="px-4 py-3 text-[9px] font-medium text-white/25 uppercase tracking-[0.15em]">Nombre</th>
+          <th class="px-4 py-3 text-[9px] font-medium text-white/25 uppercase tracking-[0.15em]">Contacto</th>
+          <th class="px-4 py-3 text-[9px] font-medium text-white/25 uppercase tracking-[0.15em]">Fuente</th>
+          <th class="px-4 py-3 text-[9px] font-medium text-white/25 uppercase tracking-[0.15em]">Servicio</th>
+          <th class="px-4 py-3 text-[9px] font-medium text-white/25 uppercase tracking-[0.15em]">Estado</th>
+          <th class="px-4 py-3 text-[9px] font-medium text-white/25 uppercase tracking-[0.15em]">Fecha</th>
+          <th class="px-4 py-3 text-[9px] font-medium text-white/25 uppercase tracking-[0.15em]">Acción</th>
+        </tr>
+      </thead>
+      <tbody id="leads-body">
+        <tr><td colspan="7" class="px-4 py-12 text-center text-white/20 text-sm">Cargando leads...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex flex-wrap items-center justify-between gap-3 mt-4">
+    <span id="pagination-info" class="text-[11px] text-white/25 font-mono"></span>
+    <div class="flex items-center gap-1">
+      <button id="page-prev"
+        class="px-3 py-1.5 bg-white/[0.04] hover:bg-white/[0.07] text-white/40 hover:text-white/60 text-[10px] font-medium tracking-[0.12em] uppercase transition-all disabled:opacity-20 disabled:cursor-not-allowed">
+        ← Anterior
+      </button>
+      <div id="page-numbers" class="flex items-center gap-1"></div>
+      <button id="page-next"
+        class="px-3 py-1.5 bg-white/[0.04] hover:bg-white/[0.07] text-white/40 hover:text-white/60 text-[10px] font-medium tracking-[0.12em] uppercase transition-all disabled:opacity-20 disabled:cursor-not-allowed">
+        Siguiente →
+      </button>
+    </div>
+  </div>
+
+  <!-- ██ Detail modal ██ -->
+  <div id="lead-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-[#010101]/80 backdrop-blur-sm" id="modal-overlay"></div>
+    <div class="relative max-w-2xl mx-auto mt-20 mb-10 px-4">
+      <div class="bg-[#070708] border border-white/[0.06] p-6 sm:p-8 max-h-[85vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-heading text-xl font-bold text-white tracking-tight" id="modal-title">Lead</h2>
+          <button id="modal-close" class="text-white/20 hover:text-white/60 transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="space-y-4 text-sm" id="modal-body"></div>
+
+        <!-- ▸ Send WhatsApp from modal -->
+        <hr class="border-white/[0.04] my-6" />
+        <h3 class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-3">Enviar WhatsApp</h3>
+        <div class="flex gap-2">
+          <input id="modal-wa-text" type="text" placeholder="Escribí el mensaje..."
+            class="flex-1 px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-xs font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+          <button id="modal-wa-send"
+            class="px-4 py-2 bg-accent text-[#010101] text-[10px] font-bold tracking-[0.15em] uppercase hover:bg-accent/90 transition-all shrink-0">
+            Enviar
+          </button>
+        </div>
+        <div id="modal-wa-status" class="mt-2 text-xs text-white/30"></div>
+
+        <!-- ▸ Conversation history -->
+        <hr class="border-white/[0.04] my-6" />
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em]">Conversación WhatsApp</h3>
+          <button id="modal-refresh-conv" class="text-[9px] text-white/20 hover:text-white/50 uppercase tracking-wider">↻ Refrescar</button>
+        </div>
+        <div id="modal-conversations" class="space-y-2 max-h-48 overflow-y-auto">
+          <p class="text-white/20 text-xs">Sin conversaciones registradas.</p>
+        </div>
+
+        <!-- ▸ Actions: status + notes -->
+        <hr class="border-white/[0.04] my-6" />
+        <h3 class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-3">Cambiar Estado</h3>
+        <div class="flex gap-2 flex-wrap" id="modal-actions">
+          <button data-status="new" class="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider bg-white/[0.04] hover:bg-white/[0.07] text-white/50 hover:text-white/80 transition-all">Nuevo</button>
+          <button data-status="contacted" class="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider bg-amber-300/10 hover:bg-amber-300/20 text-amber-300/70 hover:text-amber-300 transition-all">Contactado</button>
+          <button data-status="qualified" class="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider bg-emerald-400/10 hover:bg-emerald-400/20 text-emerald-400/70 hover:text-emerald-400 transition-all">Calificado</button>
+          <button data-status="lost" class="px-3 py-1.5 text-[10px] font-medium uppercase tracking-wider bg-red-400/10 hover:bg-red-400/20 text-red-400/70 hover:text-red-400 transition-all">Perdido</button>
+        </div>
+
+        <hr class="border-white/[0.04] my-6" />
+        <div>
+          <label class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-2 block">Notas</label>
+          <textarea id="modal-notes" rows="3"
+            class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-xs font-body focus:outline-none focus:border-accent/50 transition-colors resize-y"></textarea>
+          <button id="modal-save-notes" class="mt-2 px-4 py-1.5 bg-accent text-[#010101] text-[10px] font-bold tracking-[0.15em] uppercase hover:bg-accent/90 transition-all">Guardar Notas</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ██ Create Lead modal ██ -->
+  <div id="create-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-[#010101]/80 backdrop-blur-sm" id="create-overlay"></div>
+    <div class="relative max-w-lg mx-auto mt-20 mb-10 px-4">
+      <div class="bg-[#070708] border border-white/[0.06] p-6 sm:p-8">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-heading text-xl font-bold text-white tracking-tight">Nuevo Lead</h2>
+          <button id="create-close" class="text-white/20 hover:text-white/60 transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <form id="create-form" class="space-y-4" novalidate>
+          <div>
+            <label class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-1.5 block">Nombre *</label>
+            <input id="c-name" type="text" required maxlength="255" placeholder="Nombre del cliente"
+              class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+          </div>
+          <div>
+            <label class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-1.5 block">WhatsApp *</label>
+            <input id="c-phone" type="tel" required placeholder="56966929818"
+              class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+          </div>
+          <div>
+            <label class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-1.5 block">Email</label>
+            <input id="c-email" type="email" placeholder="correo@ejemplo.cl"
+              class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-1.5 block">Fuente</label>
+              <select id="c-source"
+                class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-sm focus:outline-none focus:border-accent/50 transition-colors">
+                <option value="web">Web</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="contact">Contacto</option>
+                <option value="quote">Cotización</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-1.5 block">Servicio</label>
+              <select id="c-service"
+                class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-sm focus:outline-none focus:border-accent/50 transition-colors">
+                <option value="">—</option>
+                <option value="web">Desarrollo Web</option>
+                <option value="seo">SEO</option>
+                <option value="whatsapp">WhatsApp Business</option>
+                <option value="automation">Automatización</option>
+                <option value="marketing">Marketing Digital</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-1.5 block">Mensaje / Nota</label>
+            <textarea id="c-message" rows="3" maxlength="5000" placeholder="Detalle del lead..."
+              class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-xs font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors resize-y"></textarea>
+          </div>
+          <button type="submit"
+            class="w-full px-5 py-2.5 bg-accent text-[#010101] text-[10px] font-bold tracking-[0.15em] uppercase hover:bg-accent/90 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+            Crear Lead
+          </button>
+          <div id="create-status" class="text-xs hidden"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script>
+  import { useLeadsStore } from "../../stores/leads";
+
+  const store = useLeadsStore;
+
+  var currentLeadId = null;
+  function $(id) { return document.getElementById(id); }
+
+  function statusBadge(s) {
+    var map = { new: 'text-amber-300/80', contacted: 'text-blue-300/80', qualified: 'text-emerald-400/80', lost: 'text-red-400/60' };
+    var labels = { new: 'Nuevo', contacted: 'Contactado', qualified: 'Calificado', lost: 'Perdido' };
+    return '<span class="' + (map[s] || 'text-white/30') + ' text-[10px] font-medium uppercase tracking-wider">' + (labels[s] || s) + '</span>';
+  }
+  function sourceBadge(s) {
+    var icons = { whatsapp: '📱', web: '🌐', contact: '📋', quote: '💰' };
+    return (icons[s] || '📌') + ' <span class="text-[10px] uppercase tracking-wider">' + s + '</span>';
+  }
+  function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  // Número para wa.me: solo dígitos, con 56 para móviles locales (9XXXXXXXX)
+  function waNum(p) {
+    if (!p) return '';
+    var d = String(p).replace(/\D/g, '');
+    if (!d) return '';
+    if (d.length === 9 && d.charAt(0) === '9') d = '56' + d;
+    return d;
+  }
+
+  /* ── Render tabla + stats + paginación desde el store ── */
+  function renderPagination(st) {
+    var info = $('pagination-info');
+    if (st.total === 0) {
+      info.textContent = 'Sin resultados';
+    } else {
+      var start = (st.page - 1) * st.perPage + 1;
+      var end = Math.min(st.page * st.perPage, st.total);
+      info.textContent = 'Mostrando ' + start + '–' + end + ' de ' + st.total;
+    }
+
+    $('page-prev').disabled = st.page <= 1;
+    $('page-next').disabled = st.page >= st.totalPages;
+
+    var nums = $('page-numbers');
+    var html = '';
+    var from = Math.max(1, st.page - 2);
+    var to = Math.min(st.totalPages, from + 4);
+    from = Math.max(1, to - 4);
+    for (var p = from; p <= to; p++) {
+      html += '<button data-page="' + p + '" class="w-7 h-7 text-[11px] font-mono transition-all '
+        + (p === st.page
+            ? 'bg-accent text-[#010101] font-bold'
+            : 'bg-white/[0.04] text-white/40 hover:text-white/70 hover:bg-white/[0.07]')
+        + '">' + p + '</button>';
+    }
+    nums.innerHTML = html;
+    nums.querySelectorAll('button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        store.getState().setPage(Number(btn.getAttribute('data-page')));
+      });
+    });
+  }
+
+  function render() {
+    var st = store.getState();
+    var leads = st.leads;
+    var stats = st.stats || {};
+    var tbody = $('leads-body');
+
+    $('stat-total').textContent = st.total;
+    $('stat-new').textContent = stats.new || 0;
+    $('stat-qualified').textContent = stats.qualified || 0;
+    $('stat-lost').textContent = stats.lost || 0;
+
+    if (st.error) {
+      tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-12 text-center text-red-400/60 text-sm">Error: ' + esc(st.error) + '</td></tr>';
+      renderPagination(st);
+      return;
+    }
+
+    if (leads.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-12 text-center text-white/20 text-sm">No hay leads aún</td></tr>';
+      renderPagination(st);
+      return;
+    }
+
+    tbody.innerHTML = leads.map(function(l) {
+      var date = l.created_at ? new Date(l.created_at).toLocaleDateString('es-CL') : '—';
+      var contact = l.phone
+        ? '<a href="https://wa.me/' + waNum(l.phone) + '" target="_blank" class="text-accent/70 hover:text-accent text-xs">' + esc(l.phone) + '</a>'
+        : (l.email || '—');
+      return '<tr class="border-b border-white/[0.02] hover:bg-white/[0.02] transition-colors cursor-pointer" data-id="' + l.id + '">'
+        + '<td class="px-4 py-3 text-white/80 text-sm font-medium">' + esc(l.name) + '</td>'
+        + '<td class="px-4 py-3 text-white/40 text-xs">' + contact + '</td>'
+        + '<td class="px-4 py-3 text-white/40 text-xs">' + sourceBadge(l.source) + '</td>'
+        + '<td class="px-4 py-3 text-white/40 text-xs">' + esc(l.service_interest || '—') + '</td>'
+        + '<td class="px-4 py-3">' + statusBadge(l.status) + '</td>'
+        + '<td class="px-4 py-3 text-white/25 text-[10px]">' + date + '</td>'
+        + '<td class="px-4 py-3"><button data-wa="' + (l.phone ? waNum(l.phone) : '') + '" class="text-white/20 hover:text-accent transition-colors text-[11px]" title="Abrir WhatsApp">📤</button></td>'
+        + '</tr>';
+    }).join('');
+
+    tbody.querySelectorAll('tr[data-id]').forEach(function(row) {
+      row.addEventListener('click', function(e) {
+        if (e.target.closest('button[data-wa]')) return;
+        openLead(Number(row.getAttribute('data-id')));
+      });
+    });
+    tbody.querySelectorAll('button[data-wa]').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var phone = btn.getAttribute('data-wa');
+        if (phone) window.open('https://wa.me/' + phone, '_blank');
+      });
+    });
+    renderPagination(st);
+  }
+
+  /* ── Open detail modal ── */
+  function openLead(id) {
+    currentLeadId = id;
+    fetch('/api/leads/' + id)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var l = data.lead;
+        if (!l) return;
+        $('modal-title').textContent = l.name;
+
+        var body = '<div class="grid grid-cols-2 gap-4 text-sm">';
+        body += '<div><span class="text-white/30 text-[10px] uppercase tracking-wider block">Teléfono</span><span class="text-white/80">' + (l.phone || '—') + '</span></div>';
+        body += '<div><span class="text-white/30 text-[10px] uppercase tracking-wider block">Email</span><span class="text-white/80">' + (l.email || '—') + '</span></div>';
+        body += '<div><span class="text-white/30 text-[10px] uppercase tracking-wider block">Fuente</span><span class="text-white/80">' + l.source + '</span></div>';
+        body += '<div><span class="text-white/30 text-[10px] uppercase tracking-wider block">Servicio</span><span class="text-white/80">' + (l.service_interest || '—') + '</span></div>';
+        body += '<div><span class="text-white/30 text-[10px] uppercase tracking-wider block">Estado</span><span>' + statusBadge(l.status) + '</span></div>';
+        body += '<div><span class="text-white/30 text-[10px] uppercase tracking-wider block">Creado</span><span class="text-white/80">' + new Date(l.created_at).toLocaleString('es-CL') + '</span></div>';
+        body += '</div>';
+        if (l.message) {
+          body += '<div class="mt-4"><span class="text-white/30 text-[10px] uppercase tracking-wider block mb-1">Mensaje</span>'
+            + '<p class="text-white/60 text-sm bg-white/[0.02] p-3 border border-white/[0.04]">' + esc(l.message) + '</p></div>';
+        }
+        $('modal-body').innerHTML = body;
+
+        renderConversations(data.conversations || []);
+        $('modal-notes').value = l.notes || '';
+        $('modal-wa-text').value = '';
+        $('modal-wa-status').textContent = '';
+        $('lead-modal').classList.remove('hidden');
+      })
+      .catch(function() { alert('Error al cargar lead'); });
+  }
+
+  function renderConversations(conv) {
+    if (conv.length > 0) {
+      $('modal-conversations').innerHTML = conv.map(function(c) {
+        var dir = c.direction === 'incoming' ? '📩 Cliente' : '📤 Nosotros';
+        var date = new Date(c.created_at).toLocaleString('es-CL');
+        return '<div class="flex text-xs">'
+          + '<div class="flex-1 bg-white/[0.02] p-2.5 border border-white/[0.04] ' + (c.direction === 'incoming' ? '' : 'border-accent/10') + '">'
+          + '<span class="text-white/20 text-[9px] uppercase tracking-wider block mb-1">' + dir + ' · ' + date + '</span>'
+          + '<span class="text-white/60">' + esc(c.content || '') + '</span>'
+          + '</div></div>';
+      }).join('');
+    } else {
+      $('modal-conversations').innerHTML = '<p class="text-white/20 text-xs">Sin conversaciones registradas.</p>';
+    }
+  }
+
+  /* ── Update status ── */
+  function updateStatus(id, status) {
+    fetch('/api/leads/' + id, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: status }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.lead) { store.getState().fetchLeads(); openLead(id); }
+    })
+    .catch(function() { alert('Error al actualizar estado'); });
+  }
+
+  /* ── Save notes ── */
+  function saveNotes() {
+    if (!currentLeadId) return;
+    fetch('/api/leads/' + currentLeadId, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notes: $('modal-notes').value }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) { if (data.lead) store.getState().fetchLeads(); })
+    .catch(function() { alert('Error al guardar notas'); });
+  }
+
+  /* ── Send WhatsApp from modal ── */
+  function sendWaFromModal() {
+    if (!currentLeadId) return;
+    var text = $('modal-wa-text').value.trim();
+    if (!text) { $('modal-wa-status').textContent = 'Escribí un mensaje'; return; }
+
+    // Get phone from the detail — re-fetch
+    fetch('/api/leads/' + currentLeadId)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var phone = data.lead?.phone;
+        if (!phone) { $('modal-wa-status').textContent = 'El lead no tiene WhatsApp'; return; }
+
+        $('modal-wa-status').textContent = 'Enviando...';
+        $('modal-wa-send').disabled = true;
+
+        fetch('/api/whatsapp/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ number: phone, text: text }),
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.success) {
+            $('modal-wa-status').textContent = '✅ Enviado';
+            $('modal-wa-text').value = '';
+            // Re-open to refresh conversations
+            setTimeout(function() { openLead(currentLeadId); }, 500);
+          } else {
+            $('modal-wa-status').textContent = '❌ ' + (res.error || 'Error');
+          }
+        })
+        .catch(function() {
+          $('modal-wa-status').textContent = '❌ Error de conexión';
+        })
+        .finally(function() {
+          $('modal-wa-send').disabled = false;
+        });
+      });
+  }
+
+  /* ── Create lead ── */
+  function createLead(e) {
+    e.preventDefault();
+    var name = $('c-name').value.trim();
+    var phone = $('c-phone').value.trim();
+    if (!name || !phone) {
+      $('create-status').className = 'text-xs text-red-400';
+      $('create-status').textContent = 'Nombre y WhatsApp son obligatorios';
+      $('create-status').classList.remove('hidden');
+      return;
+    }
+
+    $('create-status').className = 'text-xs text-white/30 hidden';
+    var btn = $('create-form').querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Creando...';
+
+    fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        phone: phone,
+        email: $('c-email').value.trim() || null,
+        source: $('c-source').value,
+        service_interest: $('c-service').value || null,
+        message: $('c-message').value.trim() || null,
+      }),
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.success) {
+        $('create-modal').classList.add('hidden');
+        store.setState({ page: 1 });
+        store.getState().fetchLeads();
+      } else {
+        $('create-status').className = 'text-xs text-red-400';
+        $('create-status').textContent = data.error || 'Error';
+        $('create-status').classList.remove('hidden');
+      }
+    })
+    .catch(function() {
+      $('create-status').className = 'text-xs text-red-400';
+      $('create-status').textContent = 'Error de conexión';
+      $('create-status').classList.remove('hidden');
+    })
+    .finally(function() {
+      btn.disabled = false; btn.textContent = 'Crear Lead';
+    });
+  }
+
+  /* ── Bind events ── */
+
+  // Filters — cualquier cambio va al store (resetea a página 1)
+  $('filter-status').addEventListener('change', function(e) { store.getState().setFilter('status', e.target.value); });
+  $('filter-source').addEventListener('change', function(e) { store.getState().setFilter('source', e.target.value); });
+  var searchTimer;
+  $('filter-search').addEventListener('input', function(e) {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function() { store.getState().setFilter('search', e.target.value); }, 300);
+  });
+
+  // Pagination
+  $('page-prev').addEventListener('click', function() { store.getState().prevPage(); });
+  $('page-next').addEventListener('click', function() { store.getState().nextPage(); });
+
+  // Export
+  $('btn-export').addEventListener('click', function() { window.open('/api/leads/export', '_blank'); });
+
+  // Nuevo lead
+  $('btn-nuevo-lead').addEventListener('click', function() {
+    $('create-form').reset();
+    $('create-status').classList.add('hidden');
+    $('create-modal').classList.remove('hidden');
+  });
+  $('create-overlay').addEventListener('click', function() { $('create-modal').classList.add('hidden'); });
+  $('create-close').addEventListener('click', function() { $('create-modal').classList.add('hidden'); });
+  $('create-form').addEventListener('submit', createLead);
+
+  // Detail modal
+  $('modal-overlay').addEventListener('click', function() { $('lead-modal').classList.add('hidden'); });
+  $('modal-close').addEventListener('click', function() { $('lead-modal').classList.add('hidden'); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { $('lead-modal').classList.add('hidden'); $('create-modal').classList.add('hidden'); }
+  });
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); $('filter-search').focus(); }
+  });
+
+  // Status buttons
+  $('modal-actions').querySelectorAll('button[data-status]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (currentLeadId) updateStatus(currentLeadId, btn.getAttribute('data-status'));
+    });
+  });
+
+  // Notes
+  $('modal-save-notes').addEventListener('click', saveNotes);
+
+  // WhatsApp send
+  $('modal-wa-send').addEventListener('click', sendWaFromModal);
+  $('modal-wa-text').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') sendWaFromModal();
+  });
+
+  // Refresh conversations
+  $('modal-refresh-conv').addEventListener('click', function() {
+    if (currentLeadId) openLead(currentLeadId);
+  });
+
+  // Init — render reactivo al store + carga inicial
+  store.subscribe(render);
+  store.getState().fetchLeads();
+</script>

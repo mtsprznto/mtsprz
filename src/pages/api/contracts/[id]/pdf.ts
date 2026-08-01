@@ -62,7 +62,12 @@ export const GET: APIRoute = async ({ params, locals, request }) => {
       clientSignature: (c.client_signature_data as string) || undefined,
       adminSignedAt: c.admin_signed_at ? new Date(c.admin_signed_at as string).toLocaleString("es-CL") : undefined,
       clientSignedAt: c.client_signed_at ? new Date(c.client_signed_at as string).toLocaleString("es-CL") : undefined,
+      // templateType
+      templateType: (c.template_type as string) || (c.contract_template_type as string) || "",
       // Nuevos campos opcionales
+      netAmount: (c.net_amount as number) ?? undefined,
+      retentionRate: (c.retention_rate as number) ?? undefined,
+      grossAmount: (c.gross_amount as number) ?? undefined,
       clientNationality: (c.client_nationality as string) || undefined,
       clientProfession: (c.client_profession as string) || undefined,
       paymentMethod: (c.payment_method as string) || undefined,
@@ -75,6 +80,15 @@ export const GET: APIRoute = async ({ params, locals, request }) => {
       prestadorNombreCivil: (c.prestador_nombre_civil as string) || undefined,
       clientRepresentante: (c.client_representante as string) || undefined,
       clientNotifEmail: (c.client_notif_email as string) || undefined,
+      hidePrices: /blast[- ]?up/i.test(c.client_name as string || ""),
+      blastUpMode: /blast[- ]?up/i.test(c.client_name as string || ""),
+      hourCap: (c.hour_cap as number) ?? undefined,
+      extraHourRate: (c.extra_hour_rate as number) ?? undefined,
+      clientTechName: (c.client_tech_name as string) || undefined,
+      clientTechEmail: (c.client_tech_email as string) || undefined,
+      revisionRounds: (c.revision_rounds as number) ?? undefined,
+      includePagare: (c.include_pagare as boolean) ?? undefined,
+      signingDate: (c.signing_date as string) || undefined,
     };
 
     // Validar antes de generar. ?draft=1 permite generar igualmente (borrador admin).
