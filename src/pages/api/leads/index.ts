@@ -45,7 +45,7 @@ export const GET: APIRoute = async ({ locals, url }) => {
     );
   } catch (err) {
     console.error("[Leads] List error:", err);
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al listar leads" }), { status: 500 });
   }
 };
 
@@ -73,12 +73,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   const name = String(body.name || "").trim();
-  if (!name) {
-    return new Response(JSON.stringify({ error: "Nombre requerido" }), { status: 400 });
+  const email = body.email ? String(body.email).trim().toLowerCase() : null;
+
+  // Newsletter: suscripción email-only permitida (name = email como fallback)
+  if (!name && !email) {
+    return new Response(JSON.stringify({ error: "Nombre o correo requerido" }), { status: 400 });
   }
+  const finalName = name || email || "Suscriptor";
 
   const phone = normalizePhone(body.phone ? String(body.phone).trim() : null);
-  const email = body.email ? String(body.email).trim().toLowerCase() : null;
   // Coerce unknown sources to 'web' (DB CHECK constraint)
   const VALID_SOURCES = ["whatsapp", "web", "contact", "quote", "google_maps", "manual"];
   const sourceRaw = String(body.source || "web").trim();
@@ -93,7 +96,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   // Field size limits
-  if (name.length > 255) {
+  if (finalName.length > 255) {
     return new Response(JSON.stringify({ error: "Nombre demasiado largo" }), { status: 400 });
   }
   if (message && message.length > 5000) {
@@ -114,7 +117,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     metadata.user_agent = request.headers.get("user-agent") || null;
 
     const lead = await createLead({
-      name,
+      name: finalName,
       phone,
       email,
       source,

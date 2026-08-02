@@ -401,19 +401,64 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
           <p class="reveal-item mt-3 text-sm text-white/40 font-body font-light">
             SEO, automatizaciones, desarrollo web y más. Directo a tu bandeja.
           </p>
-          <div class="reveal-item mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+          <form id="newsletter-form" class="reveal-item mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto" novalidate>
             <input
+              id="newsletter-email"
               type="email"
+              required
               placeholder="tu@email.com"
               class="w-full sm:flex-1 px-4 py-3 bg-white/[0.04] border border-white/[0.08] text-sm text-white font-body placeholder:text-white/25 focus:outline-none focus:border-[#6366f1]/50 transition-colors"
             />
-            <button class="w-full sm:w-auto px-6 py-3 bg-white/[0.08] hover:bg-white/[0.14] text-white text-[11px] font-body font-medium tracking-[0.15em] uppercase transition-all cursor-pointer">
+            <button type="submit" id="newsletter-btn" class="w-full sm:w-auto px-6 py-3 bg-white/[0.08] hover:bg-white/[0.14] text-white text-[11px] font-body font-medium tracking-[0.15em] uppercase transition-all cursor-pointer">
               Suscribir
             </button>
-          </div>
+          </form>
+          <p id="newsletter-status" class="hidden text-xs font-body mt-3"></p>
         </div>
       </div>
     </section>
+    <script is:inline>
+    (function() {
+      var form = document.getElementById('newsletter-form');
+      if (!form) return;
+      var emailInput = document.getElementById('newsletter-email');
+      var status = document.getElementById('newsletter-status');
+      var btn = document.getElementById('newsletter-btn');
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var email = (emailInput.value || '').trim().toLowerCase();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          status.textContent = 'Ingresa un correo válido';
+          status.className = 'text-xs font-body mt-3 text-red-400';
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
+        try {
+          var res = await fetch('/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: '', email: email, source: 'web', service_interest: 'newsletter' }),
+          });
+          var data = await res.json();
+          if (res.ok) {
+            status.textContent = '¡Listo! Te avisamos de los próximos artículos.';
+            status.className = 'text-xs font-body mt-3 text-emerald-400';
+            emailInput.value = '';
+            if (window.trackEvent) window.trackEvent('newsletter_subscribed');
+          } else {
+            status.textContent = data.error || 'Error al suscribir. Intenta de nuevo.';
+            status.className = 'text-xs font-body mt-3 text-red-400';
+          }
+        } catch (err) {
+          status.textContent = 'Error de conexión. Intenta de nuevo.';
+          status.className = 'text-xs font-body mt-3 text-red-400';
+        }
+        btn.disabled = false;
+        btn.textContent = 'Suscribir';
+      });
+    })();
+    </script>
   </main>
   <Footer />
 </BaseLayout>

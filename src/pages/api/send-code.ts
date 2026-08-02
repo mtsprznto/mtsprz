@@ -1,8 +1,14 @@
 import type { APIRoute } from "astro";
+import { createHash } from "node:crypto";
 import { sanitizeBody, validateBodySize } from "../../lib/validators";
 import { checkRateLimit } from "../../lib/rate-limit";
+import { query, initDb } from "../../lib/db";
 
 export const prerender = false;
+
+function sha256Hex(value: string): string {
+  return createHash("sha256").update(value).digest("hex");
+}
 
 export const POST: APIRoute = async ({ request }) => {
   let body: { email?: string };
@@ -40,9 +46,28 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const codeHash = sha256Hex(code);
 
-  const store = (globalThis as any)._verificationCodes ??= new Map<string, { code: string; expires: number }>();
-  store.set(email, { code, expires: Date.now() + 10 * 60 * 1000 });
+  // 💾 Persist code in NeonDB (not in-memory: Vercel serverless multi-instance
+  // would lose codes between instances / cold starts).
+  try {
+    await initDb();
+    // Cheap cleanup of expired codes (one row per email)
+    await query("DELETE FROM verification_codes WHERE expires_at < NOW()", []);
+    // One active code per email — atomic UPSERT resets attempts on resend
+    await query(
+      `INSERT INTO verification_codes (email, code_hash, attempts, expires_at)
+       VALUES ($1, $2, 0, NOW() + INTERVAL '10 minutes')
+       ON CONFLICT (email) DO UPDATE
+       SET code_hash = EXCLUDED.code_hash,
+           attempts = 0,
+           expires_at = EXCLUDED.expires_at`,
+      [email, codeHash],
+    );
+  } catch (err) {
+    console.error("[DB] Failed to persist verification code:", err);
+    return new Response(JSON.stringify({ error: "Error al enviar el código. Intenta de nuevo." }), { status: 500 });
+  }
 
   const apiKey = import.meta.env.RESEND_API_KEY;
 
@@ -68,7 +93,8 @@ export const POST: APIRoute = async ({ request }) => {
     if (!res.ok) {
       const err = await res.text();
       console.error("[Resend]", err);
-      store.delete(email);
+      // Rollback: remove persisted code so it can never be used
+      await query("DELETE FROM verification_codes WHERE email = $1", [email]).catch(() => {});
       return new Response(JSON.stringify({ error: "Error al enviar el código. Intenta de nuevo." }), { status: 500 });
     }
   } else {

@@ -36,7 +36,7 @@ const SECURITY_HEADERS: Record<string, string> = {
   "X-Frame-Options": "DENY",
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "X-XSS-Protection": "0", // deprecated but still scanned for
-  "Permissions-Policy": "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+  "Permissions-Policy": "camera=(self), microphone=(), geolocation=(), interest-cohort=()",
   "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
 };
 

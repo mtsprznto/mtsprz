@@ -78,6 +78,6 @@ export const POST: APIRoute = async ({ request }) => {
     );
   } catch (err) {
     console.error("[Seed Admin] Error:", err);
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al crear el administrador" }), { status: 500 });
   }
 };

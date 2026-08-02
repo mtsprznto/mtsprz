@@ -28,7 +28,7 @@ export const GET: APIRoute = async ({ locals, params }) => {
     });
   } catch (err) {
     console.error("[Leads] Get error:", err);
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al obtener el lead" }), { status: 500 });
   }
 };
 
@@ -86,6 +86,6 @@ export const PATCH: APIRoute = async ({ request, locals, params }) => {
     });
   } catch (err) {
     console.error("[Leads] Update error:", err);
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al actualizar el lead" }), { status: 500 });
   }
 };

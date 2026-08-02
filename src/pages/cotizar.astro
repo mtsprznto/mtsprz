@@ -252,6 +252,22 @@ const effectivePrice = (s: Service) => (s.promo_price && s.promo_price > 0 ? s.p
                   <svg id="cotizar-submit-spinner" class="hidden" style="width:14px;height:14px;animation:spin 1s linear infinite;" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.3"/><path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
                 </button>
 
+                <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid rgba(255,255,255,0.06);">
+                  <p style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.6rem;">Tu WhatsApp (opcional)</p>
+                  <input
+                    type="tel"
+                    id="cotizar-phone"
+                    placeholder="+56 9 1234 5678"
+                    autocomplete="tel"
+                    style="width:100%; padding:0.8rem 1rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); color:#fff; font-size:0.8rem; font-family:var(--font-body); outline:none; box-sizing:border-box; transition:border-color 0.2s;"
+                    onfocus="this.style.borderColor='rgba(99,102,241,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'"
+                  />
+                  <p id="cotizar-phone-error" class="hidden" style="font-size:0.68rem; color:#f87171; font-family:var(--font-body); margin-top:0.4rem;"></p>
+                  <p style="margin-top:0.5rem; font-size:0.6rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); line-height:1.6;">
+                    Te contactamos por WhatsApp para agilizar tu proyecto.
+                  </p>
+                </div>
+
                 <p style="margin-top:1rem; font-size:0.62rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); line-height:1.6; text-align:center;">
                   Sin compromiso. Te contactamos en menos de 24 hrs.
                 </p>
@@ -493,6 +509,8 @@ const effectivePrice = (s: Service) => (s.promo_price && s.promo_price > 0 ? s.p
   var discountEl = document.getElementById('cotizar-discount');
   var submitText = document.getElementById('cotizar-submit-text');
   var submitSpinner = document.getElementById('cotizar-submit-spinner');
+  var phoneInput = document.getElementById('cotizar-phone');
+  var phoneError = document.getElementById('cotizar-phone-error');
 
   var packs = [
     { ids: ['web-profesional', 'seo-local', 'bot-whatsapp'], discount: 200000, label: 'Pack Digital Completo' },
@@ -596,13 +614,26 @@ const effectivePrice = (s: Service) => (s.promo_price && s.promo_price > 0 ? s.p
         }
       });
       try {
+        var phone = '';
+        if (phoneInput && phoneInput.value.trim()) {
+          phone = phoneInput.value.trim();
+          var digits = phone.replace(/\D/g, '');
+          if (digits.length < 9 || digits.length > 13) {
+            if (phoneError) { phoneError.textContent = 'Ingresa un teléfono válido (ej: +56 9 1234 5678)'; phoneError.classList.remove('hidden'); }
+            submitText.textContent = 'Revisa el teléfono.';
+            setTimeout(function() { submitBtn.style.opacity='1'; submitBtn.style.pointerEvents='auto'; submitText.textContent = 'ENVIAR COTIZACIÓN'; if (submitSpinner) submitSpinner.classList.add('hidden'); }, 3000);
+            return;
+          }
+          if (phoneError) phoneError.classList.add('hidden');
+        }
         var finalDiscount = discountRow.classList.contains('hidden') ? 0 : parseInt(discountEl.textContent.replace(/[^0-9]/g, ''));
         var res = await fetch('/api/submit-quote', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, services: selected, total: total }),
+          body: JSON.stringify({ email: email, services: selected, total: total, discount: finalDiscount, phone: phone }),
         });
         if (res.ok) {
+          if (window.trackEvent) window.trackEvent('quote_submitted', { service_count: selected.length, total: total, total_final: total - finalDiscount });
           summary.innerHTML = '<div style="text-align:center;padding:1.5rem 0;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" style="display:block;margin:0 auto 0.75rem;"><polyline points="20 6 9 17 4 12"/></svg><p style="font-size:0.8rem;color:rgba(255,255,255,0.6);font-family:var(--font-body);margin-bottom:0.4rem;">¡Cotización enviada!</p><p style="font-size:0.68rem;color:rgba(255,255,255,0.3);font-family:var(--font-body);">Te contactamos pronto a<br><strong style="color:rgba(255,255,255,0.55);">' + email + '</strong></p><p style="font-size:0.72rem;color:rgba(255,255,255,0.4);font-family:var(--font-heading);font-weight:700;margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.06);">' + formatPrice(total - finalDiscount) + '</p></div>';
           checkboxes.forEach(function(cb) { cb.checked = false; });
           if (submitBtn) submitBtn.style.display = 'none';

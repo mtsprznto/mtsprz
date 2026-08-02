@@ -240,6 +240,26 @@ DROP INDEX IF EXISTS idx_wa_conv_wa_msg;
 CREATE UNIQUE INDEX idx_wa_conv_wa_msg ON whatsapp_conversations(wa_message_id) WHERE wa_message_id IS NOT NULL;
 `,
   },
+  {
+    name: "018_verification_codes",
+    sql: `
+CREATE TABLE IF NOT EXISTS verification_codes (
+  email VARCHAR(255) PRIMARY KEY,
+  code_hash VARCHAR(64) NOT NULL,
+  attempts INT NOT NULL DEFAULT 0,
+  expires_at TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_verification_codes_expires ON verification_codes(expires_at);
+`,
+  },
+  {
+    name: "019_quote_contact_fields",
+    sql: `
+ALTER TABLE quote_requests ADD COLUMN IF NOT EXISTS phone VARCHAR(50);
+ALTER TABLE quote_requests ADD COLUMN IF NOT EXISTS discount INT NOT NULL DEFAULT 0;
+`,
+  },
 ];
 
 let _sql: ReturnType<typeof neon> | null = null;

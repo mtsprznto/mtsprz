@@ -50,8 +50,7 @@
 
       <!-- STEP 2: Código -->
       <div id="cotizar-step-2" class="hidden">
-        <p style="font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Paso 2 / 2</p>
-        <h3 style="font-size:clamp(1.5rem,4vw,2rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0 0 0.6rem;">
+        <p style="font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Paso 2 / 2</p>        <h3 style="font-size:clamp(1.5rem,4vw,2rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0 0 0.6rem;">
           CÓDIGO<br /><span style="color:rgba(255,255,255,0.2);">6 DÍGITOS</span>
         </h3>
         <p style="font-size:0.72rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); font-weight:300; line-height:1.65; margin-bottom:2rem;">
@@ -94,28 +93,6 @@
         </div>
       </div>
 
-      <!-- STEP 3: Éxito -->
-      <div id="cotizar-step-3" class="hidden" style="text-align:center; padding:1rem 0;">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" style="display:block; margin:0 auto 1.5rem;"><polyline points="20 6 9 17 4 12"/></svg>
-        <h3 style="font-size:clamp(1.25rem,4vw,1.75rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0 0 0.75rem;">
-          VERIFICADO
-        </h3>
-        <p style="font-size:0.75rem; color:rgba(255,255,255,0.35); font-family:var(--font-body); font-weight:300; line-height:1.65; margin-bottom:2rem;">
-          Te redirigimos a tu cotización personalizada.<br />
-          <strong id="cotizar-email-confirm" style="color:rgba(255,255,255,0.55); font-weight:500;"></strong>
-        </p>
-        <a href="/cotizar"
-          style="display:block; width:100%; padding:0.875rem 1rem; background:#1A1A1A; color:#fff; font-size:0.62rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; text-align:center; box-sizing:border-box; transition:background 0.2s; margin-bottom:0.6rem;"
-          onmouseover="this.style.background='#2a2a2a'" onmouseout="this.style.background='#1A1A1A'">
-          Ir a cotización →
-        </a>
-        <button id="cotizar-close-success"
-          style="background:none; border:none; cursor:pointer; font-size:0.65rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); text-decoration:underline; text-underline-offset:3px; padding:0.4rem 0; transition:color 0.2s;"
-          onmouseover="this.style.color='rgba(255,255,255,0.5)'" onmouseout="this.style.color='rgba(255,255,255,0.2)'">
-          Cerrar
-        </button>
-      </div>
-
     </div>
   </div>
 </div>
@@ -133,14 +110,11 @@
 
   var overlay = $('cotizar-overlay');
   var close = $('cotizar-close');
-  var closeSuccess = $('cotizar-close-success');
   var step1 = $('cotizar-step-1');
   var step2 = $('cotizar-step-2');
-  var step3 = $('cotizar-step-3');
   var emailInput = $('cotizar-email');
   var emailError = $('cotizar-email-error');
   var emailDisplay = $('cotizar-email-display');
-  var emailConfirm = $('cotizar-email-confirm');
   var sendBtn = $('cotizar-send-btn');
   var sendText = $('cotizar-send-text');
   var sendSpinner = $('cotizar-send-spinner');
@@ -162,12 +136,12 @@
     document.body.style.overflow = 'hidden';
     step1.classList.remove('hidden');
     step2.classList.add('hidden');
-    step3.classList.add('hidden');
     emailInput.value = '';
     emailError.classList.add('hidden');
     codeError.classList.add('hidden');
     codeInputs.forEach(function(inp) { if (inp) inp.value = ''; });
     setTimeout(function() { if (emailInput) emailInput.focus(); }, 200);
+    if (window.trackEvent) window.trackEvent('cotizar_modal_open', { page: window.location.pathname });
   }
 
   function closeModal() {
@@ -197,7 +171,6 @@
 
   if (overlay) overlay.addEventListener('click', closeModal);
   if (close) close.addEventListener('click', closeModal);
-  if (closeSuccess) closeSuccess.addEventListener('click', closeModal);
 
   if (emailInput) {
     emailInput.addEventListener('keydown', function(e) {
@@ -232,6 +205,7 @@
         }
         currentEmail = email;
         if (emailDisplay) emailDisplay.textContent = email;
+        if (window.trackEvent) window.trackEvent('email_submitted', { email_domain: email.split('@')[1] || '' });
         step1.classList.add('hidden');
         step2.classList.remove('hidden');
         if (codeInputs[0]) codeInputs[0].focus();
@@ -293,8 +267,10 @@
         if (!res.ok) {
           showError(codeError, data.error || 'Código incorrecto');
           setLoading(verifyBtn, verifySpinner, verifyText, false);
+          if (window.trackEvent) window.trackEvent('verify_failure');
           return;
         }
+        if (window.trackEvent) window.trackEvent('verify_success');
         window.location.href = '/cotizar';
       } catch(e) {
         showError(codeError, 'Error de conexión. Intenta de nuevo.');
@@ -314,6 +290,7 @@
         body: JSON.stringify({ email: currentEmail }),
       }).then(function() {
         resendBtn.textContent = '¡Reenviado!';
+        if (window.trackEvent) window.trackEvent('email_resend');
         setTimeout(function() {
           resendBtn.disabled = false;
           resendBtn.textContent = 'Reenviar código';

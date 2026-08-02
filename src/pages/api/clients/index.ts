@@ -41,7 +41,7 @@ export const GET: APIRoute = async ({ locals, url }) => {
     });
   } catch (err) {
     console.error("[Clients] List error:", err);
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Error al listar clientes" }), { status: 500 });
   }
 };
 

@@ -38,10 +38,13 @@ async function neonQuery(databaseUrl, sql, params) {
   return data.rows ?? [];
 }
 
+// M1: mismas iteraciones que src/lib/crypto.ts (OWASP ASVS v4.0, ≥310k para login admin).
+const PBKDF2_ITERATIONS = 310_000;
+
 function hashPassword(password) {
   const salt = randomBytes(16).toString("hex");
-  const key = pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
-  return `${salt}:${key}`;
+  const key = pbkdf2Sync(password, salt, PBKDF2_ITERATIONS, 64, "sha512").toString("hex");
+  return `pbkdf2$sha512$${PBKDF2_ITERATIONS}$${salt}$${key}`;
 }
 
 async function main() {

@@ -181,6 +181,7 @@ import Footer from "../components/Footer.astro";
               const data = await res.json();
 
               if (res.ok) {
+                if (window.trackEvent) window.trackEvent("contact_submitted");
                 status.className = "text-xs font-body text-emerald-400";
                 status.textContent = data.message || "Mensaje enviado correctamente";
                 form.reset();

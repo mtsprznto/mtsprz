@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
 import { checkRateLimit } from "../../lib/rate-limit";
+import { sanitizeHtml } from "../../lib/validators";
 
 export const prerender = false;
 
@@ -53,11 +54,11 @@ export const POST: APIRoute = async ({ request }) => {
       text: `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`,
       html: `
         <h2>Nuevo mensaje desde el formulario de contacto</h2>
-        <p><strong>Nombre:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Nombre:</strong> ${sanitizeHtml(name)}</p>
+        <p><strong>Email:</strong> ${sanitizeHtml(email)}</p>
         <hr />
         <p><strong>Mensaje:</strong></p>
-        <p>${message.replace(/\n/g, "<br />")}</p>
+        <p>${sanitizeHtml(message).replace(/\n/g, "<br />")}</p>
       `,
     });
 

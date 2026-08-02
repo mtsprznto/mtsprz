@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { query, initDb } from "../../../lib/db";
-import { verifyPassword, createToken } from "../../../lib/crypto";
+import { verifyPassword, needsRehash, hashPassword, createToken } from "../../../lib/crypto";
 import { validateEmail, sanitizeBody, validateBodySize } from "../../../lib/validators";
 import { checkRateLimit } from "../../../lib/rate-limit";
 
@@ -55,12 +55,23 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       return new Response(JSON.stringify({ error: "Credenciales inválidas" }), { status: 401 });
     }
 
+    // M1: re-hashear en el próximo login si el hash usa formato legacy (1000 iter)
+    const hash = user.password_hash as string;
+    if (needsRehash(hash)) {
+      try {
+        const newHash = await hashPassword(password);
+        await query("UPDATE users SET password_hash = $1 WHERE id = $2", [newHash, user.id as number]);
+      } catch (rehashErr) {
+        console.error("[Auth] Rehash error:", rehashErr);
+      }
+    }
+
     const token = createToken({ id: user.id, email: user.email, role: user.role });
 
     cookies.set("mtsprz_token", token, {
       path: "/",
       httpOnly: true,
-      secure: true,
+      secure: import.meta.env.PROD,
       sameSite: "lax",
       maxAge: 86400 * 7,
     });

@@ -1,8 +1,17 @@
 import crypto from "node:crypto";
 
-const BIOMETRIC_SECRET =
-  (import.meta as Record<string, any>).env?.BIOMETRIC_SECRET ??
-  "biometric-secret-change-in-prod";
+const ENV = (import.meta as Record<string, any>).env ?? {};
+const IS_PROD = ENV.PROD === true || ENV.PROD === "true";
+
+const BIOMETRIC_SECRET: string = (() => {
+  const s = (ENV.BIOMETRIC_SECRET as string | undefined)?.trim();
+  if (s) return s;
+  if (IS_PROD) {
+    throw new Error("BIOMETRIC_SECRET no configurada en producción — abortando (seguridad)");
+  }
+  console.warn("[BIOMETRIC] BIOMETRIC_SECRET no configurada — usando fallback DEV (inseguro, solo local)");
+  return "biometric-secret-change-in-prod";
+})();
 
 const TOKEN_TTL = 15 * 60; // 15 minutos
 

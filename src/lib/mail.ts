@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { sanitizeHtml } from "./validators";
 
 interface SendContractEmailParams {
   to: string;
@@ -32,6 +33,8 @@ export async function sendEmail({ to, subject, html, replyTo }: SendContractEmai
 }
 
 export function contractCreatedEmail(clientName: string, contractNumber: string, link: string): string {
+  const name = sanitizeHtml(clientName);
+  const num = sanitizeHtml(contractNumber);
   return `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
       <div style="text-align:center;margin-bottom:24px">
@@ -41,16 +44,16 @@ export function contractCreatedEmail(clientName: string, contractNumber: string,
         <h2 style="margin:0;font-size:18px;font-weight:700">Contrato por Firmar</h2>
       </div>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6">
-        Hola <strong style="color:#fafafa">${clientName}</strong>,
+        Hola <strong style="color:#fafafa">${name}</strong>,
       </p>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6">
-        Has recibido el contrato <strong style="color:#fafafa">${contractNumber}</strong> de parte de <strong style="color:#fafafa">Mtsprz</strong> para revisión y firma.
+        Has recibido el contrato <strong style="color:#fafafa">${num}</strong> de parte de <strong style="color:#fafafa">Mtsprz</strong> para revisión y firma.
       </p>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 24px;line-height:1.6">
         Haz clic en el botón para revisar y firmar el contrato de forma segura.
       </p>
       <div style="text-align:center">
-        <a href="${link}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+        <a href="${sanitizeHtml(link)}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6)">
           Revisar y Firmar Contrato
         </a>
       </div>
@@ -63,6 +66,8 @@ export function contractCreatedEmail(clientName: string, contractNumber: string,
 }
 
 export function contractSignedEmail(clientName: string, contractNumber: string, pdfLink: string): string {
+  const name = sanitizeHtml(clientName);
+  const num = sanitizeHtml(contractNumber);
   return `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
       <div style="text-align:center;margin-bottom:24px">
@@ -72,13 +77,13 @@ export function contractSignedEmail(clientName: string, contractNumber: string, 
         <h2 style="margin:0;font-size:18px;font-weight:700">Contrato Firmado</h2>
       </div>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6">
-        El contrato <strong style="color:#fafafa">${contractNumber}</strong> ha sido firmado por ambas partes.
+        El contrato <strong style="color:#fafafa">${num}</strong> ha sido firmado por ambas partes.
       </p>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 24px;line-height:1.6">
         Puedes descargar el PDF firmado desde el siguiente enlace.
       </p>
       <div style="text-align:center">
-        <a href="${pdfLink}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#10b981,#059669)">
+        <a href="${sanitizeHtml(pdfLink)}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#10b981,#059669)">
           Descargar PDF Firmado
         </a>
       </div>
@@ -97,6 +102,9 @@ export function adminContractCompletedEmail(
   pdfLink: string,
   clientEmail: string
 ): string {
+  const name = sanitizeHtml(clientName);
+  const num = sanitizeHtml(contractNumber);
+  const email = sanitizeHtml(clientEmail);
   return `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
       <div style="text-align:center;margin-bottom:24px">
@@ -106,19 +114,19 @@ export function adminContractCompletedEmail(
         <h2 style="margin:0;font-size:18px;font-weight:700">Contrato Completado</h2>
       </div>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6">
-        El contrato <strong style="color:#fafafa">${contractNumber}</strong> ha sido firmado por ambas partes.
+        El contrato <strong style="color:#fafafa">${num}</strong> ha sido firmado por ambas partes.
       </p>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 6px;line-height:1.6">
-        <strong style="color:#fafafa">Cliente:</strong> ${clientName}
+        <strong style="color:#fafafa">Cliente:</strong> ${name}
       </p>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 24px;line-height:1.6">
-        <strong style="color:#fafafa">Email:</strong> ${clientEmail}
+        <strong style="color:#fafafa">Email:</strong> ${email}
       </p>
       <div style="text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        <a href="${adminLink}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+        <a href="${sanitizeHtml(adminLink)}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6)">
           Ver en Panel
         </a>
-        <a href="${pdfLink}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#10b981,#059669)">
+        <a href="${sanitizeHtml(pdfLink)}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#10b981,#059669)">
           Descargar PDF
         </a>
       </div>
@@ -131,6 +139,8 @@ export function adminContractCompletedEmail(
 }
 
 export function adminNewContractNotification(clientName: string, contractNumber: string, link: string): string {
+  const name = sanitizeHtml(clientName);
+  const num = sanitizeHtml(contractNumber);
   return `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
       <div style="text-align:center;margin-bottom:24px">
@@ -140,13 +150,13 @@ export function adminNewContractNotification(clientName: string, contractNumber:
         <h2 style="margin:0;font-size:18px;font-weight:700">Contrato Enviado a Cliente</h2>
       </div>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 16px;line-height:1.6">
-        El contrato <strong style="color:#fafafa">${contractNumber}</strong> ha sido enviado a <strong style="color:#fafafa">${clientName}</strong>.
+        El contrato <strong style="color:#fafafa">${num}</strong> ha sido enviado a <strong style="color:#fafafa">${name}</strong>.
       </p>
       <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 24px;line-height:1.6">
         Revisa su estado en el panel de administración.
       </p>
       <div style="text-align:center">
-        <a href="${link}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6)">
+        <a href="${sanitizeHtml(link)}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#fff;text-decoration:none;background:linear-gradient(135deg,#6366f1,#8b5cf6)">
           Ver en Panel
         </a>
       </div>

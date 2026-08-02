@@ -1,13 +1,42 @@
 import type { APIRoute } from "astro";
 import { query, initDb } from "../../lib/db";
 import { sendEmail } from "../../lib/mail";
-import { sanitizeBody, validateBodySize, validateEmail } from "../../lib/validators";
+import { sanitizeBody, sanitizeHtml, validateBodySize, validateEmail } from "../../lib/validators";
 import { checkRateLimit } from "../../lib/rate-limit";
+import { normalizePhone } from "../../lib/phone";
 
 export const prerender = false;
 
+const WHATSAPP_MTS = "56966929818";
+
+/**
+ * Packs con descuento — espejo de src/pages/cotizar.astro.
+ * El descuento se recalcula SERVER-SIDE contra estos packs: el cliente
+ * jamás decide el monto; solo declara qué servicios seleccionó.
+ */
+const QUOTE_PACKS: { ids: string[]; discount: number }[] = [
+  { ids: ["web-profesional", "seo-local", "bot-whatsapp"], discount: 200000 },
+  { ids: ["landing", "logo-brand", "social-media"], discount: 150000 },
+  { ids: ["seo-audit", "seo-local", "seo-mensual"], discount: 100000 },
+];
+
+/** Recalcula el descuento de pack legítimo a partir de los slugs seleccionados. */
+function computePackDiscount(serviceIds: string[]): number {
+  for (const pack of QUOTE_PACKS) {
+    if (pack.ids.every((id) => serviceIds.includes(id))) return pack.discount;
+  }
+  return 0;
+}
+
 export const POST: APIRoute = async ({ request }) => {
-  let body: { email?: string; services?: { id: string; name: string; price: number }[]; total?: number; message?: string };
+  let body: {
+    email?: string;
+    services?: { id: string; name: string; price: number }[];
+    total?: number;
+    message?: string;
+    phone?: string;
+    discount?: number;
+  };
   try {
     body = sanitizeBody(await request.json());
   } catch {
@@ -44,6 +73,23 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: "Total inválido" }), { status: 400 });
   }
 
+  // A2: teléfono opcional — normalizar a wa.me (56 + dígitos)
+  let phone: string | null = null;
+  if (body.phone !== undefined && body.phone !== null && body.phone !== "") {
+    if (typeof body.phone !== "string" || body.phone.length > 50) {
+      return new Response(JSON.stringify({ error: "Teléfono inválido" }), { status: 400 });
+    }
+    phone = normalizePhone(body.phone);
+    if (!phone || phone.length < 9 || phone.length > 15) {
+      return new Response(JSON.stringify({ error: "Teléfono inválido" }), { status: 400 });
+    }
+  }
+
+  // A3: descuento — recalcular server-side, ignorar lo que mande el cliente
+  const packDiscount = computePackDiscount(services.map((s) => s.id));
+  const discount = packDiscount;
+  const totalFinal = total - discount;
+
   // 🛡️ Rate limit: max 5 quotes per hour per email
   const rateCheck = checkRateLimit(`submit-quote:email:${email}`, 5, 3600_000);
   if (!rateCheck.allowed) {
@@ -60,8 +106,8 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     await query(
-      "INSERT INTO quote_requests (email, services, total, message) VALUES ($1, $2, $3, $4)",
-      [email, JSON.stringify(services), total, body.message || null]
+      "INSERT INTO quote_requests (email, services, total, message, phone, discount) VALUES ($1, $2, $3, $4, $5, $6)",
+      [email, JSON.stringify(services), totalFinal, body.message || null, phone, discount]
     );
   } catch (err) {
     console.error("[DB] Failed to save quote:", err);
@@ -72,10 +118,23 @@ export const POST: APIRoute = async ({ request }) => {
   const toEmail = import.meta.env.RESEND_TO || "contacto@mtsprz.org";
   const fromEmail = import.meta.env.RESEND_FROM || "cotizaciones@mtsprz.org";
 
+  // A2: deep link WhatsApp para contactar al cliente desde el email del admin
+  const phoneDisplay = phone
+    ? `<p style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 6px;line-height:1.6"><strong style="color:#fafafa">Teléfono:</strong> +${sanitizeHtml(phone)}</p>`
+    : "";
+  const phoneWaLink = phone
+    ? `<a href="https://wa.me/${phone}?text=${encodeURIComponent("Hola, vi tu cotización en mtsprz.org y quiero avanzar con tu proyecto")}" style="display:inline-block;padding:12px 24px;border-radius:9999px;font-size:13px;font-weight:600;color:#0a0a0b;text-decoration:none;background:#25D366">Contactar por WhatsApp</a>`
+    : "";
+
   if (apiKey) {
     const servicesHtml = services
-      .map((s) => `<tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:#fafafa">${s.name}</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:#fafafa;text-align:right">$${(s.price / 1000).toFixed(0)}k</td></tr>`)
+      .map((s) => `<tr><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:#fafafa">${sanitizeHtml(s.name)}</td><td style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.06);color:#fafafa;text-align:right">$${(s.price / 1000).toFixed(0)}k</td></tr>`)
       .join("");
+
+    const discountHtml =
+      discount > 0
+        ? `<div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:13px;color:#34d399">Descuento pack</span><strong style="font-size:13px;color:#34d399">-$${(discount / 1000).toFixed(0)}k</strong></div>`
+        : "";
 
     const emailHtml = `
       <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
@@ -86,8 +145,9 @@ export const POST: APIRoute = async ({ request }) => {
           <h2 style="margin:0;font-size:18px;font-weight:700;letter-spacing:-0.5px">Nueva Cotización Recibida</h2>
         </div>
         <p style="font-size:13px;color:rgba(250,250,250,0.5);margin:0 0 16px">
-          <strong style="color:#fafafa">${email}</strong> ha solicitado una cotización desde la web.
+          <strong style="color:#fafafa">${sanitizeHtml(email)}</strong> ha solicitado una cotización desde la web.
         </p>
+        ${phoneDisplay}
         <table style="width:100%;border-collapse:collapse;margin-bottom:16px">
           <thead>
             <tr><th style="padding:8px 12px;text-align:left;color:rgba(250,250,250,0.4);font-size:11px;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06)">Servicio</th><th style="padding:8px 12px;text-align:right;color:rgba(250,250,250,0.4);font-size:11px;font-weight:500;border-bottom:1px solid rgba(255,255,255,0.06)">Precio</th></tr>
@@ -95,9 +155,11 @@ export const POST: APIRoute = async ({ request }) => {
           <tbody>${servicesHtml}</tbody>
         </table>
         <div style="text-align:right;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)">
+          ${discountHtml}
           <span style="font-size:13px;color:rgba(250,250,250,0.5)">Total: </span>
-          <strong style="font-size:18px;color:#6366f1">$${(total / 1000).toFixed(0)}k</strong>
+          <strong style="font-size:18px;color:#6366f1">$${(totalFinal / 1000).toFixed(0)}k</strong>
         </div>
+        ${phoneWaLink ? `<div style="text-align:center;margin-top:20px">${phoneWaLink}</div>` : ""}
         <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:20px 0" />
         <p style="font-size:11px;color:rgba(250,250,250,0.3);margin:0;text-align:center">
           Cotización generada desde mtsprz.org/cotizar
@@ -116,7 +178,7 @@ export const POST: APIRoute = async ({ request }) => {
           from: `Mtsprz <${fromEmail}>`,
           to: toEmail,
           replyTo: email,
-          subject: `Nueva cotización de ${email} — $${(total / 1000).toFixed(0)}k`,
+          subject: `Nueva cotización de ${email} — $${(totalFinal / 1000).toFixed(0)}k`,
           html: emailHtml,
         }),
       });
@@ -147,12 +209,18 @@ export const POST: APIRoute = async ({ request }) => {
           <tbody>${servicesHtml}</tbody>
         </table>
         <div style="text-align:right;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06)">
+          ${discountHtml}
           <span style="font-size:13px;color:rgba(250,250,250,0.5)">Total estimado: </span>
-          <strong style="font-size:18px;color:#6366f1">$${(total / 1000).toFixed(0)}k</strong>
+          <strong style="font-size:18px;color:#6366f1">$${(totalFinal / 1000).toFixed(0)}k</strong>
         </div>
         <p style="font-size:14px;color:rgba(250,250,250,0.7);margin:20px 0 0;line-height:1.6">
           Un miembro de nuestro equipo te contactará pronto para resolver dudas y comenzar con tu proyecto.
         </p>
+        <div style="text-align:center;margin-top:20px">
+          <a href="https://wa.me/${WHATSAPP_MTS}?text=${encodeURIComponent("Hola Mtsprz, envié una cotización desde la web y quiero avanzar")}" style="display:inline-block;padding:14px 32px;border-radius:9999px;font-size:14px;font-weight:600;color:#0a0a0b;text-decoration:none;background:#25D366">
+            Escríbenos por WhatsApp
+          </a>
+        </div>
         <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:24px 0" />
         <p style="font-size:11px;color:rgba(250,250,250,0.3);margin:0;text-align:center">
           Mtsprz — Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org
@@ -172,5 +240,5 @@ export const POST: APIRoute = async ({ request }) => {
     }
   }
 
-  return new Response(JSON.stringify({ success: true }), { status: 200 });
+  return new Response(JSON.stringify({ success: true, total: totalFinal, discount }), { status: 200 });
 };
