@@ -1,0 +1,103 @@
+---
+/**
+ * LeadMagnetForm — Captura de email para descargar un lead magnet.
+ * Envía POST /api/lead-magnet (valida + rate limit + programa secuencia + email).
+ */
+export interface Props {
+  /** Slug del magnet (obligatorio) */
+  slug: string;
+  /** Título del magnet para el placeholder/CTA */
+  title?: string;
+  /** Texto del botón */
+  ctaLabel?: string;
+  /** Additional CSS class */
+  class?: string;
+}
+
+const { slug, title = "Recursos Mtsprz", ctaLabel = "Recibir guía gratis" } = Astro.props;
+---
+
+<form id="lm-form" data-slug={slug} class="space-y-4 {Astro.props.class || ''}" novalidate>
+  <div>
+    <label for="lm-email" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Email *</label>
+    <input
+      id="lm-email"
+      name="email"
+      type="email"
+      required
+      maxlength="254"
+      placeholder="correo@ejemplo.cl"
+      class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors"
+    />
+  </div>
+
+  <button
+    id="lm-submit"
+    type="submit"
+    class="w-full px-6 py-3 bg-accent text-[#010101] text-[11px] font-bold tracking-[0.15em] uppercase transition-all duration-300 hover:bg-accent/90 disabled:opacity-30 disabled:cursor-not-allowed"
+  >
+    {ctaLabel}
+  </button>
+
+  <p class="text-[10px] text-white/30 leading-relaxed">
+    Sin spam. Te enviamos la guía y 3 emails con tácticas. Puedes darte de baja cuando quieras. (Ley 21.719)
+  </p>
+
+  <div id="lm-status" class="hidden text-sm"></div>
+</form>
+
+<script is:inline>
+  (function () {
+    const form = document.getElementById("lm-form");
+    if (!form) return;
+
+    const slug = form.dataset.slug;
+    const submitBtn = document.getElementById("lm-submit");
+    const statusEl = document.getElementById("lm-status");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const email = form.querySelector("[name='email']").value.trim();
+      if (!email) {
+        statusEl.className = "text-sm text-red-400";
+        statusEl.textContent = "Ingresa tu correo para recibir la guía.";
+        statusEl.classList.remove("hidden");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+      statusEl.classList.add("hidden");
+
+      try {
+        const res = await fetch("/api/lead-magnet", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, slug }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          statusEl.className = "text-sm text-emerald-400";
+          statusEl.textContent = "¡Listo! Revisa tu correo. Te enviamos la guía y un diagnóstico gratis.";
+          form.reset();
+        } else if (res.status === 429) {
+          statusEl.className = "text-sm text-red-400";
+          statusEl.textContent = data.error || "Demasiadas solicitudes. Intenta en 1 hora.";
+        } else {
+          statusEl.className = "text-sm text-red-400";
+          statusEl.textContent = data.error || "Error al enviar. Intenta de nuevo.";
+        }
+      } catch {
+        statusEl.className = "text-sm text-red-400";
+        statusEl.textContent = "Error de conexión. Intenta de nuevo.";
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Recibir guía gratis";
+      statusEl.classList.remove("hidden");
+    });
+  })();
+</script>

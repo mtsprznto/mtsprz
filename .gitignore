@@ -29,3 +29,5 @@ scripts/whatsapp-browser/.venv/
 # waha
 scripts/waha/.env
 scripts/waha/.sessions/
+docs/marketing/*
+marketing/

@@ -1,0 +1,204 @@
+---
+export const prerender = true;
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { FAQ_PRECIOS } from "../data/faq-precios";
+
+const site = "https://mtsprz.org";
+---
+
+<BaseLayout
+  title="Diagnóstico Digital Gratis | Web, Google Maps e IA — Mtsprz"
+  description="Diagnóstico gratuito de 20 minutos para pymes del sur de Chile: revisamos tu web, tu Google Maps y tu presencia en ChatGPT/Perplexity, y te dejamos 3 acciones concretas."
+  canonical="https://mtsprz.org/diagnostico"
+  breadcrumbs={[{ name: "Diagnóstico", path: "/diagnostico" }]}
+>
+  <!-- FAQPage con precios directos: contenido GEO citable -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${site}/diagnostico#faq`,
+    mainEntity: FAQ_PRECIOS.map((f) => ({
+      "@type": "Question",
+      name: f.pregunta,
+      acceptedAnswer: { "@type": "Answer", text: f.respuesta },
+    })),
+  })} />
+
+  <Header />
+  <main id="main-content" style="overflow-x: hidden;">
+    <!-- HERO -->
+    <section style="position:relative; min-height:55vh; display:flex; align-items:flex-end; padding:0 2.5rem 3.5rem; background:#010101;">
+      <div style="position:absolute; inset:0; background: radial-gradient(ellipse at 20% 80%, #25D3660d 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, #0a0a2e 0%, transparent 60%);"></div>
+      <div style="position:relative; z-index:2; max-width:900px;">
+        <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.25); margin-bottom:1rem;">Gratis · Sin compromiso</p>
+        <h1 style="font-size:clamp(2.5rem, 7vw, 6rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.9; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+          Tu negocio,<br /><span style="color:rgba(255,255,255,0.2);">bajo la lupa</span>
+        </h1>
+        <p style="margin-top:1.25rem; max-width:620px; font-size:0.95rem; color:rgba(255,255,255,0.5); line-height:1.7;">
+          Web, Google Maps y presencia en IA (ChatGPT/Perplexity). Te decimos qué está bien, qué te está robando clientes y por dónde partir. 20 minutos, por video-llamada o WhatsApp.
+        </p>
+      </div>
+    </section>
+
+    <section style="padding: 3rem 2.5rem 5rem;">
+      <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns: minmax(0,1fr) 420px; gap:3rem; align-items:start;">
+        <!-- QUÉ INCLUYE -->
+        <article style="min-width:0;">
+          <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.25); margin:0 0 1.5rem;">Qué revisamos</p>
+
+          <div style="padding:1.5rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); margin-bottom:1rem;">
+            <h2 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; margin:0 0 0.5rem;">1. Tu web</h2>
+            <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); line-height:1.7; margin:0;">
+              Velocidad (Core Web Vitals), WhatsApp visible, precios publicados, SEO local NAP y cumplimiento Ley 21.719.
+            </p>
+          </div>
+
+          <div style="padding:1.5rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); margin-bottom:1rem;">
+            <h2 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; margin:0 0 0.5rem;">2. Tu Google Maps</h2>
+            <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); line-height:1.7; margin:0;">
+              Ficha completa, categorías, fotos, reseñas (cantidad y ritmo), preguntas sin responder y comparación con tu competencia local.
+            </p>
+          </div>
+
+          <div style="padding:1.5rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); margin-bottom:1rem;">
+            <h2 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; margin:0 0 0.5rem;">3. Tu presencia en IA</h2>
+            <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); line-height:1.7; margin:0;">
+              Qué dice ChatGPT y Perplexity cuando recomiendan negocios como el tuyo en tu comuna. Cada vez más clientes consultan ahí antes de comprar.
+            </p>
+          </div>
+
+          <div style="padding:1.5rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);">
+            <h2 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; margin:0 0 0.5rem;">Entregable: 3 acciones concretas</h2>
+            <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); line-height:1.7; margin:0;">
+              No te vendemos nada en la llamada: te dejamos 3 cosas ordenadas por impacto que puedes aplicar esta semana, las hagas con nosotros o no.
+            </p>
+          </div>
+
+          <!-- PREGUNTAS FRECUENTES -->
+          <section style="margin-top:3rem; padding-top:2rem; border-top:1px solid rgba(255,255,255,0.08);">
+            <h2 style="font-size:1.35rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.01em; margin:0 0 1.25rem;">Preguntas frecuentes</h2>
+            {FAQ_PRECIOS.map((f) => (
+              <div style="margin-bottom:1.5rem;">
+                <h3 style="font-size:1rem; color:#fff; font-weight:600; margin:0 0 0.5rem;">{f.pregunta}</h3>
+                <p style="font-size:0.9rem; color:rgba(255,255,255,0.55); line-height:1.7; margin:0;">{f.respuesta}</p>
+              </div>
+            ))}
+          </section>
+        </article>
+
+        <!-- FORMULARIO -->
+        <aside style="position:sticky; top:2rem; padding:1.75rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);">
+          <h2 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; margin:0 0 0.5rem;">
+            Agenda tu diagnóstico
+          </h2>
+          <p style="font-size:0.85rem; color:rgba(255,255,255,0.5); line-height:1.6; margin:0 0 1.25rem;">
+            Completa el formulario y te contactamos por WhatsApp en menos de 24 horas hábiles.
+          </p>
+
+          <form id="dx-form" class="space-y-4" novalidate>
+            <div>
+              <label for="dx-name" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Nombre *</label>
+              <input id="dx-name" name="name" type="text" required maxlength="255" placeholder="Tu nombre"
+                class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+            </div>
+            <div>
+              <label for="dx-email" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Email</label>
+              <input id="dx-email" name="email" type="email" maxlength="254" placeholder="correo@ejemplo.cl"
+                class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+            </div>
+            <div>
+              <label for="dx-phone" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">WhatsApp *</label>
+              <input id="dx-phone" name="phone" type="tel" required placeholder="+56 9 1234 5678"
+                class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
+            </div>
+            <div>
+              <label for="dx-service" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">¿Qué te interesa? *</label>
+              <select id="dx-service" name="service_interest" required
+                class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body focus:outline-none focus:border-accent/50 transition-colors">
+                <option value="diagnostico">Diagnóstico completo</option>
+                <option value="web">Web / landing</option>
+                <option value="seo">SEO / Google Maps</option>
+                <option value="whatsapp">Bot de WhatsApp</option>
+                <option value="automation">Automatización con IA</option>
+              </select>
+            </div>
+            <div>
+              <label for="dx-message" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Cuéntanos de tu negocio</label>
+              <textarea id="dx-message" name="message" maxlength="5000" rows="3" placeholder="Ej: tenemos una cafetería en Osorno y queremos aparecer en Google cuando buscan 'cafetería Osorno'."
+                class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors resize-y min-h-[80px]"></textarea>
+            </div>
+
+            <button type="submit" id="dx-submit"
+              class="w-full px-6 py-3 bg-accent text-[#010101] text-[11px] font-bold tracking-[0.15em] uppercase transition-all duration-300 hover:bg-accent/90 disabled:opacity-30 disabled:cursor-not-allowed">
+              Quiero mi diagnóstico
+            </button>
+
+            <p class="text-[10px] text-white/30 leading-relaxed">
+              Al enviar aceptas nuestra política de privacidad (Ley 21.719). Solo usamos tus datos para responderte.
+            </p>
+
+            <div id="dx-status" class="hidden text-sm"></div>
+          </form>
+        </aside>
+      </div>
+    </section>
+  </main>
+  <Footer />
+
+  <script is:inline>
+    (function () {
+      var form = document.getElementById("dx-form");
+      if (!form) return;
+      var submitBtn = document.getElementById("dx-submit");
+      var statusEl = document.getElementById("dx-status");
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var name = form.querySelector("[name='name']").value.trim();
+        var phone = form.querySelector("[name='phone']").value.trim();
+        if (!name || !phone) {
+          statusEl.className = "text-sm text-red-400";
+          statusEl.textContent = "Completa los campos obligatorios.";
+          statusEl.classList.remove("hidden");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Enviando...";
+        statusEl.classList.add("hidden");
+
+        try {
+          var res = await fetch("/api/leads", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: name,
+              phone: phone,
+              email: form.querySelector("[name='email']").value.trim() || null,
+              source: "web",
+              service_interest: form.querySelector("[name='service_interest']").value || "diagnostico",
+              message: form.querySelector("[name='message']").value.trim() || null,
+            }),
+          });
+          var data = await res.json();
+          if (res.ok && data.success) {
+            statusEl.className = "text-sm text-emerald-400";
+            statusEl.textContent = "¡Recibido! Te contactamos por WhatsApp en menos de 24 horas hábiles.";
+            form.reset();
+          } else {
+            statusEl.className = "text-sm text-red-400";
+            statusEl.textContent = data.error || "Error al enviar. Intenta de nuevo.";
+          }
+        } catch {
+          statusEl.className = "text-sm text-red-400";
+          statusEl.textContent = "Error de conexión. Intenta de nuevo.";
+        }
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Quiero mi diagnóstico";
+        statusEl.classList.remove("hidden");
+      });
+    })();
+  </script>
+</BaseLayout>

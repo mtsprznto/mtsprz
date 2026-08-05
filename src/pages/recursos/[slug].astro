@@ -1,0 +1,148 @@
+---
+export const prerender = true;
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import LeadMagnetForm from "../../components/LeadMagnetForm.astro";
+import { LEAD_MAGNETS } from "../../lib/marketing/lead-magnets";
+import { RECURSOS_CONTENIDO } from "../../data/recursos-contenido";
+
+export function getStaticPaths() {
+  return LEAD_MAGNETS.map((m) => ({
+    params: { slug: m.slug },
+    props: { magnet: m },
+  }));
+}
+
+const { magnet } = Astro.props;
+const contenido = RECURSOS_CONTENIDO[magnet.slug];
+const site = "https://mtsprz.org";
+const url = `${site}/recursos/${magnet.slug}`;
+---
+
+<BaseLayout
+  title={contenido?.metaTitle || magnet.title}
+  description={contenido?.metaDescription || magnet.promise}
+  canonical={url}
+  breadcrumbs={[{ name: "Recursos", path: "/recursos" }, { name: magnet.title, path: `/recursos/${magnet.slug}` }]}
+  article={{
+    title: magnet.title,
+    publishedTime: "2026-08-01",
+    author: "Mtsprz",
+    tags: ["marketing", "pymes", "chile", "seo"],
+    hasSpeakable: true,
+  }}
+>
+  <!-- FAQPage schema: contenido que la IA cita -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    mainEntity: (contenido?.faq || []).map((f) => ({
+      "@type": "Question",
+      name: f.pregunta,
+      acceptedAnswer: { "@type": "Answer", text: f.respuesta },
+    })),
+  })} />
+
+  <Header />
+  <main id="main-content" style="overflow-x: hidden;">
+    <!-- HERO -->
+    <section style="position:relative; min-height:50vh; display:flex; align-items:flex-end; padding:0 2.5rem 3.5rem; background:#010101;">
+      <div style="position:absolute; inset:0; background: radial-gradient(ellipse at 20% 80%, #06b6d412 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, #0a0a2e 0%, transparent 60%);"></div>
+      <div style="position:relative; z-index:2; max-width:900px;">
+        <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.25); margin-bottom:1rem;">Recurso gratis · {magnet.audience}</p>
+        <h1 style="font-size:clamp(2rem, 5.5vw, 4.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.95; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
+          {magnet.title}
+        </h1>
+        <p style="margin-top:1.25rem; max-width:640px; font-size:1rem; color:rgba(255,255,255,0.55); line-height:1.7;">
+          {magnet.outcome}
+        </p>
+      </div>
+    </section>
+
+    <section style="padding: 3rem 2.5rem 5rem;">
+      <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns: minmax(0,1fr) 340px; gap:3rem; align-items:start;">
+        <!-- CONTENIDO -->
+        {contenido ? (
+          <article style="min-width:0;">
+            <p class="geo-answer" style="font-size:1.05rem; color:rgba(255,255,255,0.75); line-height:1.8; margin:0 0 2.5rem;">
+              {contenido.intro}
+            </p>
+            {contenido.secciones.map((seccion) => (
+              <section style="margin-bottom:2.5rem;">
+                <h2 style="font-size:1.35rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.01em; margin:0 0 1rem;">
+                  {seccion.h2}
+                </h2>
+                {seccion.parrafos?.map((p) => (
+                  <p style="font-size:0.92rem; color:rgba(255,255,255,0.6); line-height:1.8; margin:0 0 1rem;">
+                    {p}
+                  </p>
+                ))}
+                {seccion.lista && (
+                  <ul style="padding-left:1.25rem; margin:0 0 1rem;">
+                    {seccion.lista.map((li) => (
+                      <li style="font-size:0.92rem; color:rgba(255,255,255,0.6); line-height:1.8; margin-bottom:0.5rem;">
+                        {li}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+
+            <!-- FAQ -->
+            <section style="margin-top:3rem; padding-top:2rem; border-top:1px solid rgba(255,255,255,0.08);">
+              <h2 style="font-size:1.35rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.01em; margin:0 0 1.25rem;">Preguntas frecuentes</h2>
+              {contenido.faq.map((f) => (
+                <div style="margin-bottom:1.5rem;">
+                  <h3 style="font-size:1rem; color:#fff; font-weight:600; margin:0 0 0.5rem;">{f.pregunta}</h3>
+                  <p style="font-size:0.9rem; color:rgba(255,255,255,0.55); line-height:1.7; margin:0;">{f.respuesta}</p>
+                </div>
+              ))}
+            </section>
+          </article>
+        ) : (
+          <p style="font-size:1rem; color:rgba(255,255,255,0.6); line-height:1.7;">{magnet.promise}</p>
+        )}
+
+        <!-- SIDEBAR CAPTURA -->
+        <aside style="position:sticky; top:2rem; padding:1.75rem; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);">
+          <h2 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; margin:0 0 0.5rem;">
+            {magnet.title}
+          </h2>
+          <p style="font-size:0.85rem; color:rgba(255,255,255,0.5); line-height:1.6; margin:0 0 1.25rem;">
+            Déjanos tu email y te enviamos el resumen + 3 tácticas extras en los próximos días.
+          </p>
+          <LeadMagnetForm slug={magnet.slug} title={magnet.title} ctaLabel="Recibir guía gratis" />
+          <div style="margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid rgba(255,255,255,0.08);">
+            <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.7; margin:0 0 0.75rem;">
+              <strong style="color:#fff;">¿Prefieres hablar ahora?</strong>
+            </p>
+            <a
+              href="https://wa.me/56966929818?text=Hola,%20vi%20un%20recurso%20en%20mtsprz.org%20y%20quiero%20más%20información."
+              target="_blank" rel="noopener noreferrer"
+              style="display:block; text-align:center; padding:0.75rem 1rem; background:#25D366; color:#010101; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none;"
+            >
+              WhatsApp
+            </a>
+          </div>
+        </aside>
+      </div>
+
+      <!-- CTA DIAGNÓSTICO -->
+      <div style="max-width:1100px; margin:2rem auto 0; padding:2.5rem; text-align:center; background:rgba(99,102,241,0.06); border:1px solid rgba(99,102,241,0.25);">
+        <h2 style="font-size:1.5rem; font-family:var(--font-heading); font-weight:700; color:#fff; margin:0 0 0.75rem;">
+          Aplica esto a tu negocio
+        </h2>
+        <p style="font-size:0.9rem; color:rgba(255,255,255,0.6); line-height:1.7; max-width:520px; margin:0 auto 1.5rem;">
+          Revisamos tu web, tu Google Maps y tu presencia en IA, y te dejamos 3 acciones concretas. 20 minutos, sin compromiso.
+        </p>
+        <a href="/diagnostico" style="display:inline-block; padding:0.85rem 2rem; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none;">
+          Quiero mi diagnóstico gratis
+        </a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
