@@ -30,4 +30,4 @@ scripts/whatsapp-browser/.venv/
 scripts/waha/.env
 scripts/waha/.sessions/
 docs/marketing/*
-marketing/
+/marketing/
