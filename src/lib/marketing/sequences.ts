@@ -10,9 +10,13 @@
  * un job manager (Trigger.dev/QStash) sin cambiar la API de esta lib.
  */
 
+import { randomUUID } from "node:crypto";
 import { query, initDb } from "../db";
 import { sendEmail } from "../mail";
 import { sequenceEmail } from "./templates";
+
+const SITE = "https://mtsprz.org";
+const MAX_FAIL_COUNT = 5;
 
 export const SEQUENCE_STEPS = [
   { step: 1, label: "dia-3-caso", delayMs: 3 * 24 * 3600_000 },
@@ -24,10 +28,15 @@ export const SEQUENCE_STEPS = [
 export async function scheduleSequence(email: string, sequenceId = "lm-2026"): Promise<void> {
   await initDb();
   await query(
-    `INSERT INTO lead_sequences (email, sequence_id, step, next_step_at)
-     VALUES ($1, $2, 1, NOW() + interval '3 days')
-     ON CONFLICT (email, sequence_id) DO UPDATE SET status = 'active'`,
-    [email, sequenceId]
+    `INSERT INTO lead_sequences (email, sequence_id, step, next_step_at, unsubscribe_token)
+     VALUES ($1, $2, 1, NOW() + interval '3 days', $3)
+     ON CONFLICT (email, sequence_id) DO UPDATE SET
+       status = 'active',
+       step = 1,
+       next_step_at = NOW() + interval '3 days',
+       fail_count = 0,
+       unsubscribe_token = EXCLUDED.unsubscribe_token`,
+    [email, sequenceId, randomUUID()]
   );
 }
 
@@ -35,14 +44,14 @@ export async function scheduleSequence(email: string, sequenceId = "lm-2026"): P
 export async function processDueSequences(): Promise<number> {
   await initDb();
   const due = await query(
-    `SELECT id, email, sequence_id, step FROM lead_sequences
+    `SELECT id, email, sequence_id, step, unsubscribe_token FROM lead_sequences
      WHERE status = 'active' AND next_step_at <= NOW()
      ORDER BY next_step_at ASC
      LIMIT 200`
   );
 
   let sent = 0;
-  for (const row of due.rows as { id: number; email: string; sequence_id: string; step: number }[]) {
+  for (const row of due.rows as { id: number; email: string; sequence_id: string; step: number; unsubscribe_token: string | null }[]) {
     const stepDef = SEQUENCE_STEPS.find((s) => s.step === row.step);
     if (!stepDef) {
       // Paso inexistente → terminar secuencia
@@ -51,21 +60,38 @@ export async function processDueSequences(): Promise<number> {
     }
 
     const name = row.email.split("@")[0];
+    const unsubscribeUrl = `${SITE}/api/unsubscribe?token=${encodeURIComponent(row.unsubscribe_token ?? "")}`;
     try {
-      await sendEmail({
+      const ok = await sendEmail({
         to: row.email,
         subject: ["Un caso real que hicimos en el sur", "3 cosas que tu competencia no hace (aún)", "Último paso: tu diagnóstico gratis"][stepDef.step - 1],
-        html: sequenceEmail(stepDef.step, name),
+        html: sequenceEmail(stepDef.step, name, unsubscribeUrl),
+        fromName: "Mtsprz",
+        headers: {
+          "List-Unsubscribe": `<${unsubscribeUrl}>, <mailto:contacto@mtsprz.org?subject=unsubscribe>`,
+          "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+        },
       });
+
+      if (!ok) {
+        // Resend falló (sin API key o error) → contar fallos, reintentar en el siguiente cron
+        await query(
+          `UPDATE lead_sequences SET fail_count = fail_count + 1,
+             status = CASE WHEN fail_count + 1 >= $2 THEN 'paused' ELSE status END
+           WHERE id = $1`,
+          [row.id, MAX_FAIL_COUNT]
+        );
+        continue;
+      }
 
       const next = SEQUENCE_STEPS.find((s) => s.step === row.step + 1);
       if (next) {
         await query(
-          `UPDATE lead_sequences SET step = $2, next_step_at = NOW() + ($3 || ' seconds')::interval, last_sent_at = NOW() WHERE id = $1`,
+          `UPDATE lead_sequences SET step = $2, next_step_at = NOW() + ($3 || ' seconds')::interval, last_sent_at = NOW(), fail_count = 0 WHERE id = $1`,
           [row.id, next.step, next.delayMs / 1000]
         );
       } else {
-        await query(`UPDATE lead_sequences SET status = 'done', last_sent_at = NOW() WHERE id = $1`, [row.id]);
+        await query(`UPDATE lead_sequences SET status = 'done', last_sent_at = NOW(), fail_count = 0 WHERE id = $1`, [row.id]);
       }
       sent++;
     } catch (err) {

@@ -71,6 +71,7 @@ export const POST: APIRoute = async ({ request }) => {
       to: email,
       subject: `Tu guía está lista — ${magnet.title}`,
       html: leadMagnetEmail(email, magnet.title, magnet.slug, [magnet.promise, magnet.outcome]),
+      fromName: "Mtsprz",
     });
 
     return new Response(

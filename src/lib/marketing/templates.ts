@@ -57,7 +57,18 @@ export function leadMagnetEmail(email: string, magnetTitle: string, magnetSlug: 
 
 /* ── 2. Secuencia de nurturing (día 3 / 7 / 14) ── */
 
-export function sequenceEmail(step: number, name: string): string {
+function unsubscribeFooter(unsubscribeUrl: string): string {
+  return `¿Ya no quieres recibir estos correos? <a href="${sanitizeHtml(unsubscribeUrl)}" style="color:rgba(250,250,250,0.5);text-decoration:underline">Darte de baja</a>.`;
+}
+
+const DEFAULT_FOOTER = "Mtsprz — Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org";
+
+function footer(unsubscribeUrl?: string): string {
+  return unsubscribeUrl ? `${DEFAULT_FOOTER} · ${unsubscribeFooter(unsubscribeUrl)}` : DEFAULT_FOOTER;
+}
+
+export function sequenceEmail(step: number, name: string, unsubscribeUrl?: string): string {
+  const foot = footer(unsubscribeUrl);
   if (step === 1) {
     return layout(
       "Un caso real que hicimos en el sur",
@@ -68,7 +79,8 @@ export function sequenceEmail(step: number, name: string): string {
          <li style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 8px;line-height:1.6">WhatsApp API que responde solo y agenda</li>
          <li style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 8px;line-height:1.6">IA aplicada (OCR/RAG) para automatizar procesos</li>
        </ul>
-       ${ctaButton(`${SITE}/casos`, "Ver casos")}`
+       ${ctaButton(`${SITE}/casos`, "Ver casos")}`,
+      foot
     );
   }
 
@@ -82,7 +94,8 @@ export function sequenceEmail(step: number, name: string): string {
          <li style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 8px;line-height:1.6"><strong style="color:#fafafa">WhatsApp:</strong> el cliente del sur vive en WhatsApp. Automatiza la primera respuesta.</li>
          <li style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 8px;line-height:1.6"><strong style="color:#fafafa">Precios visibles:</strong> publicar precios en la web filtra y ahorra tiempo.</li>
        </ul>
-       ${ctaButton(`${SITE}/diagnostico`, "Reviso mi negocio gratis")}`
+       ${ctaButton(`${SITE}/diagnostico`, "Reviso mi negocio gratis")}`,
+      foot
     );
   }
 
@@ -92,14 +105,15 @@ export function sequenceEmail(step: number, name: string): string {
      ${paragraph("Este es el momento: los negocios con web rápida + reseñas + WhatsApp + visibilidad en IA (ChatGPT/Perplexity) están capturando clientes que antes iban a la competencia.", "⏳")}
      ${paragraph("Te ofrecemos un diagnóstico de 20 minutos, sin compromiso: revisamos tu web, tu Google Maps y tu presencia en IA, y te dejamos 3 acciones concretas.")}
      ${ctaButton(`${SITE}/diagnostico`, "Agendar mi diagnóstico gratis", "linear-gradient(135deg,#25D366,#128C7E)")}
-     ${paragraph("Si no es buen momento, responde este correo y lo pausamos.", "Nota:")}`
+     ${paragraph("Si no es buen momento, responde este correo y lo pausamos.", "Nota:")}`,
+    foot
   );
 }
 
 /* ── 3. Solicitudes de reseña (J1) ── */
 
 export function reviewRequestEmail(clientName: string, project: string, day: number): string {
-  const reviewUrl = import.meta.env.GOOGLE_REVIEW_URL || "https://g.page/r/mtsprz/review";
+  const reviewUrl = import.meta.env.GOOGLE_REVIEW_URL || "https://g.page/r/CTtH8EKjoy9cEBM/review";
   return layout(
     "¿Nos ayudas con una reseña?",
     `${paragraph(sanitizeHtml(clientName), `Hola ${""}`)}

@@ -1,34 +1,44 @@
 import { Resend } from "resend";
 import { sanitizeHtml } from "./validators";
 
-interface SendContractEmailParams {
+interface SendEmailParams {
   to: string;
   subject: string;
   html: string;
   replyTo?: string;
+  /** Nombre visible del remitente. Default: "Mtsprz Contratos" (contratos). Marketing pasa "Mtsprz". */
+  fromName?: string;
+  /** Email remitente. Default: RESEND_FROM || "contratos@mtsprz.org". */
+  fromEmail?: string;
+  /** Headers extra (ej: List-Unsubscribe para cumplimiento Ley 21.719). */
+  headers?: Record<string, string>;
 }
 
-export async function sendEmail({ to, subject, html, replyTo }: SendContractEmailParams) {
+/** Devuelve true si el email se envió (o se simuló en dev sin API key); false solo si falló de verdad. */
+export async function sendEmail({ to, subject, html, replyTo, fromName, fromEmail, headers }: SendEmailParams): Promise<boolean> {
   const apiKey = import.meta.env.RESEND_API_KEY;
   if (!apiKey) {
     console.log(`[Mail] No RESEND_API_KEY. Would send to ${to}: ${subject}`);
-    return;
+    return true;
   }
 
   const resend = new Resend(apiKey);
-  const from = import.meta.env.RESEND_FROM || "contratos@mtsprz.org";
+  const from = fromEmail || import.meta.env.RESEND_FROM || "contratos@mtsprz.org";
 
   try {
     await resend.emails.send({
-      from: `Mtsprz Contratos <${from}>`,
+      from: `${fromName || "Mtsprz Contratos"} <${from}>`,
       to,
       replyTo: replyTo || from,
       subject,
       html,
+      headers,
     });
     console.log(`[Mail] Sent to ${to}: ${subject}`);
+    return true;
   } catch (err) {
     console.error(`[Mail] Failed to send to ${to}:`, err);
+    return false;
   }
 }
 

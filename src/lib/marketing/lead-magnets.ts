@@ -51,7 +51,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     title: "Guía Google Maps 2026",
     promise: "Cómo aparecer cuando buscan tu negocio en la zona",
     audience: "Negocios locales de Los Lagos y Los Ríos",
-    outcome: "Ficha optimizada paso a paso: fotos, categorías, reseñas, preguntas. El 47% que busca visita o llama ese día.",
+    outcome: "Ficha optimizada paso a paso: fotos, categorías, reseñas, preguntas. El 76% que busca un negocio local lo visita dentro de 24 horas.",
     icon: "map-pin",
     order: 3,
   },

@@ -42,15 +42,20 @@ export async function requestReview(input: ReviewRequestInput): Promise<{ id: nu
   const id = Number(inserted.rows[0].id);
 
   try {
-    await sendEmail({
+    const ok = await sendEmail({
       to: input.clientEmail,
       subject: day === 10 ? `¿Ya nos ayudaste con una reseña? — Mtsprz` : `¿Nos ayudas con una reseña? — Mtsprz`,
       html: reviewRequestEmail(input.clientName, input.project, day),
+      fromName: "Mtsprz",
     });
+    if (!ok) {
+      await query(`UPDATE review_requests SET status = 'failed' WHERE id = $1`, [id]);
+      return { id, status: "failed" };
+    }
     await query(`UPDATE review_requests SET status = 'sent', sent_at = NOW() WHERE id = $1`, [id]);
     return { id, status: "sent" };
   } catch (err) {
-    console.error(`[Review] Fallo email a ${input.clientEmail}:`, err);
+    console.error(`[Review] Error BD a ${input.clientEmail}:`, err);
     await query(`UPDATE review_requests SET status = 'failed' WHERE id = $1`, [id]);
     return { id, status: "failed" };
   }

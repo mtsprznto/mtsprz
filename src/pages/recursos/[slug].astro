@@ -101,6 +101,22 @@ const url = `${site}/recursos/${magnet.slug}`;
                 </div>
               ))}
             </section>
+
+            <!-- Fuentes primarias de las cifras citadas -->
+            {contenido.fuentes && contenido.fuentes.length > 0 && (
+              <section style="margin-top:2.5rem; padding-top:2rem; border-top:1px solid rgba(255,255,255,0.08);">
+                <h2 style="font-size:0.85rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.4); font-weight:600; margin:0 0 1rem;">Fuentes</h2>
+                <ul style="padding-left:1.25rem; margin:0;">
+                  {contenido.fuentes.map((f) => (
+                    <li style="font-size:0.85rem; color:rgba(255,255,255,0.5); line-height:1.7; margin-bottom:0.5rem;">
+                      <a href={f.url} target="_blank" rel="noopener noreferrer" style="color:rgba(255,255,255,0.65); text-decoration:underline; text-underline-offset:3px;">
+                        {f.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </article>
         ) : (
           <p style="font-size:1rem; color:rgba(255,255,255,0.6); line-height:1.7;">{magnet.promise}</p>

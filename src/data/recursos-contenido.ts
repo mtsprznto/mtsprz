@@ -17,6 +17,8 @@ export interface RecursoContenido {
   intro: string;
   secciones: RecursoSeccion[];
   faq: { pregunta: string; respuesta: string }[];
+  /** Fuentes primarias de las cifras citadas — se renderizan como lista al final. */
+  fuentes?: { label: string; url: string }[];
 }
 
 export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
@@ -83,7 +85,7 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
         h2: "8. Contenido que responde preguntas reales",
         parrafos: [
           "Escribe lo que tu cliente pregunta, no lo que tú quieres decir. '¿Cuánto cuesta una web en Osorno?' '¿Cuánto tarda?' — respondidas con precios y plazos directos.",
-          "Este contenido es lo que las IA citan: los sitios con datos propios y respuestas directas tienen hasta 41% más visibilidad en ChatGPT y Perplexity.",
+          "Este contenido es lo que las IA citan: los sitios con datos propios y respuestas directas tienen hasta 40% más visibilidad en ChatGPT y Perplexity (estudio GEO de Princeton, KDD 2024).",
         ],
       },
     ],
@@ -103,6 +105,24 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
       {
         pregunta: "¿La Ley 21.719 aplica a mi web de pyme?",
         respuesta: "Sí, desde el 1 de diciembre de 2026. Si tu web tiene formularios, analytics o WhatsApp, debes informar el tratamiento de datos y pedir consentimiento.",
+      },
+    ],
+    fuentes: [
+      {
+        label: "Google — Mobile Site Speed Playbook (2016): 53% abandona si la carga tarda más de 3 segundos",
+        url: "https://www.thinkwithgoogle.com/_qs/documents/3975/c676a_Google_MobileSiteSpeed_Playbook_v2.1_digital_RD1XArd.pdf",
+      },
+      {
+        label: "Princeton — GEO: Generative Engine Optimization (KDD 2024): hasta +40% de visibilidad en IA",
+        url: "https://collaborate.princeton.edu/en/publications/geo-generative-engine-optimization",
+      },
+      {
+        label: "BrightLocal — Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
+        url: "https://www.brightlocal.com/insights/local-consumer-review-survey/",
+      },
+      {
+        label: "Biblioteca del Congreso Nacional de Chile — Ley 21.719 (protección de datos personales)",
+        url: "https://www.bcn.cl/leychile/navegar?idNorma=1209272",
       },
     ],
   },
@@ -205,15 +225,21 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
         respuesta: "Con WhatsApp Business API oficial (no cuentas clonadas) sí. La API oficial no arriesga tu número y soporta respuestas inteligentes, etiquetas y agenda. Exige proveedor oficial y API key, no un bot en tu teléfono.",
       },
     ],
+    fuentes: [
+      {
+        label: "BrightLocal — Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
+        url: "https://www.brightlocal.com/insights/local-consumer-review-survey/",
+      },
+    ],
   },
 
   "guia-google-maps-2026": {
     slug: "guia-google-maps-2026",
     metaTitle: "Guía Google Maps 2026: cómo aparecer cuando buscan tu negocio",
     metaDescription:
-      "Optimización de Google Business Profile paso a paso para negocios de Los Lagos y Los Ríos: categorías, fotos, reseñas, publicaciones y el 47% que visita o llama el mismo día.",
+      "Optimización de Google Business Profile paso a paso para negocios de Los Lagos y Los Ríos: categorías, fotos, reseñas, publicaciones y el 76% que visita el mismo día.",
     intro:
-      "Cuando alguien en Puerto Varas, Osorno o Puerto Montt busca 'restaurante cerca de mí' o 'servicio técnico en Osorno', Google Maps decide quién aparece en el top 3. Esas 3 fichas se llevan casi todos los clics: el 47% de quienes buscan un negocio local lo visita o llama el mismo día. Esta guía te muestra cómo ser uno de esos 3.",
+      "Cuando alguien en Puerto Varas, Osorno o Puerto Montt busca 'restaurante cerca de mí' o 'servicio técnico en Osorno', Google Maps decide quién aparece en el top 3. Esas 3 fichas se llevan casi todos los clics: el 76% de quienes buscan un negocio local lo visita dentro de 24 horas (Google). Esta guía te muestra cómo ser uno de esos 3.",
     secciones: [
       {
         h2: "1. Reclama y verifica tu ficha",
@@ -288,6 +314,16 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
       {
         pregunta: "¿Cuánto cobra una agencia por el SEO de Google Maps?",
         respuesta: "En el sur de Chile, una optimización de Google Business Profile parte en $50.000 CLP y la gestión mensual (fotos, publicaciones, reseñas) entre $80.000 y $150.000 CLP.",
+      },
+    ],
+    fuentes: [
+      {
+        label: "Google/Think with Google — How Mobile Search Connects Consumers to Stores (2016): 76% visita en un día",
+        url: "https://www.thinkwithgoogle.com/_qs/documents/620/mobile-search-trends-consumers-to-stores.pdf",
+      },
+      {
+        label: "BrightLocal — Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
+        url: "https://www.brightlocal.com/insights/local-consumer-review-survey/",
       },
     ],
   },
