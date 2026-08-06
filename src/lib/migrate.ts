@@ -1,6 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 
-// Migrations embebidas — no usar fs.readdirSync (falla en Vercel serverless)
+// Migrations embebidas · no usar fs.readdirSync (falla en Vercel serverless)
 const MIGRATIONS: { name: string; sql: string }[] = [
   {
     name: "001_initial",

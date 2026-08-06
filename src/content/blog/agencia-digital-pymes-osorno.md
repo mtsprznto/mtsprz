@@ -65,4 +65,4 @@ Trabajamos con negocios de todos los tamanos, pero nos especializamos en pymes p
 
 Un sitio web profesional con Astro se entrega en 2 a 4 semanas, dependiendo de la cantidad de paginas y funcionalidades. El SEO comienza a mostrar resultados entre 2 y 4 meses.
 
-[Contacta a nuestra agencia digital en Osorno](/contacto) — conversemos sin compromiso sobre tu proyecto digital.
+[Contacta a nuestra agencia digital en Osorno](/contacto) · conversemos sin compromiso sobre tu proyecto digital.

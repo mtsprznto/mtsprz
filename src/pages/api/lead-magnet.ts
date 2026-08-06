@@ -1,5 +1,5 @@
 /**
- * POST /api/lead-magnet — Captura de email por lead magnet (J4).
+ * POST /api/lead-magnet · Captura de email por lead magnet (J4).
  *
  * Recibe { email, slug } desde los formularios de /recursos y /recursos/[slug].
  * 1. Valida + rate limit (3/hora/IP, patrón del resto de la app)
@@ -69,7 +69,7 @@ export const POST: APIRoute = async ({ request }) => {
     // 3. Email de entrega: resumen + CTA diagnóstico
     await sendEmail({
       to: email,
-      subject: `Tu guía está lista — ${magnet.title}`,
+      subject: `Tu guía está lista · ${magnet.title}`,
       html: leadMagnetEmail(email, magnet.title, magnet.slug, [magnet.promise, magnet.outcome]),
       fromName: "Mtsprz",
     });

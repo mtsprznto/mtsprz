@@ -1,35 +1,134 @@
-<footer class="border-t border-white/5 bg-[#010101]">
-  <div class="mx-auto max-w-6xl px-6 py-10">
-    <div class="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
-      <div class="flex items-center gap-3">
-        <picture>
-          <source srcset="/logo.avif" type="image/avif" />
-          <source srcset="/logo.webp" type="image/webp" />
-          <img src="/logo.jpg" alt="Mtsprz Soluciones Digitales" width="28" height="28" class="rounded-full object-cover" loading="lazy" decoding="async" />
-        </picture>
-        <p class="text-sm text-white/40 font-body">
-          2026 Mtsprz. Puerto Varas, Region de Los Lagos.
+---
+import { MapPin, Phone, Mail, ArrowUpRight } from "@lucide/astro";
+
+const navLinks = [
+  { name: "Servicios", href: "/servicios" },
+  { name: "Portafolio", href: "/portafolio" },
+  { name: "Casos", href: "/casos" },
+  { name: "Blog", href: "/blog" },
+  { name: "Contacto", href: "/contacto" },
+];
+
+const regiones = [
+  { name: "Puerto Varas", href: "/regiones/puerto-varas" },
+  { name: "Osorno", href: "/regiones/osorno" },
+  { name: "Valdivia", href: "/regiones/valdivia" },
+  { name: "Puerto Montt", href: "/regiones/puerto-montt" },
+  { name: "Castro", href: "/regiones/castro" },
+  { name: "Ancud", href: "/regiones/ancud" },
+  { name: "Calbuco", href: "/regiones/calbuco" },
+  { name: "Fresia", href: "/regiones/fresia" },
+  { name: "Chonchi", href: "/regiones/chonchi" },
+  { name: "Frutillar", href: "/regiones/frutillar" },
+  { name: "Purranque", href: "/regiones/purranque" },
+  { name: "Queilén", href: "/regiones/queilen" },
+  { name: "Maullín", href: "/regiones/maullin" },
+  { name: "Llanquihue", href: "/regiones/llanquihue" },
+];
+---
+
+<footer class="border-t border-white/[0.08] bg-[#010101]">
+  <div class="mx-auto max-w-7xl px-6 pb-8 pt-16 md:pt-20">
+    <div class="reveal-group grid gap-12 md:grid-cols-12 md:gap-8">
+
+      <!-- Zona marca: identidad + contacto directo + CTA -->
+      <div class="reveal-item col-span-2 md:col-span-5">
+        <a href="/" class="flex items-center gap-3">
+          <picture>
+            <source srcset="/logo.avif" type="image/avif" />
+            <source srcset="/logo.webp" type="image/webp" />
+            <img src="/logo.jpg" alt="Mtsprz Soluciones Digitales" width="40" height="40" class="h-10 w-10 rounded-full object-cover" loading="lazy" decoding="async" />
+          </picture>
+          <span class="flex flex-col">
+            <span class="font-heading text-xl font-bold tracking-tight text-white">Mtsprz</span>
+            <span class="font-body text-[10px] uppercase tracking-[0.28em] text-white/35">Soluciones Digitales</span>
+          </span>
+        </a>
+
+        <p class="mt-6 max-w-sm font-body text-sm font-light leading-[1.8] text-white/50">
+          Desarrollo web, SEO local y automatizaciones para pymes del sur de Chile.
+          Con base en Puerto Varas, trabajamos con negocios de toda la Región de Los Lagos.
         </p>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/50 font-body">
-        <a href="/servicios" class="transition-colors hover:text-white">Servicios</a>
-        <a href="/portafolio" class="transition-colors hover:text-white">Portafolio</a>
-        <a href="/blog" class="transition-colors hover:text-white">Blog</a>
-        <a href="/contacto" class="transition-colors hover:text-white">Contacto</a>
-        <span class="text-white/20">|</span>
-        <span class="text-[11px] text-white/30 tracking-wide">Regiones:</span>
-        <a href="/regiones/puerto-varas" class="text-[13px] transition-colors hover:text-white">Pto. Varas</a>
-        <a href="/regiones/osorno" class="text-[13px] transition-colors hover:text-white">Osorno</a>
-        <a href="/regiones/valdivia" class="text-[13px] transition-colors hover:text-white">Valdivia</a>
-        <span class="text-white/20">|</span>
+
+        <ul class="mt-8 space-y-3 font-body text-sm text-white/55">
+          <li class="flex items-center gap-3">
+            <MapPin class="h-3.5 w-3.5 shrink-0 text-white/30" />
+            <span>Puerto Varas, Región de Los Lagos</span>
+          </li>
+          <li>
+            <a href="tel:+56966929818" class="flex items-center gap-3 transition-colors hover:text-white">
+              <Phone class="h-3.5 w-3.5 shrink-0 text-white/30" />
+              <span>+56 9 6692 9818</span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:contacto@mtsprz.org" class="flex items-center gap-3 transition-colors hover:text-white">
+              <Mail class="h-3.5 w-3.5 shrink-0 text-white/30" />
+              <span>contacto@mtsprz.org</span>
+            </a>
+          </li>
+        </ul>
+
         <button
-          type="button"
-          id="footer-cookie-prefs"
-          class="text-[13px] transition-colors hover:text-white cursor-pointer bg-transparent border-none p-0 font-body"
+          onclick="window.openCotizarModal()"
+          class="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 font-body text-sm font-medium text-black transition-all hover:scale-[1.03] cursor-pointer"
         >
-          Cookies
+          Cotiza gratis
+          <ArrowUpRight class="h-4 w-4" />
         </button>
       </div>
+
+      <!-- Zona navegación -->
+      <div class="reveal-item col-span-2 md:col-span-3">
+        <h2 class="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30">Navegación</h2>
+        <div class="mt-4 h-px w-full bg-white/[0.08]"></div>
+        <nav class="mt-6 flex flex-wrap gap-x-6 gap-y-3 md:flex-col md:gap-2.5" aria-label="Navegación del pie de página">
+          {
+            navLinks.map((l) => (
+              <a href={l.href} class="nav-link font-body text-sm text-white/50 transition-colors hover:text-white">
+                {l.name}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+
+      <!-- Zona regiones · SEO local -->
+      <div class="reveal-item col-span-2 md:col-span-4">
+        <h2 class="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30">Regiones · SEO Local</h2>
+        <div class="mt-4 h-px w-full bg-white/[0.08]"></div>
+        <div class="mt-6 grid grid-cols-2 gap-x-6 gap-y-2.5">
+          {
+            regiones.map((r) => (
+              <a
+                href={r.href}
+                class="font-body text-[13px] text-white/45 transition-colors hover:text-white hover:underline decoration-white/30 underline-offset-4"
+              >
+                {r.name}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Barra inferior -->
+      <div class="reveal-item col-span-2 mt-2 flex flex-col gap-4 border-t border-white/[0.08] pt-6 md:col-span-12 md:flex-row md:items-center md:justify-between">
+        <p class="font-body text-xs text-white/30">
+          © 2026 Mtsprz · Puerto Varas, Región de Los Lagos
+        </p>
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-2 font-body text-xs text-white/35">
+          <a href="/politica-de-cookies" class="transition-colors hover:text-white">Política de cookies</a>
+          <span class="h-3 w-px bg-white/[0.12]"></span>
+          <button
+            type="button"
+            id="footer-cookie-prefs"
+            class="cursor-pointer bg-transparent p-0 font-body text-xs text-white/35 transition-colors hover:text-white border-none"
+          >
+            Cookies
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 </footer>

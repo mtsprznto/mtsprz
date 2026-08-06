@@ -8,7 +8,7 @@
  *   node scripts/optimize-images.mjs --dry-run     # solo mostrar qué se convertirá
  *   node scripts/optimize-images.mjs --quality 80  # calidad (default: 80)
  *
- * Requisitos: sharp-cli instalado como devDependency (ya lo está)
+ * Requisitos: sharp instalado como devDependency (ya lo está)
  *
  * Autor: Mtsprz SEO
  * Fecha: 2026-07
@@ -16,8 +16,8 @@
 
 import fs from "fs";
 import path from "path";
-import { execSync } from "child_process";
 import { fileURLToPath } from "url";
+import sharp from "sharp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -35,7 +35,7 @@ const IMAGES = [
   { src: "logo_v1.png" },
 ];
 
-const SHARP_BIN = path.join(ROOT, "node_modules", ".bin", "sharp");
+const SHARP_QUALITY = QUALITY;
 
 function getSize(filePath) {
   try {
@@ -46,12 +46,18 @@ function getSize(filePath) {
   }
 }
 
-function convert(srcPath, destPath) {
+async function convert(srcPath, destPath) {
   const srcSize = getSize(srcPath);
-  const sharp = `"${SHARP_BIN}"`;
-  const cmd = `${sharp} -i "${srcPath}" -o "${destPath}" --quality ${QUALITY}`;
-  console.log(`     ${cmd}`);
-  execSync(cmd, { stdio: "pipe", cwd: ROOT, timeout: 60000 });
+  const ext = path.extname(destPath).toLowerCase();
+  const pipeline = sharp(srcPath, { failOn: "none" });
+  if (ext === ".webp") {
+    pipeline.webp({ quality: SHARP_QUALITY });
+  } else if (ext === ".avif") {
+    pipeline.avif({ quality: SHARP_QUALITY });
+  } else {
+    pipeline.jpeg({ quality: SHARP_QUALITY });
+  }
+  await pipeline.toFile(destPath);
   const newSize = getSize(destPath);
   const srcKB = parseFloat(srcSize);
   const newKB = parseFloat(newSize);
@@ -83,7 +89,7 @@ for (const img of IMAGES) {
     if (DRY_RUN) {
       console.log(`     ⏳ → ${parsed.name}.webp`);
     } else {
-      try { convert(srcPath, webpPath); } catch (e) { console.error(`     ❌ WebP: ${e.message.split('\n')[0]}`); }
+      try { await convert(srcPath, webpPath); } catch (e) { console.error(`     ❌ WebP: ${e.message.split('\n')[0]}`); }
     }
   } else {
     console.log(`     ✅ ${parsed.name}.webp ya existe (${getSize(webpPath)})`);
@@ -93,7 +99,7 @@ for (const img of IMAGES) {
     if (DRY_RUN) {
       console.log(`     ⏳ → ${parsed.name}.avif`);
     } else {
-      try { convert(srcPath, avifPath); } catch (e) { console.error(`     ❌ AVIF: ${e.message.split('\n')[0]}`); }
+      try { await convert(srcPath, avifPath); } catch (e) { console.error(`     ❌ AVIF: ${e.message.split('\n')[0]}`); }
     }
   } else {
     console.log(`     ✅ ${parsed.name}.avif ya existe (${getSize(avifPath)})`);

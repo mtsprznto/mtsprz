@@ -8,7 +8,7 @@ image: "/blog/og-empresar-google-maps-osorno.svg"
 tags: ["SEO local", "Osorno", "Google Maps", "Google Business Profile", "pymes", "Región de Los Lagos"]
 ---
 
-## Tu negocio en Osorno no aparece en Google Maps — esto es lo que pasa
+## Tu negocio en Osorno no aparece en Google Maps · esto es lo que pasa
 
 Si tienes un negocio en Osorno y no apareces en los primeros resultados de Google Maps, estas perdiendo clientes todos los dias. Osorno es la segunda ciudad mas grande de la Region de Los Lagos, con mas de 160.000 habitantes y una economia activa que depende del comercio local.
 
@@ -19,7 +19,7 @@ Cada vez que alguien busca "taller mecanico en Osorno", "dentista Osorno" o "fer
 Si aun no tienes ficha de Google:
 1. Ve a [business.google.com](https://business.google.com)
 2. Haz clic en "Administrar ahora"
-3. Busca tu negocio — si no aparece, crea uno nuevo
+3. Busca tu negocio · si no aparece, crea uno nuevo
 4. Selecciona la categoria mas especifica (ej: "Taller mecanico", no "Negocio")
 5. Ingresa direccion, telefono y horarios
 6. Verifica por telefono, email o tarjeta
@@ -109,7 +109,7 @@ Asegurate de que NAP sea identico en todos los directorios.
 ## Errores comunes en Osorno
 
 1. **Direccion incompleta**: Muchos negocios no ponen numero de calle
-2. **Horarios incorrectos**: Llegas con el local cerrado — cliente se va y no vuelve
+2. **Horarios incorrectos**: Llegas con el local cerrado · cliente se va y no vuelve
 3. **Sin fotos**: Google prioriza negocios con fotos actualizadas
 4. **Resenas ignoradas**: Negocios que no responden resenas pierden posicion
 5. **Ficha duplicada**: Si tu negocio tiene multiples fichas, reporta las duplicadas

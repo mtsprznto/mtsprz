@@ -104,7 +104,7 @@ export const DELETE: APIRoute = async ({ params, locals, request }) => {
   console.log("[DELETE] id:", params.id, "user:", locals.user?.role ?? "none", "origin:", request.headers.get("origin"));
 
   if (!locals.user || locals.user.role !== "super_admin") {
-    console.log("[DELETE] auth fail — user:", JSON.stringify(locals.user));
+    console.log("[DELETE] auth fail · user:", JSON.stringify(locals.user));
     return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403, headers: JSON_HEADERS });
   }
 

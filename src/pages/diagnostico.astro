@@ -4,12 +4,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { FAQ_PRECIOS } from "../data/faq-precios";
+import { CASOS } from "../data/casos";
 
 const site = "https://mtsprz.org";
+// Prueba social honesta (J1): casos internos declarados, sin inventar reseñas.
+const pruebaSocial = CASOS.filter((c) => c.tipo === "Caso interno").slice(0, 2);
 ---
 
 <BaseLayout
-  title="Diagnóstico Digital Gratis | Web, Google Maps e IA — Mtsprz"
+  title="Diagnóstico Digital Gratis | Web, Google Maps e IA · Mtsprz"
   description="Diagnóstico gratuito de 20 minutos para pymes del sur de Chile: revisamos tu web, tu Google Maps y tu presencia en ChatGPT/Perplexity, y te dejamos 3 acciones concretas."
   canonical="https://mtsprz.org/diagnostico"
   breadcrumbs={[{ name: "Diagnóstico", path: "/diagnostico" }]}
@@ -97,15 +100,29 @@ const site = "https://mtsprz.org";
             Completa el formulario y te contactamos por WhatsApp en menos de 24 horas hábiles.
           </p>
 
+          <div style="margin-bottom:1.5rem; padding:1rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06);">
+            <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.25); margin:0 0 0.75rem;">Proyectos reales del equipo</p>
+            {pruebaSocial.map((c) => (
+              <a
+                href={`/casos/${c.slug}`}
+                style="display:flex; justify-content:space-between; align-items:baseline; gap:1rem; padding:0.6rem 0; border-top:1px solid rgba(255,255,255,0.06); text-decoration:none;"
+              >
+                <span style="font-size:0.8rem; color:#fff; line-height:1.4;">{c.cliente}</span>
+                <span style="font-size:0.8rem; color:var(--accent); white-space:nowrap; font-weight:600;">{c.metricas[0].valor}</span>
+              </a>
+            ))}
+            <a
+              href="/casos"
+              style="display:inline-block; margin-top:0.5rem; font-size:0.8rem; color:rgba(255,255,255,0.6); text-decoration:underline; text-underline-offset:3px;"
+            >
+              Ver todos los casos →
+            </a>
+          </div>
+
           <form id="dx-form" class="space-y-4" novalidate>
             <div>
               <label for="dx-name" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Nombre *</label>
               <input id="dx-name" name="name" type="text" required maxlength="255" placeholder="Tu nombre"
-                class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
-            </div>
-            <div>
-              <label for="dx-email" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Email</label>
-              <input id="dx-email" name="email" type="email" maxlength="254" placeholder="correo@ejemplo.cl"
                 class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
             </div>
             <div>
@@ -114,29 +131,33 @@ const site = "https://mtsprz.org";
                 class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors" />
             </div>
             <div>
-              <label for="dx-service" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">¿Qué te interesa? *</label>
-              <select id="dx-service" name="service_interest" required
+              <label for="dx-rubro" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Rubro de tu negocio *</label>
+              <select id="dx-rubro" name="rubro" required
                 class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body focus:outline-none focus:border-accent/50 transition-colors">
-                <option value="diagnostico">Diagnóstico completo</option>
-                <option value="web">Web / landing</option>
-                <option value="seo">SEO / Google Maps</option>
-                <option value="whatsapp">Bot de WhatsApp</option>
-                <option value="automation">Automatización con IA</option>
+                <option value="">Selecciona tu rubro</option>
+                <option value="inmobiliaria">Inmobiliaria / corretaje</option>
+                <option value="hospedaje">Cabañas / hospedaje / arriendo diario</option>
+                <option value="restaurante">Gastronomía / restaurante</option>
+                <option value="hotel">Hotel / alojamiento</option>
+                <option value="clinica">Salud / clínica</option>
+                <option value="contador">Contabilidad / legal</option>
+                <option value="retail">Comercio / retail</option>
+                <option value="otro">Otro</option>
               </select>
             </div>
             <div>
               <label for="dx-message" class="block text-[11px] font-medium text-white/40 tracking-[0.1em] uppercase mb-1.5">Cuéntanos de tu negocio</label>
-              <textarea id="dx-message" name="message" maxlength="5000" rows="3" placeholder="Ej: tenemos una cafetería en Osorno y queremos aparecer en Google cuando buscan 'cafetería Osorno'."
+              <textarea id="dx-message" name="message" maxlength="5000" rows="3" placeholder="Ej: tenemos una inmobiliaria en Puerto Varas y queremos que los compradores nos encuentren cuando buscan 'departamentos en Puerto Varas'."
                 class="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.06] text-white text-sm font-body placeholder:text-white/15 focus:outline-none focus:border-accent/50 transition-colors resize-y min-h-[80px]"></textarea>
             </div>
 
             <button type="submit" id="dx-submit"
               class="w-full px-6 py-3 bg-accent text-[#010101] text-[11px] font-bold tracking-[0.15em] uppercase transition-all duration-300 hover:bg-accent/90 disabled:opacity-30 disabled:cursor-not-allowed">
-              Quiero mi diagnóstico
+              Recibir diagnóstico gratis
             </button>
 
             <p class="text-[10px] text-white/30 leading-relaxed">
-              Al enviar aceptas nuestra política de privacidad (Ley 21.719). Solo usamos tus datos para responderte.
+              Te dejamos 3 acciones concretas, las hagas con nosotros o no. Al enviar aceptas nuestra política de privacidad (Ley 21.719). Solo usamos tus datos para responderte.
             </p>
 
             <div id="dx-status" class="hidden text-sm"></div>
@@ -154,16 +175,40 @@ const site = "https://mtsprz.org";
       var submitBtn = document.getElementById("dx-submit");
       var statusEl = document.getElementById("dx-status");
 
+      // Scoring lead caliente/frío (Día 1 piloto CRO · 23-cro-medicion-2026.md).
+      // Señales replican la validación del server (lib/phone.ts) y el target de rubros.
+      // Rubros target = público seguro 24-publico-seguro.md: inmobiliaria + hospedaje primero.
+      var TARGET_RUBROS = ["inmobiliaria", "hospedaje", "restaurante", "hotel", "clinica", "contador", "retail"];
+
+      function scoreLead(rubro, message, phone) {
+        var score = 0;
+        if (TARGET_RUBROS.indexOf(rubro) !== -1) score += 25;
+        if (message && message.length >= 80) score += 20;
+        var digits = phone.replace(/\D/g, "");
+        score += digits.length >= 9 ? 15 : -20;
+        score += /[?&]utm_campaign=/.test(window.location.search) ? 15 : 5;
+        return Math.max(0, Math.min(100, score));
+      }
+
+      function priorityOf(score) {
+        return score >= 70 ? "high" : score >= 40 ? "normal" : "low";
+      }
+
       form.addEventListener("submit", async function (e) {
         e.preventDefault();
         var name = form.querySelector("[name='name']").value.trim();
         var phone = form.querySelector("[name='phone']").value.trim();
-        if (!name || !phone) {
+        var rubro = form.querySelector("[name='rubro']").value || "";
+        var message = form.querySelector("[name='message']").value.trim() || null;
+        if (!name || !phone || !rubro) {
           statusEl.className = "text-sm text-red-400";
           statusEl.textContent = "Completa los campos obligatorios.";
           statusEl.classList.remove("hidden");
           return;
         }
+
+        var score = scoreLead(rubro, message, phone);
+        var priority = priorityOf(score);
 
         submitBtn.disabled = true;
         submitBtn.textContent = "Enviando...";
@@ -176,10 +221,15 @@ const site = "https://mtsprz.org";
             body: JSON.stringify({
               name: name,
               phone: phone,
-              email: form.querySelector("[name='email']").value.trim() || null,
               source: "web",
-              service_interest: form.querySelector("[name='service_interest']").value || "diagnostico",
-              message: form.querySelector("[name='message']").value.trim() || null,
+              service_interest: "diagnostico",
+              message: message,
+              metadata: {
+                score: score,
+                priority: priority,
+                rubro: rubro,
+                piloto: "cro-dia1",
+              },
             }),
           });
           var data = await res.json();
@@ -195,8 +245,20 @@ const site = "https://mtsprz.org";
           statusEl.className = "text-sm text-red-400";
           statusEl.textContent = "Error de conexión. Intenta de nuevo.";
         }
+
+        // Evento de funnel (consent-gated vía tracking.ts) — sin datos personales.
+        if (window.trackEvent) {
+          window.trackEvent("form_submit_diagnostico", {
+            source: "web",
+            rubro: rubro,
+            score: score,
+            priority: priority,
+            page: window.location.pathname,
+          });
+        }
+
         submitBtn.disabled = false;
-        submitBtn.textContent = "Quiero mi diagnóstico";
+        submitBtn.textContent = "Recibir diagnóstico gratis";
         statusEl.classList.remove("hidden");
       });
     })();

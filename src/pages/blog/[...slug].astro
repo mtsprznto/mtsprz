@@ -112,15 +112,21 @@ const readMin = readingTime(post.body || "");
 const postUrl = `https://mtsprz.org/blog/${slug}`;
 const shareText = encodeURIComponent(post.data.title);
 
-// Build ToC from headings (h2 and h3 only)
+// Build ToC from headings (h2 and h3 only) · excluye el heading que duplica el título del hero
+const normalizeHeading = (text: string) =>
+  text.toLowerCase().replace(/[^a-z0-9áéíóúñü]+/g, " ").trim();
+const normalizedTitle = normalizeHeading(post.data.title);
 const tocItems = headings
   .filter((h: any) => h.depth === 2 || h.depth === 3)
   .map((h: any) => ({
     depth: h.depth,
     text: h.text,
     slug: h.slug,
-  }));
+  }))
+  .filter((item: any) => normalizeHeading(item.text) !== normalizedTitle);
 const hasToc = tocItems.length >= 2;
+const hideFirstHeading =
+  headings.length > 0 && normalizeHeading(headings[0].text) === normalizedTitle;
 
 const postImg = post.data.image || "/logo.jpg";
 ---
@@ -191,7 +197,7 @@ const postImg = post.data.image || "/logo.jpg";
   </div>
 
   <main id="main-content">
-    <!-- Hero — video background with post image overlay -->
+    <!-- Hero · video background with post image overlay -->
     <section class="relative w-screen h-[85dvh] md:h-screen overflow-hidden bg-[#010101]">
       <!-- Post featured image as background layer -->
       <div
@@ -252,7 +258,7 @@ const postImg = post.data.image || "/logo.jpg";
         </div>
       </div>
 
-      <!-- Breadcrumb — integrado en hero, esquina inferior -->
+      <!-- Breadcrumb · integrado en hero, esquina inferior -->
       <div class="absolute bottom-6 md:bottom-8 left-0 right-0 z-20 px-6">
         <div class="mx-auto max-w-6xl">
           <Breadcrumbs items={[
@@ -263,8 +269,8 @@ const postImg = post.data.image || "/logo.jpg";
       </div>
     </section>
 
-    <!-- Article content — editorial layout with sidebar ToC -->
-    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
+    <!-- Article content · editorial layout with sidebar ToC -->
+    <section class="relative bg-[#0A0A0A] w-full">
       <!-- Background -->
       <div class="absolute inset-0" style="background: #0A0A0A;" />
       <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at 30% 0%, #6366f110 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, #8b5cf606 0%, transparent 50%);" />
@@ -286,7 +292,7 @@ const postImg = post.data.image || "/logo.jpg";
               </a>
             </nav>
 
-            <!-- Author + meta — editorial card -->
+            <!-- Author + meta · editorial card -->
             <div class="reveal-item mb-8 md:mb-10 p-5 md:p-6 rounded-xl bg-white/[0.02] border border-white/[0.04]">
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
@@ -308,7 +314,31 @@ const postImg = post.data.image || "/logo.jpg";
               </div>
             </div>
 
-            <!-- GEO Answer Block — destacado editorial (speakable for Google Assistant) -->
+            <!-- Mobile ToC · details nativo, sin JS · sticky para no perderlo al leer -->
+            {
+              hasToc && (
+                <div class="sticky top-16 z-20 lg:hidden mb-8 md:mb-10">
+                  <details class="mobile-toc reveal-item rounded-xl bg-[#141416]/95 backdrop-blur-md border border-white/[0.08] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.45)]">
+                    <summary class="group flex items-center justify-between px-5 py-4 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                      <span class="text-[10px] uppercase tracking-[0.2em] text-white/40 font-body font-medium">En este artículo</span>
+                      <svg class="w-3.5 h-3.5 text-white/30 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </summary>
+                    <nav class="px-5 pb-5 pt-4 space-y-2.5 border-t border-white/[0.04] max-h-[60vh] overflow-y-auto">
+                      {tocItems.map((item: any) => (
+                        <a
+                          href={`#${item.slug}`}
+                          class={`block text-[13px] font-body leading-snug transition-colors duration-200 hover:text-white/70 ${item.depth === 3 ? "pl-4 text-white/30" : "text-white/45"}`}
+                        >
+                          {item.text}
+                        </a>
+                      ))}
+                    </nav>
+                  </details>
+                </div>
+              )
+            }
+
+            <!-- GEO Answer Block · destacado editorial (speakable for Google Assistant) -->
             <div class="reveal-item mb-8 md:mb-10">
               <div class="geo-answer relative pl-5 md:pl-6 border-l-2 border-[#6366f1]/40">
                 <p class="text-[10px] uppercase tracking-[0.2em] text-[#6366f1]/70 font-body font-medium mb-2">Respuesta rápida</p>
@@ -318,12 +348,12 @@ const postImg = post.data.image || "/logo.jpg";
               </div>
             </div>
 
-            <!-- Article body — prose editorial -->
-            <div class="reveal-item prose-blog max-w-none">
+            <!-- Article body · prose editorial -->
+            <div class={`reveal-item prose-blog max-w-none${hideFirstHeading ? " hide-first-heading" : ""}`}>
               <Content />
             </div>
 
-            <!-- Author footer + sharing — enhanced editorial -->
+            <!-- Author footer + sharing · enhanced editorial -->
             <footer class="reveal-item mt-12 md:mt-16 pt-8 md:pt-10 border-t border-white/[0.06]">
               <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
                 <div class="flex items-center gap-3">
@@ -374,11 +404,11 @@ const postImg = post.data.image || "/logo.jpg";
             </footer>
           </article>
 
-          <!-- Sidebar — Table of Contents (desktop only) -->
+          <!-- Sidebar · Table of Contents (desktop only) -->
           {
             hasToc && (
               <aside class="hidden lg:block w-64 xl:w-72 shrink-0">
-                <div class="sticky top-24">
+                <div class="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto toc-scroll pr-1">
                   <p class="text-[10px] uppercase tracking-[0.2em] text-white/25 font-body font-medium mb-4">En este artículo</p>
                   <nav class="toc-sidebar space-y-1">
                     {tocItems.map((item: any) => (
@@ -417,7 +447,7 @@ const postImg = post.data.image || "/logo.jpg";
       <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
     </section>
 
-    <!-- Related posts — editorial cards with images -->
+    <!-- Related posts · editorial cards with images -->
     {
       related.length > 0 && (
         <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
@@ -488,7 +518,7 @@ const postImg = post.data.image || "/logo.jpg";
       )
     }
 
-    <!-- CTA — contextual según tema del post -->
+    <!-- CTA · contextual según tema del post -->
     <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
       <div class="absolute inset-0" style="background: #0A0A0A;" />
       <div class="absolute inset-0 opacity-50" style={`background: radial-gradient(ellipse at 50% 0%, ${ctaConfig.accent}28 0%, transparent 50%);`} />
@@ -510,7 +540,7 @@ const postImg = post.data.image || "/logo.jpg";
           <div class="reveal-item mx-auto my-8 w-12 h-[1px]" style={`background: linear-gradient(90deg, transparent, ${ctaConfig.accent}66, transparent);`} />
 
           <p class="reveal-item mx-auto max-w-lg text-sm md:text-base text-white/50 font-body font-light leading-relaxed">
-            Somos Mtsprz — agencia digital del sur de Chile. Conversemos sin compromiso sobre cómo podemos ayudarte.
+            Somos Mtsprz · agencia digital del sur de Chile. Conversemos sin compromiso sobre cómo podemos ayudarte.
           </p>
 
           <div class="reveal-item mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -560,6 +590,28 @@ const postImg = post.data.image || "/logo.jpg";
           setTimeout(function() { btn.innerHTML = original; }, 2000);
         });
       });
+    }
+
+    // Heading anchor links · permalink "#" visible on hover
+    var prose = document.querySelector(".prose-blog");
+    if (prose) {
+      prose.querySelectorAll("h2[id], h3[id]").forEach(function(heading) {
+        if (heading.querySelector(".heading-anchor")) return;
+        var anchor = document.createElement("a");
+        anchor.href = "#" + heading.id;
+        anchor.className = "heading-anchor";
+        anchor.setAttribute("aria-label", "Enlace directo: " + heading.textContent.trim());
+        anchor.textContent = "#";
+        heading.appendChild(anchor);
+      });
+    }
+
+    // Mobile ToC auto-close on scroll · no tapar la lectura
+    var mobileToc = document.querySelector(".mobile-toc");
+    if (mobileToc) {
+      window.addEventListener("scroll", function() {
+        if (mobileToc.open && window.scrollY > 100) mobileToc.open = false;
+      }, { passive: true });
     }
 
     // Reading progress bar

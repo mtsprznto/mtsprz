@@ -9,7 +9,7 @@ export const prerender = false;
 
 const ADMIN_EMAIL = import.meta.env.RESEND_TO || "contacto@mtsprz.org";
 
-/** GET /api/leads — List leads (admin only) */
+/** GET /api/leads · List leads (admin only) */
 export const GET: APIRoute = async ({ locals, url }) => {
   if (!locals.user || locals.user.role !== "super_admin") {
     return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403 });
@@ -52,7 +52,7 @@ export const GET: APIRoute = async ({ locals, url }) => {
   }
 };
 
-/** POST /api/leads — Create lead (public, from forms; admin bypasses rate limit) */
+/** POST /api/leads · Create lead (public, from forms; admin bypasses rate limit) */
 export const POST: APIRoute = async ({ request, locals }) => {
   // Admin (prospector sync, manual creation) bypasses the public rate limit
   const isAdmin = locals.user?.role === "super_admin";
@@ -130,13 +130,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
 
     // Notify admin via WhatsApp
-    notifyAdmin(lead.name, phone || email || "—", serviceInterest, message).catch(() => {});
+    notifyAdmin(lead.name, phone || email || "·", serviceInterest, message).catch(() => {});
 
     // Email de confirmación al prospecto (si dejó correo)
     if (lead.email) {
       await sendEmail({
         to: lead.email,
-        subject: "Recibimos tu solicitud — diagnóstico gratis",
+        subject: "Recibimos tu solicitud · diagnóstico gratis",
         html: leadReceivedEmail(lead.name, serviceInterest),
         fromName: "Mtsprz",
       });

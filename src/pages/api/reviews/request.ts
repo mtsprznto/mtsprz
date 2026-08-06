@@ -1,5 +1,5 @@
 /**
- * POST /api/reviews/request — Solicitud manual de reseña Google (J1).
+ * POST /api/reviews/request · Solicitud manual de reseña Google (J1).
  *
  * Admin-only. Al entregar un proyecto se llama con day=3 (entusiasmo) y
  * a los 10 días con day=10 (recordatorio). La tabla review_requests

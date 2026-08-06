@@ -14,15 +14,15 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
   <!-- Stats: visual summary -->
   <div class="flex flex-wrap gap-px bg-white/[0.04] mb-8">
     <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
-      <div class="font-heading text-xl font-bold text-white" id="statTotal">—</div>
+      <div class="font-heading text-xl font-bold text-white" id="statTotal">·</div>
       <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Total</div>
     </div>
     <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
-      <div class="font-heading text-xl font-bold text-indigo-300" id="statCompany">—</div>
+      <div class="font-heading text-xl font-bold text-indigo-300" id="statCompany">·</div>
       <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Con Empresa</div>
     </div>
     <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
-      <div class="font-heading text-xl font-bold text-emerald-400" id="statRut">—</div>
+      <div class="font-heading text-xl font-bold text-emerald-400" id="statRut">·</div>
       <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Con RUT</div>
     </div>
   </div>
@@ -169,7 +169,7 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
   <div class="relative w-full max-w-sm mx-4 bg-[#070708] border border-white/[0.06] shadow-2xl p-6 text-center">
     <svg class="w-10 h-10 text-red-400/40 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
     <p class="text-sm text-white/50 font-body mb-1">¿Eliminar cliente?</p>
-    <p id="deleteClientName" class="text-xs text-white/20 font-body mb-5">—</p>
+    <p id="deleteClientName" class="text-xs text-white/20 font-body mb-5">·</p>
     <div class="flex items-center gap-3">
       <button id="deleteConfirm" class="flex-1 py-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-[11px] font-medium tracking-wider uppercase transition-all border border-red-500/20 hover:border-red-500/40">
         Eliminar
@@ -194,7 +194,7 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
   }
 
   function formatDate(d) {
-    if (!d) return "—";
+    if (!d) return "·";
     try {
       var dt = new Date(d);
       return dt.toLocaleDateString("es-CL", { year: "numeric", month: "short", day: "numeric" });

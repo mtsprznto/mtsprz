@@ -5,7 +5,7 @@ export const prerender = false;
 
 const templates = [
   {
-    name: "Proyecto Único — Desarrollo Web",
+    name: "Proyecto Único · Desarrollo Web",
     type: "proyecto_unico",
     description: "Para proyectos de desarrollo web: landing page, sitio profesional, ecommerce, etc.",
     content_json: {
@@ -15,7 +15,7 @@ const templates = [
     },
   },
   {
-    name: "Servicio Recurrente — SEO/Marketing",
+    name: "Servicio Recurrente · SEO/Marketing",
     type: "recurrente",
     description: "Para servicios mensuales: SEO local, redes sociales, Google Ads, mantenimiento.",
     content_json: {
@@ -26,7 +26,7 @@ const templates = [
     },
   },
   {
-    name: "Jornada Dedicada — Remoto",
+    name: "Jornada Dedicada · Remoto",
     type: "jornada_dedicada",
     description: "Para clientes con horario fijo, como Blast-up Consulting Spa.",
     content_json: {
@@ -37,7 +37,7 @@ const templates = [
     },
   },
   {
-    name: "Diseño Gráfico — Proyecto",
+    name: "Diseño Gráfico · Proyecto",
     type: "proyecto_unico",
     description: "Para servicios de diseño: logo, identidad visual, branding.",
     content_json: {
@@ -47,7 +47,7 @@ const templates = [
     },
   },
   {
-    name: "Boleta de Honorarios — Prestación Servicios Profesionales",
+    name: "Boleta de Honorarios · Prestación Servicios Profesionales",
     type: "boleta_honorarios",
     description: "Para contratos a honorarios con retención: persona natural emite boleta, cliente retiene 15,25% (Ley 21.133). Sin subordinación, sin entrega de código fuente, licencia revocable.",
     content_json: {

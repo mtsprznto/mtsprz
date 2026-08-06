@@ -1,5 +1,5 @@
 /**
- * Funnel event tracking (GA4) — consent-gated, no-op si gtag no cargado.
+ * Funnel event tracking (GA4) · consent-gated, no-op si gtag no cargado.
  *
  * Patrón: Facade sobre window.gtag (expuesto por analytics.ts tras consentimiento)
  * + Observer del consent manager (cookie-consent.ts) para el gate.
@@ -31,7 +31,7 @@ if (typeof window !== "undefined") {
   window.trackEvent = trackEvent;
 
   // Event delegation global: clicks en cualquier a[href*="wa.me"]
-  // (~89 anchors en ~20 páginas — no tocar cada una).
+  // (~89 anchors en ~20 páginas · no tocar cada una).
   // Capture phase: detecta clicks aunque un handler interno haga stopPropagation.
   document.addEventListener(
     "click",

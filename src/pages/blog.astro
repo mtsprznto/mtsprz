@@ -44,7 +44,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
 ---
 
 <BaseLayout
-  title="Blog de Marketing Digital y SEO — Mtsprz"
+  title="Blog de Marketing Digital y SEO · Mtsprz"
   description="Artículos sobre SEO local, marketing digital, desarrollo web y automatizaciones para pymes en la Región de Los Lagos y el sur de Chile."
   canonical="https://mtsprz.org/blog"
 >
@@ -72,18 +72,20 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
   <main id="main-content">
 
     <!-- ═══════════════════════════════════════════
-         HERO — Full-viewport cinematic intro
+         HERO · Full-viewport cinematic intro
     ═══════════════════════════════════════════ -->
     <section class="relative w-screen h-[100dvh] md:h-screen overflow-hidden bg-[#0A0A0A]">
       <video
         src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
         autoplay loop muted playsinline
         preload="auto"
-        class="z-[1]"
+        class="z-[1] brightness-[0.4] saturate-[0.55]"
         style="position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; max-width: none !important; min-width: 0 !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; display: block !important;"
       />
+      <!-- Scrim full-screen: anula las letras del video, lo deja como textura de movimiento -->
+      <div style="position: absolute !important; inset: 0; z-index: 2;" class="bg-[#0A0A0A]/[0.8]"></div>
       <div style="position: absolute !important; top: 0; left: 0; width: 100%; height: 24%; z-index: 2;" class="bg-gradient-to-b from-[#0A0A0A] to-transparent"></div>
-      <div style="position: absolute !important; bottom: 0; left: 0; width: 100%; height: 40%; z-index: 2;" class="bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
+      <div style="position: absolute !important; bottom: 0; left: 0; width: 100%; height: 45%; z-index: 2;" class="bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
 
       <!-- Central content -->
       <div style="position: absolute !important; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; pointer-events: none;">
@@ -98,7 +100,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
           <!-- Tag pills -->
           <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
             {allTags.slice(0, 6).map((tag) => (
-              <span class="inline-flex items-center px-3 py-1 text-[10px] font-body tracking-[0.08em] uppercase text-white/30 border border-white/[0.06] rounded-full hover:text-white/60 hover:border-white/15 transition-all cursor-default">
+              <span class="inline-flex items-center px-3 py-1 text-[10px] font-body tracking-[0.08em] uppercase text-white/40 border border-white/[0.1] rounded-full hover:text-white/70 hover:border-white/20 transition-all cursor-default">
                 {tag}
               </span>
             ))}
@@ -120,7 +122,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
     </section>
 
     <!-- ═══════════════════════════════════════════
-         FEATURED — Full-bleed cinematic column
+         FEATURED · Full-bleed cinematic column
     ═══════════════════════════════════════════ -->
     {
       featured && (() => {
@@ -131,28 +133,30 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
         return (
           <section class="relative w-full overflow-hidden bg-[#0A0A0A]">
             <a href={`/blog/${fSlug}`} class="group block relative w-full h-[80dvh] md:h-[90vh] overflow-hidden">
-              <!-- Full-bleed image -->
+              <!-- Base plate: fondo sólido tras la imagen -->
+              <div class="absolute inset-0 bg-[#0A0A0A]" />
+              <!-- Full-bleed image · se muestra como textura, no como texto legible -->
               <img
                 src={featured.data.image || "/logo.jpg"}
                 alt={featured.data.title}
-                class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
+                class="absolute inset-0 w-full h-full object-cover opacity-25 brightness-[0.85] transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
                 loading="eager"
                 fetchpriority="high"
                 decoding="async"
               />
-              <!-- Dark gradient overlay — bottom heavy for text legibility -->
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/15 to-transparent" />
-              <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/25 via-transparent to-transparent h-32" />
+              <!-- Dark gradient overlay · bottom heavy, cubre el texto horneado del OG -->
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent" />
+              <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/50 via-transparent to-transparent h-32" />
 
               <!-- Content overlaid at bottom -->
               <div class="absolute bottom-0 left-0 right-0 z-10 px-6 md:px-12 lg:px-16 pb-12 md:pb-16 lg:pb-20">
                 <div class="max-w-6xl mx-auto">
-                  {/* Category — large bold label */}
+                  {/* Category · large bold label */}
                   <p class="text-[11px] md:text-xs uppercase tracking-[0.3em] font-body font-medium mb-3 md:mb-4" style="color: #6366f1;">
                     {fCat}
                   </p>
 
-                  {/* Title — massive editorial */}
+                  {/* Title · massive editorial */}
                   <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-white leading-[0.95] tracking-[-1px] md:tracking-[-2px] max-w-4xl group-hover:text-white/80 transition-colors duration-500">
                     {featured.data.title}
                   </h2>
@@ -177,7 +181,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
                       )}
                     </div>
 
-                    {/* CTA button — solid dark, editorial */}
+                    {/* CTA button · solid dark, editorial */}
                     <span class="inline-flex items-center gap-2.5 px-6 py-3 bg-white/[0.08] hover:bg-white/[0.14] text-white text-[11px] font-body font-medium tracking-[0.18em] uppercase transition-all duration-300 group-hover:gap-3.5">
                       Explorar guía
                       <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
@@ -192,67 +196,78 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
     }
 
     <!-- ═══════════════════════════════════════════
-         COLUMNS — Asymmetric editorial grid
-         No borders, no shadows, no containers.
-         Images fill columns. Typography overlaid.
+         ARTÍCULOS · Editorial panel grid
+         Cards: imagen arriba (arte) + texto abajo en panel sólido.
+         Los OG traen el título horneado dentro de la imagen, por eso
+         el texto va FUERA de la imagen. Cero texto sobre texto.
     ═══════════════════════════════════════════ -->
     <section class="relative w-full bg-[#0A0A0A]">
       <!-- Section label -->
       <div class="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 pt-16 md:pt-24 pb-8 md:pb-12">
-        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium" style="color: #6366f1aa;">
-          Últimos artículos
-        </p>
+        <div class="flex items-end justify-between gap-6">
+          <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium" style="color: #6366f1aa;">
+            Últimos artículos
+          </p>
+          <p class="text-[10px] md:text-xs font-body tracking-[0.15em] text-white/25 hidden sm:block">
+            {sortedPosts.length} artículos
+          </p>
+        </div>
       </div>
 
-      <!-- ─── Tier 1: Two large asymmetric columns ─── -->
-      <div class="w-full flex flex-col md:flex-row h-auto md:h-[75vh]" style="content-visibility:auto; contain-intrinsic-size: 600px;">
+      <div class="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 pb-16 md:pb-24 space-y-5 md:space-y-8" style="content-visibility:auto; contain-intrinsic-size: 2200px;">
+
+        <!-- ─── Tier 1 · Dos grandes, asimétricos 7/5 ─── -->
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-12 md:gap-6">
         {rest.slice(0, 2).map((post, i) => {
           const postSlug = post.id.replace(/\.(md|mdx)$/, "");
           const readMin = readingTime(post.body || "");
           const img = post.data.image || "/logo.jpg";
           const cat = getCategoryLabel(post.data.tags || []);
-          // Asymmetric: first column wider
-          const flexClass = i === 0 ? "md:w-[58%]" : "md:w-[42%]";
           return (
             <a
               href={`/blog/${postSlug}`}
-              class={`group relative overflow-hidden ${flexClass} h-[60dvh] md:h-full`}
+              class={`group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.05] bg-[#0D0D0F] transition-all duration-300 hover:border-white/[0.12] hover:bg-[#111114] ${i === 0 ? "md:col-span-7" : "md:col-span-5"}`}
             >
-              <img
-                src={img}
-                alt={post.data.title}
-                class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
-                loading="lazy"
-                decoding="async"
-              />
-              <!-- Gradient overlay -->
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/10 to-transparent" />
-
-              {/* Recent badge */}
-              {isRecent(post.data.pubDate) && (
-                <div class="absolute top-5 left-5 md:top-6 md:left-6 flex items-center gap-1.5 px-2.5 py-1 bg-white/[0.08] backdrop-blur-sm text-white text-[10px] font-body font-medium tracking-[0.08em] uppercase">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
-                  Nuevo
-                </div>
-              )}
-
-              {/* Content at bottom */}
-              <div class="absolute bottom-0 left-0 right-0 z-10 px-5 md:px-8 lg:px-10 pb-8 md:pb-10">
-                <p class="text-[10px] md:text-[11px] uppercase tracking-[0.25em] font-body font-medium mb-2 md:mb-3" style="color: #6366f1;">
+              <div class="relative aspect-[16/10] overflow-hidden bg-[#0A0A0A]">
+                <img
+                  src={img}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                  class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                />
+                {/* Fusión imagen → panel */}
+                <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0D0D0F] to-transparent" />
+                {/* Recent badge */}
+                {isRecent(post.data.pubDate) && (
+                  <div class="absolute top-4 left-4 flex items-center gap-1.5 px-2.5 py-1 bg-[#0A0A0A]/70 backdrop-blur-sm text-white text-[10px] font-body font-medium tracking-[0.08em] uppercase">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
+                    Nuevo
+                  </div>
+                )}
+              </div>
+              <div class="flex flex-1 flex-col p-5 md:p-6">
+                <p class="text-[10px] uppercase tracking-[0.25em] font-body font-medium mb-2" style="color: #6366f1;">
                   {cat}
                 </p>
-                <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-white leading-[1.0] tracking-[-0.5px] md:tracking-[-1px] max-w-lg group-hover:text-white/75 transition-colors duration-500">
+                <h2 class="font-heading font-bold text-white leading-[1.15] tracking-[-0.02em] text-xl md:text-2xl lg:text-[1.7rem] line-clamp-3 group-hover:text-white/80 transition-colors duration-300">
                   {post.data.title}
                 </h2>
-                <div class="mt-3 md:mt-4 flex items-center justify-between gap-4">
-                  <div class="flex items-center gap-2 text-[10px] md:text-[11px] text-white/35 font-body tracking-wide">
+                <div class="mt-auto pt-5 flex items-center justify-between gap-4">
+                  <div class="flex items-center gap-2 text-[11px] text-white/40 font-body tracking-wide">
                     <time datetime={post.data.pubDate.toISOString()}>
                       {post.data.pubDate.toLocaleDateString("es-CL", { month: "long", day: "numeric" })}
                     </time>
                     <span class="text-white/15">·</span>
                     <span>{readMin} min</span>
+                    {post.data.modifiedTime && (
+                      <>
+                        <span class="text-white/15">·</span>
+                        <span class="text-emerald-400/70">Actualizado</span>
+                      </>
+                    )}
                   </div>
-                  <span class="inline-flex items-center gap-2 text-[10px] md:text-[11px] font-body font-medium tracking-[0.15em] uppercase text-white/50 group-hover:text-white transition-all duration-300 group-hover:gap-3">
+                  <span class="inline-flex items-center gap-2 text-[10px] font-body font-medium tracking-[0.15em] uppercase text-white/50 group-hover:text-white transition-all duration-300 group-hover:gap-3">
                     Explorar
                     <svg class="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
                   </span>
@@ -261,132 +276,142 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
             </a>
           );
         })}
-      </div>
-
-      <!-- ─── Tier 2: Three columns — varying widths ─── -->
-      <div class="w-full flex flex-col md:flex-row h-auto md:h-[65vh]" style="content-visibility:auto; contain-intrinsic-size: 520px;">
-        {rest.slice(2, 5).map((post, i) => {
-          const postSlug = post.id.replace(/\.(md|mdx)$/, "");
-          const readMin = readingTime(post.body || "");
-          const img = post.data.image || "/logo.jpg";
-          const cat = getCategoryLabel(post.data.tags || []);
-          // Asymmetric widths: 35% / 30% / 35%
-          const widths = ["md:w-[35%]", "md:w-[30%]", "md:w-[35%]"];
-          return (
-            <a
-              href={`/blog/${postSlug}`}
-              class={`group relative overflow-hidden ${widths[i]} h-[55dvh] md:h-full`}
-            >
-              <img
-                src={img}
-                alt={post.data.title}
-                class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
-                loading="lazy"
-                decoding="async"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/10 to-transparent" />
-
-              {/* Content at bottom */}
-              <div class="absolute bottom-0 left-0 right-0 z-10 px-4 md:px-6 lg:px-8 pb-6 md:pb-8">
-                <p class="text-[9px] md:text-[10px] uppercase tracking-[0.25em] font-body font-medium mb-1.5 md:mb-2" style="color: #6366f1;">
-                  {cat}
-                </p>
-                <h3 class="text-base sm:text-lg md:text-xl lg:text-2xl font-heading font-bold text-white leading-[1.05] tracking-[-0.3px] md:tracking-[-0.5px] group-hover:text-white/75 transition-colors duration-500 line-clamp-3">
-                  {post.data.title}
-                </h3>
-                <div class="mt-2 md:mt-3 flex items-center gap-2 text-[10px] text-white/30 font-body tracking-wide">
-                  <time datetime={post.data.pubDate.toISOString()}>
-                    {post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}
-                  </time>
-                  <span class="text-white/15">·</span>
-                  <span>{readMin} min</span>
-                </div>
-              </div>
-            </a>
-          );
-        })}
-      </div>
-
-      <!--       ─── Tier 3: Four columns — equal width, compact ─── -->
-      {rest.length > 5 && (
-        <div class="w-full flex flex-col md:flex-row h-auto md:h-[50vh]" style="content-visibility:auto; contain-intrinsic-size: 400px;">
-          {rest.slice(5, 9).map((post) => {
-            const postSlug = post.id.replace(/\.(md|mdx)$/, "");
-            const readMin = readingTime(post.body || "");
-            const img = post.data.image || "/logo.jpg";
-            const cat = getCategoryLabel(post.data.tags || []);
-            return (
-              <a
-                href={`/blog/${postSlug}`}
-                class="group relative overflow-hidden md:w-1/4 h-[45dvh] md:h-full"
-              >
-                <img
-                  src={img}
-                  alt={post.data.title}
-                  class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/15 to-transparent" />
-
-                {/* Content at bottom */}
-                <div class="absolute bottom-0 left-0 right-0 z-10 px-4 md:px-5 pb-5 md:pb-6">
-                  <p class="text-[8px] md:text-[9px] uppercase tracking-[0.2em] font-body font-medium mb-1" style="color: #6366f1;">
-                    {cat}
-                  </p>
-                  <h4 class="text-sm md:text-base font-heading font-bold text-white leading-[1.1] tracking-[-0.2px] group-hover:text-white/75 transition-colors duration-500 line-clamp-2">
-                    {post.data.title}
-                  </h4>
-                  <div class="mt-1.5 flex items-center gap-2 text-[9px] text-white/25 font-body tracking-wide">
-                    <time>{post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}</time>
-                    <span class="text-white/15">·</span>
-                    <span>{readMin} min</span>
-                  </div>
-                </div>
-              </a>
-            );
-          })}
         </div>
-      )}
 
-      <!-- ─── Tier 4: Remaining — minimal text rows ─── -->
-      {rest.length > 9 && (
-        <div class="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 py-12 md:py-16">
-          <div class="h-[1px] mb-8" style="background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);" />
-          <div class="space-y-0">
-            {rest.slice(9).map((post) => {
+        <!-- ─── Tier 2 · Tres medianas ─── -->
+        {rest.length > 2 && (
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 md:gap-6">
+            {rest.slice(2, 5).map((post) => {
               const postSlug = post.id.replace(/\.(md|mdx)$/, "");
               const readMin = readingTime(post.body || "");
+              const img = post.data.image || "/logo.jpg";
               const cat = getCategoryLabel(post.data.tags || []);
               return (
                 <a
                   href={`/blog/${postSlug}`}
-                  class="group flex items-center justify-between gap-4 py-4 border-b border-white/[0.04] hover:border-white/[0.08] transition-all duration-300"
+                  class="group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.05] bg-[#0D0D0F] transition-all duration-300 hover:border-white/[0.12] hover:bg-[#111114]"
                 >
-                  <div class="flex items-center gap-4 min-w-0">
-                    <span class="text-[9px] uppercase tracking-[0.15em] font-body font-medium shrink-0" style="color: #6366f1aa;">
-                      {cat}
-                    </span>
-                    <h4 class="text-sm md:text-[15px] font-body font-medium text-white/50 group-hover:text-white transition-colors duration-300 truncate">
-                      {post.data.title}
-                    </h4>
+                  <div class="relative aspect-[4/3] overflow-hidden bg-[#0A0A0A]">
+                    <img
+                      src={img}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                    />
+                    <div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#0D0D0F] to-transparent" />
+                    {isRecent(post.data.pubDate) && (
+                      <div class="absolute top-3.5 left-3.5 flex items-center gap-1.5 px-2 py-0.5 bg-[#0A0A0A]/70 backdrop-blur-sm text-white text-[9px] font-body font-medium tracking-[0.08em] uppercase">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
+                        Nuevo
+                      </div>
+                    )}
                   </div>
-                  <div class="flex items-center gap-3 shrink-0">
-                    <span class="text-[10px] text-white/20 font-body tracking-wide hidden sm:block">
-                      {post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}
-                    </span>
-                    <svg class="w-3 h-3 text-white/15 group-hover:text-white/50 transition-all group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                  <div class="flex flex-1 flex-col p-5">
+                    <p class="text-[9px] uppercase tracking-[0.25em] font-body font-medium mb-2" style="color: #6366f1;">
+                      {cat}
+                    </p>
+                    <h3 class="font-heading font-bold text-white leading-[1.2] tracking-[-0.02em] text-lg md:text-xl line-clamp-3 group-hover:text-white/80 transition-colors duration-300">
+                      {post.data.title}
+                    </h3>
+                    <div class="mt-auto pt-4 flex items-center gap-2 text-[10px] text-white/35 font-body tracking-wide">
+                      <time datetime={post.data.pubDate.toISOString()}>
+                        {post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}
+                      </time>
+                      <span class="text-white/15">·</span>
+                      <span>{readMin} min</span>
+                    </div>
                   </div>
                 </a>
               );
             })}
           </div>
-        </div>
-      )}
+        )}
+
+        <!-- ─── Tier 3 · Cuatro compactas ─── -->
+        {rest.length > 5 && (
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            {rest.slice(5, 9).map((post) => {
+              const postSlug = post.id.replace(/\.(md|mdx)$/, "");
+              const readMin = readingTime(post.body || "");
+              const img = post.data.image || "/logo.jpg";
+              const cat = getCategoryLabel(post.data.tags || []);
+              return (
+                <a
+                  href={`/blog/${postSlug}`}
+                  class="group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.05] bg-[#0D0D0F] transition-all duration-300 hover:border-white/[0.12] hover:bg-[#111114]"
+                >
+                  <div class="relative aspect-[3/2] overflow-hidden bg-[#0A0A0A]">
+                    <img
+                      src={img}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                    />
+                    <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#0D0D0F] to-transparent" />
+                  </div>
+                  <div class="flex flex-1 flex-col p-4 md:p-5">
+                    <p class="text-[8px] uppercase tracking-[0.2em] font-body font-medium mb-1.5" style="color: #6366f1;">
+                      {cat}
+                    </p>
+                    <h4 class="font-heading font-bold text-white leading-[1.25] tracking-[-0.01em] text-sm md:text-[15px] line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
+                      {post.data.title}
+                    </h4>
+                    <div class="mt-auto pt-3 flex items-center gap-2 text-[10px] text-white/30 font-body tracking-wide">
+                      <time>{post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}</time>
+                      <span class="text-white/15">·</span>
+                      <span>{readMin} min</span>
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        )}
+
+        <!-- ─── Tier 4 · Filas restantes ─── -->
+        {rest.length > 9 && (
+          <>
+            <div class="h-[1px]" style="background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);" />
+            <div class="pt-4 md:pt-6">
+              {rest.slice(9).map((post) => {
+                const postSlug = post.id.replace(/\.(md|mdx)$/, "");
+                const readMin = readingTime(post.body || "");
+                const cat = getCategoryLabel(post.data.tags || []);
+                return (
+                  <a
+                    href={`/blog/${postSlug}`}
+                    class="group flex items-center justify-between gap-4 py-4 border-b border-white/[0.04] hover:border-white/[0.1] transition-all duration-300"
+                  >
+                    <div class="flex items-center gap-4 min-w-0">
+                      <span class="text-[9px] uppercase tracking-[0.15em] font-body font-medium shrink-0" style="color: #6366f1aa;">
+                        {cat}
+                      </span>
+                      <h4 class="text-sm md:text-[15px] font-body font-medium text-white/55 group-hover:text-white transition-colors duration-300 truncate">
+                        {post.data.title}
+                      </h4>
+                    </div>
+                    <div class="flex items-center gap-3 shrink-0">
+                      <span class="text-[10px] text-white/20 font-body tracking-wide hidden sm:block">
+                        {post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}
+                      </span>
+                      <span class="text-[10px] text-white/20 font-body tracking-wide hidden md:block">
+                        {readMin} min
+                      </span>
+                      <svg class="w-3 h-3 text-white/15 group-hover:text-white/50 transition-all group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════
-         NEWSLETTER — Minimal CTA
+         NEWSLETTER · Minimal CTA
     ═══════════════════════════════════════════ -->
     <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
       <div class="absolute inset-0 opacity-30" style="background: radial-gradient(ellipse at 50% 50%, #6366f112 0%, transparent 60%);" />

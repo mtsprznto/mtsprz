@@ -54,7 +54,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 };
 
-/** Health check — estado real de la sesión WAHA */
+/** Health check · estado real de la sesión WAHA */
 export const GET: APIRoute = async ({ locals }) => {
   if (!locals.user || locals.user.role !== "super_admin") {
     return new Response(JSON.stringify({ error: "No autorizado" }), { status: 403 });

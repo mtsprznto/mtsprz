@@ -1,5 +1,5 @@
 /**
- * WAHA — Cliente HTTP tipado para WhatsApp HTTP API.
+ * WAHA · Cliente HTTP tipado para WhatsApp HTTP API.
  * Transporte puro: no conoce lógica de negocio (auto-responder, leads).
  *
  * Docs: https://waha.devlike.pro/docs/overview/introduction/
@@ -36,7 +36,7 @@ export class WahaClient {
 
   private async request<T>(path: string, init: RequestInit = {}): Promise<T> {
     if (!this.apiKey) {
-      throw new Error("WAHA_API_KEY no configurada — revisa .env");
+      throw new Error("WAHA_API_KEY no configurada · revisa .env");
     }
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.timeoutMs);
@@ -61,7 +61,7 @@ export class WahaClient {
       if ((err as Error).name === "AbortError") {
         throw new Error(`WAHA timeout (${this.timeoutMs}ms) en ${path}`);
       }
-      throw new Error(`WAHA no responde en ${this.baseUrl} — ¿está el container arriba? (${(err as Error).message})`);
+      throw new Error(`WAHA no responde en ${this.baseUrl} · ¿está el container arriba? (${(err as Error).message})`);
     } finally {
       clearTimeout(timer);
     }
@@ -77,7 +77,7 @@ export class WahaClient {
 
   /* ── Health / Server ── */
 
-  /** GET /health — alive check del server WAHA. */
+  /** GET /health · alive check del server WAHA. */
   async health(): Promise<boolean> {
     try {
       const res = await fetch(`${this.baseUrl}/health`, { signal: AbortSignal.timeout(5_000) });
@@ -89,12 +89,12 @@ export class WahaClient {
 
   /* ── Sesiones ── */
 
-  /** GET /api/sessions/{session} — estado de la sesión. */
+  /** GET /api/sessions/{session} · estado de la sesión. */
   getSession(): Promise<WahaSession> {
     return this.get<WahaSession>(`/api/sessions/${encodeURIComponent(this.session)}`);
   }
 
-  /** GET /api/sessions/{session}/me — incluye reachoutTimelock. */
+  /** GET /api/sessions/{session}/me · incluye reachoutTimelock. */
   getMe(): Promise<WahaMe> {
     return this.get<WahaMe>(`/api/sessions/${encodeURIComponent(this.session)}/me`);
   }
@@ -102,7 +102,7 @@ export class WahaClient {
   /* ── LID resolution ── */
 
   /**
-   * GET /api/{session}/lids/{lid} — resuelve un LID (Linked ID) a su número real.
+   * GET /api/{session}/lids/{lid} · resuelve un LID (Linked ID) a su número real.
    * WAHA 2026 usa LIDs en `message.from` de los webhooks entrantes;
    * para identificar leads necesitamos el número de teléfono (pn).
    */
@@ -113,7 +113,7 @@ export class WahaClient {
 
   /* ── Envío ── */
 
-  /** POST /api/sendText — texto plano. */
+  /** POST /api/sendText · texto plano. */
   async sendText(chatId: string, text: string, options: SendTextOptions = {}): Promise<WahaMessage> {
     const body: Record<string, unknown> = {
       session: this.session,
@@ -126,7 +126,7 @@ export class WahaClient {
     return this.post<WahaMessage>("/api/sendText", body);
   }
 
-  /** POST /api/sendSeen — marca mensaje como leído. */
+  /** POST /api/sendSeen · marca mensaje como leído. */
   sendSeen(chatId: string): Promise<unknown> {
     return this.post("/api/sendSeen", { session: this.session, chatId });
   }

@@ -92,7 +92,7 @@ Pero para una pyme en Puerto Varas que necesita:
 
 ## Por qué Mtsprz usa Astro
 
-En Mtsprz construimos todos nuestros sitios con Astro porque creemos que tus clientes merecen la mejor experiencia posible. Un sitio que carga rápido, es seguro y aparece en Google no es un lujo — es la base para crecer en internet.
+En Mtsprz construimos todos nuestros sitios con Astro porque creemos que tus clientes merecen la mejor experiencia posible. Un sitio que carga rápido, es seguro y aparece en Google no es un lujo · es la base para crecer en internet.
 
 Si quieres ver la diferencia, compara cualquier sitio de WordPress con los que hemos creado nosotros. La velocidad se siente al instante.
 

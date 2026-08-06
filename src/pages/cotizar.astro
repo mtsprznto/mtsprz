@@ -41,7 +41,7 @@ const effectivePrice = (s: Service) => (s.promo_price && s.promo_price > 0 ? s.p
 ---
 
 <BaseLayout
-  title={verifiedEmail ? "Cotización — Mtsprz Soluciones Digitales" : "Cotizar — Mtsprz"}
+  title={verifiedEmail ? "Cotización · Mtsprz Soluciones Digitales" : "Cotizar · Mtsprz"}
   description={verifiedEmail ? "Simula tu cotización personalizada. Selecciona los servicios digitales que necesita tu negocio." : "Verifica tu correo para solicitar una cotización personalizada."}
   canonical="https://mtsprz.org/cotizar"
 >
@@ -113,7 +113,7 @@ const effectivePrice = (s: Service) => (s.promo_price && s.promo_price > 0 ? s.p
                   <input type="text" id="verify-code-2" maxlength="1" inputmode="numeric" pattern="[0-9]"
                     style="width:3rem;height:3.5rem;text-align:center;font-size:1.25rem;font-family:var(--font-heading);font-weight:700;color:#fff;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);outline:none;transition:border-color 0.2s;"
                     onfocus="this.style.borderColor='rgba(99,102,241,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" />
-                  <span style="display:flex;align-items:center;color:rgba(255,255,255,0.15);font-size:1.25rem;font-weight:700;">—</span>
+                  <span style="display:flex;align-items:center;color:rgba(255,255,255,0.15);font-size:1.25rem;font-weight:700;">·</span>
                   <input type="text" id="verify-code-3" maxlength="1" inputmode="numeric" pattern="[0-9]"
                     style="width:3rem;height:3.5rem;text-align:center;font-size:1.25rem;font-family:var(--font-heading);font-weight:700;color:#fff;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);outline:none;transition:border-color 0.2s;"
                     onfocus="this.style.borderColor='rgba(99,102,241,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'" />

@@ -1,5 +1,5 @@
 /**
- * Marketing — Solicitudes de reseña Google (J1 del plan 2026).
+ * Marketing · Solicitudes de reseña Google (J1 del plan 2026).
  *
  * Dos disparos post-proyecto:
  * - día 3: pedir reseña con entusiasmo del entregable
@@ -44,7 +44,7 @@ export async function requestReview(input: ReviewRequestInput): Promise<{ id: nu
   try {
     const ok = await sendEmail({
       to: input.clientEmail,
-      subject: day === 10 ? `¿Ya nos ayudaste con una reseña? — Mtsprz` : `¿Nos ayudas con una reseña? — Mtsprz`,
+      subject: day === 10 ? `¿Ya nos ayudaste con una reseña? · Mtsprz` : `¿Nos ayudas con una reseña? · Mtsprz`,
       html: reviewRequestEmail(input.clientName, input.project, day),
       fromName: "Mtsprz",
     });

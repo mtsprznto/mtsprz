@@ -39,7 +39,7 @@ Incluye horarios exactos incluyendo:
 - Feriados especiales
 
 ### Menu y precios
-Agrega tu menu directamente en Google Business Profile. Incluye precios aproximados con la etiqueta de precio ($, $$, $$$). Los usuarios buscan "restaurante barato en Puerto Varas" o "restaurante romantico Puerto Varas" — tu menu ayuda a Google a matchear esas busquedas.
+Agrega tu menu directamente en Google Business Profile. Incluye precios aproximados con la etiqueta de precio ($, $$, $$$). Los usuarios buscan "restaurante barato en Puerto Varas" o "restaurante romantico Puerto Varas" · tu menu ayuda a Google a matchear esas busquedas.
 
 ### Resenas
 Las resenas son el factor de ranking mas importante para restaurantes. Estrategia:
@@ -101,7 +101,7 @@ Las publicaciones senalan a Google que tu negocio esta activo y relevante.
 2. **Resenas sin responder**: Google penaliza negocios que ignoran clientes
 3. **Fotos de stock**: Usa fotos reales de tus platos y local
 4. **Informacion inconsistente**: Direccion, telefono y horarios deben ser identicos en Google, tu web y redes sociales
-5. **Ignorar preguntas**: Los usuarios hacen preguntas en Google Maps — respondelas todas
+5. **Ignorar preguntas**: Los usuarios hacen preguntas en Google Maps · respondelas todas
 
 ## Resultados esperados
 

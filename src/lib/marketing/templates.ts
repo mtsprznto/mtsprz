@@ -1,5 +1,5 @@
 /**
- * Marketing — Plantillas de email (estilo dark Mtsprz, consistente con lib/mail).
+ * Marketing · Plantillas de email (estilo dark Mtsprz, consistente con lib/mail).
  * Lead magnet delivery + secuencia de nurturing + solicitudes de reseña.
  */
 
@@ -8,7 +8,7 @@ import { sanitizeHtml } from "../validators";
 const SITE = "https://mtsprz.org";
 
 /** Wrapper dark consistente con los emails de contratos. */
-function layout(title: string, body: string, footer = "Mtsprz — Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org"): string {
+function layout(title: string, body: string, footer = "Mtsprz · Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org"): string {
   return `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
       <div style="text-align:center;margin-bottom:24px">
@@ -61,7 +61,7 @@ function unsubscribeFooter(unsubscribeUrl: string): string {
   return `¿Ya no quieres recibir estos correos? <a href="${sanitizeHtml(unsubscribeUrl)}" style="color:rgba(250,250,250,0.5);text-decoration:underline">Darte de baja</a>.`;
 }
 
-const DEFAULT_FOOTER = "Mtsprz — Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org";
+const DEFAULT_FOOTER = "Mtsprz · Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org";
 
 function footer(unsubscribeUrl?: string): string {
   return unsubscribeUrl ? `${DEFAULT_FOOTER} · ${unsubscribeFooter(unsubscribeUrl)}` : DEFAULT_FOOTER;
@@ -75,7 +75,7 @@ export function sequenceEmail(step: number, name: string, unsubscribeUrl?: strin
       `${paragraph(`Hola ${sanitizeHtml(name)},`)}
        ${paragraph("Nuestro portfolio incluye proyectos propios y herramientas de IA (educación, contraseñas, marketing). Esto demuestra que el stack técnico existe y es real:", "💡")}
        <ul style="padding-left:20px;margin:0 0 16px">
-         <li style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 8px;line-height:1.6">Web ultra rápida (Astro, <1.5s) — clave para convertir y para Google</li>
+         <li style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 8px;line-height:1.6">Web ultra rápida (Astro, <1.5s) · clave para convertir y para Google</li>
          <li style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 8px;line-height:1.6">WhatsApp API que responde solo y agenda</li>
          <li style="font-size:14px;color:rgba(250,250,250,0.7);margin:0 0 8px;line-height:1.6">IA aplicada (OCR/RAG) para automatizar procesos</li>
        </ul>
@@ -118,8 +118,8 @@ export function reviewRequestEmail(clientName: string, project: string, day: num
     "¿Nos ayudas con una reseña?",
     `${paragraph(sanitizeHtml(clientName), `Hola ${""}`)}
      ${paragraph(`Esperamos que estés disfrutando de ${sanitizeHtml(project)}. Tu opinión ayuda a que otros negocios del sur confíen en trabajar con nosotros.`, "🙌")}
-     ${paragraph(`Tómate 30 segundos — cuenta tu experiencia y qué fue lo que más te gustó:`)}
+     ${paragraph(`Tómate 30 segundos · cuenta tu experiencia y qué fue lo que más te gustó:`)}
      ${ctaButton(reviewUrl, "Dejar reseña en Google", "linear-gradient(135deg,#FBBC05,#4285F4)")}
-     ${day === 10 ? paragraph("Si ya la dejaste, gracias — ignora este mensaje.", "Nota:") : ""}`
+     ${day === 10 ? paragraph("Si ya la dejaste, gracias · ignora este mensaje.", "Nota:") : ""}`
   );
 }

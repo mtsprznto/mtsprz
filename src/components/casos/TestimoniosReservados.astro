@@ -1,0 +1,90 @@
+---
+/**
+ * TestimoniosReservados · Butacas de cine reservadas para historias reales.
+ * Data-driven: un asiento por cada caso con testimonio null.
+ * Concepto: pantalla de cine apagada + número de butaca. El espacio existe,
+ * la historia aún no. Sin contenedores: filas editoriales abiertas con hairline.
+ * Reutiliza los visuales generativos de CasoCard (misma paleta, misma textura).
+ * Se usa en /casos (J1: credibilidad · nunca inventar testimonios).
+ */
+import type { Caso } from "../../data/casos";
+import { getCasoVisual } from "../../lib/caso-visuals";
+
+export interface Props {
+  casos: Caso[];
+}
+
+const { casos } = Astro.props;
+
+const pendientes = casos.filter((c) => !c.testimonio);
+---
+
+<ul class="reveal-group mt-14 md:mt-20">
+  {pendientes.map((caso, i) => {
+    const visual = getCasoVisual(caso.slug);
+    const numero = String(i + 1).padStart(2, "0");
+    return (
+      <li class="reveal-item group relative grid grid-cols-12 items-center gap-x-5 gap-y-4 border-t border-white/[0.06] py-8 transition-colors duration-700 hover:border-white/[0.12] md:py-10">
+        {/* Número de butaca */}
+        <span class="col-span-2 font-mono text-[11px] tracking-[0.2em] text-white/25 transition-colors duration-500 group-hover:text-white/60 md:col-span-1">
+          {numero}
+        </span>
+
+        {/* Pantalla de cine apagada · la historia que aún no llega */}
+        <div class="col-span-4 md:col-span-2">
+          <div
+            class="relative aspect-[4/3] w-full max-w-[9rem] overflow-hidden transition-opacity duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:opacity-90"
+            aria-hidden="true"
+          >
+            <div class="absolute inset-0" style={`background: ${visual.bg};`} />
+            <div class="absolute inset-0" style={`background-image: ${visual.patternUrl}; background-size: 48px 48px;`} />
+            <div class="absolute inset-0" style="background: radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.06), transparent 70%);" />
+            {/* Indicador de grabación en espera */}
+            <span class="absolute left-2 top-2 flex items-center gap-1.5 rounded-sm bg-black/40 px-1.5 py-1 font-mono text-[8px] tracking-[0.25em] text-white/50 backdrop-blur-sm">
+              <span class="h-1 w-1 rounded-full bg-red-400/80" />
+              REC
+            </span>
+          </div>
+        </div>
+
+        {/* Industria + honestidad */}
+        <div class="col-span-6 md:col-span-7">
+          <p class="font-mono text-[9px] uppercase tracking-[0.3em] text-white/25">
+            Testimonio {numero} · en camino
+          </p>
+          <h3 class="mt-1.5 font-heading text-xl font-semibold tracking-[-0.01em] text-white/75 transition-colors duration-500 group-hover:text-white md:text-2xl">
+            {caso.industria}
+          </h3>
+          <p class="mt-2 hidden max-w-md font-body text-xs font-light leading-[1.7] text-white/35 md:block">
+            Reservado para una historia real de {caso.industria}. Sin inventar nada, se llena cuando exista.
+          </p>
+        </div>
+
+        {/* Estado del asiento */}
+        <div class="col-span-12 flex items-center gap-3 md:col-span-2 md:flex-col md:items-end md:gap-1.5">
+          <span class="inline-flex items-center gap-2 font-body text-[9px] font-medium uppercase tracking-[0.2em] text-white/50">
+            <span class="h-1 w-1 rounded-full bg-emerald-400/80" />
+            Reservado
+          </span>
+          <p class="font-body text-[9px] uppercase tracking-[0.2em] text-white/20 md:text-right">
+            Historia real
+          </p>
+        </div>
+      </li>
+    );
+  })}
+
+  <!-- Hairline de cierre -->
+  <li class="border-t border-white/[0.06]" aria-hidden="true" />
+</ul>
+
+<!-- Cierre editorial: la próxima historia puede ser la tuya -->
+<div class="reveal-group mt-12 md:mt-16">
+  <a
+    href="#oferta"
+    class="reveal-item group inline-flex items-center gap-3 font-body text-[11px] font-medium uppercase tracking-[0.22em] text-white/60 transition-colors duration-500 hover:text-white"
+  >
+    <span class="h-px w-8 bg-white/25 transition-all duration-500 group-hover:w-12 group-hover:bg-white/60" />
+    La próxima historia puede ser la tuya
+  </a>
+</div>

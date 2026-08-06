@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 
 /**
- * Secreto JWT — fail-closed:
+ * Secreto JWT · fail-closed:
  * En producción (PROD) si JWT_SECRET no está configurado, aborta el módulo.
  * En desarrollo usa fallback explícito (nunca válido en prod).
  */
@@ -12,14 +12,14 @@ const JWT_SECRET: string = (() => {
   const s = (ENV.JWT_SECRET as string | undefined)?.trim();
   if (s) return s;
   if (IS_PROD) {
-    throw new Error("JWT_SECRET no configurada en producción — abortando (seguridad)");
+    throw new Error("JWT_SECRET no configurada en producción · abortando (seguridad)");
   }
-  console.warn("[CRYPTO] JWT_SECRET no configurada — usando fallback DEV (inseguro, solo local)");
+  console.warn("[CRYPTO] JWT_SECRET no configurada · usando fallback DEV (inseguro, solo local)");
   return "dev-secret-change-in-prod";
 })();
 
 /**
- * PBKDF2-SHA512 — OWASP ASVS v4.0 recomienda ≥600k iteraciones.
+ * PBKDF2-SHA512 · OWASP ASVS v4.0 recomienda ≥600k iteraciones.
  * Se usa 310k (compromiso rendimiento/seguridad para login admin);
  * el formato incluye iteraciones → migración transparente de hashes antiguos.
  */
@@ -69,7 +69,7 @@ export function verifyPassword(password: string, hash: string): Promise<boolean>
   });
 }
 
-/** True si el hash usa formato antiguo (1000 iter) — re-hashear en el próximo login. */
+/** True si el hash usa formato antiguo (1000 iter) · re-hashear en el próximo login. */
 export function needsRehash(hash: string): boolean {
   return !hash.startsWith("pbkdf2$");
 }

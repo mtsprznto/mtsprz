@@ -45,7 +45,7 @@ const seedServices = [
       "SEO avanzado on-page + datos estructurados (Schema.org)",
       "Galer\u00eda de im\u00e1genes optimizada para velocidad",
       "Formularios inteligentes con validaci\u00f3n",
-      "Configuración de hosting, SSL y CDN — costo de infraestructura por cuenta del Cliente conforme a la Nota",
+      "Configuración de hosting, SSL y CDN · costo de infraestructura por cuenta del Cliente conforme a la Nota",
       "Google Analytics 4 + Search Console",
       "Capacitaci\u00f3n del equipo para gesti\u00f3n aut\u00f3noma"
     ],
@@ -94,7 +94,7 @@ const seedServices = [
       "API REST o GraphQL seg\u00fan necesidad",
       "Base de datos PostgreSQL optimizada",
       "Despliegue en Vercel / Railway / Cloudflare",
-      "Configuración de SSL y CDN — costo de infraestructura por cuenta del Cliente conforme a la Nota",
+      "Configuración de SSL y CDN · costo de infraestructura por cuenta del Cliente conforme a la Nota",
       "Documentaci\u00f3n t\u00e9cnica del sistema",
       "Capacitaci\u00f3n del equipo"
     ],
@@ -392,7 +392,7 @@ const seedServices = [
     price: 350000,
     promo_price: 350000,
     deliverables: [
-      "Plataformas: Instagram / Facebook / LinkedIn / TikTok — a designar",
+      "Plataformas: Instagram / Facebook / LinkedIn / TikTok · a designar",
       "8 publicaciones en total durante la vigencia del contrato",
       "Estrategia de contenido para el período",
       "Dise\u00f1o de piezas gr\u00e1ficas y copywriting",

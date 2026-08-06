@@ -235,7 +235,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
           </div>
 
           <div id="appDevWarning" class="hidden mt-4 border-l-2 border-violet-400/30 pl-4 py-2">
-            <p class="text-[11px] font-medium text-violet-300 mb-1">Software a medida — revisar pago y garantía</p>
+            <p class="text-[11px] font-medium text-violet-300 mb-1">Software a medida · revisar pago y garantía</p>
             <p class="text-[11px] text-violet-300/50 leading-relaxed" id="appDevWarningDetail"></p>
           </div>
 
@@ -314,7 +314,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
             <div id="blastupFields" class="hidden sm:col-span-2 border border-amber-400/20 p-4 bg-amber-400/[0.02]">
               <div class="flex items-center gap-2 mb-4">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-amber-400"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                <span class="text-[10px] font-medium text-amber-400 uppercase tracking-[0.12em]">Blast-Up — Configuración del Período Único</span>
+                <span class="text-[10px] font-medium text-amber-400 uppercase tracking-[0.12em]">Blast-Up · Configuración del Período Único</span>
                 <span class="text-[10px] text-amber-300/50 font-body">(contrato por período único, sin renovación automática)</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -341,7 +341,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
               </div>
               <div class="mt-3 flex items-center gap-3 pt-3 border-t border-amber-400/10">
                 <input id="includePagare" name="include_pagare" type="checkbox" class="w-3.5 h-3.5 border-white/[0.08] bg-transparent text-amber-400 focus:ring-amber-400/30" />
-                <label for="includePagare" class="text-[10px] text-white/30 font-body cursor-pointer select-none">Incluir Pagaré (Anexo B) — <span class="text-amber-300/60">requiere firma ante notario</span></label>
+                <label for="includePagare" class="text-[10px] text-white/30 font-body cursor-pointer select-none">Incluir Pagaré (Anexo B) · <span class="text-amber-300/60">requiere firma ante notario</span></label>
               </div>
             </div>
 
@@ -349,7 +349,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
             <div id="honorariosFields" class="hidden sm:col-span-2 border border-sky-400/20 p-4 bg-sky-400/[0.02]">
               <div class="flex items-center gap-2 mb-4">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-sky-400"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                <span class="text-[10px] font-medium text-sky-400 uppercase tracking-[0.12em]">Honorarios — Retención Boleta</span>
+                <span class="text-[10px] font-medium text-sky-400 uppercase tracking-[0.12em]">Honorarios · Retención Boleta</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
@@ -401,7 +401,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
                     <span class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-1">Desde</span>
                     <input type="time" id="scheduleFrom" value="09:00" onchange="updateScheduleDisplay()" class="w-28 bg-transparent border-b border-white/[0.08] py-2 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" />
                   </div>
-                  <span class="text-white/20 text-sm pt-5">—</span>
+                  <span class="text-white/20 text-sm pt-5">·</span>
                   <div>
                     <span class="block text-[10px] font-medium text-white/25 uppercase tracking-[0.12em] mb-1">Hasta</span>
                     <input type="time" id="scheduleTo" value="13:00" onchange="updateScheduleDisplay()" class="w-28 bg-transparent border-b border-white/[0.08] py-2 text-sm text-white outline-none transition-all duration-200 focus:border-accent/40 font-body" />
@@ -436,23 +436,23 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
             <div id="previewContent" class="divide-y divide-white/[0.04]">
               <div class="flex justify-between px-4 py-3">
                 <span class="text-[11px] text-white/30">Tipo</span>
-                <span class="text-[11px] text-white/60 text-right" id="previewType">—</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewType">·</span>
               </div>
               <div class="flex justify-between px-4 py-3">
                 <span class="text-[11px] text-white/30">Cliente</span>
-                <span class="text-[11px] text-white/60 text-right" id="previewClient">—</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewClient">·</span>
               </div>
               <div class="flex justify-between px-4 py-3">
                 <span class="text-[11px] text-white/30">Servicios</span>
-                <span class="text-[11px] text-white/60 text-right" id="previewServices">—</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewServices">·</span>
               </div>
               <div class="flex justify-between px-4 py-3">
                 <span class="text-[11px] text-white/30">Duración</span>
-                <span class="text-[11px] text-white/60 text-right" id="previewDuration">—</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewDuration">·</span>
               </div>
               <div class="flex justify-between px-4 py-3">
                 <span class="text-[11px] text-white/30">Pago</span>
-                <span class="text-[11px] text-white/60 text-right" id="previewPayment">—</span>
+                <span class="text-[11px] text-white/60 text-right" id="previewPayment">·</span>
               </div>
               <div class="flex justify-between px-4 py-3">
                 <span class="text-[11px] text-white/50 font-medium">Total</span>
@@ -569,7 +569,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
             maintenance_description: s.maintenance_description || "",
             is_monthly: !!s.is_monthly,
           };
-          var label = s.name + ' — $' + fullP.toLocaleString('es-CL');
+          var label = s.name + ' · $' + fullP.toLocaleString('es-CL');
           if (promoP && promoP !== fullP) label += ' (promo $' + promoP.toLocaleString('es-CL') + ')';
           opts += '<option value="' + s.slug + '" data-price="' + displayPrice + '" data-price-full="' + fullP + '">' + label + "</option>";
         });
@@ -614,10 +614,10 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     updatePreview();
   }
 
-  // Strip price info from service names (prevents " — $400.000 (promo $350.000)" leaking into doc)
+  // Strip price info from service names (prevents " · $400.000 (promo $350.000)" leaking into doc)
   function sanitizeServiceName(raw) {
-    // Strip trailing price info: " — $400.000 (promo $350.000)" or "— $250.000" or " (promo $290.000)"
-    return (raw || "").replace(/\s*[-–—].*\(promo\s*\$[\d\.]+.*\)/g, "").replace(/\s*[-–—]\s*\$[\d\.]+[\s\S]*$/g, "").trim();
+    // Strip trailing price info: " · $400.000 (promo $350.000)" or "· $250.000" or " (promo $290.000)"
+    return (raw || "").replace(/\s*[-–·].*\(promo\s*\$[\d\.]+.*\)/g, "").replace(/\s*[-–·]\s*\$[\d\.]+[\s\S]*$/g, "").trim();
   }
 
   function getServices() {
@@ -667,7 +667,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var detail = document.getElementById("recurringWarningDetail");
     if (mismatched.length > 0) {
       var names = mismatched.map(function(s) { return '"' + s.name + '"'; }).join(", ");
-      detail.textContent = names + " — nombre implica servicio continuo pero el precio está contabilizado una sola vez. " +
+      detail.textContent = names + " · nombre implica servicio continuo pero el precio está contabilizado una sola vez. " +
         "Si es cobro mensual, el texto firmado solo respalda el monto total indicado (perjudica al prestador).";
       banner.classList.remove("hidden");
     } else {
@@ -696,7 +696,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var detail = document.getElementById("ivaWarningDetail");
     if (risky.length > 0) {
       var names = risky.map(function(s) { return s.name + " ($" + s.price.toLocaleString("es-CL") + ")"; }).join(", ");
-      detail.textContent = "Servicios de posible 1ª categoría: " + names + " — " + pct + "% del total. " +
+      detail.textContent = "Servicios de posible 1ª categoría: " + names + " · " + pct + "% del total. " +
         "El SII puede clasificar desarrollo transaccional (e-commerce, apps, bots, CRM) como actividad afecta a IVA (Art. 20 N°3 LIR). " +
         "Si corresponde factura en vez de boleta de honorarios, el IVA no declarado (19%) quedaría a cargo del prestador.";
       banner.classList.remove("hidden");
@@ -724,7 +724,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var detail = document.getElementById("ilimitadoWarningDetail");
     if (!banner || !detail) return;
     if (found.length > 0) {
-      detail.textContent = "Entregables con compromisos absolutos: " + [...new Set(found)].join(", ") + " — reemplazar por descripción acotada (ej: 'sin límite impuesto por el Prestador, sujeto a la infraestructura del Cliente').";
+      detail.textContent = "Entregables con compromisos absolutos: " + [...new Set(found)].join(", ") + " · reemplazar por descripción acotada (ej: 'sin límite impuesto por el Prestador, sujeto a la infraestructura del Cliente').";
       banner.classList.remove("hidden");
     } else {
       banner.classList.add("hidden");
@@ -746,7 +746,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     if (ambiguous.length > 0) {
       detail.textContent = "Servicios posiblemente recurrentes sin marcar como mensual: " +
         ambiguous.map(function(s) { return '"' + s.name + '" ($' + s.price.toLocaleString("es-CL") + ')'; }).join(", ") +
-        " — ¿es precio mensual o total por " + duration + " meses? Marcar como mensual en el catálogo para que el contrato lo aclare. El Art. 1566 CC interpreta ambigüedades contra el redactor.";
+        " · ¿es precio mensual o total por " + duration + " meses? Marcar como mensual en el catálogo para que el contrato lo aclare. El Art. 1566 CC interpreta ambigüedades contra el redactor.";
       banner.classList.remove("hidden");
     } else {
       banner.classList.add("hidden");
@@ -764,7 +764,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var detail = document.getElementById("recurringWarningDetail");
     if (!banner || !detail) return;
     if (hasAds && (paymentMethod === "50_50" || paymentMethod === "contado")) {
-      var extra = " · Además: servicio de Ads es continuo — el 50% final no tiene 'entrega conforme' clara. Considerar pago mensual por reporte o hitos mensuales como gatillo.";
+      var extra = " · Además: servicio de Ads es continuo · el 50% final no tiene 'entrega conforme' clara. Considerar pago mensual por reporte o hitos mensuales como gatillo.";
       if (!detail.textContent.includes("Ads")) {
         detail.textContent += extra;
         banner.classList.remove("hidden");
@@ -806,10 +806,10 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var issues = [];
     if (appSvcs.length > 0) {
       if (paymentMethod === "50_50" || paymentMethod === "contado") {
-        issues.push("Pago 50/50 o contado es insuficiente para software a medida — usar pago por hitos (30/30/30/10) con cada entregable funcional como gatillo.");
+        issues.push("Pago 50/50 o contado es insuficiente para software a medida · usar pago por hitos (30/30/30/10) con cada entregable funcional como gatillo.");
       }
       if (warranty < 30) {
-        issues.push("Garantía de " + warranty + " días es corta para software con autenticación/API/BD — mínimo 30 días, idealmente 60-90.");
+        issues.push("Garantía de " + warranty + " días es corta para software con autenticación/API/BD · mínimo 30 días, idealmente 60-90.");
       }
       if (appSvcs.some(function(s) { return s.price >= 500000; })) {
         issues.push("Monto alto: definir alcance funcional (nº de módulos, pantallas, roles) en el Anexo A para evitar conflictos sobre 'modificaciones sustanciales'.");
@@ -849,12 +849,12 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     if (selected && selected.value) {
       typeEl.textContent = templateLabels[selected.value] || selected.value;
     } else {
-      typeEl.textContent = "—";
+      typeEl.textContent = "·";
     }
 
     var clientName = document.querySelector("[name='client_name']").value || "";
     var isBlastUp = /blast[-\s]?up/i.test(clientName);
-    document.getElementById("previewClient").textContent = clientName || "—";
+    document.getElementById("previewClient").textContent = clientName || "·";
 
     // Show/hide contraparte técnica group
     var ctGroup = document.getElementById("contraparteGroup");
@@ -866,27 +866,27 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
     var svcs = getServices();
     var svcCount = svcs.filter(function(s) { return s.name; }).length;
-    document.getElementById("previewServices").textContent = svcCount > 0 ? svcCount + " servicio(s)" : "—";
+    document.getElementById("previewServices").textContent = svcCount > 0 ? svcCount + " servicio(s)" : "·";
 
     var duration = document.querySelector("[name='duration_months']").value;
-    document.getElementById("previewDuration").textContent = duration ? duration + " meses" : "—";
+    document.getElementById("previewDuration").textContent = duration ? duration + " meses" : "·";
 
     var pmLabels = { contado: "Contado", "50_50": "50/50", hitos: "Por Hitos" };
     var pm = document.querySelector("[name='payment_method']")?.value;
     var pmEl = document.getElementById("previewPayment");
-    if (pmEl) pmEl.textContent = pm ? (pmLabels[pm] || pm) : "—";
+    if (pmEl) pmEl.textContent = pm ? (pmLabels[pm] || pm) : "·";
 
     if (isBlastUp) {
       var flatAmount = parseInt(document.querySelector("[name='total_amount']")?.value) || 450000;
       document.getElementById("previewTotal").textContent = "$" + flatAmount.toLocaleString("es-CL") + " líquidos";
       var psEl = document.getElementById("previewServices");
-      psEl.innerHTML = svcCount > 0 ? svcCount + ' servicio(s) <span class="text-[10px] text-sky-400/60">(honorario fijo)</span>' : "—";
+      psEl.innerHTML = svcCount > 0 ? svcCount + ' servicio(s) <span class="text-[10px] text-sky-400/60">(honorario fijo)</span>' : "·";
     } else {
       var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
       document.getElementById("previewTotal").textContent = "$" + total.toLocaleString("es-CL");
       var psEl = document.getElementById("previewServices");
       if (psEl.innerHTML.indexOf("honorario") !== -1) {
-        psEl.textContent = svcCount > 0 ? svcCount + " servicio(s)" : "—";
+        psEl.textContent = svcCount > 0 ? svcCount + " servicio(s)" : "·";
       }
     }
   }
@@ -903,7 +903,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       var promoP = s.promo_price && s.promo_price > 0 ? s.promo_price : null;
       var fullP = s.price;
       var displayPrice = promoP || fullP;
-      var label = s.name + ' — $' + fullP.toLocaleString('es-CL');
+      var label = s.name + ' · $' + fullP.toLocaleString('es-CL');
       if (promoP && promoP !== fullP) label += ' (promo $' + promoP.toLocaleString('es-CL') + ')';
       opts += '<option value="' + s.slug + '" data-price="' + displayPrice + '" data-price-full="' + fullP + '">' + label + "</option>";
     }
@@ -1005,7 +1005,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       added++;
     }
     if (added === 0 && container.querySelectorAll(".service-select").length > 0) {
-      // Todos ya estaban agregados — mensaje sutil
+      // Todos ya estaban agregados · mensaje sutil
       var firstRow = container.querySelector(".service-row");
       if (firstRow) {
         firstRow.style.transition = "outline 0.3s";
@@ -1202,7 +1202,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     for (var i = 0; i < clients.length; i++) {
       var c = clients[i];
       html.push('<button type="button" class="w-full text-left px-3 py-2.5 border-b border-white/[0.03] hover:bg-white/[0.03] transition-colors" onclick="fillClient(' + JSON.stringify(c).replace(/"/g, "&quot;") + ')">');
-      html.push('<div class="text-xs text-white/70 font-medium">' + escapeHtml(c.name) + (c.company_name ? " — " + escapeHtml(c.company_name) : "") + '</div>');
+      html.push('<div class="text-xs text-white/70 font-medium">' + escapeHtml(c.name) + (c.company_name ? " · " + escapeHtml(c.company_name) : "") + '</div>');
       html.push('<div class="text-[10px] text-white/25 mt-0.5">' + (c.rut ? escapeHtml(c.rut) + " · " : "") + (c.email ? escapeHtml(c.email) : "") + '</div>');
       html.push('</button>');
     }
@@ -1283,7 +1283,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
   // ── Preview: 19 cláusulas ────────────────────────────────────────────────
   function renderContractPreview() {
-    var clientName = document.querySelector("[name='client_name']").value || "—";
+    var clientName = document.querySelector("[name='client_name']").value || "·";
     var isBlastUp = /blast[-\s]?up/i.test(clientName);
     var blastNet = isBlastUp ? parseInt(document.querySelector("[name='total_amount']")?.value) || 450000 : 0;
     var blastRate = 15.25;
@@ -1295,12 +1295,12 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     var clientTechName = isBlastUp ? document.querySelector("[name='client_tech_name']")?.value || "" : "";
     var clientTechEmail = isBlastUp ? document.querySelector("[name='client_tech_email']")?.value || "" : "";
     var signingDate = isBlastUp ? document.querySelector("[name='signing_date']")?.value || "" : "";
-    var clientRut = document.querySelector("[name='client_rut']").value || "—";
+    var clientRut = document.querySelector("[name='client_rut']").value || "·";
     var clientNationality = document.querySelector("[name='client_nationality']")?.value || "Chilena";
     var clientProfession = document.querySelector("[name='client_profession']")?.value || "";
-    var clientEmail = document.querySelector("[name='client_email']").value || "—";
-    var clientPhone = document.querySelector("[name='client_phone']").value || "—";
-    var clientAddress = document.querySelector("[name='client_address']").value || "—";
+    var clientEmail = document.querySelector("[name='client_email']").value || "·";
+    var clientPhone = document.querySelector("[name='client_phone']").value || "·";
+    var clientAddress = document.querySelector("[name='client_address']").value || "·";
     var clientRepresentante = document.querySelector("[name='client_representante']")?.value || "";
     var clientNotifEmail = document.querySelector("[name='client_notif_email']")?.value || "";
     var prestadorNombreCivil = document.querySelector("[name='prestador_nombre_civil']")?.value || "";
@@ -1312,7 +1312,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
     var svcs = getServices();
     var total = svcs.reduce(function(sum, s) { return sum + s.price; }, 0);
-    var duration = document.querySelector("[name='duration_months']").value || "—";
+    var duration = document.querySelector("[name='duration_months']").value || "·";
     var startDate = document.querySelector("[name='start_date']").value || "";
     var endDate = document.querySelector("[name='end_date']").value || "";
     var specialClauses = document.querySelector("[name='special_clauses']")?.value || "";
@@ -1323,7 +1323,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     // Helper: clause header
     var ordinals = ["PRIMERA","SEGUNDA","TERCERA","CUARTA","QUINTA","SEXTA","SÉPTIMA","OCTAVA","NOVENA","DÉCIMA","DÉCIMA PRIMERA","DÉCIMA SEGUNDA","DÉCIMA TERCERA","DÉCIMA CUARTA","DÉCIMA QUINTA","DÉCIMA SEXTA","DÉCIMA SÉPTIMA","DÉCIMA OCTAVA","DÉCIMA NOVENA","VIGÉSIMA","VIGÉSIMA PRIMERA","VIGÉSIMA SEGUNDA","VIGÉSIMA TERCERA"];
     function clauseTitle(idx, title) {
-      return '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e5e7eb;">' + ordinals[idx] + '. — ' + title + '</h3>';
+      return '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e5e7eb;">' + ordinals[idx] + '. · ' + title + '</h3>';
     }
     function clauseText(t) {
       return '<p style="font-size:11px;color:#374151;margin:0 0 6px;line-height:1.55;">' + t + '</p>';
@@ -1340,7 +1340,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     // ── HEADER ──
     html += '<div style="text-align:center;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #4f46e5;">';
     html += '<h1 style="font-size:18px;font-weight:700;color:#111827;margin:0 0 2px;">CONTRATO DE PRESTACIÓN DE SERVICIOS</h1>';
-    html += '<p style="font-size:11px;color:#6b7280;margin:0;">Mtsprz — Soluciones Digitales</p>';
+    html += '<p style="font-size:11px;color:#6b7280;margin:0;">Mtsprz · Soluciones Digitales</p>';
     if (isBlastUp && signingDate) {
       var sd = new Date(signingDate + 'T12:00:00').toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' });
       html += '<p style="font-size:10px;color:#9ca3af;margin:6px 0 0;">En Puerto Varas, a ' + sd + ' | Per\u00edodo \u00fanico: 31 d\u00edas corridos desde la acreditaci\u00f3n del pago</p>';
@@ -1352,8 +1352,8 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     // ── 1. IDENTIFICACIÓN DE LAS PARTES ──
     var isCompanyRut = checkIsCompanyRut(clientRut);
     var prestadorLabel = prestadorNombreCivil
-      ? prestadorNombreCivil + ', que usa el nombre de fantasía Mtsprz — Soluciones Digitales'
-      : 'Mtsprz — Soluciones Digitales';
+      ? prestadorNombreCivil + ', que usa el nombre de fantasía Mtsprz · Soluciones Digitales'
+      : 'Mtsprz · Soluciones Digitales';
     html += clauseTitle(0, 'IDENTIFICACIÓN DE LAS PARTES');
     html += '<table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:8px;">';
     html += '<tr><td style="padding:2px 6px 2px 0;color:#6b7280;width:160px;">PRESTADOR:</td><td style="padding:2px 0;color:#111827;">' + prestadorLabel + '</td></tr>';
@@ -1480,7 +1480,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       html += clauseBold('T\u00e9rmino anticipado: ', 'Cualquiera de las partes podr\u00e1 poner t\u00e9rmino anticipado al contrato mediante aviso escrito con al menos 10 d\u00edas de anticipaci\u00f3n. En caso de desistimiento unilateral del Cliente sin el aviso referido, se deber\u00e1 pagar la totalidad del honorario del per\u00edodo en curso. En caso de t\u00e9rmino anticipado imputable al Prestador, \u00e9ste restituir\u00e1 el honorario proporcional a las horas no consumidas.');
       html += clauseBold('Efectos del t\u00e9rmino: ', 'Al t\u00e9rmino del contrato por cualquier causa, el Prestador pondr\u00e1 a disposici\u00f3n del Cliente los avances parciales producidos hasta esa fecha y devolver\u00e1 la informaci\u00f3n confidencial del Cliente en su poder, salvo aquella que deba conservar por obligaci\u00f3n legal o tributaria. La garant\u00eda de la cl\u00e1usula D\u00c9CIMA SEXTA sobrevive al t\u00e9rmino del contrato respecto de los avances aprobados antes del t\u00e9rmino.');
     } else {
-      html += clauseBold('Duración: ', duration + ' mes(es) desde ' + (startDate || '—') + ' hasta ' + (endDate || '—') + '.');
+      html += clauseBold('Duración: ', duration + ' mes(es) desde ' + (startDate || '·') + ' hasta ' + (endDate || '·') + '.');
       html += clauseBold('Término anticipado: ', 'Por: (a) mutuo acuerdo escrito; (b) incumplimiento grave (Art. 1489 CC); (c) fuerza mayor; (d) aviso con 30 días de anticipación.');
       html += clauseBold('Efectos del término: ', 'Pago de servicios ejecutados y recibidos conforme + entrega de avances de servicios no concluidos con pago proporcional según avance acreditado + devolución de información confidencial. En caso de desacuerdo sobre el avance, las partes se someterán a mediación.');
     }
@@ -1575,7 +1575,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     // ── 18. NOTIFICACIONES + JURISDICCIÓN ──
     html += clauseTitle(17, 'NOTIFICACIONES, JURISDICCIÓN Y LEGISLACIÓN APLICABLE');
     var notifEmailCliente = clientNotifEmail || clientEmail;
-    html += clauseBold('Notificaciones: ', 'Correos válidos para efectos legales — Prestador: contacto@mtsprz.org | Cliente: ' + notifEmailCliente + '. Se entenderá recibida la comunicación al día hábil siguiente de su envío. El cambio de correo válido debe notificarse con 5 días hábiles de anticipación.');
+    html += clauseBold('Notificaciones: ', 'Correos válidos para efectos legales · Prestador: contacto@mtsprz.org | Cliente: ' + notifEmailCliente + '. Se entenderá recibida la comunicación al día hábil siguiente de su envío. El cambio de correo válido debe notificarse con 5 días hábiles de anticipación.');
     html += clauseText('Se rige por las leyes de la República de Chile. Domicilio: Puerto Varas, Región de Los Lagos. Las partes se someten a sus tribunales ordinarios (prórroga de competencia válida conforme Art. 181 COT).');
     html += clauseBold('Firma electrónica: ', 'La firma electrónica simple utilizada produce efectos jurídicos entre las partes conforme a la Ley 19.799. No cuenta con la presunción de integridad y autoría de la firma electrónica avanzada (certificada); su valor probatorio será apreciado por el tribunal según las reglas generales.');
 
@@ -1585,7 +1585,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
     html += clauseItem('a', 'Modificación: Cualquier modificación del presente contrato requerirá acuerdo por escrito entre las partes.');
     html += clauseItem('b', 'Prevalencia: En caso de conflicto entre el cuerpo principal del contrato y el Anexo A, prevalecer\u00e1n las disposiciones del presente cuerpo principal, salvo respecto de la definici\u00f3n de d\u00edas h\u00e1biles, la descripci\u00f3n de la l\u00ednea base y la clasificaci\u00f3n de tareas contenidas en el Anexo A, que prevalecer\u00e1n en todo caso.');
 
-    // ── 20. CESIÓN (VIGÉSIMA) — recíproca ──
+    // ── 20. CESIÓN (VIGÉSIMA) · recíproca ──
     html += clauseTitle(19, 'CESIÓN DE POSICIÓN CONTRACTUAL');
     html += clauseText('Ninguna de las partes podrá ceder ni transferir su posición contractual ni las obligaciones derivadas del presente contrato sin el consentimiento previo, expreso y por escrito de la otra parte.');
     html += clauseItem('a', 'La cesión no libera al cedente de sus obligaciones contractuales, salvo pacto expreso en contrario.');
@@ -1597,16 +1597,16 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
 
     // ── 22. FIRMAS (VIGÉSIMA SEGUNDA) ──
     html += '<div style="margin-top:24px;padding-top:16px;border-top:2px solid #e5e7eb;">';
-    html += '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:0 0 12px;">VIG\u00C9SIMA SEGUNDA. — FIRMAS</h3>';
+    html += '<h3 style="font-size:13px;font-weight:700;color:#4f46e5;margin:0 0 12px;">VIG\u00C9SIMA SEGUNDA. · FIRMAS</h3>';
     html += '<p style="font-size:10px;color:#6b7280;margin:0 0 14px;font-style:italic;">"Las partes firman en señal de aprobación, aceptando todas y cada una de las cláusulas del presente contrato."</p>';
     html += '<div style="display:flex;justify-content:space-between;gap:20px;">';
-    html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">Mtsprz — Soluciones Digitales</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">PRESTADOR</p></div>';
+    html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">Mtsprz · Soluciones Digitales</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">PRESTADOR</p></div>';
     html += '<div style="flex:1;text-align:center;"><div style="height:50px;border-bottom:1px solid #9ca3af;margin-bottom:4px;"></div><p style="font-size:10px;color:#6b7280;margin:0;">' + clientName + '</p><p style="font-size:9px;color:#9ca3af;margin:2px 0 0;">CLIENTE</p></div>';
     html += '</div></div>';
 
     // ── ANEXO A: ENTREGABLES Y PLAZOS (después de firmas) ──
     html += '<div style="margin-top:20px;padding-top:16px;border-top:2px solid #e5e7eb;">';
-    html += '<h3 style="font-size:13px;font-weight:700;color:#111827;margin:0 0 8px;">ANEXO A — ENTREGABLES Y PLAZOS</h3>';
+    html += '<h3 style="font-size:13px;font-weight:700;color:#111827;margin:0 0 8px;">ANEXO A · ENTREGABLES Y PLAZOS</h3>';
     html += clauseText('El presente anexo forma parte integrante del contrato y detalla los entregables, plazos y condiciones espec\u00edficas del servicio contratado.');
     html += clauseText('Para efectos del presente contrato, se entender\u00e1 por "d\u00edas h\u00e1biles" los d\u00edas lunes a viernes, excluidos los festivos en Chile.');
     if (isBlastUp) {
@@ -1629,7 +1629,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       } else if (isBlastUp) {
         html += clauseBold('Plazo de ejecución: ', 'Per\u00edodo \u00fanico de 31 d\u00edas corridos desde la acreditaci\u00f3n del pago. Las partes acuerdan definir los hitos espec\u00edficos y sus fechas de entrega mediante comunicaci\u00f3n escrita dentro de los 3 d\u00edas h\u00e1biles siguientes a la fecha de acreditaci\u00f3n del pago.');
       } else {
-        html += clauseBold('Plazo de ejecución: ', 'Fecha de inicio: ' + plazoInicio + ' — Fecha de término estimada: ' + plazoFin + '. Las partes acuerdan definir los hitos específicos y sus fechas de entrega mediante comunicación escrita dentro de los 5 días hábiles siguientes a la firma del contrato, los que se entenderán incorporados al presente Anexo A. La falta de definición en dicho plazo habilitará al Prestador para gestionar los entregables en el orden y tiempos que estime convenientes, dentro del plazo total.');
+        html += clauseBold('Plazo de ejecución: ', 'Fecha de inicio: ' + plazoInicio + ' · Fecha de término estimada: ' + plazoFin + '. Las partes acuerdan definir los hitos específicos y sus fechas de entrega mediante comunicación escrita dentro de los 5 días hábiles siguientes a la firma del contrato, los que se entenderán incorporados al presente Anexo A. La falta de definición en dicho plazo habilitará al Prestador para gestionar los entregables en el orden y tiempos que estime convenientes, dentro del plazo total.');
       }
       if (asvc.deliverables && asvc.deliverables.length > 0) {
         html += '<strong style="font-size:11px;color:#111827;">Entregables:</strong>';
@@ -1645,7 +1645,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
       }
       if (isBlastUp) {
         html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Criterio de aceptaci\u00f3n:</strong> La aceptaci\u00f3n de los entregables determina el inicio del per\u00edodo de garant\u00eda (' + warrantyDays + ' d\u00edas) durante el cual el Prestador corregir\u00e1 defectos de implementaci\u00f3n, con hasta ' + revisionRounds + ' ronda(s) de correcciones por avance. Dicha aceptaci\u00f3n no condiciona ni suspende la obligaci\u00f3n de pago del per\u00edodo, conforme a la cl\u00e1usula S\u00c9PTIMA.</p>';
-        html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Clasificaci\u00f3n de tareas:</strong> Correctivo (fallas que impiden operaci\u00f3n normal — prioridad m\u00e1xima) | Evolutivo (mejoras y nuevas funcionalidades contra tope de horas) | Excluido (cambios de arquitectura, integraciones no previstas, tareas que excedan horas disponibles del per\u00edodo). Las horas dedicadas a tareas correctivas consumen el tope de horas del per\u00edodo.</p>';
+        html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Clasificaci\u00f3n de tareas:</strong> Correctivo (fallas que impiden operaci\u00f3n normal · prioridad m\u00e1xima) | Evolutivo (mejoras y nuevas funcionalidades contra tope de horas) | Excluido (cambios de arquitectura, integraciones no previstas, tareas que excedan horas disponibles del per\u00edodo). Las horas dedicadas a tareas correctivas consumen el tope de horas del per\u00edodo.</p>';
         html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Disponibilidad:</strong> El Prestador organiza libremente su tiempo. Se compromete a acusar recibo de las comunicaciones del Cliente dentro de un plazo m\u00e1ximo de 8 horas h\u00e1biles y, trat\u00e1ndose de incidentes correctivos calificados como cr\u00edticos, a iniciar su atenci\u00f3n dentro de 8 horas h\u00e1biles. Las horas dedicadas a incidentes correctivos consumen el tope de horas del per\u00edodo.</p>';
       } else {
         html += '<p style="font-size:10px;color:#6b7280;margin:0 0 4px;"><strong>Criterio de aceptación:</strong> Cada entregable se considerará recibido conforme tras su revisión y aprobación por escrito del Cliente, o transcurrido el plazo de revisión sin observaciones (aprobación tácita).</p>';
@@ -1804,7 +1804,7 @@ const prestadorRut = import.meta.env.MTSPRZ_RUT || "Pendiente";
           notif_email: formData.get("client_notif_email") || null,
           representante: formData.get("client_representante") || null,
         };
-        // Await save before redirect — evita que navegación aborte el fetch
+        // Await save before redirect · evita que navegación aborte el fetch
         try {
           await fetch("/api/clients", {
             method: "POST",

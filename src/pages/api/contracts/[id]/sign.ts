@@ -116,14 +116,14 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
         if (clientEmail) {
           await sendEmail({
             to: clientEmail,
-            subject: `Contrato ${contractNumber} firmado — Mtsprz`,
+            subject: `Contrato ${contractNumber} firmado · Mtsprz`,
             html: contractSignedEmail(clientName, contractNumber, pdfLink),
           });
         }
 
         await sendEmail({
           to: adminEmail,
-          subject: `Contrato ${contractNumber} completado — Mtsprz`,
+          subject: `Contrato ${contractNumber} completado · Mtsprz`,
           html: adminContractCompletedEmail(
             clientName,
             contractNumber,

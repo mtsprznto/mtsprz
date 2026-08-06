@@ -100,6 +100,6 @@ La mejor estrategia es pedir resenas en el momento de mayor satisfaccion del cli
 
 No tanto como crees. Google evalua la proporcion general y, sobre todo, como respondes a las resenas negativas. Una respuesta profesional y ofreciendo solucion puede mejorar tu imagen incluso mas que tener solo resenas perfectas.
 
-[Optimiza tu Google Maps con Mtsprz](/contacto) — te ayudamos a posicionar tu negocio en la Region de Los Lagos.
+[Optimiza tu Google Maps con Mtsprz](/contacto) · te ayudamos a posicionar tu negocio en la Region de Los Lagos.
 
 Si tu negocio esta en una comuna especifica, visita nuestras guias: [Puerto Varas](/regiones/puerto-varas), [Osorno](/regiones/osorno), [Valdivia](/regiones/valdivia) o [Puerto Montt](/regiones/puerto-montt).

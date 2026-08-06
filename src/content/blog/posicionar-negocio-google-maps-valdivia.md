@@ -78,7 +78,7 @@ Si, pero toma tiempo y conocimiento tecnico. La optimizacion inicial se puede ha
 
 ### Funciona para cualquier tipo de negocio?
 
-Si. Restaurantes, hoteles, clinicas, talleres, ferreterias, corredoras — cualquier negocio con clientes locales en Valdivia.
+Si. Restaurantes, hoteles, clinicas, talleres, ferreterias, corredoras · cualquier negocio con clientes locales en Valdivia.
 
 ---
 

@@ -1,5 +1,5 @@
 /**
- * Author profile — centralized for E-E-A-T consistency
+ * Author profile · centralized for E-E-A-T consistency
  *
  * Used in:
  * - BaseLayout.astro (Person schema)

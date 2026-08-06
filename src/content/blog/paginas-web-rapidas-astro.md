@@ -10,7 +10,7 @@ tags: ["desarrollo web", "Astro", "velocidad", "rendimiento", "WordPress", "Regi
 
 ## La velocidad de tu pagina web afecta tu negocio
 
-Si tu pagina web tarda mas de 3 segundos en cargar, el 53% de tus visitantes se van sin ver nada. Para negocios en la Region de Los Lagos, donde el turismo genera busquedas desde celulares con conexiones lentas, la velocidad no es un lujo — es supervivencia.
+Si tu pagina web tarda mas de 3 segundos en cargar, el 53% de tus visitantes se van sin ver nada. Para negocios en la Region de Los Lagos, donde el turismo genera busquedas desde celulares con conexiones lentas, la velocidad no es un lujo · es supervivencia.
 
 Google tambien lo penaliza: los sitios lentos aparecen abajo en los resultados de busqueda. Una pagina web que no carga rapido es como un local con el letrero apagado.
 
@@ -64,9 +64,9 @@ Pero para la mayoria de pymes en el sur de Chile, Astro es mejor opcion:
 ## Como saber si tu pagina web es lenta
 
 Herramientas gratuitas:
-1. **Google PageSpeed Insights** (pagespeed.web.dev) — ingresa tu URL
-2. **GTmetrix** (gtmetrix.com) — analisis detallado
-3. **Lighthouse** (integrado en Chrome) — F12 → Lighthouse → Generate report
+1. **Google PageSpeed Insights** (pagespeed.web.dev) · ingresa tu URL
+2. **GTmetrix** (gtmetrix.com) · analisis detallado
+3. **Lighthouse** (integrado en Chrome) · F12 → Lighthouse → Generate report
 
 **Metricas objetivo:**
 - LCP (Largest Contentful Paint): menos de 2.5 segundos

@@ -1,6 +1,6 @@
 ---
 /**
- * CookiePreferences — Granular consent configuration modal
+ * CookiePreferences · Granular consent configuration modal
  *
  * Design: liquid-glass modal, dark theme, toggle switches
  * Accessibility: focus trap, ARIA roles, keyboard navigation
@@ -192,13 +192,13 @@
     });
   });
 
-  // Save — manager dispatches cookie-consent-change internally
+  // Save · manager dispatches cookie-consent-change internally
   saveBtn.addEventListener("click", function() {
     var mgr = window.__cookieConsent;
     if (mgr) mgr.savePreferences(prefs);
   });
 
-  // Reject all — manager dispatches cookie-consent-change internally
+  // Reject all · manager dispatches cookie-consent-change internally
   rejectBtn.addEventListener("click", function() {
     var mgr = window.__cookieConsent;
     if (mgr) mgr.rejectAll();

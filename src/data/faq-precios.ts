@@ -1,5 +1,5 @@
 /**
- * FAQ con precios directos (J3 GEO + transparencia) — data-driven.
+ * FAQ con precios directos (J3 GEO + transparencia) · data-driven.
  * Respuestas directas con precio = lo que ChatGPT/Perplexity citan
  * cuando alguien pregunta "¿cuánto cuesta una web en Osorno/Puerto Varas?".
  */

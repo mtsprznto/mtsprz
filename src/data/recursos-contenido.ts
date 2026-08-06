@@ -1,5 +1,5 @@
 /**
- * Contenido SEO/GEO de los lead magnets — data-driven.
+ * Contenido SEO/GEO de los lead magnets · data-driven.
  * Cada slug tiene: meta SEO, secciones editables y FAQ (para schema).
  * Editar aquí; NO tocar las páginas .astro.
  */
@@ -17,7 +17,7 @@ export interface RecursoContenido {
   intro: string;
   secciones: RecursoSeccion[];
   faq: { pregunta: string; respuesta: string }[];
-  /** Fuentes primarias de las cifras citadas — se renderizan como lista al final. */
+  /** Fuentes primarias de las cifras citadas · se renderizan como lista al final. */
   fuentes?: { label: string; url: string }[];
 }
 
@@ -84,7 +84,7 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
       {
         h2: "8. Contenido que responde preguntas reales",
         parrafos: [
-          "Escribe lo que tu cliente pregunta, no lo que tú quieres decir. '¿Cuánto cuesta una web en Osorno?' '¿Cuánto tarda?' — respondidas con precios y plazos directos.",
+          "Escribe lo que tu cliente pregunta, no lo que tú quieres decir. '¿Cuánto cuesta una web en Osorno?' '¿Cuánto tarda?' · respondidas con precios y plazos directos.",
           "Este contenido es lo que las IA citan: los sitios con datos propios y respuestas directas tienen hasta 40% más visibilidad en ChatGPT y Perplexity (estudio GEO de Princeton, KDD 2024).",
         ],
       },
@@ -109,19 +109,19 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
     ],
     fuentes: [
       {
-        label: "Google — Mobile Site Speed Playbook (2016): 53% abandona si la carga tarda más de 3 segundos",
+        label: "Google · Mobile Site Speed Playbook (2016): 53% abandona si la carga tarda más de 3 segundos",
         url: "https://www.thinkwithgoogle.com/_qs/documents/3975/c676a_Google_MobileSiteSpeed_Playbook_v2.1_digital_RD1XArd.pdf",
       },
       {
-        label: "Princeton — GEO: Generative Engine Optimization (KDD 2024): hasta +40% de visibilidad en IA",
+        label: "Princeton · GEO: Generative Engine Optimization (KDD 2024): hasta +40% de visibilidad en IA",
         url: "https://collaborate.princeton.edu/en/publications/geo-generative-engine-optimization",
       },
       {
-        label: "BrightLocal — Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
+        label: "BrightLocal · Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
         url: "https://www.brightlocal.com/insights/local-consumer-review-survey/",
       },
       {
-        label: "Biblioteca del Congreso Nacional de Chile — Ley 21.719 (protección de datos personales)",
+        label: "Biblioteca del Congreso Nacional de Chile · Ley 21.719 (protección de datos personales)",
         url: "https://www.bcn.cl/leychile/navegar?idNorma=1209272",
       },
     ],
@@ -133,7 +133,7 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
     metaDescription:
       "Automatización para pymes del sur: WhatsApp que responde, reservas automáticas, boletas, recordatorios, email y más. Con qué herramientas gratis empezar hoy.",
     intro:
-      "En una pyme, el tiempo es el recurso más caro. Estas 10 automatizaciones —ordenadas de mayor a menor impacto— eliminan tareas repetitivas sin contratar a nadie. La mayoría se monta con herramientas gratis o de bajo costo, y en menos de una semana.",
+      "En una pyme, el tiempo es el recurso más caro. Estas 10 automatizaciones (ordenadas de mayor a menor impacto) eliminan tareas repetitivas sin contratar a nadie. La mayoría se monta con herramientas gratis o de bajo costo, y en menos de una semana.",
     secciones: [
       {
         h2: "1. WhatsApp que responde solo (el mayor retorno)",
@@ -146,7 +146,7 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
       {
         h2: "2. Reservas y agenda automática",
         parrafos: [
-          "Si tomas reservas (restaurante, peluquería, clínica, servicio técnico), una agenda online elimina el ida y vuelta de '¿tienes hora? — ¿a qué hora?'.",
+          "Si tomas reservas (restaurante, peluquería, clínica, servicio técnico), una agenda online elimina el ida y vuelta de '¿tienes hora? · ¿a qué hora?'.",
           "Opciones gratis: Calendly, Google Calendar con slots. Opciones pagas con cobro: Calendly Pro, Reserva, Focus. El cliente agenda solo, tú solo recibes la confirmación.",
         ],
       },
@@ -227,7 +227,7 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
     ],
     fuentes: [
       {
-        label: "BrightLocal — Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
+        label: "BrightLocal · Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
         url: "https://www.brightlocal.com/insights/local-consumer-review-survey/",
       },
     ],
@@ -318,11 +318,11 @@ export const RECURSOS_CONTENIDO: Record<string, RecursoContenido> = {
     ],
     fuentes: [
       {
-        label: "Google/Think with Google — How Mobile Search Connects Consumers to Stores (2016): 76% visita en un día",
+        label: "Google/Think with Google · How Mobile Search Connects Consumers to Stores (2016): 76% visita en un día",
         url: "https://www.thinkwithgoogle.com/_qs/documents/620/mobile-search-trends-consumers-to-stores.pdf",
       },
       {
-        label: "BrightLocal — Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
+        label: "BrightLocal · Local Consumer Review Survey 2026: 47% descarta negocios con menos de 20 reseñas",
         url: "https://www.brightlocal.com/insights/local-consumer-review-survey/",
       },
     ],

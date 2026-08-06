@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
-    "@astrojs/mdx": "^7.0.0",
+    "@astrojs/mdx": "^7.0.5",
     "@astrojs/sitemap": "^3.7.0",
     "@astrojs/vercel": "^11.0.3",
     "@lucide/astro": "^1.25.0",
@@ -33,7 +33,12 @@
     "zustand": "^5.0.0"
   },
   "devDependencies": {
-    "sharp-cli": "^5.2.0",
+    "sharp": "^0.35.3",
     "typescript": "^5.8.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "js-yaml": "4.3.1"
+    }
   }
 }

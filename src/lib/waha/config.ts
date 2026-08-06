@@ -1,5 +1,5 @@
 /**
- * WAHA — Configuración central desde environment.
+ * WAHA · Configuración central desde environment.
  * Variables: WAHA_URL, WAHA_API_KEY, WAHA_SESSION
  */
 

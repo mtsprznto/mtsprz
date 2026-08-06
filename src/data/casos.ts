@@ -1,5 +1,5 @@
 /**
- * Casos de estudio — data-driven (J1: credibilidad).
+ * Casos de estudio · data-driven (J1: credibilidad).
  * Editar aquí; NO tocar las páginas .astro.
  * Estructura: Problema → Solución → Resultado → Testimonio.
  *
@@ -25,8 +25,10 @@ export interface Caso {
   resultado: string[];
   /** Métricas clave (label → valor) */
   metricas: { label: string; valor: string }[];
-  /** Testimonio — null si aún no existe */
-  testimonio: { nombre: string; cargo: string; cita: string } | null;
+  /** Stack técnico visible · solo cuando está documentado (no inventar) */
+  stack?: string[];
+  /** Testimonio · null si aún no existe */
+  testimonio: { nombre: string; cargo: string; empresa: string; cita: string } | null;
   /** Icono lucide */
   icon: string;
 }
@@ -34,15 +36,15 @@ export interface Caso {
 export const CASOS: Caso[] = [
   {
     slug: "fie-inteligencia-educativa",
-    cliente: "FIE — Finanzas Inteligentes Educativas",
+    cliente: "FIE · Finanzas Inteligentes Educativas",
     industria: "IA / Educación",
     tipo: "Caso interno",
     titulo: "Automatización de gastos educativos con OCR + IA",
-    resumen: "Plataforma que extrae datos de comprobantes y genera informes — proceso manual eliminado.",
+    resumen: "Plataforma que extrae datos de comprobantes y genera informes · proceso manual eliminado.",
     problema:
       "Las instituciones educativas recibían decenas de comprobantes (boletas, pagarés, estados de cuenta) que debían transcribirse y clasificarse a mano. El proceso tomaba horas, generaba errores y no dejaba trazabilidad.",
     solucion:
-      "Construimos una aplicación con OCR + RAG: el sistema lee los comprobantes, extrae montos/fechas/beneficiarios y los organiza en informes. La IA maneja formatos que cambian — sin plantillas fijas.",
+      "Construimos una aplicación con OCR + RAG: el sistema lee los comprobantes, extrae montos/fechas/beneficiarios y los organiza en informes. La IA maneja formatos que cambian · sin plantillas fijas.",
     resultado: [
       "Transcripción manual eliminada: los comprobantes se procesan solos",
       "Errores de captura reducidos a casi cero (validación automática)",
@@ -53,12 +55,13 @@ export const CASOS: Caso[] = [
       { label: "Errores", valor: "≈0 (validación IA)" },
       { label: "Formato", valor: "Cualquiera (RAG)" },
     ],
+    stack: ["Next.js 15", "FastAPI", "PostgreSQL", "Arquitectura hexagonal"],
     testimonio: null,
     icon: "bot",
   },
   {
     slug: "blastup-email-ia",
-    cliente: "Blast-Up — Marketing con IA",
+    cliente: "Blast-Up · Marketing con IA",
     industria: "Marketing / IA",
     tipo: "Caso interno",
     titulo: "Campañas de email masivas con generación de contenido IA",
@@ -82,13 +85,13 @@ export const CASOS: Caso[] = [
   },
   {
     slug: "gestorpass-gestor-password",
-    cliente: "GestorPass — Gestor de contraseñas",
+    cliente: "GestorPass · Gestor de contraseñas",
     industria: "Seguridad / SaaS",
     tipo: "Caso interno",
     titulo: "Gestor de contraseñas con cifrado y verificación biométrica",
     resumen: "App web con criptografía real (AES) + login biométrico y multi-firma.",
     problema:
-      "Las pymes acumulaban contraseñas en Excel y notas — sin control de acceso ni seguridad. Necesitaban una herramienta simple, segura y chilena.",
+      "Las pymes acumulaban contraseñas en Excel y notas · sin control de acceso ni seguridad. Necesitaban una herramienta simple, segura y chilena.",
     solucion:
       "Creamos GestorPass: cifrado fuerte en reposo, verificación biométrica para acceso, y gestión de credenciales por equipo con auditoría.",
     resultado: [

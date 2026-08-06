@@ -46,19 +46,19 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
   <!-- Stats row -->
   <div class="grid grid-cols-4 gap-px bg-white/[0.04] mb-6">
     <div class="bg-[#010101] p-4">
-      <div class="font-heading text-2xl font-bold text-white tracking-tight" id="stat-total">—</div>
+      <div class="font-heading text-2xl font-bold text-white tracking-tight" id="stat-total">·</div>
       <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium mt-1">Total</div>
     </div>
     <div class="bg-[#010101] p-4">
-      <div class="font-heading text-2xl font-bold text-amber-300 tracking-tight" id="stat-new">—</div>
+      <div class="font-heading text-2xl font-bold text-amber-300 tracking-tight" id="stat-new">·</div>
       <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium mt-1">Nuevos</div>
     </div>
     <div class="bg-[#010101] p-4">
-      <div class="font-heading text-2xl font-bold text-emerald-400 tracking-tight" id="stat-qualified">—</div>
+      <div class="font-heading text-2xl font-bold text-emerald-400 tracking-tight" id="stat-qualified">·</div>
       <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium mt-1">Calificados</div>
     </div>
     <div class="bg-[#010101] p-4">
-      <div class="font-heading text-2xl font-bold text-red-400/70 tracking-tight" id="stat-lost">—</div>
+      <div class="font-heading text-2xl font-bold text-red-400/70 tracking-tight" id="stat-lost">·</div>
       <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium mt-1">Perdidos</div>
     </div>
   </div>
@@ -108,7 +108,7 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-white/[0.04] shrink-0">
           <div class="flex items-center gap-3 min-w-0">
-            <div id="modal-avatar" class="w-10 h-10 shrink-0 bg-white/[0.06] border border-white/[0.06] flex items-center justify-center font-heading text-sm font-bold text-white/70">—</div>
+            <div id="modal-avatar" class="w-10 h-10 shrink-0 bg-white/[0.06] border border-white/[0.06] flex items-center justify-center font-heading text-sm font-bold text-white/70">·</div>
             <div class="min-w-0">
               <h2 class="font-heading text-lg font-bold text-white tracking-tight truncate" id="modal-title">Lead</h2>
               <div class="text-[9px] text-white/25 uppercase tracking-[0.15em] font-medium" id="modal-meta">Detalle</div>
@@ -211,7 +211,7 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
               <label class="text-[10px] font-medium text-white/25 uppercase tracking-[0.15em] mb-1.5 block">Servicio</label>
               <select id="c-service"
                 class="w-full px-3 py-2 bg-white/[0.04] border border-white/[0.06] text-white text-sm focus:outline-none focus:border-accent/50 transition-colors">
-                <option value="">—</option>
+                <option value="">·</option>
                 <option value="web">Desarrollo Web</option>
                 <option value="seo">SEO</option>
                 <option value="whatsapp">WhatsApp Business</option>
@@ -324,15 +324,15 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
     }
 
     tbody.innerHTML = leads.map(function(l) {
-      var date = l.created_at ? new Date(l.created_at).toLocaleDateString('es-CL') : '—';
+      var date = l.created_at ? new Date(l.created_at).toLocaleDateString('es-CL') : '·';
       var contact = l.phone
         ? '<a href="https://wa.me/' + waNum(l.phone) + '" target="_blank" class="text-accent/70 hover:text-accent text-xs">' + esc(l.phone) + '</a>'
-        : (l.email || '—');
+        : (l.email || '·');
       return '<tr class="border-b border-white/[0.02] hover:bg-white/[0.02] transition-colors cursor-pointer" data-id="' + l.id + '">'
         + '<td class="px-4 py-3 text-white/80 text-sm font-medium">' + esc(l.name) + '</td>'
         + '<td class="px-4 py-3 text-white/40 text-xs">' + contact + '</td>'
         + '<td class="px-4 py-3 text-white/40 text-xs">' + sourceBadge(l.source) + '</td>'
-        + '<td class="px-4 py-3 text-white/40 text-xs">' + esc(l.service_interest || '—') + '</td>'
+        + '<td class="px-4 py-3 text-white/40 text-xs">' + esc(l.service_interest || '·') + '</td>'
         + '<td class="px-4 py-3">' + statusBadge(l.status) + '</td>'
         + '<td class="px-4 py-3 text-white/25 text-[10px]">' + date + '</td>'
         + '<td class="px-4 py-3"><button data-wa="' + (l.phone ? waNum(l.phone) : '') + '" class="text-white/20 hover:text-accent transition-colors text-[11px]" title="Abrir WhatsApp">📤</button></td>'
@@ -365,13 +365,13 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
         if (!l) return;
         $('modal-title').textContent = l.name;
         $('modal-avatar').textContent = (l.name || '?').trim().charAt(0).toUpperCase() || '?';
-        $('modal-meta').textContent = (l.source || '—') + ' · ' + (l.service_interest || '—') + ' · ' + (l.phone || '—');
+        $('modal-meta').textContent = (l.source || '·') + ' · ' + (l.service_interest || '·') + ' · ' + (l.phone || '·');
 
         var body = '<div class="space-y-3 text-sm">';
-        body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Teléfono</span><span class="text-white/80 text-xs">' + (l.phone || '—') + '</span></div>';
-        body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Email</span><span class="text-white/80 text-xs break-all">' + (l.email || '—') + '</span></div>';
+        body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Teléfono</span><span class="text-white/80 text-xs">' + (l.phone || '·') + '</span></div>';
+        body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Email</span><span class="text-white/80 text-xs break-all">' + (l.email || '·') + '</span></div>';
         body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Fuente</span><span class="text-white/80 text-xs">' + sourceBadge(l.source) + '</span></div>';
-        body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Servicio</span><span class="text-white/80 text-xs">' + (l.service_interest || '—') + '</span></div>';
+        body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Servicio</span><span class="text-white/80 text-xs">' + (l.service_interest || '·') + '</span></div>';
         body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Estado</span><span>' + statusBadge(l.status) + '</span></div>';
         body += '<div><span class="text-white/30 text-[9px] uppercase tracking-wider block">Creado</span><span class="text-white/80 text-xs">' + new Date(l.created_at).toLocaleString('es-CL') + '</span></div>';
         body += '</div>';
@@ -445,7 +445,7 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
     var text = $('modal-wa-text').value.trim();
     if (!text) { $('modal-wa-status').textContent = 'Escribí un mensaje'; return; }
 
-    // Get phone from the detail — re-fetch
+    // Get phone from the detail · re-fetch
     fetch('/api/leads/' + currentLeadId)
       .then(function(r) { return r.json(); })
       .then(function(data) {
@@ -532,7 +532,7 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
 
   /* ── Bind events ── */
 
-  // Filters — cualquier cambio va al store (resetea a página 1)
+  // Filters · cualquier cambio va al store (resetea a página 1)
   $('filter-status').addEventListener('change', function(e) { store.getState().setFilter('status', e.target.value); });
   $('filter-source').addEventListener('change', function(e) { store.getState().setFilter('source', e.target.value); });
   var searchTimer;
@@ -589,11 +589,11 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
     if (currentLeadId) openLead(currentLeadId);
   });
 
-  // Init — render reactivo al store + carga inicial
+  // Init · render reactivo al store + carga inicial
   store.subscribe(render);
   store.getState().fetchLeads();
 
-  /* ── Polling — mensajes entrantes de WhatsApp llegan por webhook a la DB;
+  /* ── Polling · mensajes entrantes de WhatsApp llegan por webhook a la DB;
      el frontend no tiene push, así que refrescamos periódicamente.
      Tabla cada 8s + conversaciones del modal abierto. ── */
   var POLL_MS = 8000;

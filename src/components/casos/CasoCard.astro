@@ -1,0 +1,91 @@
+---
+/**
+ * CasoCard · Slide editorial cinematográfico (showcase horizontal de /casos).
+ * La "imagen" es la tarjeta: capa visual generativa por caso (gradiente + patrón)
+ * + número editorial gigante + overlay oscuro. Sin contenedores ni bordes.
+ * - Stretched link: toda la slide es clickeable (link ::after).
+ * - Filtrable por industria vía data-industria (script del page /casos).
+ */
+import { ArrowUpRight } from "@lucide/astro";
+import type { Caso } from "../../data/casos";
+import { getCasoVisual } from "../../lib/caso-visuals";
+
+export interface Props {
+  caso: Caso;
+  index?: number;
+}
+
+const { caso, index = 0 } = Astro.props;
+
+// Visual abstracto por caso · la "imagen" de cada slide (sin fotos fake).
+// Fuente única: src/lib/caso-visuals.ts (DRY).
+const visual = getCasoVisual(caso.slug);
+const numero = String(index + 1).padStart(2, "0");
+const isFundador = caso.tipo === "Cliente fundador";
+---
+
+<article
+  data-caso-card
+  data-industria={caso.industria}
+  class="reveal-item group relative h-full w-[82vw] shrink-0 snap-start overflow-hidden sm:w-[58vw] md:w-[50vw] lg:w-[42vw]"
+>
+  <!-- Stretched link (toda la slide clickeable) -->
+  <a
+    href={`/casos/${caso.slug}`}
+    aria-label={`Ver caso completo: ${caso.titulo}`}
+    class="absolute inset-0 z-30"
+  />
+
+  <!-- Visual cinematográfico · la "imagen" es la tarjeta -->
+  <div
+    class="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.04]"
+    style={`background: ${visual.bg};`}
+  >
+    <div class="absolute inset-0" style={`background-image: ${visual.patternUrl}; background-size: 48px 48px;`} />
+    <div class="absolute inset-0" style="background: radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.07), transparent 70%);" />
+  </div>
+
+  <!-- Número editorial gigante -->
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute -right-2 bottom-[-3.5rem] z-0 select-none font-heading text-[9rem] font-bold leading-none tracking-[-0.04em] text-white/[0.05] transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-2 md:-right-4 md:text-[12rem]"
+  >
+    {numero}
+  </span>
+
+  <!-- Overlay oscuro para legibilidad -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10" />
+
+  <!-- Contenido superpuesto -->
+  <div class="relative z-10 flex min-h-[62vh] flex-col justify-end p-7 md:min-h-[70vh] md:p-10">
+    <div class="flex items-center justify-between gap-4">
+      <span class={`inline-flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] ${isFundador ? "text-emerald-300" : "text-white/50"}`}>
+        <span class={`h-1 w-1 rounded-full ${isFundador ? "bg-emerald-300" : "bg-white/40"}`} />
+        {caso.tipo}
+      </span>
+      <span class="font-body text-[10px] uppercase tracking-[0.2em] text-white/40">{caso.industria}</span>
+    </div>
+
+    <h3 class="mt-24 max-w-md font-heading text-3xl font-bold leading-[0.98] tracking-[-0.02em] text-white md:mt-32 md:text-5xl">
+      {caso.titulo}
+    </h3>
+    <p class="mt-4 max-w-md font-body text-sm font-light leading-[1.7] text-white/60 md:text-base">
+      {caso.resumen}
+    </p>
+
+    <!-- Métricas · sin cajas, separadas por línea editorial -->
+    <div class="mt-8 grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-6">
+      {caso.metricas.slice(0, 3).map((m, mi) => (
+        <div class={`${mi === 0 ? "pl-0" : "pl-4"} pr-4`}>
+          <p class="font-body text-[9px] uppercase tracking-[0.14em] text-white/35 md:text-[10px]">{m.label}</p>
+          <p class="mt-1 font-heading text-sm font-semibold text-white/90 md:text-base">{m.valor}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-8 inline-flex items-center gap-2 font-body text-[11px] font-medium uppercase tracking-[0.18em] text-white/70 transition-colors duration-500 group-hover:text-white">
+      Ver caso completo
+      <ArrowUpRight class="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:translate-x-1 group-hover:-translate-y-1" />
+    </div>
+  </div>
+</article>

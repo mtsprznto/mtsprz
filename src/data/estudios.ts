@@ -1,5 +1,5 @@
 /**
- * Estudios / listas GEO (J3) — data-driven.
+ * Estudios / listas GEO (J3) · data-driven.
  * Contenido con datos propios + citas de fuentes = lo que la IA cita.
  * Princeton GEO Study (KDD 2024): stats propias → hasta +40% visibilidad IA; citar fuentes → +115%.
  *
@@ -34,7 +34,7 @@ export const ESTUDIOS: Estudio[] = [
       "Medimos la velocidad de carga de restaurantes, hoteles y servicios locales. La mayoría pierde clientes por webs lentas antes de vender.",
     hallazgos: [
       { texto: "Un retraso de 1s en carga reduce conversiones ~7% (referencia web general).", fuente: "Estudios de performance web" },
-      { texto: "El 53% de visitas móviles se abandona si la carga tarda más de 3s.", fuente: "Google — Mobile Site Speed Playbook (2016): thinkwithgoogle.com/_qs/documents/3975/c676a_Google_MobileSiteSpeed_Playbook_v2.1_digital_RD1XArd.pdf" },
+      { texto: "El 53% de visitas móviles se abandona si la carga tarda más de 3s.", fuente: "Google · Mobile Site Speed Playbook (2016): thinkwithgoogle.com/_qs/documents/3975/c676a_Google_MobileSiteSpeed_Playbook_v2.1_digital_RD1XArd.pdf" },
       { texto: "En Los Lagos, la mayoría de pymes no publica precios y no tiene WhatsApp visible en el primer scroll.", fuente: "Observación de mercado mtsprz" },
     ],
     takeaways: [
@@ -67,7 +67,7 @@ export const ESTUDIOS: Estudio[] = [
     fecha: "2026-08",
     tipo: "Lista",
     resumen:
-      "Herramientas gratuitas para pymes del sur: diseño, WhatsApp, email, análisis, IA — sin pagar licencias caras.",
+      "Herramientas gratuitas para pymes del sur: diseño, WhatsApp, email, análisis, IA · sin pagar licencias caras.",
     hallazgos: [
       { texto: "Google Business Profile: gratis y el 76% de quienes buscan un negocio local lo visita dentro de 24 horas.", fuente: "Google/Think with Google (2016)" },
       { texto: "Canva (gratis) cubre el 90% de necesidades de diseño de una pyme.", fuente: "Evaluación mtsprz" },

@@ -63,4 +63,4 @@ El bot esta programado para detectar cuando no puede resolver una consulta y tra
 
 Los planes parten desde $290.000 para un bot básico (pago único) hasta $690.000 para automatización completa con CRM y dashboard. Incluyen configuracion inicial, bot con flujos personalizados y soporte tecnico continuo.
 
-[Quiero automatizar WhatsApp en mi negocio](/contacto) — bots inteligentes para pymes de Puerto Varas y todo el sur de Chile.
+[Quiero automatizar WhatsApp en mi negocio](/contacto) · bots inteligentes para pymes de Puerto Varas y todo el sur de Chile.

@@ -41,7 +41,7 @@ async function resolveFrom(chatId: string): Promise<string> {
   return extractPhoneNumber(chatId);
 }
 
-/** Handler de eventos `message` — mensajes entrantes/salientes. */
+/** Handler de eventos `message` · mensajes entrantes/salientes. */
 async function handleMessage(payload: Record<string, unknown>) {
   // Ignorar mensajes enviados por nosotros (echo de envíos propios)
   if (payload.fromMe === true) return;
@@ -55,7 +55,7 @@ async function handleMessage(payload: Record<string, unknown>) {
 
   await initDb();
 
-  // Dedupe — WAHA reintenta webhooks; no duplicar conversaciones
+  // Dedupe · WAHA reintenta webhooks; no duplicar conversaciones
   const existing = await findConversationByWaMessageId(waMessageId);
   if (existing) return;
 
@@ -93,7 +93,7 @@ async function handleMessage(payload: Record<string, unknown>) {
     // Notify admin
     notifyAdmin(lead.name, phone, null, textContent).catch(() => {});
   } else {
-    // Existing lead — update
+    // Existing lead · update
     await updateLead(lead.id, {
       notes: lead.notes
         ? `${lead.notes}\n[${new Date().toISOString()}] ${textContent.slice(0, 200)}`
@@ -112,7 +112,7 @@ async function handleMessage(payload: Record<string, unknown>) {
   });
 }
 
-/** Handler de eventos `message.ack` — actualiza estado de entrega. */
+/** Handler de eventos `message.ack` · actualiza estado de entrega. */
 async function handleAck(payload: Record<string, unknown>) {
   const waMessageId = typeof payload.id === "string" ? payload.id : "";
   const ack = typeof payload.ack === "number" ? payload.ack : 0;
@@ -122,7 +122,7 @@ async function handleAck(payload: Record<string, unknown>) {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  // Validate API key header — WAHA envía X-Api-Key via customHeaders;
+  // Validate API key header · WAHA envía X-Api-Key via customHeaders;
   // se acepta `apikey` (legacy Evolution) para transición.
   const apiKey = request.headers.get("x-api-key") || request.headers.get("apikey");
   if (apiKey !== WAHA_API_KEY) {

@@ -1,9 +1,9 @@
 /**
  * Mapeo de categorías DB → display público.
- * Solo datos de presentación — NO precios, deliverables, etc.
+ * Solo datos de presentación · NO precios, deliverables, etc.
  *
  * Cada categoría tiene un fondo editorial único generado por `getEditorialBg`.
- * Los gradientes son cinematográficos, oscuros y texturizados — simulan
+ * Los gradientes son cinematográficos, oscuros y texturizados · simulan
  * sesiones fotográficas de estudio con iluminación dramática.
  */
 export const categoryDisplay: Record<
@@ -79,7 +79,7 @@ export function getEditorialBg(accent: string, index: number): string {
 }
 
 /**
- * Fondo para hover — intensifica la iluminación.
+ * Fondo para hover · intensifica la iluminación.
  */
 export function getEditorialBgHover(accent: string, index: number): string {
   const lightAngle = index % 2 === 0 ? "70% 30%" : "30% 70%";

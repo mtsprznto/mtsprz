@@ -10,7 +10,7 @@ tags: ["automatizacion", "whatsapp", "bot", "puerto varas", "restaurantes", "hos
 
 ## Como automatizar WhatsApp para restaurantes en Puerto Varas
 
-Si eres dueño de un restaurante en Puerto Varas y pasas horas respondiendo mensajes de WhatsApp — preguntas sobre el menu, reservas, horarios, pedidos — hay una forma de recuperar ese tiempo. Un bot de WhatsApp automatizado puede atender el 80% de esas consultas mientras tu te enfocas en cocinar y atender clientes presenciales.
+Si eres dueño de un restaurante en Puerto Varas y pasas horas respondiendo mensajes de WhatsApp · preguntas sobre el menu, reservas, horarios, pedidos · hay una forma de recuperar ese tiempo. Un bot de WhatsApp automatizado puede atender el 80% de esas consultas mientras tu te enfocas en cocinar y atender clientes presenciales.
 
 ## Por qué automatizar WhatsApp en tu restaurante
 

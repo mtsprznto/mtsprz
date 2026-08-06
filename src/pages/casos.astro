@@ -1,0 +1,339 @@
+---
+export const prerender = true;
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Footer from "../components/Footer.astro";
+import CasoCard from "../components/casos/CasoCard.astro";
+import OfertaFundador from "../components/casos/OfertaFundador.astro";
+import TestimoniosReservados from "../components/casos/TestimoniosReservados.astro";
+import { ChevronLeft, ChevronRight } from "@lucide/astro";
+import { CASOS, INDUSTRIAS } from "../data/casos";
+import { CUPOS_FUNDADOR } from "../data/oferta-fundador";
+
+const site = "https://mtsprz.org";
+const url = `${site}/casos`;
+
+// Stats del hero · 100% data-driven (nada inventado)
+const stats = [
+  { label: "Casos publicados", valor: String(CASOS.length).padStart(2, "0") },
+  { label: "Casos internos", valor: String(CASOS.filter((c) => c.tipo === "Caso interno").length).padStart(2, "0") },
+  { label: "Industrias cubiertas", valor: String(INDUSTRIAS.length).padStart(2, "0") },
+  { label: "Cupos fundador", valor: String(CUPOS_FUNDADOR).padStart(2, "0") },
+];
+---
+
+<BaseLayout
+  title="Casos de éxito · Automatización con IA para pymes del sur"
+  description="Automatización con IA para pymes del sur: casos reales de OCR, email marketing y seguridad. Oferta fundador −30% para los primeros 10 clientes."
+  canonical={url}
+  breadcrumbs={[{ name: "Casos", path: "/casos" }]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${url}#collectionpage`,
+    url,
+    name: "Casos de estudio · Mtsprz Soluciones Digitales",
+    description: "Casos reales de automatización con IA para pymes del sur: OCR, email marketing y seguridad.",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: CASOS.length,
+      itemListElement: CASOS.map((c, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: c.titulo,
+        url: `${url}/${c.slug}`,
+        description: c.resumen,
+      })),
+    },
+  })} />
+
+  <Header />
+  <main id="main-content">
+    <!-- ===== Hero editorial ===== -->
+    <section class="relative flex min-h-[92vh] items-center overflow-hidden bg-[#010101]">
+      <!-- Capas de fondo -->
+      <div class="absolute inset-0" style="background: #010101;" />
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 75% 25%, #6366f118 0%, transparent 55%), radial-gradient(ellipse at 15% 85%, #8b5cf612 0%, transparent 50%);" />
+      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
+      <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+
+      <div class="relative mx-auto grid w-full max-w-[72rem] gap-12 px-6 pb-24 pt-36 lg:grid-cols-[1fr_16rem] lg:gap-8">
+        <div class="reveal-group">
+          <div class="reveal-item mb-12 md:mb-16">
+            <Breadcrumbs items={[{ name: "Casos", path: "/casos" }]} />
+          </div>
+
+          <p class="reveal-item font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/40 md:text-xs">
+            Casos de estudio · Sur de Chile
+          </p>
+          <h1 class="reveal-item mt-5 font-heading text-[clamp(2.7rem,7.5vw,6.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-white">
+            Trabajo real,<br />
+            números reales.<br />
+            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">Sin humo.</span>
+          </h1>
+          <p class="reveal-item mt-7 max-w-xl font-body text-sm font-light leading-[1.8] text-white/50 md:text-base">
+            Somos una agencia digital en Puerto Varas. Construimos automatización con IA para pymes del sur y lo mostramos con trabajo propio: cada caso con su problema, su solución y sus números.
+          </p>
+
+          <div class="reveal-item mt-10 flex flex-col gap-4 sm:flex-row">
+            <a
+              href="/diagnostico"
+              class="group inline-flex items-center justify-center gap-3 px-7 py-4 font-body text-xs font-medium uppercase tracking-[0.15em] text-white transition-all duration-300"
+              style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);"
+            >
+              <span>Agenda diagnóstico gratis</span>
+              <svg class="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:translate-x-1 group-hover:-translate-y-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+            <a
+              href="#showcase"
+              class="inline-flex items-center justify-center border border-white/[0.08] bg-white/[0.04] px-6 py-4 font-body text-xs font-medium uppercase tracking-[0.15em] text-white/50 transition-all duration-300 hover:border-white/[0.16] hover:text-white/80"
+            >
+              Ver los casos
+            </a>
+          </div>
+
+          <!-- Stats · data-driven, inline editorial -->
+          <dl class="reveal-item mt-16 grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:divide-x sm:divide-white/10">
+            {stats.map((s) => (
+              <div class="pr-8 sm:pl-8 sm:first:pl-0">
+                <dt class="font-body text-[9px] uppercase tracking-[0.2em] text-white/35 md:text-[10px]">{s.label}</dt>
+                <dd class="mt-2 font-heading text-3xl font-bold tracking-[-0.02em] text-white md:text-4xl">{s.valor}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <!-- Índice de secciones + indicador scroll (desktop) -->
+        <aside class="hidden justify-between self-stretch pb-2 text-right lg:flex lg:flex-col lg:items-end">
+          <nav aria-label="Secciones de la página">
+            <ul class="space-y-4">
+              {[
+                { href: "#showcase", label: "01 · El trabajo" },
+                { href: "#testimonios", label: "02 · Testimonios" },
+                { href: "#oferta", label: "03 · Oferta fundador" },
+              ].map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="font-body text-[10px] uppercase tracking-[0.2em] text-white/30 transition-colors duration-500 hover:text-white/80"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <p class="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-white/25 [writing-mode:vertical-rl]">
+            SCROLL
+            <span class="inline-block h-10 w-px bg-white/20" />
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== Showcase horizontal editorial (la imagen es la tarjeta) ===== -->
+    <section id="showcase" class="relative w-full scroll-mt-20 bg-[#0A0A0A]" aria-label="Casos de estudio">
+      <div class="mx-auto max-w-[72rem] px-6 pt-20 md:pt-28">
+        <div class="reveal-group flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p class="reveal-item font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30 md:text-xs">01 · El trabajo</p>
+            <h2 class="reveal-item mt-3 font-heading text-3xl font-bold tracking-[-0.5px] text-white md:text-5xl">Casos</h2>
+          </div>
+          <div class="reveal-item flex items-center gap-5">
+            <span id="casos-count" class="font-mono text-[11px] tracking-[0.14em] text-white/25" aria-live="polite"></span>
+            <div class="hidden gap-2 md:flex">
+              <button
+                type="button"
+                id="track-prev"
+                aria-label="Caso anterior"
+                class="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-white/50 transition-all duration-300 hover:border-white/[0.2] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+              >
+                <ChevronLeft class="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                id="track-next"
+                aria-label="Siguiente caso"
+                class="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-white/50 transition-all duration-300 hover:border-white/[0.2] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+              >
+                <ChevronRight class="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chips de filtro por industria -->
+        <div class="reveal-item mt-8 flex flex-wrap gap-2">
+          <button
+            type="button"
+            data-filter-btn
+            data-filter="todos"
+            aria-pressed="true"
+            class="filter-btn border border-white/[0.08] bg-white/[0.03] px-4 py-2 font-body text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors hover:text-white/80"
+          >
+            Todos
+          </button>
+          {INDUSTRIAS.map((ind) => (
+            <button
+              type="button"
+              data-filter-btn
+              data-filter={ind}
+              aria-pressed="false"
+              class="filter-btn border border-white/[0.08] bg-white/[0.03] px-4 py-2 font-body text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors hover:text-white/80"
+            >
+              {ind}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Track horizontal con snap -->
+      <div class="mt-10">
+        <div
+          id="casos-track"
+          class="scroll-luxury flex snap-x snap-mandatory gap-5 overflow-x-auto pb-8 pt-2 [scroll-padding-inline:1.5rem] md:[scroll-padding-inline:max(1.5rem,calc((100vw_-_72rem)/2))]"
+        >
+          <div class="min-w-6 md:min-w-[max(1.5rem,calc((100vw_-_72rem)/2))] shrink-0" aria-hidden="true" />
+          {CASOS.map((caso, i) => (
+            <CasoCard caso={caso} index={i} />
+          ))}
+          <div class="min-w-6 shrink-0 md:min-w-[max(1.5rem,calc((100vw-72rem)/2))]" aria-hidden="true" />
+        </div>
+
+        <!-- Progress bar del scroll horizontal -->
+        <div class="mx-auto max-w-[72rem] px-6">
+          <div class="h-[2px] w-full bg-white/[0.06]">
+            <div id="track-progress" class="h-full bg-gradient-to-r from-indigo-400 to-violet-400 transition-[width] duration-200 ease-out" style="width:0%" />
+          </div>
+
+          <!-- Estado vacío (robustez: filtro sin resultados) -->
+          <div id="casos-empty" class="mt-10 hidden rounded-[1.25rem] border border-dashed border-white/[0.08] px-6 py-16 text-center" role="status">
+            <p class="font-body text-sm text-white/40">No hay casos de esta industria todavía.</p>
+            <button
+              type="button"
+              data-filter-btn
+              data-filter="todos"
+              class="mt-5 border border-white/[0.08] bg-white/[0.03] px-4 py-2 font-body text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors hover:text-white/80"
+            >
+              Ver todos los casos
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Testimonios · sección reservada (J1: no inventar) ===== -->
+    <section id="testimonios" class="relative w-full scroll-mt-20 overflow-hidden bg-[#010101]" aria-label="Testimonios">
+      <div class="absolute inset-0" style="background: #010101;" />
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 30% 0%, #8b5cf612 0%, transparent 55%);" />
+      <div class="relative mx-auto max-w-[72rem] px-6 py-24 md:py-32">
+        <div class="reveal-group max-w-3xl">
+          <p class="reveal-item font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30 md:text-xs">02 · Testimonios</p>
+          <h2 class="reveal-item mt-3 font-heading text-3xl font-bold tracking-[-1px] text-white md:text-5xl">Clientes hablando</h2>
+          <p class="reveal-item mt-5 font-body text-sm font-light leading-[1.8] text-white/45 md:text-base">
+            Aún no tenemos testimonios de clientes externos, porque todavía no cerramos nuestro primer programa fundador. Lo decimos claro en vez de maquillarlo. Estos espacios se llenan con historias reales de pymes del sur · si querés que la próxima historia sea la tuya, la oferta está abajo.
+          </p>
+        </div>
+
+        <!-- Espacios reservados · data-driven desde CASOS (testimonio null) -->
+        <TestimoniosReservados casos={CASOS} />
+      </div>
+    </section>
+
+    <!-- ===== Oferta fundador −30% (componente reutilizable) ===== -->
+    <OfertaFundador id="oferta" />
+  </main>
+  <Footer />
+
+  <style>
+    .scroll-luxury {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .scroll-luxury::-webkit-scrollbar {
+      display: none;
+    }
+    .filter-btn.is-active {
+      background: rgba(255, 255, 255, 0.92);
+      color: #010101;
+      border-color: transparent;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-luxury {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+
+  <script is:inline>
+    (function () {
+      var btns = document.querySelectorAll("[data-filter-btn]");
+      var cards = document.querySelectorAll("[data-caso-card]");
+      var track = document.getElementById("casos-track");
+      var emptyEl = document.getElementById("casos-empty");
+      var countEl = document.getElementById("casos-count");
+      var progressEl = document.getElementById("track-progress");
+      var prevBtn = document.getElementById("track-prev");
+      var nextBtn = document.getElementById("track-next");
+
+      function updateProgress() {
+        if (!track || !progressEl) return;
+        var max = track.scrollWidth - track.clientWidth;
+        var p = max > 0 ? (track.scrollLeft / max) * 100 : 0;
+        progressEl.style.width = p + "%";
+      }
+
+      function scrollByCard(dir) {
+        if (!track) return;
+        var card = track.querySelector("[data-caso-card]");
+        if (!card) return;
+        var gap = 20; // gap-5 del track
+        var target = track.scrollLeft + dir * (card.offsetWidth + gap);
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          track.scrollLeft = target;
+        } else {
+          track.scrollTo({ left: target, behavior: "smooth" });
+        }
+      }
+
+      function apply(filter) {
+        var visible = 0;
+        cards.forEach(function (card) {
+          var show = filter === "todos" || card.getAttribute("data-industria") === filter;
+          card.style.display = show ? "" : "none";
+          if (show) visible++;
+        });
+
+        if (emptyEl) emptyEl.classList.toggle("hidden", visible !== 0);
+        if (countEl) {
+          countEl.textContent =
+            String(visible).padStart(2, "0") + " / " + String(cards.length).padStart(2, "0");
+        }
+
+        btns.forEach(function (b) {
+          var active = b.getAttribute("data-filter") === filter;
+          b.setAttribute("aria-pressed", active ? "true" : "false");
+          b.classList.toggle("is-active", active);
+        });
+
+        if (track) track.scrollLeft = 0;
+        updateProgress();
+      }
+
+      btns.forEach(function (b) {
+        b.addEventListener("click", function () {
+          apply(b.getAttribute("data-filter"));
+        });
+      });
+      if (prevBtn) prevBtn.addEventListener("click", function () { scrollByCard(-1); });
+      if (nextBtn) nextBtn.addEventListener("click", function () { scrollByCard(1); });
+      if (track) track.addEventListener("scroll", updateProgress, { passive: true });
+      window.addEventListener("resize", updateProgress);
+
+      apply("todos");
+    })();
+  </script>
+</BaseLayout>

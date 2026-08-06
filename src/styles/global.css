@@ -377,6 +377,8 @@ button:focus-visible {
   font-family: var(--font-heading);
   font-weight: 600;
   letter-spacing: -0.02em;
+  scroll-margin-top: 5.5rem;
+  position: relative;
 }
 
 .prose-blog h3 {
@@ -388,6 +390,8 @@ button:focus-visible {
   font-family: var(--font-heading);
   font-weight: 600;
   letter-spacing: -0.01em;
+  scroll-margin-top: 5.5rem;
+  position: relative;
 }
 
 .prose-blog h2 + h3 {
@@ -398,6 +402,8 @@ button:focus-visible {
   margin-top: 1.25rem;
   margin-bottom: 0;
   color: rgba(250, 250, 250, 0.72);
+  text-wrap: pretty;
+  overflow-wrap: break-word;
 }
 
 .prose-blog ul,
@@ -444,6 +450,7 @@ button:focus-visible {
   font-family: var(--font-mono);
   font-size: 0.875em;
   background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   padding: 0.2em 0.4em;
   border-radius: 4px;
   color: rgba(250, 250, 250, 0.85);
@@ -458,6 +465,17 @@ button:focus-visible {
   overflow-x: auto;
   font-size: 0.875rem;
   line-height: 1.6;
+  tab-size: 2;
+}
+.prose-blog pre::-webkit-scrollbar {
+  height: 6px;
+}
+.prose-blog pre::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+}
+.prose-blog pre::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .prose-blog pre code {
@@ -470,6 +488,7 @@ button:focus-visible {
 .prose-blog img {
   margin-top: 1.5rem;
   border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
   max-width: 100%;
   height: auto;
 }
@@ -481,7 +500,7 @@ button:focus-visible {
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* Tablas markdown — Astro renderiza <table> plano dentro de .prose-blog.
+/* Tablas markdown · Astro renderiza <table> plano dentro de .prose-blog.
    Sin wrapper posible (posts son .md, no .mdx), se usa display:block + overflow
    para scroll horizontal en móvil y bordes sutiles en escritorio. */
 .prose-blog table {
@@ -539,6 +558,84 @@ button:focus-visible {
 .prose-blog tbody td strong {
   color: rgba(250, 250, 250, 0.9);
   font-weight: 600;
+}
+
+/* Lectura editorial · orden de lectura y anclas */
+.prose-blog.hide-first-heading > h2:first-child {
+  display: none;
+}
+
+.prose-blog ::selection {
+  background: rgba(99, 102, 241, 0.35);
+  color: #fafafa;
+}
+
+/* Permalink "#" en headings · aparece en hover */
+.prose-blog a.heading-anchor {
+  position: absolute;
+  left: -1.75rem;
+  top: 0.18em;
+  font-size: 0.75em;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  color: rgba(250, 250, 250, 0.28);
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+.prose-blog h2:hover a.heading-anchor,
+.prose-blog h3:hover a.heading-anchor {
+  opacity: 1;
+}
+.prose-blog a.heading-anchor:hover {
+  color: #6366f1;
+}
+
+/* Índice lateral · rail de posición de lectura */
+.toc-sidebar a {
+  position: relative;
+  transition: color 0.2s ease;
+}
+.toc-sidebar a::before {
+  content: "";
+  position: absolute;
+  left: -0.9rem;
+  top: 0.22em;
+  bottom: 0.22em;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  transition: background-color 0.2s ease, width 0.2s ease;
+}
+.toc-sidebar a.toc-active {
+  color: rgba(250, 250, 250, 0.92);
+}
+.toc-sidebar a.toc-active::before {
+  width: 2px;
+  background: #6366f1;
+}
+
+/* ToC sticky · scroll interno fino cuando supera el viewport */
+.toc-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}
+.toc-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.toc-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.toc-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+}
+
+/* Scroll suave para anclas · respeta prefers-reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @media (max-width: 640px) {

@@ -22,7 +22,7 @@ const site = "https://mtsprz.org";
     "@context": "https://schema.org",
     "@type": "Service",
     "@id": `${site}/automatizacion#service`,
-    "name": "Automatización de Procesos con IA y n8n — Mtsprz",
+    "name": "Automatización de Procesos con IA y n8n · Mtsprz",
     "description": "Bots de WhatsApp 24/7, automatización de Excel, flujos de email marketing, integraciones CRM, dashboards de datos en tiempo real y workflows con n8n para pymes en la Región de Los Lagos. Ahorra 10+ horas semanales.",
     "provider": { "@id": `${site}/#organization` },
     "category": "Transformación Digital / Automatización con IA",
@@ -101,6 +101,14 @@ const site = "https://mtsprz.org";
           "@type": "Answer",
           "text": "Sí. Nos adaptamos a tus herramientas: Excel, Google Sheets, Salesforce, HubSpot, Mercado Pago, Transbank, y cualquier sistema con API o acceso a datos."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Puedo automatizar documentos como comprobantes o facturas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sí. Con OCR + RAG + LLM transcribimos y procesamos comprobantes, facturas y contratos automáticamente. Caso real: un contador de Puerto Varas procesa 200 comprobantes al día sin digitarlos. Desde $1.900.000."
+        }
       }
     ]
   })} />
@@ -111,7 +119,7 @@ const site = "https://mtsprz.org";
   <main id="main-content" style="overflow-x:hidden;">
 
     <!-- ═══════════════════════════════════════════
-         HERO — Video full-bleed, texto al pie izquierdo
+         HERO · Video full-bleed, texto al pie izquierdo
     ═══════════════════════════════════════════ -->
     <section style="position:relative; width:100vw; height:100dvh; min-height:100vh; overflow:hidden; background:#010101;">
       <video
@@ -157,7 +165,36 @@ const site = "https://mtsprz.org";
 
 
     <!-- ═══════════════════════════════════════════
-         SOLUCIONES — 4 columnas cinematográficas
+         ANSWER BLOCK · respuesta directa 40-60 palabras (GEO N1)
+         Misma página, dos audiencias: humano + asistente IA
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#010101; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(37,211,102,0.15),transparent);"></div>
+      <div style="max-width:920px; margin:0 auto; padding:5rem 2.5rem;">
+
+        <p style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(37,211,102,0.5); font-family:var(--font-body); margin-bottom:1.5rem;">Respuesta directa · Automatización con IA</p>
+
+        <div class="reveal-group">
+          <p class="reveal-item" style="font-size:clamp(1.4rem, 3.4vw, 2.4rem); font-family:var(--font-heading); font-weight:700; color:#fff; line-height:1.25; letter-spacing:-0.02em; margin:0;">
+            Automatizar procesos con IA en una pyme es conectar tus herramientas para eliminar tareas manuales repetitivas: bots de WhatsApp que atienden 24/7, reportes que se generan solos y flujos que integran Excel, CRM y email. En Mtsprz lo hacemos desde <span style="color:#25D366;">$290.000</span>, con resultados en días y sin conocimientos técnicos.
+          </p>
+        </div>
+
+        <div class="reveal-item" style="margin-top:2rem; display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.62rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+            QUIERO MI DIAGNÓSTICO
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <span style="font-size:0.7rem; color:rgba(255,255,255,0.25); font-family:var(--font-body);">Caso real: contador de Puerto Varas · 200 comprobantes al día sin digitar</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         SOLUCIONES · 4 columnas cinematográficas
          Fila 1: 55/45 | Fila 2: 45/55
     ═══════════════════════════════════════════ -->
     <div class="sol-wrapper">
@@ -165,7 +202,7 @@ const site = "https://mtsprz.org";
       <!-- Fila 1 -->
       <div class="sol-row">
 
-        <!-- BOT WHATSAPP — col dominante 55% -->
+        <!-- BOT WHATSAPP · col dominante 55% -->
         <div class="sol-col sol-dominant">
           <div style="position:absolute; inset:0; background:linear-gradient(150deg, #041208 0%, #021a0d 45%, #010101 100%);"></div>
           <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 20% 30%, #25d36614 0%, transparent 55%);"></div>
@@ -174,7 +211,7 @@ const site = "https://mtsprz.org";
           <div class="sol-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
           <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
           <div style="position:relative; z-index:10; padding:2.5rem;">
-            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">01 — Bot WhatsApp</p>
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">01 · Bot WhatsApp</p>
             <h2 style="font-size:clamp(2.25rem, 5vw, 5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
               ATENCIÓN<br />24/7
             </h2>
@@ -192,7 +229,7 @@ const site = "https://mtsprz.org";
           </div>
         </div>
 
-        <!-- EXCEL / REPORTES — col 45% -->
+        <!-- EXCEL / REPORTES · col 45% -->
         <div class="sol-col sol-secondary" style="position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:flex-end;">
           <div style="position:absolute; inset:0; background:linear-gradient(145deg, #060810 0%, #0a0e1a 45%, #010101 100%);"></div>
           <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 70% 25%, #06b6d414 0%, transparent 55%);"></div>
@@ -200,7 +237,7 @@ const site = "https://mtsprz.org";
           <div class="sol-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
           <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
           <div style="position:relative; z-index:10; padding:2.5rem;">
-            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">02 — Excel & Reportes</p>
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">02 · Excel & Reportes</p>
             <h2 style="font-size:clamp(2rem, 4vw, 3.75rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
               REPORTES<br />AUTOMÁTICOS
             </h2>
@@ -218,7 +255,7 @@ const site = "https://mtsprz.org";
       <!-- Fila 2 -->
       <div class="sol-row">
 
-        <!-- EMAIL MARKETING — col 45% -->
+        <!-- EMAIL MARKETING · col 45% -->
         <div class="sol-col sol-secondary-alt">
           <div style="position:absolute; inset:0; background:linear-gradient(155deg, #07060f 0%, #0c0a18 45%, #010101 100%);"></div>
           <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 35%, #6366f114 0%, transparent 55%);"></div>
@@ -226,7 +263,7 @@ const site = "https://mtsprz.org";
           <div class="sol-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
           <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
           <div style="position:relative; z-index:10; padding:2.5rem;">
-            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">03 — Email Marketing</p>
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">03 · Email Marketing</p>
             <h2 style="font-size:clamp(2rem, 4vw, 3.75rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
               EMAILS<br />QUE VENDEN
             </h2>
@@ -239,7 +276,7 @@ const site = "https://mtsprz.org";
           </div>
         </div>
 
-        <!-- DASHBOARD — col dominante 55% -->
+        <!-- DASHBOARD · col dominante 55% -->
         <div class="sol-col sol-dominant-alt">
           <div style="position:absolute; inset:0; background:linear-gradient(140deg, #04100a 0%, #061a10 45%, #010101 100%);"></div>
           <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 75% 30%, #10b98112 0%, transparent 55%);"></div>
@@ -247,7 +284,7 @@ const site = "https://mtsprz.org";
           <div class="sol-hover" style="position:absolute; inset:0; background:rgba(255,255,255,0.018); opacity:0; transition:opacity 0.4s;"></div>
           <div style="position:absolute; bottom:0; left:0; right:0; height:70%; background:linear-gradient(to top, rgba(1,1,1,0.97) 0%, transparent 100%);"></div>
           <div style="position:relative; z-index:10; padding:2.5rem;">
-            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">04 — Dashboard de Datos</p>
+            <p style="font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.7rem;">04 · Dashboard de Datos</p>
             <h2 style="font-size:clamp(2.25rem, 5vw, 5rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.88; letter-spacing:-0.03em; text-transform:uppercase; margin:0;">
               DATOS EN<br />TIEMPO REAL
             </h2>
@@ -271,7 +308,7 @@ const site = "https://mtsprz.org";
 
 
     <!-- ═══════════════════════════════════════════
-         PLANES — editorial full-width, sin cards
+         PLANES · editorial full-width, sin cards
     ═══════════════════════════════════════════ -->
     <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
       <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
@@ -314,11 +351,11 @@ const site = "https://mtsprz.org";
             </div>
           </div>
 
-          <!-- Plan 2 — destacado -->
+          <!-- Plan 2 · destacado -->
           <div class="reveal-item plan-row plan-featured" style="border-bottom:1px solid rgba(255,255,255,0.06); padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem; position:relative;">
             <div style="position:absolute; left:0; top:0; bottom:0; width:2px; background:rgba(255,255,255,0.15);"></div>
             <div style="min-width:120px; padding-left:1.5rem;">
-              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.5); font-family:var(--font-body); margin-bottom:0.5rem;">02 — Popular</p>
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.5); font-family:var(--font-body); margin-bottom:0.5rem;">02 · Popular</p>
               <p style="font-size:clamp(2rem,5vw,3.5rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$690k</p>
               <p style="font-size:0.65rem; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-top:0.25rem;">Desde / pago único</p>
             </div>
@@ -373,7 +410,7 @@ const site = "https://mtsprz.org";
 
 
     <!-- ═══════════════════════════════════════════
-         FAQ — editorial strip
+         FAQ · editorial strip
     ═══════════════════════════════════════════ -->
     <section style="width:100vw; background:#010101; position:relative; overflow:hidden;">
       <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
@@ -393,6 +430,7 @@ const site = "https://mtsprz.org";
             { q: "¿Cuánto cuesta un bot de WhatsApp?", a: "Desde $290.000 para un bot básico con respuestas automáticas y menú interactivo. Planes avanzados con integración CRM y dashboard desde $690.000." },
             { q: "¿Cuánto tiempo toma implementar una automatización?", a: "Un bot de WhatsApp básico está listo en 3-5 días. Una automatización completa con CRM + dashboard toma 2-3 semanas." },
             { q: "¿Funciona con mi sistema actual?", a: "Sí. Nos adaptamos a tus herramientas: Excel, Google Sheets, Salesforce, HubSpot, Mercado Pago, Transbank, y cualquier sistema con API o acceso a datos." },
+            { q: "¿Puedo automatizar documentos como comprobantes o facturas?", a: "Sí. Con OCR + RAG + LLM transcribimos y procesamos comprobantes, facturas y contratos automáticamente. Caso real: un contador de Puerto Varas procesa 200 comprobantes al día sin digitarlos. Desde $1.900.000." },
           ].map(faq => (
             <details class="reveal-item faq-item" style="border-bottom:1px solid rgba(255,255,255,0.06);">
               <summary style="display:flex; cursor:pointer; align-items:center; justify-content:space-between; gap:1rem; padding:1.5rem 0; font-size:0.875rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); list-style:none; transition:color 0.2s;">
@@ -410,7 +448,7 @@ const site = "https://mtsprz.org";
 
 
     <!-- ═══════════════════════════════════════════
-         CTA FINAL — viewport, texto al pie
+         CTA FINAL · viewport, texto al pie
     ═══════════════════════════════════════════ -->
     <section style="position:relative; width:100vw; min-height:75vh; overflow:hidden; background:#0A0A0A; display:flex; flex-direction:column; justify-content:flex-end;">
       <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 60%, rgba(37,211,102,0.04) 0%, transparent 55%);"></div>

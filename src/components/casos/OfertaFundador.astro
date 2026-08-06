@@ -1,0 +1,155 @@
+---
+/**
+ * OfertaFundador · Sección de oferta fundador reutilizable.
+ * Consume src/data/oferta-fundador.ts (copy centralizado; editar data, no aquí).
+ * Se usa en:
+ *  - /casos: variante completa (showPrecios=true, con tabla de precios ancla)
+ *  - /casos/[slug]: variante compact (showPrecios=false, copy corto + form)
+ * La sección incluye su propia decoración (bg + radial + noise + hairline)
+ * para ser drop-in en cualquier página.
+ *
+ * Concepto editorial: "el póster del −30%" · la promesa es la imagen.
+ * Escasez honesta (10 cupos / 1 por rubro) como stats, no como chips.
+ * Contrapartidas como filas editoriales (sin cajas). Tabla abierta (sin contenedor).
+ */
+import CasoForm from "./CasoForm.astro";
+import { CUPOS_FUNDADOR, CUPO_RUBRO, CONTRAPARTIDAS, PRECIOS_FUNDADOR } from "../../data/oferta-fundador";
+
+export interface Props {
+  /** id del contenedor (p.ej. "oferta" para anclas) */
+  id?: string;
+  /** Mostrar tabla de precios ancla (default true) */
+  showPrecios?: boolean;
+  /** Label del botón del form */
+  ctaLabel?: string;
+}
+
+const { id, showPrecios = true, ctaLabel = "Quiero mi cupo fundador" } = Astro.props;
+
+const display = "text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-indigo-300 to-violet-400";
+---
+
+<section
+  id={id}
+  class={`relative w-full overflow-hidden bg-[#0A0A0A] ${id ? "scroll-mt-24" : ""}`}
+  aria-label="Oferta fundador"
+>
+  <div class="absolute inset-0" style="background: #0A0A0A;" />
+  <div class="absolute inset-0 opacity-60" style="background: radial-gradient(ellipse at 15% 10%, #6366f11f 0%, transparent 55%), radial-gradient(ellipse at 90% 90%, #8b5cf612 0%, transparent 45%);" />
+  <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
+  <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+
+  <div class={`relative mx-auto grid max-w-6xl gap-16 px-6 lg:grid-cols-12 lg:gap-20 ${showPrecios ? "py-24 md:py-32" : "py-16 md:py-20"}`}>
+    <!-- ===== Columna póster ===== -->
+    <div class="reveal-group lg:col-span-7">
+      <p
+        class="reveal-item font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30 md:text-xs"
+        style="color: #6366f1aa;"
+      >
+        {showPrecios ? "03 · Oferta fundador" : "Oferta fundador"}
+      </p>
+
+      <h2 class="reveal-item mt-6 font-heading font-extrabold tracking-[-0.04em] leading-[0.9] text-white">
+        <span class={`block text-[clamp(4.5rem,13vw,10rem)] leading-none ${display}`}>−30%</span>
+        <span class="mt-3 block text-[clamp(1.5rem,4vw,3rem)] tracking-[-0.02em]">
+          en tu pack, a cambio de tu historia
+        </span>
+      </h2>
+
+      <p class="reveal-item mt-6 max-w-md font-body text-sm font-light leading-[1.8] text-white/50 md:text-base">
+        {showPrecios
+          ? "Estamos armando el portafolio de clientes del sur. Por eso este precio existe · para los primeros que confíen."
+          : `${CUPOS_FUNDADOR} cupos, ${CUPO_RUBRO} por rubro. Primero diagnóstico gratis, después decides. Cuando tu caso esté publicado, esta página lo cuenta · con tu testimonio en video y tu reseña en Google.`}
+      </p>
+
+      <!-- Escasez honesta: stats, no chips -->
+      <div class="reveal-item mt-10 flex border-y border-white/[0.08]">
+        <div class="flex-1 py-7 pr-6">
+          <p class="font-heading text-5xl font-extrabold tracking-[-0.03em] text-white md:text-6xl">
+            {String(CUPOS_FUNDADOR).padStart(2, "0")}
+          </p>
+          <p class="mt-2 font-body text-[10px] uppercase tracking-[0.22em] text-white/35">Cupos máximo</p>
+        </div>
+        <div class="flex-1 border-l border-white/[0.08] py-7 pl-6">
+          <p class="font-heading text-5xl font-extrabold tracking-[-0.03em] text-white md:text-6xl">
+            {String(CUPO_RUBRO).padStart(2, "0")}
+          </p>
+          <p class="mt-2 font-body text-[10px] uppercase tracking-[0.22em] text-white/35">Por rubro</p>
+        </div>
+      </div>
+
+      <!-- Contrapartidas: filas editoriales, sin cajas -->
+      {showPrecios && (
+        <>
+          <p class="reveal-item mt-10 font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30">
+            A cambio, 3 cosas que te toman minutos
+          </p>
+          <div class="reveal-item mt-3 border-t border-white/[0.08]">
+            {CONTRAPARTIDAS.map((c, i) => (
+              <div class="group flex items-baseline gap-6 border-b border-white/[0.08] py-5">
+                <span class="font-mono text-xs text-white/25 transition-colors duration-500 group-hover:text-indigo-300/80">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 class="font-heading text-lg font-semibold text-white/90 transition-colors duration-500 group-hover:text-white md:text-xl">
+                    {c.titulo}
+                  </h3>
+                  {c.detalle && (
+                    <p class="mt-1 font-body text-sm font-light leading-relaxed text-white/40">{c.detalle}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p class="reveal-item mt-8 max-w-md font-body text-xs font-light leading-[1.8] text-white/40">
+            <span class="text-white/75">Tu web o automatización a precio fundador,</span>
+            {" "}y la primera historia con nombre real en esta página.
+          </p>
+        </>
+      )}
+    </div>
+
+    <!-- ===== Columna precios + form ===== -->
+    <div class="reveal-group lg:col-span-5">
+      {showPrecios && (
+        <div class="reveal-item">
+          <p class="font-body text-[10px] font-medium uppercase tracking-[0.25em] text-white/30">Precios fundador</p>
+
+          {/* Tabla abierta: sin contenedor, solo líneas */}
+          <div class="mt-4 overflow-x-auto">
+            <table class="w-full border-collapse text-left">
+              <thead>
+                <tr class="border-b border-white/[0.12]">
+                  <th class="pb-3 font-body text-[10px] font-medium uppercase tracking-[0.14em] text-white/30">Pack</th>
+                  <th class="pb-3 text-right font-body text-[10px] font-medium uppercase tracking-[0.14em] text-white/30">Regular</th>
+                  <th class="pb-3 pl-5 text-right font-body text-[10px] font-medium uppercase tracking-[0.14em] text-white/30">Fundador</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PRECIOS_FUNDADOR.map((p) => (
+                  <tr class="border-b border-white/[0.05] transition-colors duration-300 hover:bg-white/[0.02]">
+                    <td class="py-4 pr-4 font-body text-sm text-white/85">{p.pack}</td>
+                    <td class="whitespace-nowrap py-4 pr-4 text-right font-body text-sm text-white/25 line-through">{p.regular}</td>
+                    <td class="whitespace-nowrap py-4 pl-5 text-right">
+                      <span class="font-heading text-base font-bold" style="color: #a78bfa;">{p.fundador}</span>
+                      <span class="ml-2 font-mono text-[10px] text-emerald-300/90">{p.nota}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p class="mt-5 font-body text-[11px] font-light leading-relaxed text-white/30">
+            Si tu rubro ya está tomado, no competimos contra nuestro propio caso · respetamos el cupo único.
+          </p>
+        </div>
+      )}
+
+      <div class={`reveal-item ${showPrecios ? "mt-10" : ""}`}>
+        <CasoForm ctaLabel={ctaLabel} />
+      </div>
+    </div>
+  </div>
+</section>

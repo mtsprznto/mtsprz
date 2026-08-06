@@ -1,6 +1,6 @@
 ---
 /**
- * FAQSection.astro — Reusable FAQ with visible accordion + FAQPage schema
+ * FAQSection.astro · Reusable FAQ with visible accordion + FAQPage schema
  * Usage: <FAQSection items={[{ q: "...", a: "..." }, ...]} />
  */
 export interface FAQItem {
@@ -23,7 +23,7 @@ const {
 const site = "https://mtsprz.org";
 ---
 
-<!-- FAQPage schema — habilita rich results + GEO citability -->
+<!-- FAQPage schema · habilita rich results + GEO citability -->
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -37,7 +37,7 @@ const site = "https://mtsprz.org";
   })),
 })} />
 
-<!-- FAQ visible — editorial accordion, consistente con el design system -->
+<!-- FAQ visible · editorial accordion, consistente con el design system -->
 <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
   <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
   <div class="faq-glow" style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 0%, #6366f112 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, #8b5cf606 0%, transparent 50%);"></div>

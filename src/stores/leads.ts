@@ -1,7 +1,7 @@
 /**
- * Leads store (Zustand vanilla — sin React).
+ * Leads store (Zustand vanilla · sin React).
  * Estado global del panel /admin/leads: lista paginada, filtros, stats.
- * La URL permanece limpia — todo el estado vive aquí.
+ * La URL permanece limpia · todo el estado vive aquí.
  */
 
 import { createStore } from "zustand/vanilla";

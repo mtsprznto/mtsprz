@@ -175,7 +175,7 @@ export function leadReceivedEmail(name: string, serviceInterest: string | null):
       </div>
       <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:24px 0" />
       <p style="font-size:11px;color:rgba(250,250,250,0.3);margin:0;text-align:center">
-        Mtsprz — Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org
+        Mtsprz · Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org
       </p>
     </div>
   `;
@@ -191,11 +191,11 @@ export function adminNewLeadEmail(lead: {
   createdAt: string;
 }): string {
   const name = sanitizeHtml(lead.name);
-  const phone = sanitizeHtml(lead.phone || "—");
-  const email = sanitizeHtml(lead.email || "—");
+  const phone = sanitizeHtml(lead.phone || "");
+  const email = sanitizeHtml(lead.email || "");
   const source = sanitizeHtml(lead.source);
   const interest = sanitizeHtml(lead.serviceInterest || "No especificado");
-  const message = sanitizeHtml((lead.message || "—").slice(0, 500)).replace(/\n/g, "<br />");
+  const message = sanitizeHtml((lead.message || "").slice(0, 500)).replace(/\n/g, "<br />");
   const date = sanitizeHtml(new Date(lead.createdAt).toLocaleString("es-CL", { timeZone: "America/Santiago" }));
   return `
     <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">

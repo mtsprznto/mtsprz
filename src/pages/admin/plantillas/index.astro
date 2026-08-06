@@ -19,23 +19,23 @@ import AdminLayout from "../../../layouts/AdminLayout.astro";
   <!-- Stats: visual summary -->
   <div class="flex flex-wrap gap-px bg-white/[0.04] mb-8">
     <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
-      <div class="font-heading text-xl font-bold text-white" id="statTotal">—</div>
+      <div class="font-heading text-xl font-bold text-white" id="statTotal">·</div>
       <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Total</div>
     </div>
     <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
-      <div class="font-heading text-xl font-bold text-indigo-300" id="statProyecto">—</div>
+      <div class="font-heading text-xl font-bold text-indigo-300" id="statProyecto">·</div>
       <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Proyecto</div>
     </div>
     <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
-      <div class="font-heading text-xl font-bold text-emerald-400" id="statRecurrente">—</div>
+      <div class="font-heading text-xl font-bold text-emerald-400" id="statRecurrente">·</div>
       <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Recurrente</div>
     </div>
     <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
-      <div class="font-heading text-xl font-bold text-amber-400" id="statDedicada">—</div>
+      <div class="font-heading text-xl font-bold text-amber-400" id="statDedicada">·</div>
       <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Dedicada</div>
     </div>
     <div class="bg-[#010101] px-5 py-3.5 flex-1 min-w-[100px]">
-      <div class="font-heading text-xl font-bold text-sky-400" id="statHonorarios">—</div>
+      <div class="font-heading text-xl font-bold text-sky-400" id="statHonorarios">·</div>
       <div class="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5">Honorarios</div>
     </div>
   </div>
@@ -123,7 +123,7 @@ import AdminLayout from "../../../layouts/AdminLayout.astro";
   };
 
   function getMeta(type) {
-    return typeMeta[type] || { label: type || "—", color: "text-white/30", border: "border-white/[0.06]", icon: "" };
+    return typeMeta[type] || { label: type || "·", color: "text-white/30", border: "border-white/[0.06]", icon: "" };
   }
 
   function safeJson(raw) {

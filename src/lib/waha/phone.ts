@@ -1,5 +1,5 @@
 /**
- * WAHA — Utilidades de formato de números y chat IDs.
+ * WAHA · Utilidades de formato de números y chat IDs.
  *
  * WAHA usa chat IDs tipo `56912345678@c.us` (número + sufijo de dominio).
  * Estos helpers normalizan entre "número pelado" (56..., 9...) y chat ID.

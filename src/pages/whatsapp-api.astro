@@ -1,0 +1,444 @@
+---
+export const prerender = true;
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Footer from "../components/Footer.astro";
+import CiudadesRelacionadas from "../components/CiudadesRelacionadas.astro";
+
+const waPhone = "56966929818";
+const waMsg = encodeURIComponent("Hola! Vi la página de WhatsApp API y quiero conectar mi negocio con un bot 24/7.");
+const waUrl = `https://wa.me/${waPhone}?text=${waMsg}`;
+const site = "https://mtsprz.org";
+---
+
+<BaseLayout
+  title="WhatsApp Business API para Pymes: Bots 24/7 y Precios | Los Lagos"
+  description="WhatsApp Business API oficial (WAHA + Resend) para pymes: bot 24/7, catálogo y pedidos. Desde $390.000 + $90.000/mes. Puerto Varas, Osorno, Valdivia."
+  canonical="https://mtsprz.org/whatsapp-api"
+  breadcrumbs={[{ name: "WhatsApp API", path: "/whatsapp-api" }]}
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${site}/whatsapp-api#service`,
+    "name": "WhatsApp Business API para Pymes · Mtsprz",
+    "description": "Implementación de WhatsApp Business API oficial con WAHA + Resend: bot 24/7, catálogo de productos, pedidos por WhatsApp, notificaciones y recordatorios automáticos para pymes en la Región de Los Lagos.",
+    "provider": { "@id": `${site}/#organization` },
+    "category": "Transformación Digital / Canales de Venta",
+    "serviceType": "WhatsApp Business API y Chatbots",
+    "audience": {
+      "@type": "BusinessAudience",
+      "audienceType": "Pymes del sur de Chile que venden por WhatsApp y quieren un canal propio, automático y sin regalar comisión a marketplaces"
+    },
+    "areaServed": [
+      { "@type": "City", "@id": `${site}/#city-puerto-varas`, "name": "Puerto Varas" },
+      { "@type": "City", "@id": `${site}/#city-osorno`, "name": "Osorno" },
+      { "@type": "City", "@id": `${site}/#city-valdivia`, "name": "Valdivia" },
+      { "@type": "City", "@id": `${site}/#city-puerto-montt`, "name": "Puerto Montt" }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Planes WhatsApp API",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Implementación WhatsApp API (WAHA + Resend + bot)" }, "price": "390000", "priceCurrency": "CLP", "description": "Setup único. API oficial de WhatsApp Business vía WAHA, envío transaccional con Resend y bot de respuestas automáticas 24/7. Incluye hosting, soporte y actualizaciones. Instalación en 5-7 días. Mantención mensual $90.000." },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bot de WhatsApp con IA" }, "price": "650000", "priceCurrency": "CLP", "description": "Desde $650.000. Bot que entiende lenguaje natural y responde con tus documentos (catálogo, precios, disponibilidad). Incluye todo el plan de implementación API. Mantención mensual $90.000." }
+      ]
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "CLP",
+      "lowPrice": 390000,
+      "highPrice": 650000,
+      "offerCount": 2,
+      "availability": "https://schema.org/InStock"
+    },
+    "termsOfService": `${site}/politica-de-cookies`,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `${site}/whatsapp-api` }
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "¿Cuánto cuesta un bot de WhatsApp para una pyme en Chile?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Implementación desde $390.000 más $90.000 mensuales de mantención, usando la API oficial de WhatsApp Business (WAHA + Resend). Con IA desde $650.000. Incluye bot 24/7, catálogo, hosting, soporte y actualizaciones."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Es lo mismo la API de WhatsApp Business que la app normal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. WhatsApp Business es la app manual para atender desde el celular. La API permite automatizar: bots 24/7, catálogo, respuestas programáticas e integración con tus sistemas (inventario, CRM, pedidos)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Me pueden bloquear la cuenta si uso un bot?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Trabajamos con la API oficial de WhatsApp Business (Meta) y configuramos plantillas aprobadas según sus políticas. No usamos herramientas no oficiales, por lo que el riesgo de bloqueo es mínimo."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Cuánto demora implementar un bot de WhatsApp?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Un bot con respuestas automáticas y catálogo está listo en 5-7 días. Con IA o integración a sistemas, 2-3 semanas."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "¿Qué puede hacer mi bot de WhatsApp?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Responder consultas frecuentes 24/7, mostrar catálogo, recibir pedidos, agendar citas, calificar leads y derivar a un humano cuando corresponde. Con IA, además entiende lenguaje natural y responde con tus documentos."
+        }
+      }
+    ]
+  })} />
+
+  <Header />
+
+  <main id="main-content" style="overflow-x:hidden;">
+
+    <!-- ═══════════════════════════════════════════
+         HERO · Gradiente oscuro, texto al pie izquierdo
+    ═══════════════════════════════════════════ -->
+    <section style="position:relative; width:100vw; height:100dvh; min-height:100vh; overflow:hidden; background:#010101;">
+      <!-- Fondo verde oscuro + radial -->
+      <div style="position:absolute; inset:0; z-index:1; background:linear-gradient(150deg, #041208 0%, #021a0d 45%, #010101 100%);"></div>
+      <div style="position:absolute; inset:0; z-index:1; background:radial-gradient(ellipse at 22% 32%, rgba(37,211,102,0.07) 0%, transparent 55%);"></div>
+      <!-- Gradiente cinemático -->
+      <div style="position:absolute; inset:0; z-index:2; background:linear-gradient(to top, #010101 0%, #010101 18%, rgba(1,1,1,0.4) 55%, rgba(1,1,1,0.1) 100%);"></div>
+
+      <!-- Texto al pie izquierdo -->
+      <div style="position:absolute; left:0; right:0; bottom:0; z-index:10; padding:0 2.5rem 5rem;">
+        <p style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(37,211,102,0.5); font-family:var(--font-body); margin-bottom:1.25rem;">WhatsApp Business API · Ventas 24/7</p>
+        <h1 style="font-size:clamp(3rem,11vw,12rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+          VENDE<br /><span style="color:rgba(255,255,255,0.15);">MIENTRAS</span><br /><span style="color:rgba(255,255,255,0.15);">DUERMES</span>
+        </h1>
+        <p style="margin-top:1.5rem; font-size:0.82rem; color:rgba(255,255,255,0.35); font-family:var(--font-body); font-weight:300; max-width:420px; line-height:1.7;">
+          Tu bot de WhatsApp responde, muestra tu catálogo y recibe pedidos solo. API oficial, sin bloqueos, con hosting y soporte incluidos.
+        </p>
+        <div style="margin-top:2rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:#25D366; color:#010101; font-size:0.65rem; font-family:var(--font-body); font-weight:600; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#1eb858'" onmouseout="this.style.background='#25D366'">
+            HABLAR CON UN HUMANO
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/cotizar"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:transparent; color:rgba(255,255,255,0.4); font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; border:1px solid rgba(255,255,255,0.1); text-decoration:none; transition:all 0.2s;"
+            onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.borderColor='rgba(255,255,255,0.1)'">
+            COTIZAR ONLINE
+          </a>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div style="position:absolute; bottom:2rem; right:2.5rem; z-index:20;">
+        <Breadcrumbs items={[{ name: "WhatsApp API", path: "/whatsapp-api" }]} />
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         ANSWER BLOCK · respuesta directa 40-60 palabras (GEO N1)
+         Responde el prompt 11: "¿Cuánto cuesta un bot de WhatsApp?"
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#010101; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(37,211,102,0.15),transparent);"></div>
+      <div style="max-width:920px; margin:0 auto; padding:5rem 2.5rem;">
+
+        <p style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(37,211,102,0.5); font-family:var(--font-body); margin-bottom:1.5rem;">Respuesta directa · Costo y qué incluye</p>
+
+        <div class="reveal-group">
+          <p class="reveal-item" style="font-size:clamp(1.4rem, 3.4vw, 2.4rem); font-family:var(--font-heading); font-weight:700; color:#fff; line-height:1.25; letter-spacing:-0.02em; margin:0;">
+            Un bot de WhatsApp para pymes en Chile cuesta desde <span style="color:#25D366;">$390.000</span> de implementación más <span style="color:#25D366;">$90.000 mensuales</span>, usando la API oficial de WhatsApp Business (WAHA + Resend). Incluye respuestas 24/7, catálogo, hosting, soporte y actualizaciones. Con IA desde $650.000. Cotización sin costo.
+          </p>
+        </div>
+
+        <div class="reveal-item" style="margin-top:2rem; display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.62rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+            QUIERO MI COTIZACIÓN
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <span style="font-size:0.7rem; color:rgba(255,255,255,0.25); font-family:var(--font-body);">Demo viva: este mismo sitio responde por WhatsApp 24/7</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         SOLUCIONES · 4 columnas cinematográficas
+         Fila 1: 55/45 | Fila 2: 45/55
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#010101; position:relative; overflow:hidden;">
+      <div style="max-width:1200px; margin:0 auto; padding:4rem 2.5rem 2rem;">
+        <div class="reveal-group" style="margin-bottom:3rem;">
+          <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Soluciones</p>
+          <h2 class="reveal-item" style="font-size:clamp(2rem,5vw,4rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0;">
+            QUÉ HACE<br /><span style="color:rgba(255,255,255,0.15);">TU BOT</span>
+          </h2>
+        </div>
+      </div>
+
+      <div class="sol-wrapper">
+
+        <!-- Fila 1 · 55 / 45 -->
+        <div class="sol-row">
+          <div class="sol-col sol-dominant" style="background:radial-gradient(ellipse at 20% 80%, rgba(37,211,102,0.05) 0%, transparent 60%), #0A0A0A;">
+            <div class="sol-hover" style="position:absolute; inset:0; opacity:0; transition:opacity 0.5s; background:radial-gradient(ellipse at 20% 80%, rgba(37,211,102,0.1) 0%, transparent 60%);"></div>
+            <div style="position:relative; z-index:10; padding:4rem 3rem;">
+              <p style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-body); margin-bottom:1.5rem;">01</p>
+              <h3 style="font-size:clamp(1.6rem,3.5vw,2.8rem); font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; line-height:0.95; margin:0 0 1rem;">BOT 24/7</h3>
+              <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); font-family:var(--font-body); font-weight:300; line-height:1.7; max-width:420px; margin:0;">
+                Responde al instante: horarios, precios, ubicación, preguntas frecuentes. Nadie espera respuesta hasta el lunes.
+              </p>
+            </div>
+          </div>
+
+          <div class="sol-col sol-secondary">
+            <div style="position:relative; z-index:10; padding:4rem 2.5rem;">
+              <p style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-body); margin-bottom:1.5rem;">02</p>
+              <h3 style="font-size:clamp(1.4rem,3vw,2.2rem); font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; line-height:0.95; margin:0 0 1rem;">CATÁLOGO<br />Y PEDIDOS</h3>
+              <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); font-family:var(--font-body); font-weight:300; line-height:1.7; max-width:340px; margin:0;">
+                Muestra tu catálogo dentro del chat y recibe pedidos sin intermediarios. Sin comisiones a marketplaces.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fila 2 · 45 / 55 -->
+        <div class="sol-row">
+          <div class="sol-col sol-secondary-alt">
+            <div style="position:relative; z-index:10; padding:4rem 2.5rem;">
+              <p style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-body); margin-bottom:1.5rem;">03</p>
+              <h3 style="font-size:clamp(1.4rem,3vw,2.2rem); font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; line-height:0.95; margin:0 0 1rem;">NOTIFICA<br />Y RECUERDA</h3>
+              <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); font-family:var(--font-body); font-weight:300; line-height:1.7; max-width:340px; margin:0;">
+                Recordatorios de citas, confirmaciones de pedido, avisos de despacho. Automático, con plantillas aprobadas por Meta.
+              </p>
+            </div>
+          </div>
+
+          <div class="sol-col sol-dominant-alt" style="background:radial-gradient(ellipse at 80% 20%, rgba(37,211,102,0.05) 0%, transparent 60%), #0A0A0A;">
+            <div class="sol-hover" style="position:absolute; inset:0; opacity:0; transition:opacity 0.5s; background:radial-gradient(ellipse at 80% 20%, rgba(37,211,102,0.1) 0%, transparent 60%);"></div>
+            <div style="position:relative; z-index:10; padding:4rem 3rem;">
+              <p style="font-size:0.58rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.25); font-family:var(--font-body); margin-bottom:1.5rem;">04 · IA</p>
+              <h3 style="font-size:clamp(1.6rem,3.5vw,2.8rem); font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; line-height:0.95; margin:0 0 1rem;">IA CON TUS DOCUMENTOS</h3>
+              <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); font-family:var(--font-body); font-weight:300; line-height:1.7; max-width:420px; margin:0;">
+                El bot entiende lenguaje natural y responde con tu catálogo, tus precios y tu disponibilidad. Cuando corresponde, deriva a un humano con todo el contexto.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         PLANES · editorial strip, setup + mensual
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#0A0A0A; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="max-width:1000px; margin:0 auto; padding:6rem 2.5rem;">
+
+        <div class="reveal-group" style="margin-bottom:3rem;">
+          <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Precios transparentes</p>
+          <h2 class="reveal-item" style="font-size:clamp(2rem,5vw,4rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0;">
+            PLANES<br />WHATSAPP
+          </h2>
+          <p class="reveal-item" style="margin-top:1rem; font-size:0.75rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); font-weight:300; max-width:420px; line-height:1.7;">
+            Setup único + mantención mensual. La mantención cubre hosting, soporte, actualizaciones y monitoreo.
+          </p>
+        </div>
+
+        <div class="reveal-group">
+          <!-- Plan 1 · popular -->
+          <div class="reveal-item plan-row plan-featured" style="border-bottom:1px solid rgba(255,255,255,0.06); padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem; position:relative;">
+            <div style="position:absolute; left:0; top:0; bottom:0; width:2px; background:rgba(37,211,102,0.4);"></div>
+            <div style="min-width:140px; padding-left:1.5rem;">
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(37,211,102,0.7); font-family:var(--font-body); margin-bottom:0.5rem;">01 · Popular</p>
+              <p style="font-size:clamp(1.8rem,4.5vw,3rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$390k</p>
+              <p style="font-size:0.65rem; color:rgba(255,255,255,0.35); font-family:var(--font-body); margin-top:0.25rem;">setup único</p>
+              <p style="font-size:clamp(1.2rem,3vw,1.8rem); font-family:var(--font-heading); font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:-0.02em; line-height:1; margin:0.75rem 0 0;">+$90k<span style="font-size:0.6rem; color:rgba(255,255,255,0.25); font-family:var(--font-body); font-weight:300;"> /mes</span></p>
+            </div>
+            <div style="flex:1; min-width:200px; padding-left:1.5rem;">
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; margin:0 0 0.75rem;">WhatsApp API Completa</h3>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                {["API oficial (WAHA + Resend)", "Bot de respuestas 24/7", "Catálogo y pedidos", "Hosting incluido", "Soporte y actualizaciones", "Instalación en 5-7 días"].map(item => (
+                  <span style="font-size:0.72rem; color:rgba(255,255,255,0.45); font-family:var(--font-body);">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; padding-left:1.5rem;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.7rem 1.5rem; background:#fff; color:#010101; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; white-space:nowrap; transition:all 0.2s; font-weight:600;"
+                onmouseover="this.style.background='#e5e5e5'" onmouseout="this.style.background='#fff'">
+                LO QUIERO →
+              </a>
+            </div>
+          </div>
+
+          <!-- Plan 2 -->
+          <div class="reveal-item plan-row" style="padding:2.5rem 0; display:flex; flex-wrap:wrap; align-items:flex-start; gap:2rem;">
+            <div style="min-width:140px;">
+              <p style="font-size:0.58rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:0.5rem;">02</p>
+              <p style="font-size:clamp(1.8rem,4.5vw,3rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; line-height:1; margin:0;">$650k</p>
+              <p style="font-size:0.65rem; color:rgba(255,255,255,0.35); font-family:var(--font-body); margin-top:0.25rem;">desde / setup</p>
+              <p style="font-size:clamp(1.2rem,3vw,1.8rem); font-family:var(--font-heading); font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:-0.02em; line-height:1; margin:0.75rem 0 0;">+$90k<span style="font-size:0.6rem; color:rgba(255,255,255,0.25); font-family:var(--font-body); font-weight:300;"> /mes</span></p>
+            </div>
+            <div style="flex:1; min-width:200px;">
+              <h3 style="font-size:1.1rem; font-family:var(--font-heading); font-weight:700; color:#fff; letter-spacing:-0.02em; text-transform:uppercase; margin:0 0 0.75rem;">Bot con IA</h3>
+              <div style="display:flex; flex-wrap:wrap; gap:1.5rem;">
+                {["Todo el plan API", "Entiende lenguaje natural", "Responde con tu catálogo y precios", "Deriva a humano con contexto", "Análisis de conversaciones"].map(item => (
+                  <span style="font-size:0.72rem; color:rgba(255,255,255,0.38); font-family:var(--font-body);">{item}</span>
+                ))}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                style="display:inline-block; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.6rem; font-family:var(--font-body); text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; white-space:nowrap; transition:background 0.2s;"
+                onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1A1A1A'">
+                LO QUIERO →
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="reveal-item" style="margin-top:2.5rem; font-size:0.7rem; color:rgba(255,255,255,0.2); font-family:var(--font-body);">
+          ¿Necesitas algo distinto? <a href="/contacto" style="color:rgba(255,255,255,0.45); text-decoration:underline; text-underline-offset:3px;">Cuéntanos tu caso →</a>
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         FAQ · editorial strip
+    ═══════════════════════════════════════════ -->
+    <section style="width:100vw; background:#010101; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+      <div style="max-width:800px; margin:0 auto; padding:6rem 2.5rem;">
+
+        <div class="reveal-group" style="margin-bottom:3rem;">
+          <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Preguntas frecuentes</p>
+          <h2 class="reveal-item" style="font-size:clamp(2rem,5vw,4rem); font-family:var(--font-heading); font-weight:800; color:#fff; letter-spacing:-0.03em; text-transform:uppercase; line-height:0.92; margin:0;">
+            LO QUE<br />NOS PREGUNTAN
+          </h2>
+        </div>
+
+        <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
+          {[
+            { q: "¿Cuánto cuesta un bot de WhatsApp para una pyme en Chile?", a: "Implementación desde $390.000 más $90.000 mensuales de mantención, usando la API oficial de WhatsApp Business (WAHA + Resend). Con IA desde $650.000. Incluye bot 24/7, catálogo, hosting, soporte y actualizaciones." },
+            { q: "¿Es lo mismo la API de WhatsApp Business que la app normal?", a: "No. WhatsApp Business es la app manual para atender desde el celular. La API permite automatizar: bots 24/7, catálogo, respuestas programáticas e integración con tus sistemas (inventario, CRM, pedidos)." },
+            { q: "¿Me pueden bloquear la cuenta si uso un bot?", a: "Trabajamos con la API oficial de WhatsApp Business (Meta) y configuramos plantillas aprobadas según sus políticas. No usamos herramientas no oficiales, por lo que el riesgo de bloqueo es mínimo." },
+            { q: "¿Cuánto demora implementar un bot de WhatsApp?", a: "Un bot con respuestas automáticas y catálogo está listo en 5-7 días. Con IA o integración a sistemas, 2-3 semanas." },
+            { q: "¿Qué puede hacer mi bot de WhatsApp?", a: "Responder consultas frecuentes 24/7, mostrar catálogo, recibir pedidos, agendar citas, calificar leads y derivar a un humano cuando corresponde. Con IA, además entiende lenguaje natural y responde con tus documentos." },
+          ].map(faq => (
+            <details class="reveal-item faq-item" style="border-bottom:1px solid rgba(255,255,255,0.06);">
+              <summary style="display:flex; cursor:pointer; align-items:center; justify-content:space-between; gap:1rem; padding:1.5rem 0; font-size:0.875rem; font-family:var(--font-heading); font-weight:600; color:rgba(255,255,255,0.75); list-style:none; transition:color 0.2s;">
+                <span>{faq.q}</span>
+                <span class="faq-icon" style="flex-shrink:0; width:1.25rem; height:1.25rem; border:1px solid rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </span>
+              </summary>
+              <p style="padding-bottom:1.5rem; font-size:0.8rem; color:rgba(255,255,255,0.38); font-family:var(--font-body); font-weight:300; line-height:1.8; max-width:600px;">{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         CTA FINAL · viewport, texto al pie
+    ═══════════════════════════════════════════ -->
+    <section style="position:relative; width:100vw; min-height:75vh; overflow:hidden; background:#0A0A0A; display:flex; flex-direction:column; justify-content:flex-end;">
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at 30% 60%, rgba(37,211,102,0.04) 0%, transparent 55%);"></div>
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);"></div>
+
+      <div class="reveal-group" style="position:relative; z-index:10; padding:4rem 2.5rem 5rem;">
+        <p class="reveal-item" style="font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:rgba(255,255,255,0.2); font-family:var(--font-body); margin-bottom:1.25rem;">Empieza hoy</p>
+        <h2 class="reveal-item" style="font-size:clamp(3rem,10vw,11rem); font-family:var(--font-heading); font-weight:800; color:#fff; line-height:0.85; letter-spacing:-0.04em; text-transform:uppercase; margin:0;">
+          CONECTA TU<br /><span style="color:rgba(255,255,255,0.15);">NEGOCIO</span>
+        </h2>
+        <p class="reveal-item" style="margin-top:1.25rem; font-size:0.78rem; color:rgba(255,255,255,0.3); font-family:var(--font-body); font-weight:300; max-width:340px; line-height:1.7;">
+          Cuéntanos cómo atiendes hoy por WhatsApp y te mostramos cuánto tiempo y ventas estás perdiendo.
+        </p>
+        <div class="reveal-item" style="margin-top:2rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <a href={waUrl} target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:#25D366; color:#010101; font-size:0.65rem; font-family:var(--font-body); font-weight:600; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+            onmouseover="this.style.background='#1eb858'" onmouseout="this.style.background='#25D366'">
+            WHATSAPP
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/cotizar"
+            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.85rem 1.75rem; background:transparent; color:rgba(255,255,255,0.4); font-size:0.65rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; border:1px solid rgba(255,255,255,0.1); text-decoration:none; transition:all 0.2s;"
+            onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.borderColor='rgba(255,255,255,0.1)'">
+            COTIZAR ONLINE
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CIUDADES RELACIONADAS -->
+    <CiudadesRelacionadas current="puerto-varas" />
+  </main>
+
+  <Footer />
+
+  <style>
+    /* ── Sol wrapper + rows ──────────────────────── */
+    .sol-wrapper { display: flex; flex-direction: column; width: 100vw; }
+
+    .sol-row {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .sol-col {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 85vw;
+    }
+
+    @media (min-width: 768px) {
+      .sol-row { flex-direction: row; }
+      .sol-col { min-height: 72vh; }
+      .sol-dominant      { width: 55%; }
+      .sol-secondary     { width: 45%; border-left: 1px solid rgba(255,255,255,0.04); }
+      .sol-secondary-alt { width: 45%; }
+      .sol-dominant-alt  { width: 55%; border-left: 1px solid rgba(255,255,255,0.04); }
+      .sol-row + .sol-row { border-top: 1px solid rgba(255,255,255,0.04); }
+    }
+
+    .sol-col:hover .sol-hover { opacity: 1 !important; }
+
+    @media (max-width: 640px) {
+      .sol-col { min-height: 100vw; }
+    }
+
+    /* Planes */
+    .plan-row:hover { background: rgba(255,255,255,0.01); }
+
+    /* FAQ */
+    .faq-item summary:hover { color: #fff !important; }
+    .faq-item[open] summary { color: #fff !important; }
+    .faq-item[open] .faq-icon { border-color: rgba(255,255,255,0.3) !important; transform: rotate(45deg); }
+  </style>
+
+</BaseLayout>

@@ -1,7 +1,7 @@
 /**
- * Analytics — GA4 + Clarity loader (consent-gated)
+ * Analytics · GA4 + Clarity loader (consent-gated)
  *
- * Pattern: Observer — listens to cookie-consent-change events
+ * Pattern: Observer · listens to cookie-consent-change events
  * Only loads GA/Clarity scripts AFTER user grants analytics consent.
  * Revokes consent by removing scripts if user revokes later.
  */

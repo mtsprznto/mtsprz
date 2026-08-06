@@ -1,5 +1,5 @@
 /**
- * WAHA (WhatsApp HTTP API) — Domain types.
+ * WAHA (WhatsApp HTTP API) · Domain types.
  * Docs: https://waha.devlike.pro/docs/overview/introduction/
  */
 
@@ -53,7 +53,7 @@ export interface WahaMessage {
   [key: string]: unknown;
 }
 
-/** Valores ack — estado de entrega de un mensaje. */
+/** Valores ack · estado de entrega de un mensaje. */
 export enum Ack {
   ERROR = -1,
   PENDING = 0,
@@ -76,7 +76,7 @@ export interface WahaMessageEvent extends WahaWebhookEvent {
   payload: WahaMessage;
 }
 
-/** Evento `message.ack` — cambio de estado de entrega. */
+/** Evento `message.ack` · cambio de estado de entrega. */
 export interface WahaMessageAckEvent extends WahaWebhookEvent {
   event: "message.ack";
   payload: {

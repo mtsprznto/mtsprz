@@ -1,0 +1,119 @@
+---
+/**
+ * CasoNav · Navegación editorial prev/next entre casos.
+ * Se usa al final de /casos/[slug]. Patrón circular (el último enlaza al primero).
+ * Diseño: split-screen de agencia — cada caso es un panel half-viewport con su
+ * visual generativo como fondo (la imagen es la tarjeta), overlay cinematográfico,
+ * título editorial grande y flecha en esquina. Hairline de 1px entre paneles.
+ * Micro-motion: Ken Burns sutil (scale 1→1.05) + desplazamiento de flecha.
+ * La sección es autosuficiente (bg + contenedor + padding propio): NO usa
+ * márgenes externos para evitar aire duplicado con la sección anterior.
+ */
+import { ArrowLeft, ArrowRight } from "@lucide/astro";
+import type { Caso } from "../../data/casos";
+import { getCasoVisual } from "../../lib/caso-visuals";
+
+export interface Props {
+  casos: Caso[];
+  currentSlug: string;
+}
+
+const { casos, currentSlug } = Astro.props;
+
+const idx = casos.findIndex((c) => c.slug === currentSlug);
+const prev = casos[(idx - 1 + casos.length) % casos.length];
+const next = casos[(idx + 1) % casos.length];
+const prevVisual = getCasoVisual(prev.slug);
+const nextVisual = getCasoVisual(next.slug);
+---
+
+<section class="relative w-full bg-[#010101]" aria-label="Otros casos">
+  <div class="mx-auto max-w-6xl px-6 pb-24 md:pb-32">
+    <div class="reveal-group">
+
+      <!-- Encabezado editorial -->
+      <div class="reveal-item mb-10 flex items-center gap-6 md:mb-14">
+        <p class="shrink-0 font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/40">
+          Otros casos
+        </p>
+        <span class="h-px flex-1 bg-white/[0.08]" aria-hidden="true" />
+      </div>
+
+      <!-- Paneles prev/next · hijos directos del grupo para stagger; hairline de 1px entre ambos -->
+      <a
+        href={`/casos/${prev.slug}`}
+        aria-label={`Anterior caso: ${prev.titulo}`}
+        class="reveal-item group relative block overflow-hidden bg-[#010101]"
+      >
+          <div
+            class="absolute inset-0 scale-100 transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+            style={`background: ${prevVisual.bg};`}
+            aria-hidden="true"
+          />
+          <div
+            class="absolute inset-0 opacity-40 mix-blend-overlay transition-opacity duration-700 group-hover:opacity-60"
+            style={`background-image: ${prevVisual.patternUrl}; background-size: 160px 160px;`}
+            aria-hidden="true"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-[#010101] via-[#010101]/55 to-transparent"
+            aria-hidden="true"
+          />
+
+          <span
+            class="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center border border-white/25 bg-[#010101]/30 backdrop-blur-sm transition-colors duration-500 group-hover:border-white/60 group-hover:bg-[#010101]/50 md:right-8 md:top-8 md:h-11 md:w-11"
+            aria-hidden="true"
+          >
+            <ArrowLeft class="h-4 w-4 text-white/80 transition-transform duration-500 group-hover:-translate-x-1" />
+          </span>
+
+          <div class="relative flex min-h-[240px] flex-col justify-end p-8 md:min-h-[340px] md:p-12">
+            <p class="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/60">
+              Anterior caso
+            </p>
+            <h3 class="mt-3 max-w-md font-heading text-2xl font-extrabold leading-[1.05] tracking-[-0.02em] text-white md:text-[2.75rem]">
+              {prev.titulo}
+            </h3>
+          </div>
+        </a>
+
+        <a
+          href={`/casos/${next.slug}`}
+          aria-label={`Siguiente caso: ${next.titulo}`}
+          class="reveal-item group relative block overflow-hidden border-t border-white/[0.08] bg-[#010101] md:border-l md:border-t-0"
+        >
+          <div
+            class="absolute inset-0 scale-100 transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+            style={`background: ${nextVisual.bg};`}
+            aria-hidden="true"
+          />
+          <div
+            class="absolute inset-0 opacity-40 mix-blend-overlay transition-opacity duration-700 group-hover:opacity-60"
+            style={`background-image: ${nextVisual.patternUrl}; background-size: 160px 160px;`}
+            aria-hidden="true"
+          />
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-[#010101] via-[#010101]/55 to-transparent"
+            aria-hidden="true"
+          />
+
+          <span
+            class="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center border border-white/25 bg-[#010101]/30 backdrop-blur-sm transition-colors duration-500 group-hover:border-white/60 group-hover:bg-[#010101]/50 md:right-8 md:top-8 md:h-11 md:w-11"
+            aria-hidden="true"
+          >
+            <ArrowRight class="h-4 w-4 text-white/80 transition-transform duration-500 group-hover:translate-x-1" />
+          </span>
+
+          <div class="relative flex min-h-[240px] flex-col justify-end p-8 md:min-h-[340px] md:p-12">
+            <p class="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/60">
+              Siguiente caso
+            </p>
+            <h3 class="mt-3 max-w-md font-heading text-2xl font-extrabold leading-[1.05] tracking-[-0.02em] text-white md:text-[2.75rem]">
+              {next.titulo}
+            </h3>
+          </div>
+        </a>
+
+    </div>
+  </div>
+</section>

@@ -206,8 +206,8 @@ const { id } = Astro.params;
         svcHtml.push("<tr><td colspan='2' class='py-6 text-center text-sm text-sky-400/60'>");
         svcHtml.push("<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' class='inline mr-2 mb-1'><path d='M12 2L2 7l10 5 10-5-10-5z'/><path d='M2 17l10 5 10-5'/><path d='M2 12l10 5 10-5'/></svg>");
         svcHtml.push(isHonorarios
-          ? "Contrato de honorarios — pago único por prestación profesional sin servicio desglosado"
-          : "Contrato honorario fijo — servicios incluidos en alcance sin desglose de precios");
+          ? "Contrato de honorarios · pago único por prestación profesional sin servicio desglosado"
+          : "Contrato honorario fijo · servicios incluidos en alcance sin desglose de precios");
         svcHtml.push("</td></tr>");
       }
       document.getElementById("servicesTable").innerHTML = svcHtml.join("");

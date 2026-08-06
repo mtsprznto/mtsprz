@@ -15,7 +15,7 @@ export const GET: APIRoute = async ({ locals, url }) => {
 
     let rows: Record<string, unknown>[];
     if (search.trim()) {
-      // ILIKE fallback — más robusto que tsvector para búsquedas cortas/parciales
+      // ILIKE fallback · más robusto que tsvector para búsquedas cortas/parciales
       const pattern = `%${search.trim()}%`;
       const result = await query(
         `SELECT id, name, company_name, rut, email, phone, address, nationality, profession, notes, notif_email, representante, created_at

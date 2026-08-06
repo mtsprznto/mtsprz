@@ -4,7 +4,7 @@ export const prerender = false;
 const { token } = Astro.params;
 ---
 
-<BaseLayout title="Firmar Contrato — Mtsprz" noindex>
+<BaseLayout title="Firmar Contrato · Mtsprz" noindex>
   <main id="main-content" class="min-h-screen bg-[#010101] px-4 py-12">
     <div class="mx-auto max-w-3xl">
       <div id="loadingState" class="text-center py-24">
@@ -32,7 +32,7 @@ const { token } = Astro.params;
       <div id="signForm" class="hidden space-y-6">
         <div class="text-center mb-6">
           <div class="text-2xl font-bold text-white/90 font-heading tracking-tight mb-1">
-            <span class="text-accent">MTSPRZ</span> — Firma tu Contrato
+            <span class="text-accent">MTSPRZ</span> · Firma tu Contrato
           </div>
           <p id="contractNumber" class="text-sm text-white/30">Cargando...</p>
         </div>
@@ -88,7 +88,7 @@ const { token } = Astro.params;
           </div>
         </div>
 
-        <!-- Verificación Biométrica — Steps -->
+        <!-- Verificación Biométrica · Steps -->
         <div class="rounded-xl border border-white/[0.06] bg-[#0a0a0b] p-5 space-y-5">
           <div class="flex items-center gap-2.5">
             <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-sky-400/10 text-sky-400">
@@ -155,7 +155,7 @@ const { token } = Astro.params;
                   id="mrzInput"
                   rows="3"
                   class="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2.5 text-[11px] text-white font-mono outline-none focus:border-accent/40 transition-colors resize-none"
-                  placeholder="Se llena automáticamente al subir la foto — o pégalo manualmente"
+                  placeholder="Se llena automáticamente al subir la foto · o pégalo manualmente"
                   oninput="onMrzInput(this)"
                 ></textarea>
                 <div id="mrzStatus" class="mt-1 text-[10px]"></div>
@@ -205,12 +205,12 @@ const { token } = Astro.params;
 
           <!-- Resumen verificación -->
           <div id="bioDetails" class="pt-1 space-y-1.5">
-            <div class="flex justify-between text-xs"><span class="text-white/40">Rostro en c&eacute;dula:</span><span id="bioFaceId" class="text-white/60">—</span></div>
-            <div class="flex justify-between text-xs"><span class="text-white/40">Coincidencia facial:</span><span id="bioMatch" class="text-white/60">—</span></div>
-            <div class="flex justify-between text-xs"><span class="text-white/40">Prueba de vida (parpadeos):</span><span id="bioLiveness" class="text-white/60">—</span></div>
-            <div class="flex justify-between text-xs"><span class="text-white/40">RUT v&aacute;lido:</span><span id="bioRut" class="text-white/60">—</span></div>
-            <div class="flex justify-between text-xs"><span class="text-white/40">MRZ v&aacute;lido:</span><span id="bioMrz" class="text-white/60">—</span></div>
-            <div class="flex justify-between text-xs"><span class="text-white/40">Rostro en selfie:</span><span id="bioFaceSelfie" class="text-white/60">—</span></div>
+            <div class="flex justify-between text-xs"><span class="text-white/40">Rostro en c&eacute;dula:</span><span id="bioFaceId" class="text-white/60">·</span></div>
+            <div class="flex justify-between text-xs"><span class="text-white/40">Coincidencia facial:</span><span id="bioMatch" class="text-white/60">·</span></div>
+            <div class="flex justify-between text-xs"><span class="text-white/40">Prueba de vida (parpadeos):</span><span id="bioLiveness" class="text-white/60">·</span></div>
+            <div class="flex justify-between text-xs"><span class="text-white/40">RUT v&aacute;lido:</span><span id="bioRut" class="text-white/60">·</span></div>
+            <div class="flex justify-between text-xs"><span class="text-white/40">MRZ v&aacute;lido:</span><span id="bioMrz" class="text-white/60">·</span></div>
+            <div class="flex justify-between text-xs"><span class="text-white/40">Rostro en selfie:</span><span id="bioFaceSelfie" class="text-white/60">·</span></div>
           </div>
         </div>
 
@@ -338,7 +338,7 @@ const { token } = Astro.params;
       document.getElementById("cameraOverlay").classList.add("hidden");
       document.getElementById("faceOverlay").classList.remove("hidden");
       document.getElementById("faceGuide").classList.remove("hidden");
-      document.getElementById("selfieStatus").textContent = "Parpadeos: 0/2 — Mira a la cámara";
+      document.getElementById("selfieStatus").textContent = "Parpadeos: 0/2 · Mira a la cámara";
       document.getElementById("selfieStatus").classList.remove("hidden");
       try {
         await waitForMP();
@@ -450,8 +450,8 @@ const { token } = Astro.params;
           wasBlinking = true;
           blinkCount++;
           status.textContent = blinkCount < 2
-            ? "💚 Parpadeo 1/2 — un parpadeo más"
-            : "💚 Parpadeo 2/2 — capturando...";
+            ? "💚 Parpadeo 1/2 · un parpadeo más"
+            : "💚 Parpadeo 2/2 · capturando...";
         }
       } else {
         wasBlinking = false;
@@ -632,7 +632,7 @@ const { token } = Astro.params;
     if (!idUploads.front) return;
 
     var img = new Image();
-    img.src = idUploads.front; // base64 local — sin crossOrigin
+    img.src = idUploads.front; // base64 local · sin crossOrigin
     await new Promise(function(r) { img.onload = r; img.onerror = r; });
 
     try {
@@ -668,7 +668,7 @@ const { token } = Astro.params;
         if (score >= 0.5) bioResult.verificationStatus = "passed";
         else bioResult.verificationStatus = "failed";
       } else if (!selfieDescriptor) {
-        // selfieDescriptor aún no disponible — puede estar siendo extraído
+        // selfieDescriptor aún no disponible · puede estar siendo extraído
       if (idUploads.selfie) {
         document.getElementById("bioMatch").textContent = "⏳ Procesando selfie...";
         // Reintentar en 2s por si extractSelfieDescriptor aún no terminó
@@ -676,7 +676,7 @@ const { token } = Astro.params;
           if (selfieDescriptor) runFaceMatching();
         }, 2000);
       } else {
-        document.getElementById("bioMatch").textContent = idDet ? "⏳ Toma la selfie" : "—";
+        document.getElementById("bioMatch").textContent = idDet ? "⏳ Toma la selfie" : "·";
       }
       }
     } catch (e) {
@@ -803,7 +803,7 @@ const { token } = Astro.params;
     mrzStatus.classList.remove("hidden");
     try {
       if (typeof Tesseract === "undefined") {
-        mrzStatus.textContent = "⚠️ OCR no disponible — ingresa el MRZ manualmente";
+        mrzStatus.textContent = "⚠️ OCR no disponible · ingresa el MRZ manualmente";
         mrzStatus.className = "mt-1 text-[10px] text-amber-400";
         return;
       }
@@ -838,11 +838,11 @@ const { token } = Astro.params;
           mrzStatus.className = "mt-1 text-[10px] text-emerald-400";
         }
       } else {
-        mrzStatus.textContent = "⚠️ No se detectó MRZ — ingresa manualmente las 3 líneas";
+        mrzStatus.textContent = "⚠️ No se detectó MRZ · ingresa manualmente las 3 líneas";
         mrzStatus.className = "mt-1 text-[10px] text-amber-400";
       }
     } catch(e) {
-      mrzStatus.textContent = "⚠️ Error OCR: " + (e.message || e) + " — ingresa manualmente";
+      mrzStatus.textContent = "⚠️ Error OCR: " + (e.message || e) + " · ingresa manualmente";
       mrzStatus.className = "mt-1 text-[10px] text-amber-400";
     }
   }
@@ -896,7 +896,7 @@ const { token } = Astro.params;
     if (val.length < 30) {
       bioResult.mrzValid = false;
       document.getElementById('mrzStatus').textContent = '';
-      document.getElementById('bioMrz').textContent = '—';
+      document.getElementById('bioMrz').textContent = '·';
       updateSteps();
       return;
     }
@@ -919,7 +919,7 @@ const { token } = Astro.params;
       document.getElementById('bioMrz').textContent = '✅ Válido';
     } else if (hasOnlyChecksumErrors && result.docNumber && result.docNumber.length >= 5) {
       bioResult.mrzOcrOnly = true;
-      // Solo errores de checksum — el OCR leyó el texto pero con ruido
+      // Solo errores de checksum · el OCR leyó el texto pero con ruido
       el2.textContent = '⚠️ MRZ leído con imprecisiones OCR (se guardará como evidencia)';
       el2.className = 'mt-1 text-[10px] text-amber-400';
       document.getElementById('bioMrz').textContent = '⚠️ Leído (OCR impreciso)';

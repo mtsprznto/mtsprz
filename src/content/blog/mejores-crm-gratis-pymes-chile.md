@@ -27,7 +27,7 @@ Antes de elegir, define que necesitas:
 
 ## Comparativa de CRM gratis para pymes chilenas
 
-### 1. HubSpot CRM — El mas completo para empezar
+### 1. HubSpot CRM · El mas completo para empezar
 
 | Caracteristica | Detalle |
 |---------------|---------|
@@ -43,7 +43,7 @@ Antes de elegir, define que necesitas:
 
 **Para que tipo de pyme:** Cualquier negocio que quiera empezar con CRM. Es el mas facil de configurar.
 
-### 2. Zoho CRM — El mejor relacion calidad-prestaciones gratis
+### 2. Zoho CRM · El mejor relacion calidad-prestaciones gratis
 
 | Caracteristica | Detalle |
 |---------------|---------|
@@ -58,7 +58,7 @@ Antes de elegir, define que necesitas:
 
 **Para que tipo de pyme:** Negocios con muchos contactos (1,000+) que necesitan mas de 1 usuario.
 
-### 3. Monday CRM — El mas visual
+### 3. Monday CRM · El mas visual
 
 | Caracteristica | Detalle |
 |---------------|---------|
@@ -73,7 +73,7 @@ Antes de elegir, define que necesitas:
 
 **Para que tipo de pyme:** Equipos pequenos que prefieren una vista visual de su pipeline de ventas.
 
-### 4. Bitrix24 — El mas completo (casi demasiado)
+### 4. Bitrix24 · El mas completo (casi demasiado)
 
 | Caracteristica | Detalle |
 |---------------|---------|
@@ -88,7 +88,7 @@ Antes de elegir, define que necesitas:
 
 **Para que tipo de pyme:** Equipos de 5-12 personas que necesitan CRM + proyecto + comunicacion interna todo en uno.
 
-### 5. Google Contacts + Google Sheets — El mas simple (no es CRM pero funciona)
+### 5. Google Contacts + Google Sheets · El mas simple (no es CRM pero funciona)
 
 Si ningun CRM te convence, puedes empezar con Google Contacts (contactos) + Google Sheets (seguimiento). No es un CRM pero para negocios muy pequenos puede funcionar.
 

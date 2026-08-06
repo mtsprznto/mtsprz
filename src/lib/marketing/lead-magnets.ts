@@ -1,5 +1,5 @@
 /**
- * Marketing — Catálogo de lead magnets (J4 del plan 2026).
+ * Marketing · Catálogo de lead magnets (J4 del plan 2026).
  * Contenido público (SEO/GEO) + captura de email → secuencia.
  *
  * Los "magnets" NO son archivos PDF: son páginas públicas en /recursos/[slug]
@@ -12,7 +12,7 @@ export interface LeadMagnet {
   slug: string;
   /** Nombre visible en cards y emails */
   title: string;
-  /** Promesa de 1 línea — copy de la card */
+  /** Promesa de 1 línea · copy de la card */
   promise: string;
   /** Para quién (buyer persona) */
   audience: string;
@@ -41,7 +41,7 @@ export const LEAD_MAGNETS: LeadMagnet[] = [
     title: "10 automatizaciones que toda pyme debería tener",
     promise: "WhatsApp que responde, reservas automáticas, boletas sin fricción",
     audience: "Servicios profesionales y proveedores B2B",
-    outcome: "Mira qué procesos se pueden automatizar hoy con IA y WhatsApp — sin contratar a nadie.",
+    outcome: "Mira qué procesos se pueden automatizar hoy con IA y WhatsApp · sin contratar a nadie.",
     icon: "bot",
     order: 2,
   },

@@ -54,7 +54,7 @@ export const POST: APIRoute = async ({ request }) => {
     await initDb();
     // Cheap cleanup of expired codes (one row per email)
     await query("DELETE FROM verification_codes WHERE expires_at < NOW()", []);
-    // One active code per email — atomic UPSERT resets attempts on resend
+    // One active code per email · atomic UPSERT resets attempts on resend
     await query(
       `INSERT INTO verification_codes (email, code_hash, attempts, expires_at)
        VALUES ($1, $2, 0, NOW() + INTERVAL '10 minutes')
@@ -81,7 +81,7 @@ export const POST: APIRoute = async ({ request }) => {
       body: JSON.stringify({
         from: "Mtsprz <cotizaciones@mtsprz.org>",
         to: email,
-        subject: "Tu código de verificación — Mtsprz",
+        subject: "Tu código de verificación · Mtsprz",
         html: `<div style="font-family:sans-serif;max-width:480px;margin:0 auto;background:#0a0a0b;color:#fafafa;padding:32px;border-radius:16px;border:1px solid rgba(255,255,255,0.06)">
           <p style="font-size:14px;color:rgba(250,250,250,0.6);margin:0 0 24px">Usa este código para verificar tu correo y recibir tu cotización personalizada.</p>
           <div style="text-align:center;font-size:36px;font-weight:700;letter-spacing:8px;color:#6366f1;padding:16px 0;margin:0 0 24px;background:rgba(99,102,241,0.08);border-radius:12px">${code}</div>

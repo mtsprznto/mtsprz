@@ -33,7 +33,7 @@ const diagnosisFallbacks = [
 ];
 const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFallbacks;
 
-// Recursos — biblioteca gratuita (misma fuente que /recursos)
+// Recursos · biblioteca gratuita (misma fuente que /recursos)
 const magnets = [...LEAD_MAGNETS].sort((a, b) => a.order - b.order);
 const iconMap = {
   "list-checks": ListChecks,
@@ -43,7 +43,7 @@ const iconMap = {
 ---
 
 <BaseLayout
-  title="Agencia Digital Puerto Varas, Los Lagos — Páginas Web, SEO y Automatización"
+  title="Agencia Digital Puerto Varas, Los Lagos · Páginas Web, SEO y Automatización"
   description="Agencia digital en Puerto Varas: páginas web profesionales, SEO local en Google Maps y automatizaciones para pymes en la Región de Los Lagos. Cotiza gratis."
   video={{
     url: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4",
@@ -117,7 +117,7 @@ const iconMap = {
           <span class="text-white/20">|</span>
           <span class="flex items-center gap-1.5">
             <svg class="w-3 h-3 text-[#6366f1] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Puerto Varas — Los Lagos
+            Puerto Varas · Los Lagos
           </span>
           </div>
         </div>
@@ -130,7 +130,7 @@ const iconMap = {
       </div>
     </section>
 
-    <!-- Diagnóstico — editorial cinematic columns -->
+    <!-- Diagnóstico · editorial cinematic columns -->
     <section class="relative bg-[#0A0A0A] w-full" id="diagnostico">
       <!-- Header -->
       <div class="mx-auto max-w-5xl px-6 pt-20 md:pt-28 pb-14 md:pb-18 text-center">
@@ -145,7 +145,7 @@ const iconMap = {
         </div>
       </div>
 
-      <!-- 3 editorial columns — full-bleed, cada una link a su landing si existe -->
+      <!-- 3 editorial columns · full-bleed, cada una link a su landing si existe -->
       <div class="w-full overflow-hidden reveal-group">
         <div class="grid grid-cols-1 md:grid-cols-3">
           {featured.map((s, i) => (
@@ -165,7 +165,7 @@ const iconMap = {
         </div>
       </div>
 
-      <!-- Full-width CTA + GEO Quick Answer — sutil, debajo de columnas -->
+      <!-- Full-width CTA + GEO Quick Answer · sutil, debajo de columnas -->
       <div class="mx-auto max-w-5xl px-6 py-16 md:py-20">
         <div class="reveal-group">
           <a href="/contacto" class="reveal-item group flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl px-6 md:px-8 py-5 md:py-6 transition-all duration-300"
@@ -197,7 +197,7 @@ const iconMap = {
       </div>
     </section>
 
-    <!-- Structured Data: Services (SEO 2026 — FAQPage deprecated May 2026) -->
+    <!-- Structured Data: Services (SEO 2026 · FAQPage deprecated May 2026) -->
     <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
@@ -243,7 +243,7 @@ const iconMap = {
       ]
     })} />
 
-    <!-- Services — editorial cinematic columns -->
+    <!-- Services · editorial cinematic columns -->
     <section class="relative bg-[#0A0A0A] w-full">
       <!-- Header -->
       <div class="mx-auto max-w-5xl px-6 pt-20 md:pt-28 pb-14 md:pb-18 text-center">
@@ -258,7 +258,7 @@ const iconMap = {
         </div>
       </div>
 
-      <!-- Columnas editoriales — full-bleed, asimétricas -->
+      <!-- Columnas editoriales · full-bleed, asimétricas -->
       <div class="w-full overflow-hidden reveal-group">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12">
           {services.map((s, i) => {
@@ -282,9 +282,9 @@ const iconMap = {
       </div>
     </section>
 
-    <!-- Nosotros — editorial brand spread -->
+    <!-- Nosotros · editorial brand spread -->
     <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
-      <!-- Background cinematográfico — iluminación de estudio dramática -->
+      <!-- Background cinematográfico · iluminación de estudio dramática -->
       <div class="absolute inset-0" style="background: #0A0A0A;" />
       <div class="absolute inset-0 opacity-60" style="background: radial-gradient(ellipse at 30% 20%, #6366f122 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, #8b5cf615 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, #0A0A0A 0%, transparent 70%);" />
       <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
@@ -296,7 +296,7 @@ const iconMap = {
           <!-- Label editorial -->
           <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Sobre Nosotros</p>
 
-          <!-- Título principal — enorme, editorial -->
+          <!-- Título principal · enorme, editorial -->
           <h2 class="reveal-item text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-heading font-bold text-white leading-[0.92] tracking-[-2px] md:tracking-[-3px] lg:tracking-[-4px] uppercase">
             Agencia Digital<br />
             <span class="block mt-1 md:mt-0" style="color: #6366f1cc;">Región de Los Lagos</span>
@@ -305,7 +305,7 @@ const iconMap = {
           <!-- Separador editorial -->
           <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
 
-          <!-- Cuerpo — texto editorial con tracking amplio -->
+          <!-- Cuerpo · texto editorial con tracking amplio -->
           <div class="reveal-item max-w-3xl mx-auto space-y-5 md:space-y-6">
             <p class="text-sm md:text-base lg:text-lg text-white/55 font-body font-light leading-[1.8] md:leading-[1.9] tracking-[0.01em]">
               Mtsprz nació en <span class="text-white/80">Puerto Varas</span> con la misión de llevar soluciones digitales profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad sin pagar precios de Santiago. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
@@ -315,7 +315,7 @@ const iconMap = {
             </p>
           </div>
 
-          <!-- Regiones — chips editoriales -->
+          <!-- Regiones · chips editoriales -->
           <div class="reveal-item mt-10 md:mt-12 flex flex-wrap justify-center gap-3">
             {[
               { name: "Puerto Varas", slug: "puerto-varas" },
@@ -343,7 +343,7 @@ const iconMap = {
       <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
     </section>
 
-    <!-- Portafolio — proyectos reales -->
+    <!-- Portafolio · proyectos reales -->
     <section class="relative bg-[#010101] w-full overflow-hidden">
       <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
 
@@ -404,7 +404,7 @@ const iconMap = {
       <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
     </section>
 
-    <!-- Recursos — biblioteca gratuita (puente a /recursos) -->
+    <!-- Recursos · biblioteca gratuita (puente a /recursos) -->
     <section class="relative bg-[#010101] w-full overflow-hidden">
       <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
 
@@ -424,7 +424,7 @@ const iconMap = {
           </div>
         </div>
 
-        <!-- Índice editorial de guías — filas horizontales -->
+        <!-- Índice editorial de guías · filas horizontales -->
         <div class="reveal-group border-t border-white/10 divide-y divide-white/10">
           {magnets.map((m) => {
             const Icon = iconMap[m.icon] || ListChecks;
@@ -460,7 +460,7 @@ const iconMap = {
       <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
     </section>
 
-    <!-- CTA — editorial call to action -->
+    <!-- CTA · editorial call to action -->
     <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
       <!-- Background cinematográfico -->
       <div class="absolute inset-0" style="background: #0A0A0A;" />
@@ -502,7 +502,7 @@ const iconMap = {
             <span class="text-[11px] md:text-xs text-white/30 font-body tracking-wide">o llama al <span class="text-white/50">+56966929818</span></span>
           </div>
 
-          <!-- Trust signals — chips editoriales -->
+          <!-- Trust signals · chips editoriales -->
           <div class="reveal-item mt-12 md:mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
             {[
               { label: "Sin compromiso", accent: "#6366f1" },

@@ -75,7 +75,7 @@ export function checkRateLimit(
 }
 
 /**
- * Rate limiter for verification code attempts (stricter — per-email, short window).
+ * Rate limiter for verification code attempts (stricter · per-email, short window).
  */
 export function checkVerifyRateLimit(email: string): RateLimitResult {
   const key = `verify-code:email:${email}`;

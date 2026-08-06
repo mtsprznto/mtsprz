@@ -81,4 +81,4 @@ Si recien empiezas y tu presupuesto es limitado, una landing page bien optimizad
 
 La diferencia principal es la velocidad, el SEO y la personalizacion. Un sitio Wix carga lento, tiene limitaciones de SEO y usas plantillas que usan miles de otros sitios. Un sitio Mtsprz es unico, ultra-rapido, optimizado para Google desde el primer dia y completamente personalizado para tu marca.
 
-[Quiero crear mi pagina web para emprendedores](/contacto) — solicita tu cotizacion sin compromiso y recibe respuesta en 24 horas.
+[Quiero crear mi pagina web para emprendedores](/contacto) · solicita tu cotizacion sin compromiso y recibe respuesta en 24 horas.

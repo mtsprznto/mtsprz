@@ -1,5 +1,5 @@
 /**
- * Cookie Consent Manager — LGPD/RGPD compliant
+ * Cookie Consent Manager · LGPD/RGPD compliant
  *
  * Patterns applied:
  * - Singleton: single global instance

@@ -28,7 +28,7 @@ export interface ContractData {
   adminSignedAt?: string;
   clientSignedAt?: string;
 
-  // NUEVOS — opcionales para compatibilidad backward
+  // NUEVOS · opcionales para compatibilidad backward
   clientNationality?: string;
   clientProfession?: string;
   clientCompany?: string;
@@ -41,13 +41,13 @@ export interface ContractData {
   jurisdiction?: string;         // default "Puerto Varas"
   prestadorRut?: string;
 
-  // NUEVOS — identificación legal correcta (recomendación abogado)
+  // NUEVOS · identificación legal correcta (recomendación abogado)
   prestadorNombreCivil?: string; // nombre civil completo del prestador (persona natural)
-  clientRepresentante?: string;  // "[nombre], RUT [rut], según consta en escritura/estatutos" — para SpA/SA/Ltda
+  clientRepresentante?: string;  // "[nombre], RUT [rut], según consta en escritura/estatutos" · para SpA/SA/Ltda
   clientNotifEmail?: string;     // correo formal del cliente para notificaciones (si distinto a clientEmail)
   prestadorNotifEmail?: string;  // correo formal del prestador (default: contacto@mtsprz.org)
 
-  // NUEVOS — contrato boleta honorarios
+  // NUEVOS · contrato boleta honorarios
   templateType?: string;          // tipo de plantilla (proyecto_unico, boleta_honorarios, etc.)
   netAmount?: number;             // monto líquido (ej: 450000)
   retentionRate?: number;         // tasa retención porcentual (ej: 15.25)
@@ -59,7 +59,7 @@ export interface ContractData {
   // Blast-Up mode: license IP, $450k líquidos, obligation of means, no hosting
   blastUpMode?: boolean;
 
-  // NUEVOS — Blast-Up 007: período único, horas, pagaré, contraparte
+  // NUEVOS · Blast-Up 007: período único, horas, pagaré, contraparte
   hourCap?: number;              // tope horas período (default 40)
   extraHourRate?: number;        // tarifa hora adicional bruta (default 11250)
   clientTechName?: string;       // contraparte técnica nombre
@@ -186,7 +186,7 @@ function drawClauseTitle(ctx: LayoutCtx, index: number, title: string): number {
     color: BORDER,
   });
   ctx.y -= 18;
-  const label = `${ORDINALS[index]}. — ${title}`;
+  const label = `${ORDINALS[index]}. · ${title}`;
   ctx.page.drawText(label, {
     x: MARGIN,
     y: ctx.y,
@@ -250,8 +250,8 @@ function drawClause1_Parties(ctx: LayoutCtx, data: ContractData): void {
 
   const prestadorRut = data.prestadorRut || import.meta.env.MTSPRZ_RUT || "Pendiente";
   const prestadorNombre = data.prestadorNombreCivil
-    ? `${data.prestadorNombreCivil}, que usa el nombre de fantasía Mtsprz — Soluciones Digitales`
-    : "Mtsprz — Soluciones Digitales";
+    ? `${data.prestadorNombreCivil}, que usa el nombre de fantasía Mtsprz · Soluciones Digitales`
+    : "Mtsprz · Soluciones Digitales";
 
   const prestadorNotifEmail = data.prestadorNotifEmail || "contacto@mtsprz.org";
   const clientNotifEmail = data.clientNotifEmail || data.clientEmail;
@@ -270,15 +270,15 @@ function drawClause1_Parties(ctx: LayoutCtx, data: ContractData): void {
     ...(isCompanyRut && data.clientRepresentante
       ? [{ label: "REPRESENTANTE LEGAL", value: data.clientRepresentante }]
       : []),
-    { label: "RUT CLIENTE", value: data.clientRut || "—" },
+    { label: "RUT CLIENTE", value: data.clientRut || "" },
     ...(!isCompanyRut ? [{ label: "NACIONALIDAD", value: data.clientNationality || "Chilena" }] : []),
     ...(data.clientProfession ? [{ label: isCompanyRut ? "GIRO" : "PROFESIÓN / GIRO", value: data.clientProfession }] : []),
-    { label: "DOMICILIO CLIENTE", value: data.clientAddress || "—" },
+    { label: "DOMICILIO CLIENTE", value: data.clientAddress || "" },
     { label: "CORREO (CONTACTO)", value: data.clientEmail },
     ...(data.clientNotifEmail && data.clientNotifEmail !== data.clientEmail
       ? [{ label: "CORREO (NOTIFICACIONES)", value: data.clientNotifEmail }]
       : []),
-    { label: "TELÉFONO", value: data.clientPhone || "—" },
+    { label: "TELÉFONO", value: data.clientPhone || "" },
   ];
 
   const drawRow = (label: string, value: string) => {
@@ -711,7 +711,7 @@ function drawClause7_Payment(ctx: LayoutCtx, data: ContractData): void {
     `El valor total de los servicios asciende a $${total} CLP (${total} pesos chilenos). El Prestador es persona natural que emite boleta de honorarios, por lo que estos servicios no están afectos a IVA a la fecha de suscripción, sin perjuicio de la cláusula de ajuste tributario de la presente cláusula. El valor corresponde al monto bruto de las boletas de honorarios; la retención legal se descuenta de dicho monto.`
   );
 
-  // Jerarquía única de pago — 2 niveles (Opción A: sin numeral de devengo mensual)
+  // Jerarquía única de pago · 2 niveles (Opción A: sin numeral de devengo mensual)
   drawClauseParagraph(ctx, "Modalidad de pago: ",
     "Los servicios contratados se pagan conforme a la siguiente jerarquía, que las partes declaran " +
     "excluyente y ordenada:"
@@ -804,7 +804,7 @@ function drawClause7_Payment(ctx: LayoutCtx, data: ContractData): void {
     "staging y eliminar los entregables no pagados, sin responsabilidad para el Prestador."
   );
 
-  drawClauseParagraph(ctx, "Impuestos — cláusula de ajuste tributario (gross-up): ",
+  drawClauseParagraph(ctx, "Impuestos · cláusula de ajuste tributario (gross-up): ",
     "Los honorarios pactados en la cláusula CUARTA se entienden netos de todo impuesto indirecto. " +
     "El Prestador declara ser persona natural que emite boleta de honorarios, prestación exenta de IVA " +
     "conforme al Artículo 12 letra E N°8 del D.L. N°825 en relación con el Artículo 42 N°2 de la LIR. " +
@@ -824,8 +824,8 @@ function drawClause7_Payment(ctx: LayoutCtx, data: ContractData): void {
 function drawClause8_Term(ctx: LayoutCtx, data: ContractData): void {
   drawClauseTitle(ctx, 7, "PLAZO, VIGENCIA Y TÉRMINO");
 
-  const startDate = data.startDate || "—";
-  const endDate = data.endDate || "—";
+  const startDate = data.startDate || "";
+  const endDate = data.endDate || "";
 
   if (data.blastUpMode) {
     drawClauseParagraph(ctx, "Vigencia del período: ",
@@ -854,7 +854,7 @@ function drawClause8_Term(ctx: LayoutCtx, data: ContractData): void {
     return;
   }
 
-  // B4: entrada en vigor unificada — funciona con o sin bloques
+  // B4: entrada en vigor unificada · funciona con o sin bloques
   const hasBlocks = (data.services || []).some(s => (s.price || 0) > 0 && !s.is_monthly);
   const entradaVigorText = hasBlocks
     ? `El presente contrato se perfecciona con su suscripción por ambas partes. La ejecución de los ` +
@@ -1073,7 +1073,7 @@ function drawClause11_IntellectualProperty(ctx: LayoutCtx, data: ContractData): 
 
   drawClauseTitle(ctx, 10, "PROPIEDAD INTELECTUAL");
 
-  // ── Layer 1: Software — cesión directa vía Art. 8 inc. 3° Ley 17.336 ──
+  // ── Layer 1: Software · cesión directa vía Art. 8 inc. 3° Ley 17.336 ──
   drawClauseParagraph(ctx, "A. Programas computacionales (software): ",
     "Respecto de los programas computacionales —incluyendo códigos fuentes, aplicaciones web, APIs, " +
     "backend, automatizaciones, bots, scrapers, scripts, integraciones y similar— creados en virtud " +
@@ -1083,7 +1083,7 @@ function drawClause11_IntellectualProperty(ctx: LayoutCtx, data: ContractData): 
     "constituye la estipulación escrita en contrario a que se refiere dicha norma."
   );
 
-  // ── Layer 2: Obras no-software — licencia exclusiva (sostenida por sí sola) ──
+  // ── Layer 2: Obras no-software · licencia exclusiva (sostenida por sí sola) ──
   drawClauseParagraph(ctx, "B. Demás obras (diseño, contenidos, identidad visual): ",
     "Respecto de las demás obras creadas en virtud del presente contrato —incluyendo diseños UI/UX, " +
     "identidad visual, manual de marca, logotipos, contenidos, textos, copywriting, gráficas para " +
@@ -1131,7 +1131,7 @@ function drawClause11_IntellectualProperty(ctx: LayoutCtx, data: ContractData): 
     "de paternidad e integridad de la obra, conforme al Artículo 14 de la Ley N° 17.336."
   );
 
-  // ── Portafolio — carve-out expreso frente a confidencialidad ──
+  // ── Portafolio · carve-out expreso frente a confidencialidad ──
   drawClauseParagraph(ctx, "Portafolio (carve-out de confidencialidad): ",
     "El Prestador podrá utilizar los trabajos realizados en virtud del presente contrato en su " +
     "portafolio profesional, incluyendo la publicación en su sitio web, redes sociales y plataformas " +
@@ -1472,7 +1472,7 @@ function drawClause21_Assignment(ctx: LayoutCtx, data: ContractData): void {
 }
 
 async function drawClause19_Signatures(ctx: LayoutCtx, data: ContractData): Promise<void> {
-  // FIRMAS siempre VIGÉSIMA SEGUNDA (21) — tras Acuerdo Íntegro (18), Cesión (19), Divisibilidad (20)
+  // FIRMAS siempre VIGÉSIMA SEGUNDA (21) · tras Acuerdo Íntegro (18), Cesión (19), Divisibilidad (20)
   const sigIndex = 21;
   drawClauseTitle(ctx, sigIndex, "FIRMAS");
 
@@ -1510,7 +1510,7 @@ async function drawClause19_Signatures(ctx: LayoutCtx, data: ContractData): Prom
     font: ctx.fontBold,
     color: PRIMARY,
   });
-  ctx.page.drawText("Mtsprz — Soluciones Digitales", {
+  ctx.page.drawText("Mtsprz · Soluciones Digitales", {
     x: MARGIN + 8,
     y: sigBoxY + 68,
     size: 8,
@@ -1776,7 +1776,7 @@ function drawAutoSpecialClauses(ctx: LayoutCtx, data: ContractData): void {
     });
     ctx.y -= 16;
 
-    drawClauseParagraph(ctx, "Pasarelas de pago — responsabilidad del Cliente: ",
+    drawClauseParagraph(ctx, "Pasarelas de pago · responsabilidad del Cliente: ",
       "La afiliación a las pasarelas de pago (Webpay/Transbank, Flow, Mercado Pago u otras) debe ser " +
       "gestionada directamente por el Cliente a su propio nombre, con su RUT y cuenta bancaria, " +
       "mediante contrato comercial directo con cada proveedor. El Prestador realiza exclusivamente la " +
@@ -1835,13 +1835,13 @@ function sanitizeDeliverable(d: string): string | null {
   if (lower.includes("opcional") && !lower.includes("sujeta a") && !lower.includes("cotización adicional")) {
     return d + " (sujeta a cotización adicional)";
   }
-  // Si menciona "rotación de IPs" o "anti-bloqueo" — riesgos penales por scraping
+  // Si menciona "rotación de IPs" o "anti-bloqueo" · riesgos penales por scraping
   if (lower.includes("rotación de ip") || lower.includes("rotacion de ip") || lower.includes("anti-bloqueo") || lower.includes("antibloqueo")) {
     return null;
   }
   // Hosting/SSL/CDN: reemplazar SOLO en servicios con slug de hosting.
   // La Nota sobre hosting e infraestructura se imprime desde drawAnnexA_Deliverables
-  // cuando el entregable contiene hosting/ssl/cdn — esa lógica es la fuente de verdad.
+  // cuando el entregable contiene hosting/ssl/cdn · esa lógica es la fuente de verdad.
   // Aquí NO tocamos entregables legítimos como "Despliegue en servidor seguro".
   return d;
 }
@@ -2072,7 +2072,7 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
     height: 36,
     color: rgb(0.01, 0.01, 0.01),
   });
-  ctx.page.drawText("ANEXO A — ALCANCE, ENTREGABLES Y PLAZOS", {
+  ctx.page.drawText("ANEXO A · ALCANCE, ENTREGABLES Y PLAZOS", {
     x: MARGIN,
     y: ctx.y + 12,
     size: 13,
@@ -2104,7 +2104,7 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
   const endD = `${data.durationMonths || 1} mes(es) contados desde la entrada en vigor conforme a la cláusula OCTAVA`;
 
   // ── Block grouping table ──
-  // B3: misma fuente que drawClause4 — solo servicios con price > 0
+  // B3: misma fuente que drawClause4 · solo servicios con price > 0
   const billableServices = (data.services || []).filter(s => (s.price || 0) > 0);
   const activeServices = billableServices;
   const monthlyNames = activeServices.filter(s => s.is_monthly).map(s => s.name);
@@ -2170,9 +2170,9 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
   }
 
   // Only print non-empty blocks
-  if (fundacionSvcs.length > 0) drawBlockRow("1 — Fundación", fundacionSvcs.join(", "), "");
-  if (plataformaSvcs.length > 0) drawBlockRow("2 — Plataforma", plataformaSvcs.join(", "), "");
-  if (autoSvcs.length > 0) drawBlockRow("3 — Automatización", autoSvcs.join(", "), "");
+  if (fundacionSvcs.length > 0) drawBlockRow("1 · Fundación", fundacionSvcs.join(", "), "");
+  if (plataformaSvcs.length > 0) drawBlockRow("2 · Plataforma", plataformaSvcs.join(", "), "");
+  if (autoSvcs.length > 0) drawBlockRow("3 · Automatización", autoSvcs.join(", "), "");
   if (hitosSvcs.length > 0) drawBlockRow("Hitos propios", hitosSvcs.join(", "), "(pago 40/30/30)");
   if (monthlyNames.length > 0) drawBlockRow("Mensuales", monthlyNames.join(", "), "(devengo mensual)");
   ctx.y -= 4;
@@ -2195,7 +2195,7 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
     const monthlyTag = svc.is_monthly ? " (mensual)" : "";
     const svcHeaderText = hidePrices
       ? `${idx + 1}. ${svc.name}${monthlyTag}`
-      : `${idx + 1}. ${svc.name} — $${(svc.price || 0).toLocaleString("es-CL")}${monthlyTag}`;
+      : `${idx + 1}. ${svc.name} · $${(svc.price || 0).toLocaleString("es-CL")}${monthlyTag}`;
     const svcHeaderLines = countLines(svcHeaderText, CONTENT_W - 16, NORMAL_SIZE, ctx.fontBold);
     const svcHeaderH = Math.max(24, svcHeaderLines * 14 + 10);
     ensureSpace(ctx, svcHeaderH + 20);
@@ -2374,7 +2374,7 @@ function drawAnnexA_Deliverables(ctx: LayoutCtx, data: ContractData): void {
   const annexSW = (CONTENT_W - 40) / 2;
   ctx.page.drawRectangle({ x: MARGIN, y: annexSY, width: annexSW, height: 60, color: WHITE, borderColor: BORDER, borderWidth: 0.5 });
   ctx.page.drawText("PRESTADOR", { x: MARGIN + 6, y: annexSY + 44, size: 8, font: ctx.fontBold, color: PRIMARY });
-  ctx.page.drawText("Mtsprz — Soluciones Digitales", { x: MARGIN + 6, y: annexSY + 34, size: 7, font: ctx.font, color: MUTED });
+  ctx.page.drawText("Mtsprz · Soluciones Digitales", { x: MARGIN + 6, y: annexSY + 34, size: 7, font: ctx.font, color: MUTED });
   ctx.page.drawRectangle({ x: MARGIN + annexSW + 40, y: annexSY, width: annexSW, height: 60, color: WHITE, borderColor: BORDER, borderWidth: 0.5 });
   ctx.page.drawText("CLIENTE", { x: MARGIN + annexSW + 46, y: annexSY + 44, size: 8, font: ctx.fontBold, color: PRIMARY });
   ctx.page.drawText(data.clientName, { x: MARGIN + annexSW + 46, y: annexSY + 34, size: 7, font: ctx.font, color: MUTED });
@@ -2397,7 +2397,7 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
 
   // Header
   ctx.page.drawRectangle({ x: 0, y: ctx.y + 4, width: ctx.width, height: 36, color: rgb(0.01, 0.01, 0.01) });
-  ctx.page.drawText("ANEXO B — HERRAMIENTAS DE IA Y SUBENCARGADOS DE TRATAMIENTO", {
+  ctx.page.drawText("ANEXO B · HERRAMIENTAS DE IA Y SUBENCARGADOS DE TRATAMIENTO", {
     x: MARGIN, y: ctx.y + 12, size: 11, font: ctx.fontBold, color: WHITE,
   });
   ctx.y -= 16;
@@ -2414,8 +2414,8 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
   );
   ctx.y -= 6;
 
-  // ─── TABLA B.1 — Subencargados de tratamiento ───
-  ctx.page.drawText("TABLA B.1 — SUBENCARGADOS DE TRATAMIENTO (Art. 15 bis Ley 19.628)", {
+  // ─── TABLA B.1 · Subencargados de tratamiento ───
+  ctx.page.drawText("TABLA B.1 · SUBENCARGADOS DE TRATAMIENTO (Art. 15 bis Ley 19.628)", {
     x: MARGIN, y: ctx.y, size: SMALL_SIZE, font: ctx.fontBold, color: PRIMARY,
   });
   ctx.y -= 16;
@@ -2452,8 +2452,8 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
   );
   if (hasWebService) {
     drawTableRow(["Vercel Inc.", "Hosting/despliegue plataformas web", "Logs de acceso, IPs y datos de sesión de usuarios", "EE.UU. (edge global)", "DPA Vercel: vercel.com/legal/dpa"]);
-    drawTableRow(["Railway Corp. [POR CONFIRMAR — NO FIRMAR]", "Hosting/despliegue alternativo", "Logs de acceso e IPs", "EE.UU.", "railway.app/legal/privacy"]);
-    drawTableRow(["Cloudflare Inc. [POR CONFIRMAR — NO FIRMAR]", "CDN y seguridad web", "Logs de tráfico, IPs", "EE.UU./global", "cloudflare.com/privacypolicy"]);
+    drawTableRow(["Railway Corp. [POR CONFIRMAR · NO FIRMAR]", "Hosting/despliegue alternativo", "Logs de acceso e IPs", "EE.UU.", "railway.app/legal/privacy"]);
+    drawTableRow(["Cloudflare Inc. [POR CONFIRMAR · NO FIRMAR]", "CDN y seguridad web", "Logs de tráfico, IPs", "EE.UU./global", "cloudflare.com/privacypolicy"]);
   }
 
   // NeonDB (base de datos)
@@ -2468,26 +2468,26 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
   // Twilio / WhatsApp BSP
   const hasWhatsApp = serviceNames.some(n => n.includes("bot") || n.includes("whatsapp"));
   if (hasWhatsApp) {
-    drawTableRow(["Meta Platforms Inc. [POR CONFIRMAR — NO FIRMAR]", "Bot WhatsApp — operador de API", "Conversaciones con clientes finales", "EE.UU.", "Meta Data Processing Terms: facebook.com/legal/terms/dataprocessing"], true);
-    drawTableRow(["BSP intermediario (Twilio / 360dialog / Cloud API) [POR CONFIRMAR — NO FIRMAR]", "Bot WhatsApp — capa de mensajería", "Metadatos de mensajes", "Por confirmar según BSP elegido", "DPA del BSP contratado"], true);
+    drawTableRow(["Meta Platforms Inc. [POR CONFIRMAR · NO FIRMAR]", "Bot WhatsApp · operador de API", "Conversaciones con clientes finales", "EE.UU.", "Meta Data Processing Terms: facebook.com/legal/terms/dataprocessing"], true);
+    drawTableRow(["BSP intermediario (Twilio / 360dialog / Cloud API) [POR CONFIRMAR · NO FIRMAR]", "Bot WhatsApp · capa de mensajería", "Metadatos de mensajes", "Por confirmar según BSP elegido", "DPA del BSP contratado"], true);
   }
 
   // n8n/Make (automatización)
   const hasAutomation = serviceNames.some(n => n.includes("n8n") || n.includes("make") || n.includes("automatiz"));
   if (hasAutomation) {
-    drawTableRow(["n8n GmbH o Make a.s. [POR CONFIRMAR — NO FIRMAR]", "Automatización de flujos con datos", "Datos de clientes según flujo configurado", "Alemania / Rep. Checa", "DPA del proveedor elegido"], true);
+    drawTableRow(["n8n GmbH o Make a.s. [POR CONFIRMAR · NO FIRMAR]", "Automatización de flujos con datos", "Datos de clientes según flujo configurado", "Alemania / Rep. Checa", "DPA del proveedor elegido"], true);
   }
 
   // CRM cloud
   const hasCRM = serviceNames.some(n => n.includes("crm"));
   if (hasCRM) {
-    drawTableRow(["[PROVEEDOR CRM POR CONFIRMAR — NO FIRMAR]", "Integración CRM", "Datos de contactos y clientes", "Por confirmar", "DPA del proveedor CRM elegido"], true);
+    drawTableRow(["[PROVEEDOR CRM POR CONFIRMAR · NO FIRMAR]", "Integración CRM", "Datos de contactos y clientes", "Por confirmar", "DPA del proveedor CRM elegido"], true);
   }
 
   ctx.y -= 8;
 
-  // ─── TABLA B.2 — Herramientas de IA ───
-  ctx.page.drawText("TABLA B.2 — HERRAMIENTAS DE IA QUE PROCESAN DATOS PERSONALES", {
+  // ─── TABLA B.2 · Herramientas de IA ───
+  ctx.page.drawText("TABLA B.2 · HERRAMIENTAS DE IA QUE PROCESAN DATOS PERSONALES", {
     x: MARGIN, y: ctx.y, size: SMALL_SIZE, font: ctx.fontBold, color: PRIMARY,
   });
   ctx.y -= 16;
@@ -2524,13 +2524,13 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
 
   // Bot/IA conversacional
   if (hasWhatsApp) {
-    drawTableRow2(["OpenAI LLC [POR CONFIRMAR — NO FIRMAR]", "Bot WhatsApp inteligente", "Conversaciones con clientes finales", "EE.UU.", "API (Enterprise recomendado)", "OpenAI API Terms: openai.com/policies/api-usage"], true);
+    drawTableRow2(["OpenAI LLC [POR CONFIRMAR · NO FIRMAR]", "Bot WhatsApp inteligente", "Conversaciones con clientes finales", "EE.UU.", "API (Enterprise recomendado)", "OpenAI API Terms: openai.com/policies/api-usage"], true);
   }
 
   ctx.y -= 8;
 
-  // ─── TABLA B.3 — Herramientas del Prestador sin datos del Cliente ───
-  ctx.page.drawText("TABLA B.3 — HERRAMIENTAS DEL PRESTADOR QUE NO TRATAN DATOS DEL CLIENTE", {
+  // ─── TABLA B.3 · Herramientas del Prestador sin datos del Cliente ───
+  ctx.page.drawText("TABLA B.3 · HERRAMIENTAS DEL PRESTADOR QUE NO TRATAN DATOS DEL CLIENTE", {
     x: MARGIN, y: ctx.y, size: SMALL_SIZE, font: ctx.fontBold, color: MUTED,
   });
   ctx.y -= 14;
@@ -2541,9 +2541,9 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
   );
 
   const b3Tools = [
-    "GitHub Copilot (GitHub Inc.) — asistente de código. Procesa solo código fuente del Prestador.",
-    "Herramientas de apoyo del Prestador (Claude/Anthropic y otros asistentes de IA) — pueden procesar los datos de contacto de las partes contenidos en el propio documento contractual y en comunicaciones administrativas, sin acceder a bases de datos, sistemas ni datos personales de clientes finales del Cliente, y bajo compromiso de no uso para entrenamiento de modelos (plan API).",
-    "Figma Inc. — diseño UI/UX. No procesa datos personales de clientes finales del Cliente.",
+    "GitHub Copilot (GitHub Inc.) · asistente de código. Procesa solo código fuente del Prestador.",
+    "Herramientas de apoyo del Prestador (Claude/Anthropic y otros asistentes de IA) · pueden procesar los datos de contacto de las partes contenidos en el propio documento contractual y en comunicaciones administrativas, sin acceder a bases de datos, sistemas ni datos personales de clientes finales del Cliente, y bajo compromiso de no uso para entrenamiento de modelos (plan API).",
+    "Figma Inc. · diseño UI/UX. No procesa datos personales de clientes finales del Cliente.",
     "Google Ads / Analytics / Search Console / Business Profile: las cuentas son titularidad del Cliente conforme a la cláusula DÉCIMA PRIMERA. Google actúa como subencargado del Cliente (no del Prestador). El Prestador opera como administrador autorizado sin adquirir titularidad.",
   ];
   for (const tool of b3Tools) {
@@ -2556,7 +2556,7 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
   // ─── PROHIBICIONES ABSOLUTAS ───
   ensureSpace(ctx, 60);
   ctx.page.drawRectangle({ x: MARGIN, y: ctx.y - 44, width: CONTENT_W, height: 54, color: rgb(1, 0.97, 0.97), borderColor: rgb(0.9, 0.2, 0.2), borderWidth: 0.5 });
-  ctx.page.drawText("PROHIBICIONES ABSOLUTAS — INDEPENDIENTE DE AUTORIZACIÓN EN TABLA B.2", {
+  ctx.page.drawText("PROHIBICIONES ABSOLUTAS · INDEPENDIENTE DE AUTORIZACIÓN EN TABLA B.2", {
     x: MARGIN + 6, y: ctx.y - 4, size: SMALL_SIZE, font: ctx.fontBold, color: rgb(0.8, 0.1, 0.1),
   });
   ctx.y -= 16;
@@ -2574,7 +2574,7 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
   ctx.y -= 12;
 
   // ─── MECANISMO DE ACTUALIZACIÓN ───
-  drawClauseParagraph(ctx, "Mecanismo de actualización — dos velocidades: ",
+  drawClauseParagraph(ctx, "Mecanismo de actualización · dos velocidades: ",
     "La incorporación de herramientas a la Tabla B.3 requerirá solo aviso escrito al Cliente, sin " +
     "necesidad de modificar este Anexo. La incorporación a las Tablas B.1 y B.2 requerirá autorización " +
     "específica y por escrito del Cliente conforme al Artículo 15 bis de la Ley N° 19.628, la que el " +
@@ -2603,7 +2603,7 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
     "Las partes suscriben el presente Anexo B en señal de aceptación y como autorización específica " +
     "y por escrito conforme al Artículo 15 bis de la Ley N° 19.628, formando parte integrante del " +
     "contrato N° " + data.contractNumber + ". Cualquier herramienta de las Tablas B.1 y B.2 marcada " +
-    "como [POR CONFIRMAR — NO FIRMAR] debe ser reemplazada por los datos reales del proveedor antes " +
+    "como [POR CONFIRMAR · NO FIRMAR] debe ser reemplazada por los datos reales del proveedor antes " +
     "de la suscripción del contrato."
   );
   ctx.y -= 12;
@@ -2611,11 +2611,11 @@ function drawAnnexB_AITools(ctx: LayoutCtx, data: ContractData): void {
   const annexBY = ctx.y - 40;
   const annexBW = (CONTENT_W - 40) / 2;
   ctx.page.drawRectangle({ x: MARGIN, y: annexBY, width: annexBW, height: 60, color: WHITE, borderColor: BORDER, borderWidth: 0.5 });
-  ctx.page.drawText("PRESTADOR — Mtsprz", { x: MARGIN + 6, y: annexBY + 44, size: 8, font: ctx.fontBold, color: PRIMARY });
+  ctx.page.drawText("PRESTADOR · Mtsprz", { x: MARGIN + 6, y: annexBY + 44, size: 8, font: ctx.fontBold, color: PRIMARY });
   ctx.page.drawText("Firma y fecha:", { x: MARGIN + 6, y: annexBY + 30, size: 7, font: ctx.font, color: MUTED });
   ctx.page.drawRectangle({ x: MARGIN + annexBW + 40, y: annexBY, width: annexBW, height: 60, color: WHITE, borderColor: BORDER, borderWidth: 0.5 });
-  ctx.page.drawText("CLIENTE — " + data.clientName, { x: MARGIN + annexBW + 46, y: annexBY + 44, size: 8, font: ctx.fontBold, color: PRIMARY });
-  ctx.page.drawText("RUT: " + (data.clientRut || "—"), { x: MARGIN + annexBW + 46, y: annexBY + 32, size: 7, font: ctx.font, color: MUTED });
+  ctx.page.drawText("CLIENTE · " + data.clientName, { x: MARGIN + annexBW + 46, y: annexBY + 44, size: 8, font: ctx.fontBold, color: PRIMARY });
+  ctx.page.drawText("RUT: " + (data.clientRut || ""), { x: MARGIN + annexBW + 46, y: annexBY + 32, size: 7, font: ctx.font, color: MUTED });
   ctx.page.drawText("Firma y fecha:", { x: MARGIN + annexBW + 46, y: annexBY + 20, size: 7, font: ctx.font, color: MUTED });
   ctx.y = annexBY - 12;
 }
@@ -2634,7 +2634,7 @@ export function validateContractData(data: ContractData, strict = true): string[
 
   // Marcadores [POR CONFIRMAR] en deliverables
   const hasMarkers = allDeliverables.some(d => d.includes("[POR CONFIRMAR"));
-  if (hasMarkers) blockers.push("Entregables con marcadores [POR CONFIRMAR — NO FIRMAR]. Completar antes de emitir.");
+  if (hasMarkers) blockers.push("Entregables con marcadores [POR CONFIRMAR · NO FIRMAR]. Completar antes de emitir.");
 
   // Servicios que activan Anexo B pero cuyos proveedores de IA no están confirmados
   const serviceNames = (data.services || []).map(s => s.name.toLowerCase());
@@ -2665,7 +2665,7 @@ export function validateContractData(data: ContractData, strict = true): string[
     return (l.includes("hosting") || l.includes("ssl") || l.includes("cdn")) &&
            (l.includes("incluido") || l.includes("incluidos"));
   });
-  if (badHosting.length > 0) blockers.push(`Entregables con "incluido" + hosting/ssl/cdn — reemplazar con texto de Nota: ${badHosting.slice(0, 2).join(" | ")}`);
+  if (badHosting.length > 0) blockers.push(`Entregables con "incluido" + hosting/ssl/cdn · reemplazar con texto de Nota: ${badHosting.slice(0, 2).join(" | ")}`);
 
   if (strict && blockers.length > 0) {
     throw new Error("Contrato no apto para emisión:\n" + blockers.map(b => `• ${b}`).join("\n"));
@@ -2788,7 +2788,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
   drawClause18_Jurisdiction(ctx, data);
 
   if (data.blastUpMode) {
-    // DÉCIMA NOVENA (18) — ACUERDO ÍNTEGRO (con prevalencia con excepciones)
+    // DÉCIMA NOVENA (18) · ACUERDO ÍNTEGRO (con prevalencia con excepciones)
     drawClauseTitle(ctx, 18, "ACUERDO ÍNTEGRO");
     drawClauseText(ctx,
       "El presente contrato constituye el acuerdo íntegro entre las partes respecto de su objeto, " +
@@ -2807,7 +2807,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
       "en el Anexo A, que prevalecerán en todo caso."
     );
 
-    // VIGÉSIMA (19) — CESIÓN (recíproca)
+    // VIGÉSIMA (19) · CESIÓN (recíproca)
     drawClauseTitle(ctx, 19, "CESIÓN DE POSICIÓN CONTRACTUAL");
     drawClauseText(ctx,
       "Ninguna de las partes podrá ceder ni transferir su posición contractual ni las obligaciones " +
@@ -2822,7 +2822,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
       "Cualquier cesión no autorizada será nula y no producirá efecto alguno entre las partes."
     );
 
-    // VIGÉSIMA PRIMERA (20) — DIVISIBILIDAD
+    // VIGÉSIMA PRIMERA (20) · DIVISIBILIDAD
     drawClauseTitle(ctx, 20, "DIVISIBILIDAD");
     drawClauseText(ctx,
       "Si cualquiera de las cláusulas del presente contrato fuere declarada nula, ilegal o " +
@@ -2833,13 +2833,13 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
       "original de la cláusula invalidada."
     );
   } else {
-    // DÉCIMA NOVENA — Obligaciones que subsisten al término
+    // DÉCIMA NOVENA · Obligaciones que subsisten al término
     drawClause20_Survival(ctx, data);
 
-    // VIGÉSIMA — Cesión del contrato
+    // VIGÉSIMA · Cesión del contrato
     drawClause21_Assignment(ctx, data);
 
-    // VIGÉSIMA PRIMERA — Cláusulas Especiales
+    // VIGÉSIMA PRIMERA · Cláusulas Especiales
     drawClauseTitle(ctx, 20, "CLÁUSULAS ESPECIALES");
 
     // Auto clauses (scraping indemnity, ads spend exclusion)
@@ -2849,7 +2849,7 @@ export async function generateContractPdf(data: ContractData): Promise<Uint8Arra
     drawSpecialClauses(ctx, data);
   }
 
-  // VIGÉSIMA SEGUNDA (21) — Firmas
+  // VIGÉSIMA SEGUNDA (21) · Firmas
   await drawClause19_Signatures(ctx, data);
 
   // Anexo A: Entregables y Plazos (nueva página, después de las firmas)

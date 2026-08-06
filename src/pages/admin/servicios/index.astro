@@ -8,7 +8,7 @@ const result = await query("SELECT * FROM services ORDER BY category, name");
 const services = result.rows as Record<string, unknown>[];
 ---
 
-<AdminLayout title="Servicios — Admin Mtsprz">
+<AdminLayout title="Servicios · Admin Mtsprz">
   <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
     <div>
       <p class="text-[11px] font-medium text-accent tracking-[0.15em] uppercase mb-2">Catálogo</p>
@@ -50,7 +50,7 @@ const services = result.rows as Record<string, unknown>[];
               <div class="text-sm text-white/80 font-medium">{(s.name as string)}</div>
               <div class="text-[11px] text-white/25 mt-0.5 line-clamp-1 font-body">{(s.description as string || "").slice(0, 80)}</div>
             </td>
-            <td class="px-4 py-3.5 text-sm text-white/40">{(s.category as string || "—")}</td>
+            <td class="px-4 py-3.5 text-sm text-white/40">{(s.category as string || "·")}</td>
             <td class="px-4 py-3.5 text-right">
               <div class="text-sm text-accent font-mono">
                 ${Number(s.price).toLocaleString("es-CL")}
@@ -60,7 +60,7 @@ const services = result.rows as Record<string, unknown>[];
               ) : ""}
             </td>
             <td class="px-4 py-3.5 text-right text-sm text-white/40 font-mono">
-              {s.includes_maintenance ? `$${Number(s.maintenance_price).toLocaleString("es-CL")}/mes` : "—"}
+              {s.includes_maintenance ? `$${Number(s.maintenance_price).toLocaleString("es-CL")}/mes` : "·"}
             </td>
             <td class="px-4 py-3.5 text-center">
               <span class={`inline-flex items-center gap-1.5 ${s.is_active ? "text-emerald-400" : "text-white/25"} text-[11px] font-medium`}>

@@ -1,0 +1,193 @@
+---
+/**
+ * CasoForm · Captura de cupo Oferta Fundador (sección #oferta de /casos).
+ * POST /api/leads (endpoint existente y verificado): crea lead, notifica admin
+ * por WhatsApp + Resend, envía confirmación al prospecto.
+ * - source: "web", service_interest: "oferta_fundador" (convención 14)
+ * - Rate limit real: 5 por IP/hora → pocos campos, sin relleno.
+ * - Captura UTM del query string (el endpoint ya los guarda).
+ *
+ * Estilo editorial: campos underline (sin cajas), labels uppercase,
+ * CTA con gradiente de marca. IDs cf-* intactos (script is:inline abajo).
+ */
+import { ChevronDown, ArrowRight } from "@lucide/astro";
+
+export interface Props {
+  class?: string;
+  ctaLabel?: string;
+}
+
+const { class: className = "", ctaLabel = "Quiero mi cupo fundador" } = Astro.props;
+
+const RUBROS = [
+  { value: "restaurante", label: "Restaurante / comida" },
+  { value: "hotel", label: "Hotel / alojamiento" },
+  { value: "clinica", label: "Clínica / salud" },
+  { value: "contador", label: "Contador / contabilidad" },
+  { value: "retail", label: "Retail / tienda" },
+  { value: "otro", label: "Otro rubro" },
+];
+
+const field =
+  "w-full rounded-none border-0 border-b border-white/[0.12] bg-transparent px-0 py-2.5 font-body text-sm text-white transition-colors duration-300 placeholder:text-white/15 focus:border-indigo-400/70 focus:outline-none focus:ring-0";
+
+const labelCls =
+  "mb-0.5 block font-body text-[10px] font-medium uppercase tracking-[0.18em] text-white/35";
+---
+
+<form id="cf-form" class="space-y-6 {className}" novalidate>
+  <div class="grid gap-x-5 gap-y-6 sm:grid-cols-2">
+    <div>
+      <label for="cf-name" class={labelCls}>Nombre *</label>
+      <input
+        id="cf-name"
+        name="name"
+        type="text"
+        required
+        maxlength="255"
+        autocomplete="name"
+        placeholder="Tu nombre"
+        class={field}
+      />
+    </div>
+    <div>
+      <label for="cf-rubro" class={labelCls}>Rubro *</label>
+      <div class="relative">
+        <select
+          id="cf-rubro"
+          name="rubro"
+          required
+          class={`${field} appearance-none pr-8 [&>option]:bg-[#121212]`}
+        >
+          <option value="" disabled selected>Elige tu rubro</option>
+          {RUBROS.map((r) => (
+            <option value={r.value}>{r.label}</option>
+          ))}
+        </select>
+        <ChevronDown class="pointer-events-none absolute right-1 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-x-5 gap-y-6 sm:grid-cols-2">
+    <div>
+      <label for="cf-email" class={labelCls}>Correo</label>
+      <input
+        id="cf-email"
+        name="email"
+        type="email"
+        maxlength="254"
+        autocomplete="email"
+        placeholder="correo@ejemplo.cl"
+        class={field}
+      />
+    </div>
+    <div>
+      <label for="cf-phone" class={labelCls}>WhatsApp</label>
+      <input
+        id="cf-phone"
+        name="phone"
+        type="tel"
+        maxlength="20"
+        autocomplete="tel"
+        placeholder="+56 9 1234 5678"
+        class={field}
+      />
+    </div>
+  </div>
+
+  <button
+    id="cf-submit"
+    type="submit"
+    class="group inline-flex w-full items-center justify-center gap-3 bg-gradient-to-r from-indigo-500 to-violet-500 px-6 py-4 font-body text-[11px] font-bold uppercase tracking-[0.18em] text-white transition-all duration-500 hover:from-indigo-400 hover:to-violet-400 disabled:cursor-not-allowed disabled:opacity-40"
+  >
+    <span>{ctaLabel}</span>
+    <ArrowRight class="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:translate-x-1" />
+  </button>
+
+  <p class="font-body text-[10px] font-light leading-relaxed text-white/30">
+    Sin pago ahora. Primero el diagnóstico gratis, después decides. Solo usamos tus datos para responderte (Ley 21.719).
+  </p>
+
+  <div id="cf-status" class="hidden text-sm" role="status" aria-live="polite"></div>
+</form>
+
+<script is:inline>
+  (function () {
+    const form = document.getElementById("cf-form");
+    if (!form) return;
+
+    const submitBtn = document.getElementById("cf-submit");
+    const statusEl = document.getElementById("cf-status");
+    const originalLabel = submitBtn.textContent;
+
+    // UTM capture · el endpoint ya los persiste en metadata
+    const params = new URLSearchParams(window.location.search);
+    const utm = {};
+    ["utm_source", "utm_medium", "utm_campaign"].forEach(function (k) {
+      const v = params.get(k);
+      if (v) utm[k] = v;
+    });
+
+    function showStatus(msg, ok) {
+      statusEl.className = "text-sm " + (ok ? "text-emerald-400" : "text-red-400");
+      statusEl.textContent = msg;
+      statusEl.classList.remove("hidden");
+    }
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = form.querySelector("[name='name']").value.trim();
+      const email = form.querySelector("[name='email']").value.trim();
+      const phone = form.querySelector("[name='phone']").value.trim();
+      const rubro = form.querySelector("[name='rubro']").value;
+
+      if (!name) {
+        showStatus("Ingresa tu nombre.", false);
+        return;
+      }
+      if (!email && !phone) {
+        showStatus("Deja tu correo o tu WhatsApp para coordinarte.", false);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+      statusEl.classList.add("hidden");
+
+      try {
+        const res = await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email: email || null,
+            phone: phone || null,
+            source: "web",
+            service_interest: "oferta_fundador",
+            message: "Cupo Oferta Fundador · rubro: " + rubro,
+            metadata: { rubro, cupo_fundador: true, ...utm },
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          showStatus("¡Cupo solicitado! Te escribimos con el diagnóstico gratis. Revisa tu correo o WhatsApp.", true);
+          form.reset();
+        } else if (res.status === 429) {
+          showStatus(data.error || "Demasiadas solicitudes. Intenta en 1 hora.", false);
+        } else {
+          showStatus(data.error || "Error al enviar. Intenta de nuevo.", false);
+        }
+      } catch {
+        showStatus("Error de conexión. Intenta de nuevo.", false);
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+      statusEl.classList.remove("hidden");
+    });
+  })();
+</script>

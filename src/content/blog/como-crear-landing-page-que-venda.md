@@ -24,7 +24,7 @@ Esta guia te muestra los elementos que toda landing page necesita para convertir
 
 Tu titular debe responder en 3 segundos: **"Que gano yo si me quedo?"**
 
-**Mal:** "Mtsprz — Soluciones Digitales Profesionales"  
+**Mal:** "Mtsprz · Soluciones Digitales Profesionales"  
 **Bien:** "Pagina web para tu negocio en Puerto Varas desde $350.000"
 
 **Regla:** El titular debe hablar del beneficio para el cliente, no de tu empresa.

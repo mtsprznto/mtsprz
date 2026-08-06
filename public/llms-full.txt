@@ -4,7 +4,7 @@
 > Desarrollamos páginas web modernas (Astro), SEO local para Google Maps, automatización de procesos con WhatsApp y bots, dashboards de datos, marketing digital, diseño gráfico y consultoría digital para pymes del sur de Chile.
 >
 > Fundada: 2024 | Fundador: Matías Pérez Nauto | Oficina: Puerto Varas
-> Contacto: contacto@mtsprz.org | +56975475781 | WhatsApp: +56966929818
+> Contacto: contacto@mtsprz.org | WhatsApp: +56966929818
 > Web: https://mtsprz.org
 
 ---
@@ -257,8 +257,7 @@ Simulador de fragmentación y control de energía para minería con WebGPU e int
 
 ## Contact Information
 - **Email**: contacto@mtsprz.org
-- **Phone**: +56975475781
-- **WhatsApp Business**: +56966929818
+- **Phone/WhatsApp**: +56966929818
 - **Location**: Puerto Varas, Región de Los Lagos, Chile
 - **Contact page**: https://mtsprz.org/contacto
 - **Service inquiry**: https://mtsprz.org/servicios

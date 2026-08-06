@@ -1,5 +1,5 @@
 /**
- * Lead DB operations — CRUD + conversation logging.
+ * Lead DB operations · CRUD + conversation logging.
  */
 
 import { query, initDb } from "./db";
@@ -197,7 +197,7 @@ export async function getConversations(leadId: number): Promise<ConversationReco
   return result.rows as unknown as ConversationRecord[];
 }
 
-/** Busca una conversación por wa_message_id — para dedupe de webhooks. */
+/** Busca una conversación por wa_message_id · para dedupe de webhooks. */
 export async function findConversationByWaMessageId(waMessageId: string): Promise<ConversationRecord | null> {
   await initDb();
   const result = await query(

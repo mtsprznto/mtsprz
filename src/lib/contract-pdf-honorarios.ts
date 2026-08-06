@@ -448,7 +448,7 @@ async function drawSignatures(ctx: LayoutCtx, data: ContractData) {
     color: MUTED,
   });
   ctx.y -= 12;
-  ctx.page.drawText("El Prestador — \"Mtsprz\"", {
+  ctx.page.drawText("El Prestador · \"Mtsprz\"", {
     x: MARGIN,
     y: ctx.y,
     size: SMALL_SIZE,

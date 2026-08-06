@@ -1,5 +1,5 @@
 /**
- * GET /api/cron/sequences — Cron Vercel: procesa secuencias de nurturing vencidas.
+ * GET /api/cron/sequences · Cron Vercel: procesa secuencias de nurturing vencidas.
  *
  * Seguridad: si CRON_SECRET está definido, exige Authorization: Bearer <secret>.
  * Vercel Cron envía ese header automáticamente (config en vercel.json "crons").

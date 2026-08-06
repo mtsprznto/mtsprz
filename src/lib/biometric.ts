@@ -7,9 +7,9 @@ const BIOMETRIC_SECRET: string = (() => {
   const s = (ENV.BIOMETRIC_SECRET as string | undefined)?.trim();
   if (s) return s;
   if (IS_PROD) {
-    throw new Error("BIOMETRIC_SECRET no configurada en producción — abortando (seguridad)");
+    throw new Error("BIOMETRIC_SECRET no configurada en producción · abortando (seguridad)");
   }
-  console.warn("[BIOMETRIC] BIOMETRIC_SECRET no configurada — usando fallback DEV (inseguro, solo local)");
+  console.warn("[BIOMETRIC] BIOMETRIC_SECRET no configurada · usando fallback DEV (inseguro, solo local)");
   return "biometric-secret-change-in-prod";
 })();
 
@@ -44,7 +44,7 @@ function validateImage(dataUrl: string | null | undefined): { ok: boolean; base6
   if (comma === -1) return { ok: false, base64: "" };
   const b64 = dataUrl.slice(comma + 1);
   const bytes = Buffer.from(b64, "base64");
-  // Mínimo 5KB — descarta imágenes fabricadas / vacías
+  // Mínimo 5KB · descarta imágenes fabricadas / vacías
   return { ok: bytes.length >= 5120, base64: b64 };
 }
 

@@ -1,4 +1,4 @@
-// Datos locales por comuna — diferenciación de páginas región.
+// Datos locales por comuna · diferenciación de páginas región.
 // Fuente población: INE, Censo de Población y Vivienda 2024 (resultados oficiales).
 // Distancias: carretera aproximada desde Puerto Varas (Ruta 5 y accesos).
 // Actualizar solo con fuente verificable. No inventar cifras.

@@ -10,7 +10,7 @@ export const prerender = false;
 const WHATSAPP_MTS = "56966929818";
 
 /**
- * Packs con descuento — espejo de src/pages/cotizar.astro.
+ * Packs con descuento · espejo de src/pages/cotizar.astro.
  * El descuento se recalcula SERVER-SIDE contra estos packs: el cliente
  * jamás decide el monto; solo declara qué servicios seleccionó.
  */
@@ -73,7 +73,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ error: "Total inválido" }), { status: 400 });
   }
 
-  // A2: teléfono opcional — normalizar a wa.me (56 + dígitos)
+  // A2: teléfono opcional · normalizar a wa.me (56 + dígitos)
   let phone: string | null = null;
   if (body.phone !== undefined && body.phone !== null && body.phone !== "") {
     if (typeof body.phone !== "string" || body.phone.length > 50) {
@@ -85,7 +85,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
   }
 
-  // A3: descuento — recalcular server-side, ignorar lo que mande el cliente
+  // A3: descuento · recalcular server-side, ignorar lo que mande el cliente
   const packDiscount = computePackDiscount(services.map((s) => s.id));
   const discount = packDiscount;
   const totalFinal = total - discount;
@@ -178,7 +178,7 @@ export const POST: APIRoute = async ({ request }) => {
           from: `Mtsprz <${fromEmail}>`,
           to: toEmail,
           replyTo: email,
-          subject: `Nueva cotización de ${email} — $${(totalFinal / 1000).toFixed(0)}k`,
+          subject: `Nueva cotización de ${email} · $${(totalFinal / 1000).toFixed(0)}k`,
           html: emailHtml,
         }),
       });
@@ -223,7 +223,7 @@ export const POST: APIRoute = async ({ request }) => {
         </div>
         <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:24px 0" />
         <p style="font-size:11px;color:rgba(250,250,250,0.3);margin:0;text-align:center">
-          Mtsprz — Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org
+          Mtsprz · Soluciones Digitales · Puerto Varas, Región de Los Lagos · contacto@mtsprz.org
         </p>
       </div>
     `;
@@ -231,7 +231,7 @@ export const POST: APIRoute = async ({ request }) => {
     try {
       await sendEmail({
         to: email,
-        subject: `Hemos recibido tu cotización — Mtsprz`,
+        subject: `Hemos recibido tu cotización · Mtsprz`,
         html: confirmHtml,
         replyTo: "contacto@mtsprz.org",
       });

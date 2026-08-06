@@ -1,5 +1,5 @@
 /**
- * WhatsApp — Capa de dominio (auto-responder + notificaciones).
+ * WhatsApp · Capa de dominio (auto-responder + notificaciones).
  *
  * Consume el módulo de infraestructura `lib/waha` (transporte WAHA).
  * El dominio NO conoce detalles de transporte: solo números y textos.
@@ -26,13 +26,13 @@ export interface ConnectionState {
   timelocked?: boolean;
 }
 
-/** Estado real de la sesión WAHA — pre-validación de envíos. */
+/** Estado real de la sesión WAHA · pre-validación de envíos. */
 export async function getConnectionState(): Promise<ConnectionState> {
   try {
     const session: WahaSession = await wahaClient.getSession();
     return {
       state: session.status,
-      reason: session.status === "FAILED" ? "Sesión fallida — restart o logout + start" : undefined,
+      reason: session.status === "FAILED" ? "Sesión fallida · restart o logout + start" : undefined,
       timelocked: Boolean(session.me?.reachoutTimelock?.isActive),
     };
   } catch (err) {
@@ -52,7 +52,7 @@ export async function sendText(number: string, text: string): Promise<WahaMessag
   }
   if (state.timelocked) {
     // WhatsApp shadow-restringe outreach a contactos nuevos; el envío puede fallar con 463.
-    console.warn("[WhatsApp] reachoutTimelock activo — envíos a contactos nuevos pueden fallar");
+    console.warn("[WhatsApp] reachoutTimelock activo · envíos a contactos nuevos pueden fallar");
   }
   return wahaClient.sendText(toChatId(number), text);
 }
@@ -60,7 +60,7 @@ export async function sendText(number: string, text: string): Promise<WahaMessag
 /* ── Auto-responder engine ── */
 
 const SERVICE_RESPONSES: Record<string, string> = {
-  web: `🌟 *Mtsprz — Desarrollo Web*
+  web: `🌟 *Mtsprz · Desarrollo Web*
 
 Creamos sitios web profesionales para pymes chilenas:
 • Landing pages desde $150.000
@@ -71,7 +71,7 @@ Creamos sitios web profesionales para pymes chilenas:
 
 ¿Te gustaría agendar una llamada gratis de 15 min para ver tu proyecto?`,
 
-  seo: `🔍 *Mtsprz — SEO y Posicionamiento*
+  seo: `🔍 *Mtsprz · SEO y Posicionamiento*
 
 Aparece en Google cuando tus clientes te buscan:
 • Auditoría SEO técnica desde $80.000
@@ -81,7 +81,7 @@ Aparece en Google cuando tus clientes te buscan:
 
 ¿Qué tipo de negocio tienes? Te recomiendo el plan ideal.`,
 
-  whatsapp: `📱 *Mtsprz — WhatsApp Business*
+  whatsapp: `📱 *Mtsprz · WhatsApp Business*
 
 Automatiza tus ventas por WhatsApp:
 • Bot automatizado con respuestas inteligentes
@@ -92,7 +92,7 @@ Automatiza tus ventas por WhatsApp:
 
 ¿Cuántos mensajes recibes al día?`,
 
-  automation: `🤖 *Mtsprz — Automatización con IA*
+  automation: `🤖 *Mtsprz · Automatización con IA*
 
 Deja que la tecnología haga el trabajo pesado:
 • Chatbots con IA para atención al cliente
@@ -102,7 +102,7 @@ Deja que la tecnología haga el trabajo pesado:
 
 Cuéntame qué proceso te gustaría automatizar.`,
 
-  marketing: `📢 *Mtsprz — Marketing Digital*
+  marketing: `📢 *Mtsprz · Marketing Digital*
 
 Haz crecer tu negocio con estrategia digital:
 • Gestión de redes sociales
@@ -145,18 +145,18 @@ Para darte un precio exacto, cuéntame un poco más de tu proyecto y te envío u
     }
   }
 
-  // Default — welcome + menu
+  // Default · welcome + menu
   return `👋 *¡Hola! Soy el asistente virtual de Mtsprz*
 
 Somos una agencia digital 100% chilena, ubicada en Puerto Varas, especializada en ayudar a pymes de la Región de Los Lagos a crecer con tecnología.
 
 Estos son nuestros servicios principales:
 
-🌟 *Desarrollo Web* — Sitios, landing pages, tiendas online
-🔍 *SEO* — Posicionamiento en Google + Maps locales
-📱 *WhatsApp Business* — Bots, catálogo, automatización
-🤖 *Automatización con IA* — Chatbots, procesos, integraciones
-📢 *Marketing Digital* — Redes sociales, anuncios, contenido
+🌟 *Desarrollo Web* · Sitios, landing pages, tiendas online
+🔍 *SEO* · Posicionamiento en Google + Maps locales
+📱 *WhatsApp Business* · Bots, catálogo, automatización
+🤖 *Automatización con IA* · Chatbots, procesos, integraciones
+📢 *Marketing Digital* · Redes sociales, anuncios, contenido
 
 ¿En cuál de estos te puedo ayudar? Así te doy más información 😊`;
 }

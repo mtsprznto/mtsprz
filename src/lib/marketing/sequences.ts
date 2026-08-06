@@ -1,5 +1,5 @@
 /**
- * Marketing — Motor de secuencias de email (nurturing J4).
+ * Marketing · Motor de secuencias de email (nurturing J4).
  *
  * Modelo: `lead_sequences` con `step` + `next_step_at`.
  * - Un lead descarga un magnet → scheduleSequence(email, "lm-2026")
