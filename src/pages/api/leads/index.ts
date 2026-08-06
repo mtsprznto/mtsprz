@@ -3,8 +3,11 @@ import { listLeads, createLead } from "../../../lib/leads";
 import { checkRateLimit } from "../../../lib/rate-limit";
 import { notifyAdmin } from "../../../lib/whatsapp";
 import { normalizePhone } from "../../../lib/phone";
+import { sendEmail, leadReceivedEmail, adminNewLeadEmail } from "../../../lib/mail";
 
 export const prerender = false;
+
+const ADMIN_EMAIL = import.meta.env.RESEND_TO || "contacto@mtsprz.org";
 
 /** GET /api/leads — List leads (admin only) */
 export const GET: APIRoute = async ({ locals, url }) => {
@@ -128,6 +131,33 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Notify admin via WhatsApp
     notifyAdmin(lead.name, phone || email || "—", serviceInterest, message).catch(() => {});
+
+    // Email de confirmación al prospecto (si dejó correo)
+    if (lead.email) {
+      await sendEmail({
+        to: lead.email,
+        subject: "Recibimos tu solicitud — diagnóstico gratis",
+        html: leadReceivedEmail(lead.name, serviceInterest),
+        fromName: "Mtsprz",
+      });
+    }
+
+    // Email de notificación al admin (backup de WhatsApp)
+    await sendEmail({
+      to: ADMIN_EMAIL,
+      subject: `Nuevo lead: ${lead.name}`,
+      html: adminNewLeadEmail({
+        name: lead.name,
+        phone,
+        email,
+        source,
+        serviceInterest,
+        message,
+        createdAt: lead.created_at,
+      }),
+      fromName: "Mtsprz",
+      replyTo: email || undefined,
+    });
 
     return new Response(JSON.stringify({ success: true, lead: { id: lead.id } }), {
       status: 201,

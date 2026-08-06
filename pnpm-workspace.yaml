@@ -7,3 +7,14 @@ packages:
 allowBuilds:
   esbuild: true
   sharp: true
+
+# Fix `pnpm audit` (Nov 2026). pnpm 11 no lee `pnpm.overrides` de package.json — aquí.
+# Todos son deps dev/build-time; runtime (neon, resend, zustand, pdf-lib) está limpio.
+overrides:
+  sharp: '>=0.35.0'          # GHSA-f88m-g3jw-g9cj (libvips CVEs; sharp-cli fija 0.34.2 exacto)
+  brace-expansion: '>=5.0.9' # GHSA-mh99-v99m-4gvg + GHSA-rgw5-rvv9-x895 (minimatch ^5.0.5 ok)
+  fast-uri: '>=3.1.5'        # GHSA-7p8r-x3mc-p8w7 (ajv — @astrojs/check, dev)
+  tar: '>=7.5.21'            # GHSA-r292-9mhp-454m (@vercel/nft → node-pre-gyp, build)
+  postcss: '>=8.5.23'        # GHSA-fxqj-rqcc-2cmp (vite ^8.5.17 ok, build)
+  path-to-regexp: '>=6.3.0'  # GHSA-9wv6-86v2-598j (routing-utils pide 6.1.0 exacto; Vercel ya usa 6.3.0 alias)
+  glob: '>=11.1.0'           # override previo que estaba en package.json (pnpm 11 lo ignoraba)
