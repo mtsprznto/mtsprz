@@ -52,7 +52,7 @@ No todo es mensual. Algunos servicios se contratan una vez:
 
 - Diseño de página web: desde $290.000
 - Configuración de tienda online: desde $1.500.000
-- Automatización de WhatsApp: desde $290.000
+- Automatización de WhatsApp: desde $590.000
 - Auditoría SEO completa: desde $150.000
 - Estrategia de contenido: desde $200.000
 

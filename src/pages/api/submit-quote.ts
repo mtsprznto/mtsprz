@@ -15,7 +15,8 @@ const WHATSAPP_MTS = "56966929818";
  * jamás decide el monto; solo declara qué servicios seleccionó.
  */
 const QUOTE_PACKS: { ids: string[]; discount: number }[] = [
-  { ids: ["web-profesional", "seo-local", "bot-whatsapp"], discount: 200000 },
+  // Pack Digital Completo · descuento alineado con src/data/pricing.json (350.000)
+  { ids: ["web-profesional", "seo-local", "bot-whatsapp"], discount: 350000 },
   { ids: ["landing", "logo-brand", "social-media"], discount: 150000 },
   { ids: ["seo-audit", "seo-local", "seo-mensual"], discount: 100000 },
 ];

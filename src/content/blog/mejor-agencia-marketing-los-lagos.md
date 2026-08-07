@@ -71,7 +71,7 @@ Los precios varían según el alcance del servicio:
 | Landing page profesional | $290.000 - $400.000 |
 | Sitio web corporativo | $690.000 - $1.000.000 |
 | SEO local (mensual) | $190.000 - $490.000/mes |
-| Automatización WhatsApp | $290.000 - $690.000 |
+| Automatización WhatsApp | $590.000 - $690.000 |
 | Marketing digital integral | $400.000 - $900.000/mes |
 
 Estos precios son para la Región de Los Lagos. En Santiago probablemente pagues un 30-50% más por el mismo servicio.

@@ -14,7 +14,7 @@ const site = "https://mtsprz.org";
 
 <BaseLayout
   title="WhatsApp Business API para Pymes: Bots 24/7 y Precios | Los Lagos"
-  description="WhatsApp Business API oficial (WAHA + Resend) para pymes: bot 24/7, catálogo y pedidos. Desde $390.000 + $90.000/mes. Puerto Varas, Osorno, Valdivia."
+  description="WhatsApp Business API oficial (WAHA + Resend) para pymes: bot 24/7, catálogo y pedidos. $590.000 + $69.000/mes opcional. Puerto Varas, Osorno, Valdivia."
   canonical="https://mtsprz.org/whatsapp-api"
   breadcrumbs={[{ name: "WhatsApp API", path: "/whatsapp-api" }]}
 >
@@ -41,16 +41,16 @@ const site = "https://mtsprz.org";
       "@type": "OfferCatalog",
       "name": "Planes WhatsApp API",
       "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Implementación WhatsApp API (WAHA + Resend + bot)" }, "price": "390000", "priceCurrency": "CLP", "description": "Setup único. API oficial de WhatsApp Business vía WAHA, envío transaccional con Resend y bot de respuestas automáticas 24/7. Incluye hosting, soporte y actualizaciones. Instalación en 5-7 días. Mantención mensual $90.000." },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Bot de WhatsApp con IA" }, "price": "650000", "priceCurrency": "CLP", "description": "Desde $650.000. Bot que entiende lenguaje natural y responde con tus documentos (catálogo, precios, disponibilidad). Incluye todo el plan de implementación API. Mantención mensual $90.000." }
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Implementación WhatsApp API (WAHA + bot)" }, "price": "590000", "priceCurrency": "CLP", "description": "Setup único. API oficial de WhatsApp Business vía WAHA, bot de respuestas automáticas 24/7 con IA, catálogo y pedidos. Incluye hosting, soporte y actualizaciones. Instalación en 5-7 días. Pago único." },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mantenimiento mensual del bot" }, "price": "69000", "priceCurrency": "CLP", "description": "Suscripción mensual opcional: hosting del bot, monitoreo 24/7, actualización de flujos y respuestas, API de IA incluida y reportes mensuales." }
       ]
     },
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "CLP",
-      "lowPrice": 390000,
-      "highPrice": 650000,
-      "offerCount": 2,
+      "lowPrice": 590000,
+      "highPrice": 590000,
+      "offerCount": 1,
       "availability": "https://schema.org/InStock"
     },
     "termsOfService": `${site}/politica-de-cookies`,
@@ -66,7 +66,7 @@ const site = "https://mtsprz.org";
         "name": "¿Cuánto cuesta un bot de WhatsApp para una pyme en Chile?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Implementación desde $390.000 más $90.000 mensuales de mantención, usando la API oficial de WhatsApp Business (WAHA + Resend). Con IA desde $650.000. Incluye bot 24/7, catálogo, hosting, soporte y actualizaciones."
+          "text": "Implementación desde $590.000 pago único, usando la API oficial de WhatsApp Business (WAHA). Incluye bot 24/7 con IA, catálogo, hosting, soporte y actualizaciones. Mantenimiento mensual opcional desde $69.000/mes."
         }
       },
       {
@@ -161,7 +161,7 @@ const site = "https://mtsprz.org";
 
         <div class="reveal-group">
           <p class="reveal-item" style="font-size:clamp(1.4rem, 3.4vw, 2.4rem); font-family:var(--font-heading); font-weight:700; color:#fff; line-height:1.25; letter-spacing:-0.02em; margin:0;">
-            Un bot de WhatsApp para pymes en Chile cuesta desde <span style="color:#25D366;">$390.000</span> de implementación más <span style="color:#25D366;">$90.000 mensuales</span>, usando la API oficial de WhatsApp Business (WAHA + Resend). Incluye respuestas 24/7, catálogo, hosting, soporte y actualizaciones. Con IA desde $650.000. Cotización sin costo.
+            Un bot de WhatsApp para pymes en Chile cuesta <span style="color:#25D366;">$590.000</span> pago único, usando la API oficial de WhatsApp Business (WAHA). Incluye respuestas 24/7 con IA, catálogo, hosting, soporte y actualizaciones. Mantenimiento mensual opcional desde <span style="color:#25D366;">$69.000/mes</span>. Cotización sin costo.
           </p>
         </div>
 
@@ -340,7 +340,7 @@ const site = "https://mtsprz.org";
 
         <div class="reveal-group" style="border-top:1px solid rgba(255,255,255,0.06);">
           {[
-            { q: "¿Cuánto cuesta un bot de WhatsApp para una pyme en Chile?", a: "Implementación desde $390.000 más $90.000 mensuales de mantención, usando la API oficial de WhatsApp Business (WAHA + Resend). Con IA desde $650.000. Incluye bot 24/7, catálogo, hosting, soporte y actualizaciones." },
+            { q: "¿Cuánto cuesta un bot de WhatsApp para una pyme en Chile?", a: "Implementación desde $590.000 pago único, usando la API oficial de WhatsApp Business (WAHA). Incluye bot 24/7 con IA, catálogo, hosting, soporte y actualizaciones. Mantenimiento mensual opcional desde $69.000/mes." },
             { q: "¿Es lo mismo la API de WhatsApp Business que la app normal?", a: "No. WhatsApp Business es la app manual para atender desde el celular. La API permite automatizar: bots 24/7, catálogo, respuestas programáticas e integración con tus sistemas (inventario, CRM, pedidos)." },
             { q: "¿Me pueden bloquear la cuenta si uso un bot?", a: "Trabajamos con la API oficial de WhatsApp Business (Meta) y configuramos plantillas aprobadas según sus políticas. No usamos herramientas no oficiales, por lo que el riesgo de bloqueo es mínimo." },
             { q: "¿Cuánto demora implementar un bot de WhatsApp?", a: "Un bot con respuestas automáticas y catálogo está listo en 5-7 días. Con IA o integración a sistemas, 2-3 semanas." },

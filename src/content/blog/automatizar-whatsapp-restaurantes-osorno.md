@@ -43,7 +43,7 @@ Un restaurante de comida chilota en Osorno implementó un bot de WhatsApp con es
 - **Reducción de no-shows**: 40% menos de clientes que no se presentan gracias a los recordatorios
 - **Ahorro de tiempo**: 15 horas semanales que el equipo dedica a atención presencial de mayor calidad
 
-La inversión fue de $290.000 por configuración inicial más $50.000 mensuales de mantenimiento. Con un ticket promedio de $12.000 por cliente, solo necesitas 3 clientes adicionales por semana para que la inversión se pague sola.
+La inversión fue de $590.000 por configuración inicial más $69.000 mensuales de mantenimiento. Con un ticket promedio de $12.000 por cliente, solo necesitas 3 clientes adicionales por semana para que la inversión se pague sola.
 
 ## Cómo implementar el bot en tu restaurante
 
@@ -91,8 +91,8 @@ Un bot de WhatsApp no solo ahorra tiempo sino que mejora la experiencia del clie
 
 | Concepto | Costo |
 |----------|-------|
-| Configuración inicial | Desde $290.000 |
-| Mantenimiento mensual | Desde $50.000 |
+| Configuración inicial | Desde $590.000 |
+| Mantenimiento mensual | Desde $69.000 |
 | Plataforma de chatbot | Incluido |
 | Integración con sistema POS | Cotización adicional |
 

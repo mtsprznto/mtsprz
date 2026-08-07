@@ -37,9 +37,9 @@ export const PRECIOS_FUNDADOR: {
   { pack: "Web", regular: "$690K", fundador: "$483K", nota: "−30%" },
   {
     pack: "Landing + WhatsApp API",
-    regular: "$290K + $100K",
-    fundador: "$273K",
+    regular: "$290K + $590K",
+    fundador: "$616K",
     nota: "−30%",
   },
-  { pack: "Pack Digital Completo", regular: "$1.1M", fundador: "$770K", nota: "−$330K" },
+  { pack: "Pack Digital Completo", regular: "$1.34M", fundador: "$938K", nota: "−$402K" },
 ];

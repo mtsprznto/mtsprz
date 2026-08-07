@@ -75,8 +75,8 @@ Un restaurante en Puerto Varas implemento un bot de WhatsApp que:
 
 ## Cuanto cuesta automatizar WhatsApp para un restaurante?
 
-- **Bot basico** (respuestas automaticas + menu): Desde $290.000
-- **Bot con reservas y pedidos**: Desde $690.000
+- **Bot de WhatsApp** (respuestas automaticas + menu, reservas y pedidos): Desde $590.000 pago único
+- **Mantenimiento mensual opcional**: $69.000/mes (hosting, monitoreo y actualizaciones)
 - **Automatizacion completa** (CRM + dashboard): Desde $1.500.000
 
 El return on investment se ve en las primeras 2-3 semanas: tiempo recuperado + mas ventas por mejor atencion.

@@ -23,7 +23,7 @@ export const FAQ_PRECIOS: FaqPrecio[] = [
   {
     pregunta: "¿Cuánto cuesta un bot de WhatsApp para mi negocio?",
     respuesta:
-      "Un bot de WhatsApp Business con catálogo digital desde $120.000 CLP/mes, incluye integración con tu sitio web y respuestas inteligentes. Es la forma más rápida de capturar leads en el sur de Chile.",
+      "Un bot de WhatsApp Business desde $590.000 pago único (configuración, catálogo digital, integración con tu sitio web y respuestas inteligentes 24/7). Mantenimiento mensual opcional desde $69.000/mes. Es la forma más rápida de capturar leads en el sur de Chile.",
   },
   {
     pregunta: "¿En cuánto tiempo entregan una web?",

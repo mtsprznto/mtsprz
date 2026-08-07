@@ -22,11 +22,11 @@ En esta guía publicamos **nuestra lista de precios reales 2026** como agencia d
 | Sitio web profesional | $800.000 | $690.000 | 5-10 páginas, blog CMS, panel admin, SEO avanzado + schema, GA4 + Search Console |
 | Tienda online (e-commerce) | $1.800.000 | $1.500.000 | Catálogo ilimitado, carrito, Webpay/Flow, dashboard ventas, inventario |
 | Aplicación web a medida | $1.500.000 | $1.200.000 | Sistema personalizado, auth, panel admin, API, PostgreSQL |
-| Bot WhatsApp inteligente | $350.000 | $290.000 | Atención 24/7, catálogo, agendamiento, dashboard |
+| Bot WhatsApp inteligente | $590.000 | — | Atención 24/7, catálogo, agendamiento, dashboard. Mantenimiento mensual opcional: $69.000 |
 
 **Packs más contratados:**
 
-- **Pack Digital Completo** (web + SEO local + bot WhatsApp): $1.450.000 → **$1.100.000**
+- **Pack Digital Completo** (web + SEO local + bot WhatsApp): $1.690.000 → **$1.340.000**
 - **Pack Emprendedor** (landing + logo + redes): $1.050.000 → **$800.000**
 - **Pack SEO Completo** (auditoría + SEO local + 3 meses mantenimiento): $650.000 → **$550.000**
 

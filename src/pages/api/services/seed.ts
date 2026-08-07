@@ -111,8 +111,8 @@ const seedServices = [
     name: "Bot WhatsApp Inteligente",
     category: "Automatizaci\u00f3n de Procesos",
     description: "Atenci\u00f3n al cliente 24/7 automatizada en WhatsApp. Flujos conversacionales, integraci\u00f3n con IA y CRM. No incluye costos de API/mensajer\u00eda ni licencias (a cargo del Cliente).",
-    price: 350000,
-    promo_price: 290000,
+    price: 590000,
+    promo_price: 0,
     deliverables: [
       "Plataforma/API: WhatsApp Business API v\u00eda Twilio / 360dialog / Meta Cloud API (a designar)",
       "Flujos conversacionales y respuestas automatizadas (cantidad a acordar)",
@@ -122,9 +122,30 @@ const seedServices = [
       "No incluye costos de API/mensajer\u00eda ni licencias (a cargo del Cliente)"
     ],
     includes_maintenance: true,
-    maintenance_price: 60000,
-    maintenance_description: "Mantenimiento del bot, actualizaci\u00f3n de respuestas, monitoreo de conversaciones, reportes mensuales y soporte prioritario.",
+    maintenance_price: 69000,
+    maintenance_description: "Hosting del bot, monitoreo 24/7, actualizaci\u00f3n de flujos y respuestas, API de IA incluida, reportes mensuales y soporte prioritario.",
     is_popular: true
+  },
+  {
+    slug: "bot-mensual",
+    name: "Mantenimiento Bot WhatsApp",
+    category: "Automatizaci\u00f3n de Procesos",
+    description: "Suscripci\u00f3n mensual opcional para tu bot de WhatsApp: hosting, monitoreo 24/7, actualizaci\u00f3n de flujos y respuestas, API de IA incluida, reportes mensuales y soporte prioritario.",
+    price: 69000,
+    promo_price: 0,
+    deliverables: [
+      "Hosting del bot con respaldo y SSL",
+      "Monitoreo 24/7 de conversaciones y disponibilidad",
+      "Actualizaci\u00f3n de flujos y respuestas autom\u00e1ticas",
+      "API de IA incluida (consumo razonable)",
+      "1 reporte mensual de conversaciones y rendimiento",
+      "Soporte prioritario por WhatsApp"
+    ],
+    includes_maintenance: false,
+    maintenance_price: 0,
+    maintenance_description: "",
+    is_monthly: true,
+    is_popular: false
   },
   {
     slug: "email-flow",

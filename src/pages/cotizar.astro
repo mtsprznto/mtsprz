@@ -513,7 +513,8 @@ const effectivePrice = (s: Service) => (s.promo_price && s.promo_price > 0 ? s.p
   var phoneError = document.getElementById('cotizar-phone-error');
 
   var packs = [
-    { ids: ['web-profesional', 'seo-local', 'bot-whatsapp'], discount: 200000, label: 'Pack Digital Completo' },
+    // Pack Digital Completo · descuento alineado con src/data/pricing.json (350.000)
+    { ids: ['web-profesional', 'seo-local', 'bot-whatsapp'], discount: 350000, label: 'Pack Digital Completo' },
     { ids: ['landing', 'logo-brand', 'social-media'], discount: 150000, label: 'Pack Emprendedor' },
     { ids: ['seo-audit', 'seo-local', 'seo-mensual'], discount: 100000, label: 'Pack SEO Completo' },
   ];

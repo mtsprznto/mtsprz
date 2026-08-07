@@ -87,8 +87,8 @@
       "category": "Automatización de Procesos",
       "name": "Bot WhatsApp Inteligente",
       "description": "Atención al cliente 24/7 sin que contestes un solo mensaje. Automatiza respuestas, cotizaciones, agendamiento y catálogo directamente en WhatsApp.",
-      "price": 350000,
-      "promoPrice": 290000,
+      "price": 590000,
+      "promoPrice": 0,
       "features": [
         "Levantamiento de casos de uso y flujos de conversación",
         "Configuración WhatsApp Business API oficial",
@@ -100,6 +100,24 @@
         "Soporte 1 mes post-lanzamiento"
       ],
       "popular": true
+    },
+    {
+      "id": "bot-mensual",
+      "category": "Automatización de Procesos",
+      "name": "Mantenimiento Bot WhatsApp",
+      "description": "Suscripción mensual opcional para tu bot de WhatsApp: hosting, monitoreo 24/7, actualización de flujos y respuestas, API de IA incluida, reportes mensuales y soporte prioritario.",
+      "price": 69000,
+      "promoPrice": 0,
+      "features": [
+        "Hosting del bot con respaldo y SSL",
+        "Monitoreo 24/7 de conversaciones y disponibilidad",
+        "Actualización de flujos y respuestas automáticas",
+        "API de IA incluida (consumo razonable)",
+        "1 reporte mensual de conversaciones y rendimiento",
+        "Soporte prioritario por WhatsApp"
+      ],
+      "monthly": true,
+      "popular": false
     },
     {
       "id": "email-flow",
@@ -392,9 +410,9 @@
       "name": "Pack Digital Completo",
       "description": "Web profesional + SEO Local + Bot WhatsApp. La combinación ideal para pymes que quieren presencia seria y atención automatizada.",
       "services": ["web-profesional", "seo-local", "bot-whatsapp"],
-      "totalPrice": 1450000,
+      "totalPrice": 1690000,
       "discount": 350000,
-      "promoPrice": 1100000,
+      "promoPrice": 1340000,
       "popular": true,
       "badge": "Más contratado"
     },

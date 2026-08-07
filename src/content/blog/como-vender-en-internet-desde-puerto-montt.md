@@ -91,7 +91,7 @@ Con estos datos puedes tomar decisiones informadas y optimizar tu estrategia mes
 | Redes sociales | Gratis (o $100k/mes en gestión) | Continuo |
 | Marketplaces | Comisión por venta | 1-2 días |
 | Google Ads | Desde $100.000/mes | Continuo |
-| Automatización | Desde $290.000 | 1-2 semanas |
+| Automatización | Desde $590.000 | 1-2 semanas |
 
 ## Empieza a vender online hoy
 
