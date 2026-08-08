@@ -160,7 +160,7 @@ class BaseScraper(ABC):
                         self._stats["errores"] += 1
                         return None
                 # No reintentar errores de DNS — no se autocurarán
-                if "getaddrinfo failed" in estr or "[Errno 11001]" in estr or "[Errno -2]" in estr or "Name or service not known" in estr:
+                if "getaddrinfo failed" in estr or "[Errno 11001]" in estr or "[Errno -2]" in estr or "[Errno -3]" in estr or "Name or service not known" in estr:
                     log.warning("DNS error en {url} — saltando (no resuelve)", url=url)
                     self._stats["errores"] += 1
                     return None

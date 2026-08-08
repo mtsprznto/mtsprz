@@ -37,6 +37,7 @@ class Rubro(str, Enum):
     CONTADOR = "contador"
     DISENO = "diseno"
     TIENDA = "tienda"
+    FERIA_LIBRE = "feria_libre"
     OTRO = "otro"
 
     @classmethod
@@ -75,6 +76,16 @@ class Rubro(str, Enum):
             "diseno": cls.DISENO,
             "tienda": cls.TIENDA,
             "ecommerce": cls.TIENDA,
+            "feria": cls.FERIA_LIBRE,
+            "ferias": cls.FERIA_LIBRE,
+            "feria libre": cls.FERIA_LIBRE,
+            "feriantes": cls.FERIA_LIBRE,
+            "feria de productores": cls.FERIA_LIBRE,
+            "sindicato ferias": cls.FERIA_LIBRE,
+            "sindicato de ferias": cls.FERIA_LIBRE,
+            "asociacion ferias": cls.FERIA_LIBRE,
+            "agrupacion comerciantes": cls.FERIA_LIBRE,
+            "mercado": cls.FERIA_LIBRE,
         }
         return mapping.get(s, cls.OTRO)
 
@@ -108,6 +119,8 @@ class FuenteProspect(str, Enum):
     MANUAL = "manual"
     REFERIDO = "referido"
     REDES = "redes"
+    FERIAS_REGISTROS = "ferias_registros"
+    FERIAS_PRENSA = "ferias_prensa"
 
 
 # ---------------------------------------------------------------------------
@@ -164,6 +177,17 @@ class Prospect(BaseModel):
 
     # --- Redes ---
     redes: dict[str, str] = Field(default_factory=dict)
+
+    # --- Feria (organización / dirigencia) ---
+    dirigente: str = ""
+    cargo_dirigente: str = ""
+    rut_org: str = ""
+    personalidad_juridica: str = ""
+    fecha_constitucion: str = ""
+    num_puestos: int = 0
+    contexto: str = ""
+    fecha_noticia: str = ""
+    url_noticia: str = ""
 
     # --- Análisis digital ---
     senales_digitales: SenalesDigitales = Field(default_factory=SenalesDigitales)

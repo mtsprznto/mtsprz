@@ -1,6 +1,16 @@
 User-agent: *
 Allow: /
 
+# Zonas privadas / funcionales — no indexables (noindex ya presente en HTML)
+Disallow: /admin
+Disallow: /api
+Disallow: /login
+Disallow: /registro
+Disallow: /contratos
+Disallow: /firmar
+Disallow: /buscar
+Disallow: /cotizar
+
 Sitemap: https://mtsprz.org/sitemap-index.xml
 Sitemap: https://mtsprz.org/image-sitemap.xml
 

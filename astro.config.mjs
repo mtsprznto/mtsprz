@@ -6,6 +6,7 @@ import vercel from "@astrojs/vercel";
 
 export default defineConfig({
   site: "https://mtsprz.org",
+  trailingSlash: "never",
   integrations: [
     mdx(),
     sitemap({

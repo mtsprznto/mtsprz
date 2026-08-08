@@ -428,6 +428,47 @@ def googlesearch(ctx: Context, query: str):
 
 
 # ===================================================================
+# FERIAS LOS LAGOS — Enriquecer ferias desde semilla manual
+# ===================================================================
+
+@scrape.command()
+@click.option("--seed", type=click.Path(path_type=Path), default=None,
+              help="JSON semilla de ferias (default: data/ferias_target.json)")
+@click.option("--prensa", is_flag=True,
+              help="Solo dominios de prensa local (+ webs de ferias sociales)")
+@click.option("--registros", is_flag=True,
+              help="Pre-cargar RUTs desde registros19862 (contacto representante)")
+@click.option("--limit", default=0, type=int, help="Máx ferias a procesar (0 = todas)")
+@click.option("--resume", is_flag=True, help="Reanudar desde checkpoint")
+@click.pass_obj
+def ferias(ctx: Context, seed: Optional[Path], prensa: bool, registros: bool, limit: int, resume: bool):
+    """Busca teléfonos y correos de ferias de Los Lagos (semilla manual).
+
+    Enriquece data/ferias_target.json con contactos desde Google + prensa local
+    y registros19862 (representante legal de ferias sociales).
+    """
+    from prospector.scrapers.ferias_loslagos import FeriasPrensaScraper
+
+    log.info("Ferias — seed={s} prensa={p} registros={r} limit={l}",
+             s=seed or "data/ferias_target.json", p=prensa, r=registros, l=limit)
+
+    if ctx.dry_run:
+        ctx.log_dry_run("Buscaría contactos de ferias (prensa={p}, registros={r})",
+                        p=prensa, r=registros)
+        return
+
+    scraper = FeriasPrensaScraper(seed_file=seed, dry_run=ctx.dry_run, resume=resume)
+    try:
+        result = scraper.scrape(limit=limit, con_prensa=prensa, con_registros=registros)
+        log.info("Resultado: {r}", r=result.resumen)
+        if result.prospects:
+            guardados = ctx.db.add_batch(result.prospects)
+            log.info("Guardados {n} prospectos en DB", n=guardados)
+    finally:
+        scraper.close()
+
+
+# ===================================================================
 # FIND-WEBSITES — Buscar webs para prospectos sin sitio_web
 # ===================================================================
 

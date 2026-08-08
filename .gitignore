@@ -31,3 +31,5 @@ scripts/waha/.env
 scripts/waha/.sessions/
 docs/marketing/*
 /marketing/
+scripts/prospector/data/ferias_target.json
+scripts/prospector/data/prospects.json

@@ -48,6 +48,13 @@ function applySecurityHeaders(response: Response): Response {
 }
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  // WWW → apex canonical redirect (SEO): consolida duplicados www/apex en 301.
+  if (context.url.hostname.toLowerCase() === "www.mtsprz.org") {
+    const canonicalUrl = new URL(context.url);
+    canonicalUrl.hostname = "mtsprz.org";
+    return applySecurityHeaders(context.redirect(canonicalUrl.toString(), 301));
+  }
+
   if (!context.isPrerendered) {
     const token = context.cookies.get("mtsprz_token")?.value;
     const authHeader = context.request.headers.get("authorization")?.replace("Bearer ", "");

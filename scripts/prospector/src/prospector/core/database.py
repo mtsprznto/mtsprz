@@ -217,6 +217,22 @@ class JSONDatabase:
         if not existing.google_maps_url and nuevo.google_maps_url:
             updates["google_maps_url"] = nuevo.google_maps_url
 
+        # Campos de feria faltantes (dirigencia / organización / prensa)
+        if not existing.rut_org and nuevo.rut_org:
+            updates["rut_org"] = nuevo.rut_org
+        if not existing.dirigente and nuevo.dirigente:
+            updates["dirigente"] = nuevo.dirigente
+        if not existing.cargo_dirigente and nuevo.cargo_dirigente:
+            updates["cargo_dirigente"] = nuevo.cargo_dirigente
+        if not existing.url_noticia and nuevo.url_noticia:
+            updates["url_noticia"] = nuevo.url_noticia
+        if not existing.contexto and nuevo.contexto:
+            updates["contexto"] = nuevo.contexto
+        if not existing.personalidad_juridica and nuevo.personalidad_juridica:
+            updates["personalidad_juridica"] = nuevo.personalidad_juridica
+        if nuevo.num_puestos > existing.num_puestos:
+            updates["num_puestos"] = nuevo.num_puestos
+
         # Fusionar teléfonos
         existing_phones = set(existing.telefonos)
         new_phones = [t for t in nuevo.telefonos if t not in existing_phones]
