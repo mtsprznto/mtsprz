@@ -21,6 +21,7 @@
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "Fira Code", "JetBrains Mono", monospace;
   --font-alt: "Montserrat", system-ui, sans-serif;
+  --font-hand: "Caveat", "Comic Sans MS", cursive;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -76,6 +77,10 @@ code, pre, kbd, samp {
 
 .font-alt {
   font-family: var(--font-alt);
+}
+
+.font-hand {
+  font-family: var(--font-hand);
 }
 
 input, select, textarea {

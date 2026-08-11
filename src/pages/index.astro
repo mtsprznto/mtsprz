@@ -11,7 +11,7 @@ import testimonialsData from "../data/testimonials.json";
 import projectsData from "../data/projects.json";
 import { query, initDb } from "../lib/db";
 import { toServiceDisplay } from "../lib/service-display";
-import { ListChecks, Bot, MapPin, ArrowUpRight } from "@lucide/astro";
+import { ListChecks, Bot, MapPin } from "@lucide/astro";
 import { LEAD_MAGNETS } from "../lib/marketing/lead-magnets";
 
 await initDb();
@@ -40,6 +40,13 @@ const iconMap = {
   bot: Bot,
   "map-pin": MapPin,
 };
+
+// Temporal realness (Kyle Chayka) · fecha renderizada por el servidor,
+// no un timestamp estático: honesta, cambia cada día.
+const mesesES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const _hoy = new Date();
+const hoy = `${_hoy.getDate()} de ${mesesES[_hoy.getMonth()]} de ${_hoy.getFullYear()}`;
+const anio = _hoy.getFullYear();
 ---
 
 <BaseLayout
@@ -66,7 +73,7 @@ const iconMap = {
   <Header />
 
   <main id="main-content">
-    <section class="relative w-screen h-[100dvh] md:h-screen overflow-hidden bg-[#010101]">
+    <section class="relative w-full h-[100dvh] md:h-screen overflow-hidden bg-[#010101]">
       <video
         src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
         autoplay loop muted playsinline
@@ -77,55 +84,102 @@ const iconMap = {
       <div style="position: absolute !important; top: 0; left: 0; width: 100%; height: 24%; z-index: 2;" class="bg-gradient-to-b from-[#010101] to-transparent md:h-32"></div>
       <div style="position: absolute !important; bottom: 0; left: 0; width: 100%; height: 36%; z-index: 2;" class="bg-gradient-to-t from-[#010101] to-transparent md:h-48"></div>
       <div style="position: absolute !important; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none;">
-        <div class="w-full max-w-7xl mx-auto px-6 flex flex-col items-center justify-center" style="pointer-events: auto;">
-        <h1 class="text-[clamp(1rem,5.5vw,6rem)] sm:text-6xl md:text-7xl lg:text-[6rem] font-heading font-bold text-white leading-[1.05] tracking-tight text-center">
-          <span>
-            <StaggerText
-              text="EXPERTOS EN"
-              as="span"
-              className="block"
-              staggerMs={0.05}
-            />
-            <StaggerText
-              text="SOLUCIONES DIGITALES"
-              as="span"
-              className="block text-white/70 -mt-1 sm:-mt-2"
-              staggerMs={0.045}
-            />
-          </span>
-        </h1>
-        <p class="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg text-white/60 font-body font-light leading-relaxed max-w-xl text-center">
-          Creamos sitios web profesionales, posicionamos tu negocio en Google y automatizamos tus procesos.
-          <span class="block mt-1.5 text-white/60 text-xs sm:text-sm leading-relaxed">Tu agencia digital de confianza en Puerto Varas y la Región de Los Lagos.</span>
-        </p>
-        <div class="mt-8 flex items-center gap-4">
-          <button onclick="window.openCotizarModal()" class="liquid-glass-strong rounded-full px-7 sm:px-10 py-3.5 sm:py-4 text-sm font-medium text-white/90 tracking-[0.18em] uppercase flex items-center gap-2 transition-all hover:scale-[1.03] hover:text-white cursor-pointer">
-            Cotizar
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-          </button>
-        </div>
-        <div class="mt-10 inline-flex flex-wrap items-center gap-x-5 gap-y-2 justify-center rounded-full border border-white/[0.08] bg-white/[0.04] px-5 py-2 text-[11px] text-white/80 font-body tracking-wide backdrop-blur-sm">
-          <span class="flex items-center gap-1.5">
-            <svg class="w-3 h-3 text-[#6366f1] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Sin compromiso
-          </span>
-          <span class="text-white/20">|</span>
-          <span class="flex items-center gap-1.5">
-            <svg class="w-3 h-3 text-[#6366f1] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Atención personalizada
-          </span>
-          <span class="text-white/20">|</span>
-          <span class="flex items-center gap-1.5">
-            <svg class="w-3 h-3 text-[#6366f1] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Puerto Varas · Los Lagos
-          </span>
+        <div class="w-full px-5 sm:px-8 md:px-12 lg:px-16" style="pointer-events: auto;">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+
+            <!-- Editorial left · full-width · proof of place -->
+            <div class="lg:col-span-7 text-left">
+              <!-- marca · firma a mano -->
+              <div class="flex items-center gap-2.5 -rotate-1 w-fit font-hand text-lg md:text-xl" style="color: #f5efe0;">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="#6ee7b7" stroke="none"><path d="M12 0c.9 6.6 4.8 10.5 12 12-7.2 1.5-11.1 5.4-12 12-.9-6.6-4.8-10.5-12-12 7.2-1.5 11.1-5.4 12-12z"/></svg>
+                Mtsprz · Soluciones Digitales
+              </div>
+              <!-- Coordenadas · proof of place, anotación a mano -->
+              <p class="mt-3 w-fit -rotate-1 font-hand text-base md:text-lg" style="color: #a5b4fc;">
+                41.32°S · 72.98°O — Puerto Varas, Región de Los Lagos
+                <svg class="block w-full h-1.5 mt-0.5" viewBox="0 0 300 6" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"><path d="M2 4c40-4 80 4 120 0s80-4 120 0" /></svg>
+              </p>
+
+              <h1 class="mt-5 md:mt-7 font-heading font-bold text-white leading-[1.03] tracking-[-0.02em] text-[clamp(2.1rem,4.8vw,5.5rem)]">
+                <StaggerText text="Soluciones digitales" as="span" className="block" staggerMs={0.04} />
+                <span class="block mt-1 text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1 0%, #a5b4fc 55%, #8b5cf6 100%);">
+                  hechas por personas
+                </span>
+                <!-- subrayado a mano · sobrio -->
+                <svg class="block w-[52%] -ml-1 h-2.5 mt-1" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
+              </h1>
+
+              <p class="mt-5 md:mt-6 text-sm sm:text-base md:text-lg text-white/65 font-body font-light leading-relaxed max-w-xl">
+                Creamos sitios web, posicionamos tu negocio en Google y automatizamos tus procesos.
+                <span class="mt-2 block text-xs leading-relaxed text-white/50 sm:text-sm">Detrás de cada proyecto hay <span class="relative whitespace-nowrap text-white/75">personas reales<svg class="absolute -inset-x-1 -inset-y-1 w-[calc(100%+0.5rem)] h-[calc(100%+0.5rem)] -rotate-2" viewBox="0 0 200 24" preserveAspectRatio="none" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 5"><ellipse cx="100" cy="12" rx="99" ry="11" /></svg></span> en Puerto Varas — las mismas que te responden el WhatsApp.</span>
+              </p>
+
+              <div class="mt-7 md:mt-9 flex flex-wrap items-center gap-4 md:gap-5">
+                <button onclick="window.openCotizarModal()" class="-rotate-1 px-7 sm:px-9 py-3.5 sm:py-4 text-xs sm:text-sm font-medium text-white tracking-[0.18em] uppercase flex items-center gap-2 transition-transform duration-300 hover:rotate-0 hover:scale-[1.04] cursor-pointer"
+                  style="background: #6366f1; border-radius: 4px 18px 6px 16px / 16px 4px 18px 6px; box-shadow: 0 10px 30px rgba(99,102,241,0.35);">
+                  Cotizar
+                  <svg class="w-4 h-4 -rotate-6" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                </button>
+                <a href="/portafolio" class="group inline-flex items-center gap-2 -rotate-1 font-hand text-base md:text-xl transition-transform duration-300 hover:rotate-1" style="color: #fde68a;">
+                  Ver trabajo real
+                  <svg class="w-4 h-4 -rotate-6 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+
+              <!-- temporal realness · anotación manuscrita -->
+              <p class="mt-6 md:mt-8 w-fit rotate-1 font-hand text-base md:text-lg" style="color: #a5b4fc;">
+                hoy es {hoy} · esto lo escribieron personas, no una plantilla
+                <svg class="block w-full h-1 mt-0.5" viewBox="0 0 300 5" preserveAspectRatio="none" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"><path d="M2 3c50-2 100 2 150 0s100-2 146-1" /></svg>
+              </p>
+            </div>
+
+            <!-- Proof of work · ficha técnica (desktop) -->
+            <div class="hidden lg:flex lg:col-span-5 items-end justify-end">
+              <!-- Nota adhesiva · ficha de trabajo -->
+              <div class="relative w-full max-w-sm -rotate-1 px-6 md:px-7 py-6 md:py-7 transition-transform duration-300 hover:rotate-0"
+                style="background: #f5efe0; border-radius: 3px 22px 3px 24px / 24px 3px 22px 3px; box-shadow: 0 20px 50px rgba(0,0,0,0.55);">
+                <!-- cinta adhesiva -->
+                <div class="absolute left-1/2 -top-3.5 w-28 h-6 -translate-x-1/2 -rotate-2"
+                  style="background: rgba(253,230,138,0.75); box-shadow: inset 0 1px 1px rgba(255,255,255,0.5), 0 1px 3px rgba(0,0,0,0.25); backdrop-filter: blur(1px);">
+                </div>
+                <div class="flex items-center justify-between border-b-2 border-dashed pb-3 mb-4" style="border-color: rgba(74,63,51,0.25);">
+                  <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-[#4a3f33]">Ficha de trabajo</span>
+                  <span class="font-mono text-[10px] text-[#4338ca]">N° {anio}</span>
+                </div>
+                <ul class="space-y-3 text-[12px] leading-relaxed" style="color: #4a3f33;">
+                  <li class="flex gap-3"><span class="font-hand text-lg leading-none shrink-0" style="color: #f59e0b;">01</span>Sitios web a medida para pymes del sur de Chile</li>
+                  <li class="flex gap-3"><span class="font-hand text-lg leading-none shrink-0" style="color: #10b981;">02</span>SEO local: Google Maps y búsquedas de la región</li>
+                  <li class="flex gap-3"><span class="font-hand text-lg leading-none shrink-0" style="color: #6366f1;">03</span>Automatizaciones que te devuelven horas de trabajo</li>
+                </ul>
+                <p class="mt-4 pt-4 border-t-2 border-dashed font-hand text-base leading-snug" style="border-color: rgba(74,63,51,0.25); color: #2f2a22;">
+                  Te atiende una sola persona, de principio a fin. Si automatizamos algo, te decimos exactamente qué es.
+                </p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      <div class="absolute bottom-6 left-0 w-full flex justify-center z-10" style="pointer-events: none;">
-        <div class="w-5 h-8 rounded-full border border-white/15 flex items-start justify-center pt-1.5" style="pointer-events: auto;">
-          <div class="w-1 h-2 rounded-full bg-white/30" />
+      <!-- Trust bar · full width -->
+      <div class="absolute bottom-0 left-0 w-full z-10 border-t border-white/10 bg-[#010101]/40 backdrop-blur-sm">
+        <div class="w-full px-5 sm:px-8 md:px-12 lg:px-16 py-3.5 md:py-4 flex flex-wrap items-center justify-center md:justify-between gap-x-7 gap-y-2">
+          <!-- chips artesanales · hand-drawn stickers sobre la cinta -->
+          <span class="inline-flex items-center gap-2 -rotate-2 px-3.5 py-1.5 border-2 border-dashed font-hand text-lg md:text-xl transition-transform duration-300 hover:rotate-0"
+            style="color: #fde68a; border-color: rgba(253,230,138,0.45); background: rgba(253,230,138,0.08); border-radius: 4px 12px 4px 14px / 14px 4px 12px 4px;">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><path d="M12 0c.9 6.6 4.8 10.5 12 12-7.2 1.5-11.1 5.4-12 12-.9-6.6-4.8-10.5-12-12 7.2-1.5 11.1-5.4 12-12z"/></svg>
+            Sin compromiso
+          </span>
+          <span class="inline-flex items-center gap-2 rotate-1 px-3.5 py-1.5 border-2 border-dashed font-hand text-lg md:text-xl transition-transform duration-300 hover:rotate-0"
+            style="color: #6ee7b7; border-color: rgba(110,231,183,0.4); background: rgba(110,231,183,0.08); border-radius: 4px 14px 4px 12px / 12px 4px 14px 4px;">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13l5 5L20 7"/></svg>
+            Atención personalizada
+          </span>
+          <span class="inline-flex items-center gap-2 -rotate-1 px-3.5 py-1.5 border-2 border-dashed font-hand text-lg md:text-xl transition-transform duration-300 hover:rotate-0"
+            style="color: #a5b4fc; border-color: rgba(165,180,252,0.45); background: rgba(165,180,252,0.08); border-radius: 4px 12px 4px 14px / 14px 4px 12px 4px;">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            Puerto Varas · Los Lagos
+          </span>
         </div>
       </div>
     </section>
@@ -165,32 +219,54 @@ const iconMap = {
         </div>
       </div>
 
-      <!-- Full-width CTA + GEO Quick Answer · sutil, debajo de columnas -->
+      <!-- Full-width CTA + GEO Quick Answer · dibujado a mano (humanwashing) -->
       <div class="mx-auto max-w-5xl px-6 py-16 md:py-20">
         <div class="reveal-group">
-          <a href="/diagnostico" class="reveal-item group flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl px-6 md:px-8 py-5 md:py-6 transition-all duration-300"
-            style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);"
+          <!-- anotación manuscrita -->
+          <p class="reveal-item font-hand text-xl md:text-2xl mb-6 -rotate-1" style="color: #a5b4fc;">
+            hoja de ruta
+            <svg class="inline-block w-5 h-5 ml-1 -rotate-3" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M6 13l6 6 6-6"/></svg>
+          </p>
+
+          <!-- CTA box · bordes irregulares de cuaderno -->
+          <a href="/diagnostico" class="reveal-item group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 md:px-8 py-5 md:py-6 transition-all duration-300 hover:-translate-y-0.5"
+            style="background: rgba(245,239,230,0.03); border: 2px solid rgba(245,239,230,0.35); border-radius: 12px 250px 14px 240px / 240px 14px 250px 12px;"
           >
             <div>
-              <h3 class="text-sm md:text-base font-heading font-semibold text-white/80">¿No sabes por dónde empezar?</h3>
-              <p class="mt-0.5 text-xs md:text-sm text-white/40 font-body">Cuéntanos tu situación y te recomendamos la solución ideal sin compromiso.</p>
+              <h3 class="text-sm md:text-base font-heading font-semibold text-white/80">
+                ¿No sabes por dónde empezar?
+                <svg class="block w-[105%] h-2 -mx-1 mt-0.5" viewBox="0 0 200 8" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round"><path d="M1 6c25-6 50 6 75 0s50-6 75 0 33-6 48-2" /></svg>
+              </h3>
+              <p class="mt-1 text-xs md:text-sm text-white/40 font-body">Cuéntanos tu situación y te recomendamos la solución ideal <span class="relative whitespace-nowrap">sin compromiso
+                <svg class="absolute -inset-x-1.5 -inset-y-1 w-[calc(100%+0.75rem)] h-[calc(100%+0.5rem)] -rotate-2" viewBox="0 0 200 32" preserveAspectRatio="none" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 6"><ellipse cx="100" cy="16" rx="99" ry="15" /></svg>
+              </span>.</p>
             </div>
-            <span class="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium tracking-[0.1em] uppercase transition-all duration-300 group-hover:gap-3"
-              style="color: #6366f1cc;"
+            <span class="shrink-0 inline-flex items-center gap-1.5 font-hand text-lg md:text-xl px-4 py-1.5 rotate-[1.5deg] transition-transform duration-300 group-hover:rotate-3"
+              style="color: #fde68a; background: rgba(253,230,138,0.08); border: 1.5px dashed rgba(253,230,138,0.5); border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;"
             >
               Diagnóstico gratuito
-              <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+              <svg class="w-4 h-4 -rotate-6" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><path d="M12 0c.8 6.5 4.5 10.2 12 12-7.5 1.8-11.2 5.5-12 12-.8-6.5-4.5-10.2-12-12C7.5 10.2 11.2 6.5 12 0z" /></svg>
             </span>
           </a>
 
-          <!-- GEO Quick Answer -->
-          <div class="reveal-item mt-6 pt-5 border-t border-white/5 text-left">
-            <p class="text-xs text-white/35 font-body leading-relaxed">
-              <strong class="text-white/50">Respuesta rápida: </strong>
+          <!-- flecha punteada -->
+          <div class="reveal-item flex justify-center my-2">
+            <svg class="w-6 h-10" viewBox="0 0 24 40" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v28" stroke-dasharray="5 7" /><path d="M6 30l6 7 6-7" /></svg>
+          </div>
+
+          <!-- Nota adhesiva · GEO Quick Answer -->
+          <div class="reveal-item relative mx-auto max-w-xl px-6 md:px-8 py-6 md:py-7 -rotate-1 transition-transform duration-300 hover:rotate-0"
+            style="background: #f5efe0; border-radius: 3px 22px 3px 24px / 24px 3px 22px 3px; box-shadow: 0 14px 34px rgba(0,0,0,0.45);"
+          >
+            <div class="absolute left-1/2 -top-3.5 w-28 h-6 -translate-x-1/2 -rotate-2 opacity-80"
+              style="background: rgba(253,230,138,0.75); box-shadow: inset 0 1px 1px rgba(255,255,255,0.5), 0 1px 3px rgba(0,0,0,0.25); backdrop-filter: blur(1px);"
+            ></div>
+            <p class="text-xs md:text-sm font-body leading-relaxed" style="color: #4a3f33;">
+              <strong style="color: #2f2a22;">Respuesta rápida: </strong>
               La mayoría de las pymes en la Región de Los Lagos comienzan con un sitio web profesional optimizado para SEO local.
               Si ya tienes página, el siguiente paso es el posicionamiento en Google Maps y búsquedas locales.
               Las automatizaciones son ideales cuando tu negocio empieza a recibir más clientes de los que puedes atender manualmente.
-              <a href="/diagnostico" class="hover:underline ml-1" style="color: #6366f1bb;">Solicita un diagnóstico →</a>
+              <a href="/diagnostico" class="font-hand text-base md:text-lg ml-1 underline underline-offset-4 decoration-2" style="color: #4338ca; text-decoration-color: rgba(67,56,202,0.4);">Solicita un diagnóstico →</a>
             </p>
           </div>
         </div>
@@ -291,48 +367,55 @@ const iconMap = {
       <!-- Línea decorativa superior -->
       <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
 
-      <div class="relative mx-auto max-w-5xl px-6 py-28 md:py-36 lg:py-44">
-        <div class="reveal-group text-center max-w-4xl mx-auto">
-          <!-- Label editorial -->
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Sobre Nosotros</p>
+      <div class="relative mx-auto max-w-6xl px-6 py-28 md:py-36 lg:py-44">
+        <div class="reveal-group text-center">
+          <!-- Anotación manuscrita · sobre nosotros -->
+          <div class="reveal-item flex items-center justify-center gap-2.5 -rotate-1 w-fit mx-auto font-hand text-lg md:text-xl mb-6 md:mb-8" style="color: #fde68a;">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            Sobre nosotros
+          </div>
 
-          <!-- Título principal · enorme, editorial -->
-          <h2 class="reveal-item text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-heading font-bold text-white leading-[0.92] tracking-[-2px] md:tracking-[-3px] lg:tracking-[-4px] uppercase">
+          <!-- Título principal · full-width en desktop + subrayado a mano -->
+          <h2 class="reveal-item font-heading font-bold text-white leading-[0.92] tracking-[-2px] md:tracking-[-3px] lg:tracking-[-4px] uppercase"
+              style="font-size: clamp(2.25rem, 7vw, 5.25rem);">
             Agencia Digital<br />
-            <span class="block mt-1 md:mt-0" style="color: #6366f1cc;">Región de Los Lagos</span>
+            <span class="block mt-1 md:mt-0 text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #a5b4fc);">Región de Los Lagos</span>
+            <svg class="block w-[56%] mx-auto h-3 mt-2" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
           </h2>
+        </div>
 
-          <!-- Separador editorial -->
-          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
+        <div class="reveal-group text-center max-w-4xl mx-auto">
+          <!-- Garabato separador -->
+          <svg class="reveal-item mx-auto my-8 md:my-10 block w-24 h-2.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
 
-          <!-- Cuerpo · texto editorial con tracking amplio -->
-          <div class="reveal-item max-w-3xl mx-auto space-y-5 md:space-y-6">
+          <!-- Cuerpo · texto editorial con acentos manuscritos -->
+          <div class="reveal-item max-w-3xl mx-auto">
             <p class="text-sm md:text-base lg:text-lg text-white/55 font-body font-light leading-[1.8] md:leading-[1.9] tracking-[0.01em]">
-              Mtsprz nació en <span class="text-white/80">Puerto Varas</span> con la misión de llevar soluciones digitales profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad sin pagar precios de Santiago. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
+              Mtsprz nació en <span class="text-white/80">Puerto Varas</span> con la misión de llevar <span class="relative whitespace-nowrap text-white/75">soluciones digitales<svg class="absolute -inset-x-1 -bottom-0.5 w-[calc(100%+0.5rem)] h-2 -rotate-1" viewBox="0 0 300 6" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"><path d="M2 4c40-4 80 4 120 0s80-4 120 0" /></svg></span> profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad <span class="relative whitespace-nowrap text-white/75">sin pagar precios de Santiago<svg class="absolute -inset-x-1 -inset-y-1 w-[calc(100%+0.5rem)] h-[calc(100%+0.5rem)] rotate-1" viewBox="0 0 200 24" preserveAspectRatio="none" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 5"><ellipse cx="100" cy="12" rx="99" ry="11" /></svg></span>. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
             </p>
-            <p class="text-sm md:text-base text-white/45 font-body font-light leading-[1.8] md:leading-[1.9]">
-              Trabajamos con negocios de toda la región.
+            <p class="mt-7 md:mt-9 flex items-center justify-center gap-2.5 rotate-1 font-hand text-lg md:text-xl" style="color: #a5b4fc;">
+              trabajamos con negocios de toda la región
+              <svg class="w-4 h-4 -rotate-6" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
             </p>
           </div>
 
-          <!-- Regiones · chips editoriales -->
-          <div class="reveal-item mt-10 md:mt-12 flex flex-wrap justify-center gap-3">
+          <!-- Regiones · stickers artesanales -->
+          <div class="reveal-item mt-8 md:mt-10 flex flex-wrap justify-center gap-4">
             {[
-              { name: "Puerto Varas", slug: "puerto-varas" },
-              { name: "Osorno", slug: "osorno" },
-              { name: "Valdivia", slug: "valdivia" },
-              { name: "Ancud", slug: "ancud" },
-              { name: "Castro", slug: "castro" },
+              { name: "Puerto Varas", slug: "puerto-varas", color: "#6ee7b7", rot: "-rotate-2", br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
+              { name: "Osorno", slug: "osorno", color: "#f59e0b", rot: "rotate-1", br: "4px 12px 4px 14px / 14px 4px 12px 4px" },
+              { name: "Valdivia", slug: "valdivia", color: "#a5b4fc", rot: "-rotate-1", br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
+              { name: "Ancud", slug: "ancud", color: "#fde68a", rot: "rotate-2", br: "4px 12px 4px 14px / 14px 4px 12px 4px" },
+              { name: "Castro", slug: "castro", color: "#10b981", rot: "-rotate-2", br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
             ].map((r) => (
               <a
                 href={`/regiones/${r.slug}`}
-                class="group inline-flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 text-[11px] md:text-xs font-medium tracking-[0.1em] uppercase transition-all duration-300"
-                style="color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);"
-                onmouseover="this.style.background='rgba(99,102,241,0.12)'; this.style.borderColor='rgba(99,102,241,0.3)'; this.style.color='rgba(255,255,255,0.85)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.06)'; this.style.color='rgba(255,255,255,0.5)'"
+                class={`group inline-flex items-center gap-2 ${r.rot} px-4 md:px-5 py-2 md:py-2.5 font-hand text-base md:text-lg border-2 border-dashed transition-transform duration-300 hover:rotate-0`}
+                style={`color: ${r.color}; border-color: ${r.color}55; background: ${r.color}14; border-radius: ${r.br};`}
+                aria-label={`Agencia digital en ${r.name}`}
               >
-                <span>{r.name}</span>
-                <svg class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -ml-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke={r.color} stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                {r.name}
               </a>
             ))}
           </div>
@@ -349,22 +432,24 @@ const iconMap = {
 
       <div class="relative mx-auto max-w-6xl px-6 py-24 md:py-32">
         <div class="reveal-group">
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Portafolio</p>
+          <div class="reveal-item flex items-center gap-2.5 -rotate-1 w-fit font-hand text-lg md:text-xl mb-6 md:mb-8" style="color: #fde68a;">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+            Portafolio
+          </div>
           <div class="reveal-item flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
             <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] max-w-2xl">
-              Proyectos que<br /><span style="color: #6366f1cc;">ya están en producción</span>
+              Proyectos que<br /><span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #a5b4fc);">ya están en producción</span>
+              <svg class="block w-[58%] h-2.5 mt-1.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
             </h2>
-            <a href="/portafolio" class="group inline-flex items-center gap-2 text-[11px] md:text-xs font-medium tracking-[0.15em] uppercase transition-colors shrink-0"
-              style="color: rgba(255,255,255,0.5);"
-              onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">
+            <a href="/portafolio" class="group inline-flex items-center gap-2 -rotate-1 shrink-0 font-hand text-base md:text-xl transition-transform duration-300 hover:rotate-1" style="color: #fde68a;">
               Ver portafolio completo
-              <svg class="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              <svg class="w-4 h-4 -rotate-6 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
             </a>
           </div>
         </div>
 
         <div class="reveal-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px" style="background: rgba(255,255,255,0.06);">
-          {projectsData.slice(0, 6).map((p) => (
+          {projectsData.slice(0, 6).map((p, i) => (
             <a
               href={p.url}
               target="_blank"
@@ -386,13 +471,16 @@ const iconMap = {
                   </div>
                 )}
                 <div class="absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100" style="background: linear-gradient(to top, rgba(1,1,1,0.9), rgba(1,1,1,0.1));"></div>
+                <span class="absolute top-3 left-3 px-2 py-0.5 font-hand text-sm -rotate-2" style="color: #fde68a; background: rgba(1,1,1,0.75); border: 1px dashed rgba(253,230,138,0.35); border-radius: 4px 10px 4px 8px / 8px 4px 10px 4px;">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
               <div class="relative p-6">
                 <h3 class="font-heading font-bold text-white text-base md:text-lg leading-tight tracking-[-0.02em] transition-colors group-hover:text-white/90">{p.title}</h3>
                 <p class="mt-2 text-xs text-white/40 font-body font-light leading-relaxed line-clamp-2">{p.description}</p>
                 <div class="mt-4 flex flex-wrap gap-2">
-                  {p.tags.slice(0, 4).map((t) => (
-                    <span class="text-[9px] uppercase tracking-[0.12em] px-2 py-1" style="color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);">{t}</span>
+                  {p.tags.slice(0, 4).map((t, ti) => (
+                    <span class="font-hand text-sm leading-none px-2 py-1 -rotate-1 transition-transform duration-300 group-hover:rotate-0" style={`color: ${["#f59e0b", "#10b981", "#a5b4fc"][ti % 3]}; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12);`}>{t}</span>
                   ))}
                 </div>
               </div>
@@ -410,22 +498,24 @@ const iconMap = {
 
       <div class="relative mx-auto max-w-6xl px-6 py-24 md:py-32">
         <div class="reveal-group">
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Recursos Gratuitos</p>
+          <div class="reveal-item flex items-center gap-2.5 -rotate-1 w-fit font-hand text-lg md:text-xl mb-6 md:mb-8" style="color: #fde68a;">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="#6ee7b7" stroke="none"><path d="M12 0c.9 6.6 4.8 10.5 12 12-7.2 1.5-11.1 5.4-12 12-.9-6.6-4.8-10.5-12-12 7.2-1.5 11.1-5.4 12-12z"/></svg>
+            Recursos gratuitos
+          </div>
           <div class="reveal-item flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
             <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] max-w-2xl">
-              Aprende gratis.<br /><span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">Ponlo en práctica hoy.</span>
+              Aprende gratis.<br /><span class="block text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #a5b4fc);">Ponlo en práctica hoy.</span>
+              <svg class="block w-[48%] -ml-1 h-2.5 mt-1.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
             </h2>
-            <a href="/recursos" class="group inline-flex items-center gap-2 text-[11px] md:text-xs font-medium tracking-[0.15em] uppercase transition-colors shrink-0"
-              style="color: rgba(255,255,255,0.5);"
-              onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">
+            <a href="/recursos" class="group inline-flex items-center gap-2 -rotate-1 shrink-0 font-hand text-base md:text-xl transition-transform duration-300 hover:rotate-1" style="color: #fde68a;">
               Biblioteca completa
-              <svg class="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              <svg class="w-4 h-4 -rotate-6 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
             </a>
           </div>
         </div>
 
         <!-- Índice editorial de guías · filas horizontales -->
-        <div class="reveal-group border-t border-white/10 divide-y divide-white/10">
+        <div class="reveal-group border-t-2 border-dashed divide-y-2 divide-dashed" style="border-color: rgba(255,255,255,0.12);">
           {magnets.map((m) => {
             const Icon = iconMap[m.icon] || ListChecks;
             return (
@@ -433,24 +523,25 @@ const iconMap = {
                 href={`/recursos/${m.slug}`}
                 class="reveal-item group flex items-center gap-5 md:gap-10 py-6 md:py-7 transition-colors duration-300"
               >
-                <span class="w-10 md:w-20 shrink-0 font-heading text-3xl md:text-5xl font-extrabold leading-none text-white/[0.06] transition-colors duration-300 group-hover:text-[#6366f1]/25">
+                <span class="w-10 md:w-20 shrink-0 font-hand text-3xl md:text-4xl leading-none -rotate-3 transition-transform duration-300 group-hover:rotate-0" style={{ color: ["#f59e0b", "#10b981", "#a5b4fc"][Number(m.order) % 3] }}>
                   {String(m.order).padStart(2, "0")}
                 </span>
-                <span class="hidden md:flex h-12 w-12 shrink-0 items-center justify-center border border-white/10 text-white/70 transition-all duration-300 group-hover:border-[#6366f1]/50 group-hover:text-[#a5b4fc]">
+                <span class="hidden md:flex h-12 w-12 shrink-0 items-center justify-center border-2 border-dashed transition-all duration-300 group-hover:border-[#6366f1]/50 group-hover:text-[#a5b4fc]" style="border-radius: 6px 14px 6px 12px / 12px 6px 14px 6px; color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.15);">
                   <Icon size={20} stroke-width="1.5" />
                 </span>
                 <span class="min-w-0 flex-1">
-                  <span class="block font-heading text-lg md:text-2xl font-bold tracking-[-0.01em] text-white transition-colors duration-300 group-hover:text-white/90">
+                  <span class="relative inline-block font-heading text-lg md:text-2xl font-bold tracking-[-0.01em] text-white transition-colors duration-300 group-hover:text-white/90">
                     {m.title}
+                    <svg class="absolute -bottom-1.5 left-0 w-full h-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" viewBox="0 0 300 6" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"><path d="M2 4c40-4 80 4 120 0s80-4 120 0" /></svg>
                   </span>
                   <span class="mt-1 block font-body text-xs md:text-sm leading-[1.6] text-white/45 line-clamp-1">
                     {m.promise}
                   </span>
                 </span>
-                <span class="hidden lg:inline shrink-0 font-body text-[10px] uppercase tracking-[0.2em] text-white/30">
+                <span class="hidden lg:inline shrink-0 font-hand text-base md:text-lg rotate-1 transition-transform duration-300 group-hover:rotate-0" style="color: #a5b4fc;">
                   {m.audience}
                 </span>
-                <ArrowUpRight size={18} stroke-width="2" class="shrink-0 text-white/30 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[#a5b4fc]" />
+                <svg class="w-4 h-4 shrink-0 -rotate-6 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
               </a>
             );
           })}
@@ -472,17 +563,21 @@ const iconMap = {
 
       <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44 text-center">
         <div class="reveal-group">
-          <!-- Label editorial -->
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Contacto</p>
+          <!-- Anotación manuscrita · hablemos -->
+          <div class="reveal-item flex items-center justify-center gap-2.5 -rotate-1 w-fit mx-auto font-hand text-lg md:text-xl mb-6 md:mb-8" style="color: #fde68a;">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            Hablemos
+          </div>
 
           <!-- Título -->
           <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px] lg:tracking-[-3px]">
             Listo para impulsar<br />
-            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">tu negocio?</span>
+            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #a5b4fc);">tu negocio?</span>
+            <svg class="block w-[42%] mx-auto h-3 mt-2" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
           </h2>
 
-          <!-- Separador -->
-          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
+          <!-- Garabato separador -->
+          <svg class="reveal-item mx-auto my-8 md:my-10 block w-24 h-2.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
 
           <!-- Descripción -->
           <p class="reveal-item mx-auto max-w-xl text-sm md:text-base lg:text-lg text-white/50 font-body font-light leading-relaxed">
@@ -493,8 +588,8 @@ const iconMap = {
           <div class="reveal-item mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-5">
             <a
               href="/contacto"
-              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300"
-              style="color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase -rotate-1 transition-all duration-300 hover:rotate-0"
+              style="color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 8px 30px rgba(99,102,241,0.25);"
             >
               <span>Contáctanos</span>
               <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
@@ -502,15 +597,15 @@ const iconMap = {
             <span class="text-[11px] md:text-xs text-white/30 font-body tracking-wide">o llama al <span class="text-white/50">+56966929818</span></span>
           </div>
 
-          <!-- Trust signals · chips editoriales -->
-          <div class="reveal-item mt-12 md:mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
+          <!-- Trust signals · notas manuscritas -->
+          <div class="reveal-item mt-12 md:mt-14 flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
             {[
-              { label: "Sin compromiso", accent: "#6366f1" },
-              { label: "Respuesta en 24 hrs", accent: "#10b981" },
-              { label: "Atención personalizada", accent: "#6366f1" },
+              { label: "Sin compromiso", accent: "#6366f1", rot: "-rotate-2" },
+              { label: "Respuesta en 24 hrs", accent: "#10b981", rot: "rotate-1" },
+              { label: "Atención personalizada", accent: "#f59e0b", rot: "-rotate-1" },
             ].map((t) => (
-              <span class="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium tracking-[0.1em] uppercase" style="color: rgba(255,255,255,0.35);">
-                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke={t.accent} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class={`inline-flex items-center gap-2 ${t.rot} font-hand text-base md:text-lg transition-transform duration-300 hover:rotate-0`} style="color: rgba(255,255,255,0.65);">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke={t.accent} stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
                 {t.label}
               </span>
             ))}
