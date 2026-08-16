@@ -8,7 +8,6 @@ import Footer from "../components/Footer.astro";
 import CasoCard from "../components/casos/CasoCard.astro";
 import OfertaFundador from "../components/casos/OfertaFundador.astro";
 import TestimoniosReservados from "../components/casos/TestimoniosReservados.astro";
-import { ChevronLeft, ChevronRight } from "@lucide/astro";
 import { CASOS, INDUSTRIAS } from "../data/casos";
 import { CUPOS_FUNDADOR } from "../data/oferta-fundador";
 
@@ -60,21 +59,32 @@ const stats = [
       <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
       <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
 
-      <div class="relative mx-auto grid w-full max-w-[72rem] gap-12 px-6 pb-24 pt-36 lg:grid-cols-[1fr_16rem] lg:gap-8">
+      <!-- Decoración de archivo (aria-hidden · responsive: escala fluida) -->
+      <div class="pointer-events-none absolute right-2 top-0 z-10 sm:right-4" aria-hidden="true">
+        <div class="border border-dashed border-white/[0.15] border-b-0 bg-[#010101] px-2.5 pb-1.5 pt-1 font-mono text-[7px] tracking-[0.25em] text-white/35 sm:px-4 sm:pb-2.5 sm:pt-1.5 sm:text-[9px] sm:tracking-[0.3em]">ARCHIVO · CASOS</div>
+      </div>
+      <div class="pointer-events-none absolute -left-8 top-[20%] h-[26%] w-[14%] rotate-[-3deg] border border-dashed border-white/[0.07] md:-left-16 md:top-[18%] md:h-[52%] md:w-[34%]" aria-hidden="true" />
+      <div class="pointer-events-none absolute -right-10 top-[30%] hidden h-[42%] w-[26%] rotate-[2.5deg] border border-dashed border-white/[0.05] lg:block" aria-hidden="true" />
+      <span class="pointer-events-none absolute right-1 top-8 z-0 select-none font-hand text-[clamp(4.5rem,22vw,15rem)] leading-none text-white/[0.05] sm:right-4 md:top-12 lg:top-16" aria-hidden="true">2026</span>
+
+      <div class="relative mx-auto grid w-full gap-12 px-5 pb-24 pt-32 sm:px-8 md:px-10 md:pb-28 md:pt-36 lg:grid-cols-[1fr_16rem] lg:gap-8 lg:px-10 xl:px-20 2xl:px-28">
         <div class="reveal-group">
           <div class="reveal-item mb-12 md:mb-16">
             <Breadcrumbs items={[{ name: "Casos", path: "/casos" }]} />
           </div>
 
-          <p class="reveal-item font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/40 md:text-xs">
-            Casos de estudio · Sur de Chile
-          </p>
-          <h1 class="reveal-item mt-5 font-heading text-[clamp(2.7rem,7.5vw,6.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-white">
+          <div class="reveal-item flex flex-wrap items-center justify-between gap-3">
+            <p class="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/40 md:text-xs">
+              Casos de estudio · Sur de Chile
+            </p>
+            <span class="inline-flex rotate-[-4deg] border-2 border-dashed border-white/20 px-2.5 py-1 font-mono text-[8px] tracking-[0.22em] text-white/50 sm:px-3 sm:py-1.5 sm:text-[9px] sm:tracking-[0.25em]" aria-hidden="true">ARCHIVO · 2026</span>
+          </div>
+          <h1 class="reveal-item mt-6 font-heading text-[clamp(2.7rem,8vw,8.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-white">
             Trabajo real,<br />
             números reales.<br />
             <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">Sin humo.</span>
           </h1>
-          <p class="reveal-item mt-7 max-w-xl font-body text-sm font-light leading-[1.8] text-white/50 md:text-base">
+          <p class="reveal-item mt-7 max-w-2xl font-body text-sm font-light leading-[1.8] text-white/50 md:text-lg">
             Somos una agencia digital en Puerto Varas. Construimos automatización con IA para pymes del sur y lo mostramos con trabajo propio: cada caso con su problema, su solución y sus números.
           </p>
 
@@ -96,11 +106,11 @@ const stats = [
           </div>
 
           <!-- Stats · data-driven, inline editorial -->
-          <dl class="reveal-item mt-16 grid grid-cols-2 gap-y-10 sm:grid-cols-4 sm:divide-x sm:divide-white/10">
+          <dl class="reveal-item mt-16 grid grid-cols-2 gap-y-10 border-b-2 border-dashed border-white/10 pb-10 sm:grid-cols-4 sm:divide-x sm:divide-white/10">
             {stats.map((s) => (
               <div class="pr-8 sm:pl-8 sm:first:pl-0">
                 <dt class="font-body text-[9px] uppercase tracking-[0.2em] text-white/35 md:text-[10px]">{s.label}</dt>
-                <dd class="mt-2 font-heading text-3xl font-bold tracking-[-0.02em] text-white md:text-4xl">{s.valor}</dd>
+                <dd class="mt-2 font-heading text-3xl font-bold tracking-[-0.02em] text-white md:text-5xl">{s.valor}</dd>
               </div>
             ))}
           </dl>
@@ -134,39 +144,45 @@ const stats = [
       </div>
     </section>
 
-    <!-- ===== Showcase horizontal editorial (la imagen es la tarjeta) ===== -->
-    <section id="showcase" class="relative w-full scroll-mt-20 bg-[#0A0A0A]" aria-label="Casos de estudio">
-      <div class="mx-auto max-w-[72rem] px-6 pt-20 md:pt-28">
-        <div class="reveal-group flex flex-wrap items-end justify-between gap-6">
+    <!-- ===== Archivo de Casos Sobre la Mesa · filas full-width (GSAP) ===== -->
+    <section
+      id="showcase"
+      data-gsap-casos="section"
+      class="relative w-full scroll-mt-20 overflow-hidden bg-[#0A0A0A]"
+      aria-label="Casos de estudio"
+    >
+      <!-- Encabezado del archivo (reveal editorial con GSAP) -->
+      <div data-gsap-casos="header" class="mx-auto max-w-[72rem] px-6 pt-20 md:pt-28">
+        <div class="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p class="reveal-item font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30 md:text-xs">01 · El trabajo</p>
-            <h2 class="reveal-item mt-3 font-heading text-3xl font-bold tracking-[-0.5px] text-white md:text-5xl">Casos</h2>
-          </div>
-          <div class="reveal-item flex items-center gap-5">
-            <span id="casos-count" class="font-mono text-[11px] tracking-[0.14em] text-white/25" aria-live="polite"></span>
-            <div class="hidden gap-2 md:flex">
-              <button
-                type="button"
-                id="track-prev"
-                aria-label="Caso anterior"
-                class="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-white/50 transition-all duration-300 hover:border-white/[0.2] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+            <p data-gsap-casos="eyebrow" class="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30 md:text-xs">01 · El trabajo</p>
+            <h2 class="relative mt-3 font-heading text-3xl font-bold tracking-[-0.5px] text-white md:text-5xl">
+              <span data-gsap-casos="title">Casos sobre la mesa</span>
+              <svg
+                data-gsap-casos="underline"
+                class="absolute -bottom-3 left-0 hidden h-3 w-full md:block"
+                viewBox="0 0 320 12"
+                fill="none"
+                preserveAspectRatio="none"
+                aria-hidden="true"
               >
-                <ChevronLeft class="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                id="track-next"
-                aria-label="Siguiente caso"
-                class="flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-white/50 transition-all duration-300 hover:border-white/[0.2] hover:text-white disabled:opacity-30 disabled:pointer-events-none"
-              >
-                <ChevronRight class="h-4 w-4" />
-              </button>
-            </div>
+                <path
+                  d="M3 8 C 70 2, 190 3, 317 6"
+                  stroke="#6ee7b7"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  pathLength="1"
+                  style="stroke-dasharray: 1; stroke-dashoffset: 0;"
+                />
+              </svg>
+            </h2>
+            <p class="mt-5 font-hand text-lg md:text-xl" style="color: #fde68a;">todas las historias, una sola mesa</p>
           </div>
+          <span id="casos-count" class="font-mono text-[11px] tracking-[0.14em] text-white/25" aria-live="polite"></span>
         </div>
 
         <!-- Chips de filtro por industria -->
-        <div class="reveal-item mt-8 flex flex-wrap gap-2">
+        <div class="mt-10 flex flex-wrap gap-2">
           <button
             type="button"
             data-filter-btn
@@ -190,37 +206,34 @@ const stats = [
         </div>
       </div>
 
-      <!-- Track horizontal con snap -->
-      <div class="mt-10">
+      <!-- Regla superior del archivo (se dibuja con GSAP; visible sin JS) -->
+      <div class="mx-auto max-w-[110rem] px-6 pt-12 sm:px-8 md:pt-16 lg:px-12 xl:px-16 2xl:px-24">
         <div
-          id="casos-track"
-          class="scroll-luxury flex snap-x snap-mandatory gap-5 overflow-x-auto pb-8 pt-2 [scroll-padding-inline:1.5rem] md:[scroll-padding-inline:max(1.5rem,calc((100vw_-_72rem)/2))]"
-        >
-          <div class="min-w-6 md:min-w-[max(1.5rem,calc((100vw_-_72rem)/2))] shrink-0" aria-hidden="true" />
-          {CASOS.map((caso, i) => (
-            <CasoCard caso={caso} index={i} />
-          ))}
-          <div class="min-w-6 shrink-0 md:min-w-[max(1.5rem,calc((100vw-72rem)/2))]" aria-hidden="true" />
-        </div>
+          data-gsap-casos="rule-top"
+          class="h-0.5 w-full origin-left"
+          style="background: repeating-linear-gradient(90deg, rgba(255,255,255,0.14) 0 8px, transparent 8px 14px);"
+        />
+      </div>
 
-        <!-- Progress bar del scroll horizontal -->
-        <div class="mx-auto max-w-[72rem] px-6">
-          <div class="h-[2px] w-full bg-white/[0.06]">
-            <div id="track-progress" class="h-full bg-gradient-to-r from-indigo-400 to-violet-400 transition-[width] duration-200 ease-out" style="width:0%" />
-          </div>
+      <!-- Hojas del archivo · una fila full-width por caso -->
+      <div data-gsap-casos="deck" class="mt-0">
+        {CASOS.map((caso, i) => (
+          <CasoCard caso={caso} index={i} />
+        ))}
+      </div>
 
-          <!-- Estado vacío (robustez: filtro sin resultados) -->
-          <div id="casos-empty" class="mt-10 hidden rounded-[1.25rem] border border-dashed border-white/[0.08] px-6 py-16 text-center" role="status">
-            <p class="font-body text-sm text-white/40">No hay casos de esta industria todavía.</p>
-            <button
-              type="button"
-              data-filter-btn
-              data-filter="todos"
-              class="mt-5 border border-white/[0.08] bg-white/[0.03] px-4 py-2 font-body text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors hover:text-white/80"
-            >
-              Ver todos los casos
-            </button>
-          </div>
+      <!-- Estado vacío (robustez: filtro sin resultados) -->
+      <div class="mx-auto max-w-[72rem] px-6 pb-6">
+        <div id="casos-empty" class="mt-12 hidden rounded-[1.25rem] border border-dashed border-white/[0.08] px-6 py-16 text-center" role="status">
+          <p class="font-body text-sm text-white/40">No hay casos de esta industria todavía.</p>
+          <button
+            type="button"
+            data-filter-btn
+            data-filter="todos"
+            class="mt-5 border border-white/[0.08] bg-white/[0.03] px-4 py-2 font-body text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors hover:text-white/80"
+          >
+            Ver todos los casos
+          </button>
         </div>
       </div>
     </section>
@@ -249,91 +262,332 @@ const stats = [
   <Footer />
 
   <style>
-    .scroll-luxury {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .scroll-luxury::-webkit-scrollbar {
-      display: none;
-    }
     .filter-btn.is-active {
       background: rgba(255, 255, 255, 0.92);
       color: #010101;
       border-color: transparent;
     }
-    @media (prefers-reduced-motion: reduce) {
-      .scroll-luxury {
-        scroll-behavior: auto;
-      }
-    }
   </style>
+
+  <!-- GSAP vía CDN (jsdelivr) — no está en package.json · mismo patrón que index.astro -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 
   <script is:inline>
     (function () {
       var btns = document.querySelectorAll("[data-filter-btn]");
       var cards = document.querySelectorAll("[data-caso-card]");
-      var track = document.getElementById("casos-track");
       var emptyEl = document.getElementById("casos-empty");
       var countEl = document.getElementById("casos-count");
-      var progressEl = document.getElementById("track-progress");
-      var prevBtn = document.getElementById("track-prev");
-      var nextBtn = document.getElementById("track-next");
 
-      function updateProgress() {
-        if (!track || !progressEl) return;
-        var max = track.scrollWidth - track.clientWidth;
-        var p = max > 0 ? (track.scrollLeft / max) * 100 : 0;
-        progressEl.style.width = p + "%";
-      }
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var hasGsap =
+        typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
 
-      function scrollByCard(dir) {
-        if (!track) return;
-        var card = track.querySelector("[data-caso-card]");
-        if (!card) return;
-        var gap = 20; // gap-5 del track
-        var target = track.scrollLeft + dir * (card.offsetWidth + gap);
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          track.scrollLeft = target;
-        } else {
-          track.scrollTo({ left: target, behavior: "smooth" });
-        }
-      }
-
-      function apply(filter) {
+      // ---------- Filtros por industria (siempre activos; no-JS-safe) ----------
+      function updateMeta(filter) {
         var visible = 0;
-        cards.forEach(function (card) {
-          var show = filter === "todos" || card.getAttribute("data-industria") === filter;
-          card.style.display = show ? "" : "none";
-          if (show) visible++;
+        cards.forEach(function (c) {
+          if (c.style.display !== "none") visible++;
         });
-
         if (emptyEl) emptyEl.classList.toggle("hidden", visible !== 0);
         if (countEl) {
           countEl.textContent =
             String(visible).padStart(2, "0") + " / " + String(cards.length).padStart(2, "0");
         }
-
         btns.forEach(function (b) {
           var active = b.getAttribute("data-filter") === filter;
           b.setAttribute("aria-pressed", active ? "true" : "false");
           b.classList.toggle("is-active", active);
         });
+      }
 
-        if (track) track.scrollLeft = 0;
-        updateProgress();
+      function applyFilter(filter) {
+        if (hasGsap && !reduce) {
+          var hide = [];
+          var show = [];
+          cards.forEach(function (c) {
+            var match = filter === "todos" || c.getAttribute("data-industria") === filter;
+            (match ? show : hide).push(c);
+          });
+
+          var tl = gsap.timeline({ overwrite: "auto" });
+          if (hide.length) {
+            tl.to(hide, {
+              autoAlpha: 0,
+              y: 24,
+              duration: 0.35,
+              ease: "power2.in",
+              stagger: 0.04,
+              onComplete: function () {
+                hide.forEach(function (c) { c.style.display = "none"; });
+                updateMeta(filter);
+              },
+            });
+          }
+          tl.add(function () {
+            show.forEach(function (c) { c.style.display = ""; });
+            updateMeta(filter);
+          });
+          if (show.length) {
+            tl.fromTo(
+              show,
+              { autoAlpha: 0, y: 24 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power3.out",
+                stagger: 0.08,
+                clearProps: "opacity,visibility,transform",
+                onComplete: function () {
+                  if (typeof window.ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+                },
+              },
+              ">-0.1"
+            );
+          }
+        } else {
+          cards.forEach(function (c) {
+            var match = filter === "todos" || c.getAttribute("data-industria") === filter;
+            c.style.display = match ? "" : "none";
+          });
+          updateMeta(filter);
+        }
       }
 
       btns.forEach(function (b) {
         b.addEventListener("click", function () {
-          apply(b.getAttribute("data-filter"));
+          applyFilter(b.getAttribute("data-filter"));
         });
       });
-      if (prevBtn) prevBtn.addEventListener("click", function () { scrollByCard(-1); });
-      if (nextBtn) nextBtn.addEventListener("click", function () { scrollByCard(1); });
-      if (track) track.addEventListener("scroll", updateProgress, { passive: true });
-      window.addEventListener("resize", updateProgress);
 
-      apply("todos");
+      // Estado inicial: visible por defecto (sin animar; GSAP hace el reveal)
+      cards.forEach(function (c) { c.style.display = ""; });
+      updateMeta("todos");
+
+      // ---------- GSAP: reveal editorial + micro-interacciones + parallax ----------
+      function initCasos() {
+        var section = document.querySelector('[data-gsap-casos="section"]');
+        if (!section) return false;
+        if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+          console.warn("[casos] GSAP no disponible — archivo estático visible por diseño");
+          return false;
+        }
+        gsap.registerPlugin(ScrollTrigger);
+
+        var q = gsap.utils.selector(section);
+        var mm = gsap.matchMedia();
+
+        // Entrada editorial: regla + encabezado + hojas + estampado
+        mm.add("casos-reveal", "(prefers-reduced-motion: no-preference)", function () {
+          var tl = gsap.timeline({
+            defaults: { ease: "power3.out" },
+            scrollTrigger: { trigger: section, start: "top 80%" },
+          });
+
+          tl.fromTo(
+            q('[data-gsap-casos="rule-top"]'),
+            { scaleX: 0 },
+            { scaleX: 1, duration: 1.1, ease: "power2.inOut" },
+            0
+          )
+            .fromTo(
+              q('[data-gsap-casos="eyebrow"]'),
+              { autoAlpha: 0, y: 14, filter: "blur(6px)" },
+              { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.7 },
+              0.15
+            )
+            .fromTo(
+              q('[data-gsap-casos="title"]'),
+              { yPercent: 40, autoAlpha: 0, filter: "blur(6px)" },
+              { yPercent: 0, autoAlpha: 1, filter: "blur(0px)", duration: 0.8 },
+              0.2
+            )
+            .fromTo(
+              q('[data-gsap-casos="underline"]'),
+              { strokeDashoffset: 1 },
+              { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" },
+              0.45
+            );
+
+          var rows = q('[data-gsap-casos="row"]');
+          if (rows.length) {
+            var rot = [1.4, -1.6, 1.2, -1.4, 1.5];
+            tl.fromTo(
+              rows,
+              {
+                y: 80,
+                autoAlpha: 0,
+                scale: 0.98,
+                rotation: function (i) { return rot[i % rot.length]; },
+              },
+              {
+                y: 0,
+                autoAlpha: 1,
+                scale: 1,
+                rotation: 0,
+                duration: 1.15,
+                stagger: function (i) { return 0.16 + (i % 2) * 0.1; },
+              },
+              0.35
+            );
+          }
+
+          var stickers = q('[data-gsap-casos="sticker"]');
+          if (stickers.length) {
+            tl.fromTo(
+              stickers,
+              { scale: 0, rotation: 40 },
+              { scale: 1, rotation: 0, duration: 1.0, ease: "elastic.out(1,0.45)", stagger: 0.06, clearProps: "transform" },
+              ">-0.6"
+            );
+          }
+
+          var stamps = q('[data-gsap-casos="stamp"]');
+          if (stamps.length) {
+            tl.fromTo(
+              stamps,
+              { scale: 0, rotation: -30 },
+              { scale: 1, rotation: 0, duration: 0.5, ease: "back.out(1.7)", stagger: 0.05, clearProps: "transform" },
+              ">-0.4"
+            );
+          }
+        });
+
+        // Micro-interacciones de oficio (mouse real, sin reduced-motion)
+        mm.add("casos-touch", "(pointer: fine) and (hover: hover) and (prefers-reduced-motion: no-preference)", function () {
+          var medias = q('[data-gsap-casos="media"]');
+          var shines = q('[data-gsap-casos="shine"]');
+          var rows = q('[data-gsap-casos="row"]');
+
+          rows.forEach(function (row, i) {
+            var media = medias[i];
+            var shine = shines[i];
+            if (!media) return;
+
+            var xTo = gsap.quickTo(media, "x", { duration: 0.5, ease: "power3.out" });
+            var yTo = gsap.quickTo(media, "y", { duration: 0.5, ease: "power3.out" });
+            var sX = shine ? gsap.quickTo(shine, "x", { duration: 0.4, ease: "power3.out" }) : null;
+            var sY = shine ? gsap.quickTo(shine, "y", { duration: 0.4, ease: "power3.out" }) : null;
+
+            row.addEventListener("pointerenter", function () {
+              gsap.to(media, { scale: 1.18, duration: 0.6, ease: "power3.out" });
+            });
+            row.addEventListener("pointerleave", function () {
+              gsap.to(media, { scale: 1.12, duration: 0.6, ease: "power3.out" });
+              if (shine) gsap.to(shine, { autoAlpha: 0, duration: 0.3 });
+            });
+            row.addEventListener("pointermove", function (e) {
+              var r = row.getBoundingClientRect();
+              var nx = (e.clientX - r.left) / r.width - 0.5;
+              var ny = (e.clientY - r.top) / r.height - 0.5;
+              xTo(nx * 16);
+              yTo(ny * 16);
+              if (shine && sX && sY) {
+                sX(nx * 60);
+                sY(ny * 60);
+                gsap.to(shine, { autoAlpha: 1, duration: 0.2, overwrite: "auto" });
+              }
+            });
+
+            // Estampado al presionar / soltar la hoja (sello + número)
+            var sticker = row.querySelector('[data-gsap-casos="sticker"]');
+            var stamp = row.querySelector('[data-gsap-casos="stamp"]');
+            row.addEventListener("pointerdown", function (e) {
+              if (e.pointerType === "mouse" && e.button !== 0) return;
+              if (sticker) gsap.to(sticker, { scale: 1.15, duration: 0.2, ease: "power2.out" });
+              if (stamp) gsap.to(stamp, { scale: 1.12, duration: 0.15, ease: "power2.out" });
+            });
+            row.addEventListener("pointerup", function () {
+              if (sticker) gsap.to(sticker, { scale: 1, duration: 0.5, ease: "elastic.out(1,0.45)" });
+              if (stamp) gsap.to(stamp, { scale: 1, duration: 0.4, ease: "back.out(1.7)" });
+            });
+          });
+        });
+
+        // Parallax sutil del fondo del visual (desktop)
+        mm.add("casos-parallax", "(min-width: 768px) and (prefers-reduced-motion: no-preference)", function () {
+          var medias = q('[data-gsap-casos="media"]');
+          gsap.set(medias, { scale: 1.12 });
+          medias.forEach(function (media) {
+            var row = media.closest('[data-gsap-casos="row"]');
+            gsap.fromTo(
+              media,
+              { yPercent: -6 },
+              {
+                yPercent: 6,
+                ease: "none",
+                scrollTrigger: {
+                  trigger: row,
+                  start: "top bottom",
+                  end: "bottom top",
+                  scrub: 0.5,
+                },
+              }
+            );
+          });
+        });
+
+        // Refresco robusto: load + fonts + delay (layout cambia con filtros/fuentes)
+        function refreshAll() {
+          if (typeof window.ScrollTrigger !== "undefined") ScrollTrigger.refresh();
+        }
+        window.addEventListener("load", refreshAll, { once: true });
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(refreshAll);
+        }
+        window.setTimeout(refreshAll, 800);
+
+        return true;
+      }
+
+      // Guard + reintento: CDN bloqueado/offline → archivo estático visible
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", function () {
+          if (!hasGsap) {
+            console.warn("[casos] GSAP no disponible al DOMContentLoaded — reintento en load");
+            window.addEventListener(
+              "load",
+              function () {
+                if (typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined") {
+                  hasGsap = true;
+                  initCasos();
+                  return;
+                }
+                var inject = function (src) {
+                  return new Promise(function (resolve, reject) {
+                    var s = document.createElement("script");
+                    s.src = src;
+                    s.async = true;
+                    s.onload = resolve;
+                    s.onerror = reject;
+                    document.head.appendChild(s);
+                  });
+                };
+                Promise.all([
+                  inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"),
+                  inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"),
+                ])
+                  .then(function () {
+                    hasGsap = true;
+                    if (!initCasos()) {
+                      console.warn("[casos] GSAP cargó pero la init falló — archivo estático");
+                    }
+                  })
+                  .catch(function () {
+                    console.warn("[casos] GSAP no cargó (CDN bloqueado u offline) — archivo estático por diseño");
+                  });
+              },
+              { once: true }
+            );
+          } else {
+            initCasos();
+          }
+        });
+      } else if (hasGsap) {
+        initCasos();
+      }
     })();
   </script>
 </BaseLayout>

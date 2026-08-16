@@ -1,10 +1,14 @@
 ---
 /**
- * CasoCard · Slide editorial cinematográfico (showcase horizontal de /casos).
- * La "imagen" es la tarjeta: capa visual generativa por caso (gradiente + patrón)
- * + número editorial gigante + overlay oscuro. Sin contenedores ni bordes.
- * - Stretched link: toda la slide es clickeable (link ::after).
+ * CasoCard · Hoja del "Archivo de Casos Sobre la Mesa" (showcase de /casos).
+ * Cada caso es una HOJA del archivo: fila full-width con zig-zag editorial
+ * (visual generativo + contenido alternados), número manuscrito gigante,
+ * sello de estado y micro-interacciones de oficio (sin tilt 3D).
+ * - Stretched link: toda la fila es clickeable (enlace absoluto).
  * - Filtrable por industria vía data-industria (script del page /casos).
+ * - NO lleva reveal-item: el reveal lo hace GSAP (data-gsap-casos="row")
+ *   con matchMedia; el observer de BaseLayout no debe tocarlo (doble
+ *   animación). Sin GSAP / reduced-motion: fila visible por defecto.
  */
 import { ArrowUpRight } from "@lucide/astro";
 import type { Caso } from "../../data/casos";
@@ -17,75 +21,120 @@ export interface Props {
 
 const { caso, index = 0 } = Astro.props;
 
-// Visual abstracto por caso · la "imagen" de cada slide (sin fotos fake).
-// Fuente única: src/lib/caso-visuals.ts (DRY).
 const visual = getCasoVisual(caso.slug);
 const numero = String(index + 1).padStart(2, "0");
 const isFundador = caso.tipo === "Cliente fundador";
+const par = index % 2 === 0;
+const accent = ["#f59e0b", "#10b981", "#a5b4fc"][index % 3];
 ---
 
 <article
   data-caso-card
   data-industria={caso.industria}
-  class="reveal-item group relative h-full w-[82vw] shrink-0 snap-start overflow-hidden sm:w-[58vw] md:w-[50vw] lg:w-[42vw]"
+  data-gsap-casos="row"
+  class="group relative w-full overflow-hidden border-b-2 border-dashed"
+  style="border-color: rgba(255,255,255,0.12);"
 >
-  <!-- Stretched link (toda la slide clickeable) -->
+  <!-- Stretched link (toda la fila clickeable) -->
   <a
     href={`/casos/${caso.slug}`}
     aria-label={`Ver caso completo: ${caso.titulo}`}
     class="absolute inset-0 z-30"
   />
 
-  <!-- Visual cinematográfico · la "imagen" es la tarjeta -->
-  <div
-    class="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:scale-[1.04]"
-    style={`background: ${visual.bg};`}
-  >
-    <div class="absolute inset-0" style={`background-image: ${visual.patternUrl}; background-size: 48px 48px;`} />
-    <div class="absolute inset-0" style="background: radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.07), transparent 70%);" />
-  </div>
-
-  <!-- Número editorial gigante -->
-  <span
-    aria-hidden="true"
-    class="pointer-events-none absolute -right-2 bottom-[-3.5rem] z-0 select-none font-heading text-[9rem] font-bold leading-none tracking-[-0.04em] text-white/[0.05] transition-transform duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-2 md:-right-4 md:text-[12rem]"
-  >
-    {numero}
-  </span>
-
-  <!-- Overlay oscuro para legibilidad -->
-  <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10" />
-
-  <!-- Contenido superpuesto -->
-  <div class="relative z-10 flex min-h-[62vh] flex-col justify-end p-7 md:min-h-[70vh] md:p-10">
-    <div class="flex items-center justify-between gap-4">
-      <span class={`inline-flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] ${isFundador ? "text-emerald-300" : "text-white/50"}`}>
-        <span class={`h-1 w-1 rounded-full ${isFundador ? "bg-emerald-300" : "bg-white/40"}`} />
-        {caso.tipo}
-      </span>
-      <span class="font-body text-[10px] uppercase tracking-[0.2em] text-white/40">{caso.industria}</span>
-    </div>
-
-    <h3 class="mt-24 max-w-md font-heading text-3xl font-bold leading-[0.98] tracking-[-0.02em] text-white md:mt-32 md:text-5xl">
-      {caso.titulo}
-    </h3>
-    <p class="mt-4 max-w-md font-body text-sm font-light leading-[1.7] text-white/60 md:text-base">
-      {caso.resumen}
-    </p>
-
-    <!-- Métricas · sin cajas, separadas por línea editorial -->
-    <div class="mt-8 grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-6">
-      {caso.metricas.slice(0, 3).map((m, mi) => (
-        <div class={`${mi === 0 ? "pl-0" : "pl-4"} pr-4`}>
-          <p class="font-body text-[9px] uppercase tracking-[0.14em] text-white/35 md:text-[10px]">{m.label}</p>
-          <p class="mt-1 font-heading text-sm font-semibold text-white/90 md:text-base">{m.valor}</p>
+  <div class="relative mx-auto flex w-full max-w-[110rem] flex-col gap-10 px-6 py-14 sm:px-8 md:py-20 lg:grid lg:grid-cols-12 lg:items-center lg:gap-0 lg:px-12 lg:py-24 xl:px-16 2xl:px-24">
+    <!-- Visual del caso · captura real del proyecto (proof of work), impresión enmarcada -->
+    <!-- relative: ancla el sticker/stamp al cajón del visual (no al article) -->
+    <div class={`relative order-1 lg:row-start-1 ${par ? "lg:col-span-5 lg:col-start-1" : "lg:col-span-5 lg:col-start-8"}`}>
+      <div
+        class={`relative aspect-[16/11] min-h-[220px] overflow-hidden transition-transform duration-500 sm:min-h-[280px] ${par ? "lg:rotate-1" : "lg:-rotate-1"} group-hover:rotate-0`}
+        style="border: 1px dashed rgba(255,255,255,0.25); border-radius: 8px 18px 8px 16px / 16px 8px 18px 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);"
+      >
+        <!-- Sin transition-transform en CSS: GSAP conduce x/y/scale/yPercent
+             (quickTo + parallax scrub). CSS transition + GSAP en la misma
+             propiedad = motion mushy (cada tick re-arranca la transición). -->
+        <div
+          data-gsap-casos="media"
+          class="absolute inset-0"
+          style={`background: ${visual.bg};`}
+        >
+          <!-- Captura real (avif→webp→png, object-top como el portafolio).
+               Decorativa: el stretched-link ya lleva aria-label. -->
+          <picture class="absolute inset-0 block">
+            <source srcset={visual.image.replace(/\.(png|jpg|jpeg)$/i, ".avif")} type="image/avif" />
+            <source srcset={visual.image.replace(/\.(png|jpg|jpeg)$/i, ".webp")} type="image/webp" />
+            <img
+              src={visual.image}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 h-full w-full object-cover object-top"
+            />
+          </picture>
+          <div class="absolute inset-0" style="background: radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.07), transparent 70%);" />
         </div>
-      ))}
+        <!-- Shine: acompaña al cursor (pointer fine + hover) -->
+        <div
+          data-gsap-casos="shine"
+          class="pointer-events-none absolute inset-0 opacity-0"
+          style="background: radial-gradient(220px 220px at 0 0, rgba(255,255,255,0.14), transparent 60%);"
+        />
+      </div>
+
+      <!-- Número editorial manuscrito (se estampa al entrar; clearProps
+           devuelve el -rotate-6/rotate-3 del CSS al terminar) -->
+      <span
+        data-gsap-casos="sticker"
+        aria-hidden="true"
+        class={`pointer-events-none absolute z-20 select-none font-hand text-[5.5rem] leading-none group-hover:rotate-0 md:text-[7.5rem] ${par ? "-right-2 top-4 -rotate-6 lg:-right-10 lg:top-6" : "-left-2 top-4 rotate-3 lg:-left-10 lg:top-6"}`}
+        style={`color: ${accent}; text-shadow: 0 4px 24px rgba(0,0,0,0.55), 0 0 44px rgba(0,0,0,0.4);`}
+      >
+        {numero}
+      </span>
+
+      <!-- Sello de estado (se estampa al entrar / se re-estampa al agarrar) -->
+      <span
+        data-gsap-casos="stamp"
+        aria-hidden="true"
+        class={`pointer-events-none absolute bottom-4 z-20 select-none border-2 px-3 py-1.5 font-body text-[9px] font-semibold uppercase tracking-[0.2em] ${par ? "right-4 -rotate-3" : "left-4 rotate-2"}`}
+        style={`border-radius: 9999px; background: rgba(0,0,0,0.28); color: ${isFundador ? "#6ee7b7" : "rgba(255,255,255,0.6)"}; border-color: ${isFundador ? "rgba(110,231,183,0.55)" : "rgba(255,255,255,0.28)"};`}
+      >
+        {isFundador ? "Fundador −30%" : "Caso interno"}
+      </span>
     </div>
 
-    <div class="mt-8 inline-flex items-center gap-2 font-body text-[11px] font-medium uppercase tracking-[0.18em] text-white/70 transition-colors duration-500 group-hover:text-white">
-      Ver caso completo
-      <ArrowUpRight class="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:translate-x-1 group-hover:-translate-y-1" />
+    <!-- Contenido editorial -->
+    <div class={`order-2 lg:row-start-1 ${par ? "lg:col-span-6 lg:col-start-7" : "lg:col-span-6 lg:col-start-1"}`}>
+      <div class="flex items-center justify-between gap-4">
+        <span class={`inline-flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] ${isFundador ? "text-emerald-300" : "text-white/50"}`}>
+          <span class={`h-1 w-1 rounded-full ${isFundador ? "bg-emerald-300" : "bg-white/40"}`} />
+          {caso.tipo}
+        </span>
+        <span class="font-body text-[10px] uppercase tracking-[0.2em] text-white/40">{caso.industria}</span>
+      </div>
+
+      <h3 class="mt-6 font-heading text-3xl font-bold leading-[0.98] tracking-[-0.02em] text-white md:text-4xl xl:text-5xl">
+        {caso.titulo}
+      </h3>
+      <p class="mt-4 max-w-xl font-body text-sm font-light leading-[1.7] text-white/60 md:text-base">
+        {caso.resumen}
+      </p>
+
+      <!-- Métricas · sin cajas, separadas por línea editorial -->
+      <div class="mt-8 grid max-w-xl grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-6">
+        {caso.metricas.slice(0, 3).map((m, mi) => (
+          <div class={`${mi === 0 ? "pl-0" : "pl-4"} pr-4`}>
+            <p class="font-body text-[9px] uppercase tracking-[0.14em] text-white/35 md:text-[10px]">{m.label}</p>
+            <p class="mt-1 font-heading text-sm font-semibold text-white/90 md:text-base">{m.valor}</p>
+          </div>
+        ))}
+      </div>
+
+      <span class="mt-8 inline-flex items-center gap-2 font-hand text-lg transition-transform duration-300 group-hover:translate-x-1" style="color: #fde68a;">
+        Ver caso completo
+        <svg class="h-4 w-4 -rotate-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </span>
     </div>
   </div>
 </article>

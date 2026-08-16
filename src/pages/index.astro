@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import StaggerText from "../components/StaggerText.astro";
 import BlurText from "../components/BlurText.astro";
 import CinematicColumn from "../components/CinematicColumn.astro";
+import ScrollCard from "../components/ScrollCard.astro";
 import Footer from "../components/Footer.astro";
 import Testimonials from "../components/Testimonials.astro";
 import testimonialsData from "../data/testimonials.json";
@@ -41,6 +42,35 @@ const iconMap = {
   "map-pin": MapPin,
 };
 
+// Portafolio · tipologías para el filtro del flujo Cobloc (derivadas de tags reales)
+const tiposProyecto = (p: any): string[] => {
+  const tipos = new Set<string>();
+  if (p.tags.some((t: string) => /IA|LLM|GPT|agente|inteligencia/i.test(t))) tipos.add("IA");
+  if (p.id === "fie" || p.id === "gestpass" || p.id === "blast-up") tipos.add("Web");
+  if (p.id === "lllit" || p.tags.some((t: string) => /Visual|Mapping|Touch/i.test(t))) tipos.add("Visuales");
+  if (p.tags.some((t: string) => /Three|WebGPU|3D/i.test(t)) || p.id === "novablast") tipos.add("3D");
+  return [...tipos];
+};
+
+// Portafolio · acento de color por proyecto (projects.json no trae color)
+const colorProyecto: Record<string, string> = {
+  fie: "#6366f1",
+  lllit: "#6ee7b7",
+  gestpass: "#f59e0b",
+  "blast-up": "#10b981",
+  novablast: "#a5b4fc",
+};
+
+// Portafolio · muestrario de tecnologías (volúmenes CSS 3D del panel 3)
+const volumenes = [
+  { tech: "Next.js", color: "#6366f1", figura: "cubo" },
+  { tech: "Astro", color: "#f97316", figura: "prisma" },
+  { tech: "Python", color: "#6ee7b7", figura: "esfera" },
+  { tech: "Three.js", color: "#a5b4fc", figura: "pirámide" },
+  { tech: "PostgreSQL", color: "#f59e0b", figura: "cubo" },
+  { tech: "TouchDesigner", color: "#fde68a", figura: "prisma" },
+];
+
 // Temporal realness (Kyle Chayka) · fecha renderizada por el servidor,
 // no un timestamp estático: honesta, cambia cada día.
 const mesesES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
@@ -73,7 +103,7 @@ const anio = _hoy.getFullYear();
   <Header />
 
   <main id="main-content">
-    <section class="relative w-full h-[100dvh] md:h-screen overflow-hidden bg-[#010101]">
+    <section id="hero" class="relative w-full h-[100dvh] md:h-screen overflow-hidden bg-[#010101]">
       <video
         src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
         autoplay loop muted playsinline
@@ -88,7 +118,7 @@ const anio = _hoy.getFullYear();
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
 
             <!-- Editorial left · full-width · proof of place -->
-            <div class="lg:col-span-7 text-left">
+            <div data-gsap="editorial" class="lg:col-span-7 text-left">
               <!-- marca · firma a mano -->
               <div class="flex items-center gap-2.5 -rotate-1 w-fit font-hand text-lg md:text-xl" style="color: #f5efe0;">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="#6ee7b7" stroke="none"><path d="M12 0c.9 6.6 4.8 10.5 12 12-7.2 1.5-11.1 5.4-12 12-.9-6.6-4.8-10.5-12-12 7.2-1.5 11.1-5.4 12-12z"/></svg>
@@ -97,7 +127,7 @@ const anio = _hoy.getFullYear();
               <!-- Coordenadas · proof of place, anotación a mano -->
               <p class="mt-3 w-fit -rotate-1 font-hand text-base md:text-lg" style="color: #a5b4fc;">
                 41.32°S · 72.98°O — Puerto Varas, Región de Los Lagos
-                <svg class="block w-full h-1.5 mt-0.5" viewBox="0 0 300 6" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"><path d="M2 4c40-4 80 4 120 0s80-4 120 0" /></svg>
+                <svg data-gsap="underline" class="block w-full h-1.5 mt-0.5" viewBox="0 0 300 6" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"><path d="M2 4c40-4 80 4 120 0s80-4 120 0" /></svg>
               </p>
 
               <h1 class="mt-5 md:mt-7 font-heading font-bold text-white leading-[1.03] tracking-[-0.02em] text-[clamp(2.1rem,4.8vw,5.5rem)]">
@@ -106,7 +136,7 @@ const anio = _hoy.getFullYear();
                   hechas por personas
                 </span>
                 <!-- subrayado a mano · sobrio -->
-                <svg class="block w-[52%] -ml-1 h-2.5 mt-1" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
+                <svg data-gsap="underline" class="block w-[52%] -ml-1 h-2.5 mt-1" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
               </h1>
 
               <p class="mt-5 md:mt-6 text-sm sm:text-base md:text-lg text-white/65 font-body font-light leading-relaxed max-w-xl">
@@ -129,14 +159,19 @@ const anio = _hoy.getFullYear();
               <!-- temporal realness · anotación manuscrita -->
               <p class="mt-6 md:mt-8 w-fit rotate-1 font-hand text-base md:text-lg" style="color: #a5b4fc;">
                 hoy es {hoy} · esto lo escribieron personas, no una plantilla
-                <svg class="block w-full h-1 mt-0.5" viewBox="0 0 300 5" preserveAspectRatio="none" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"><path d="M2 3c50-2 100 2 150 0s100-2 146-1" /></svg>
+                <svg data-gsap="underline" class="block w-full h-1 mt-0.5" viewBox="0 0 300 5" preserveAspectRatio="none" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"><path d="M2 3c50-2 100 2 150 0s100-2 146-1" /></svg>
               </p>
             </div>
 
             <!-- Proof of work · ficha técnica (desktop) -->
-            <div class="hidden lg:flex lg:col-span-5 items-end justify-end">
-              <!-- Nota adhesiva · ficha de trabajo -->
-              <div class="relative w-full max-w-sm -rotate-1 px-6 md:px-7 py-6 md:py-7 transition-transform duration-300 hover:rotate-0"
+            <div data-gsap="sheet" class="hidden lg:flex lg:col-span-5 items-end justify-end">
+              <!-- Nota adhesiva · ficha de trabajo
+                   data-gsap="sheet-drag": hook para Draggable (se mueve SOLO
+                   dentro de su grid, el wrapper data-gsap="sheet").
+                   Sin transition-transform/hover:rotate: la transición CSS de
+                   transform LAGUEARÍA en cada mousemove del drag y el hover
+                   pelearía con GSAP. cursor-grab: el papel invita a tomarlo. -->
+              <div data-gsap="sheet-drag" class="relative w-full max-w-sm -rotate-1 px-6 md:px-7 py-6 md:py-7 cursor-grab active:cursor-grabbing"
                 style="background: #f5efe0; border-radius: 3px 22px 3px 24px / 24px 3px 22px 3px; box-shadow: 0 20px 50px rgba(0,0,0,0.55);">
                 <!-- cinta adhesiva -->
                 <div class="absolute left-1/2 -top-3.5 w-28 h-6 -translate-x-1/2 -rotate-2"
@@ -162,7 +197,7 @@ const anio = _hoy.getFullYear();
       </div>
 
       <!-- Trust bar · full width -->
-      <div class="absolute bottom-0 left-0 w-full z-10 border-t border-white/10 bg-[#010101]/40 backdrop-blur-sm">
+      <div data-gsap="trust" class="absolute bottom-0 left-0 w-full z-10 border-t border-white/10 bg-[#010101]/40 backdrop-blur-sm">
         <div class="w-full px-5 sm:px-8 md:px-12 lg:px-16 py-3.5 md:py-4 flex flex-wrap items-center justify-center md:justify-between gap-x-7 gap-y-2">
           <!-- chips artesanales · hand-drawn stickers sobre la cinta -->
           <span class="inline-flex items-center gap-2 -rotate-2 px-3.5 py-1.5 border-2 border-dashed font-hand text-lg md:text-xl transition-transform duration-300 hover:rotate-0"
@@ -319,10 +354,17 @@ const anio = _hoy.getFullYear();
       ]
     })} />
 
-    <!-- Services · editorial cinematic columns -->
-    <section class="relative bg-[#0A0A0A] w-full">
-      <!-- Header -->
-      <div class="mx-auto max-w-5xl px-6 pt-20 md:pt-28 pb-14 md:pb-18 text-center">
+    <!-- Services · scroll carousel horizontal (pin + ScrollTrigger)
+         Al llegar, la sección se ancla (pin) y el scroll vertical mueve
+         las cards de izquierda a derecha (track full-bleed, transform).
+         El header queda fijo ARRIBA durante todo el pin. -->
+    <section id="servicios" data-gsap-svc="section"
+      class="relative flex min-h-screen w-full flex-col bg-[#0A0A0A]">
+      <!-- Header · sin overflow-hidden en la sección (necesario para el pin
+           de ScrollTrigger). Mantiene reveal-group: el observer global
+           dispara la entrada ANTES de que el pin comience (top top), así
+           que no hay conflicto. En mobile/reduced-motion queda estático. -->
+      <div class="mx-auto max-w-5xl shrink-0 px-6 pt-20 pb-10 text-center md:pt-28 md:pb-12">
         <div class="reveal-group">
           <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Servicios</p>
           <BlurText
@@ -334,27 +376,43 @@ const anio = _hoy.getFullYear();
         </div>
       </div>
 
-      <!-- Columnas editoriales · full-bleed, asimétricas -->
-      <div class="w-full overflow-hidden reveal-group">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12">
-          {services.map((s, i) => {
-            const span = i % 3 === 0 ? "lg:col-span-6" : "lg:col-span-3";
-            return (
-              <div class={`${span} md:col-span-1 reveal-item`}>
-                <CinematicColumn
-                  title={s.title}
-                  description={s.description}
-                  accent={s.accent}
-                  slug={s.slug}
-                  index={i}
-                  href={s.landingUrl || "/cotizar"}
-                  ctaText={s.landingUrl ? "Explorar" : "Cotizar"}
-                  compact
-                />
-              </div>
-            );
-          })}
-        </div>
+      <!-- Track full-bleed. ESTADO NATURAL (sin JS / GSAP caído / móvil /
+           reduced-motion): .svc-track en global.css = sticky deck CSS puro
+           (cartas apiladas una encima de otra que se revelan con scroll,
+           card 0 abajo, CTA coronando). En desktop con GSAP,
+           .svc-track--gsap hace las cards absolute y el pin mueve la
+           cascada mazo→columna. SIN reveal-item: el observer global
+           pelearía con el pin y las transformaciones de GSAP. -->
+      <div class="svc-track w-full px-6 pb-12 md:px-10" data-gsap-svc="track">
+        {services.map((s, i) => (
+          <ScrollCard
+            title={s.title}
+            description={s.description}
+            accent={s.accent}
+            index={i}
+            href={s.landingUrl || "/cotizar"}
+            ctaText={s.landingUrl ? "Explorar" : "Cotizar"}
+          />
+        ))}
+
+        <!-- Carta de cierre · "Ver todos los servicios" — el recorrido del
+             carousel termina exactamente en esta card (queda visible al
+             final del pin). Estética humanwashing: borde dashed, font-hand. -->
+        <a
+          href="/servicios"
+          class="svc-card group relative block h-full border border-dashed border-white/20 no-underline transition-colors duration-300 hover:border-white/40 focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
+          style="--i: 8; border-radius: 3px 22px 3px 24px / 24px 3px 22px 3px; background: #1A1A1A;"
+        >
+          <div class="flex h-full -rotate-1 flex-col items-center justify-center gap-7 p-8 text-center">
+            <span class="font-hand text-5xl leading-none text-white/80 md:text-6xl">Ver todos los servicios</span>
+            <span class="inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.2em] text-indigo-300 transition-all duration-300 group-hover:gap-5">
+              Explorar catálogo
+              <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14" /><path d="M12 5l7 7-7 7" />
+              </svg>
+            </span>
+          </div>
+        </a>
       </div>
     </section>
 
@@ -367,52 +425,54 @@ const anio = _hoy.getFullYear();
       <!-- Línea decorativa superior -->
       <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
 
-      <div class="relative mx-auto max-w-6xl px-6 py-28 md:py-36 lg:py-44">
-        <div class="reveal-group text-center">
+      <div class="relative mx-auto max-w-6xl px-6 py-28 md:py-36 lg:py-44" data-gsap-about="section">
+        <div class="text-center">
           <!-- Anotación manuscrita · sobre nosotros -->
-          <div class="reveal-item flex items-center justify-center gap-2.5 -rotate-1 w-fit mx-auto font-hand text-lg md:text-xl mb-6 md:mb-8" style="color: #fde68a;">
+          <div class="flex items-center justify-center gap-2.5 -rotate-1 w-fit mx-auto font-hand text-lg md:text-xl mb-6 md:mb-8" style="color: #fde68a;" data-gsap-about="eyebrow">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
             Sobre nosotros
           </div>
 
           <!-- Título principal · full-width en desktop + subrayado a mano -->
-          <h2 class="reveal-item font-heading font-bold text-white leading-[0.92] tracking-[-2px] md:tracking-[-3px] lg:tracking-[-4px] uppercase"
-              style="font-size: clamp(2.25rem, 7vw, 5.25rem);">
-            Agencia Digital<br />
-            <span class="block mt-1 md:mt-0 text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #a5b4fc);">Región de Los Lagos</span>
-            <svg class="block w-[56%] mx-auto h-3 mt-2" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
+          <h2 class="font-heading font-bold text-white leading-[0.92] tracking-[-2px] md:tracking-[-3px] lg:tracking-[-4px] uppercase"
+              style="font-size: clamp(2.25rem, 7vw, 5.25rem);" data-gsap-about="title">
+            <span class="block" data-gsap-about="title-line-1">Agencia Digital</span>
+            <span class="block mt-1 md:mt-0 text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #a5b4fc);" data-gsap-about="title-line-2">Región de Los Lagos</span>
+            <svg class="block w-[56%] mx-auto h-3 mt-2" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round" data-gsap-about="title-underline"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" pathLength="1" /></svg>
           </h2>
         </div>
 
-        <div class="reveal-group text-center max-w-4xl mx-auto">
+        <div class="text-center max-w-4xl mx-auto" data-gsap-about="block">
           <!-- Garabato separador -->
-          <svg class="reveal-item mx-auto my-8 md:my-10 block w-24 h-2.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
+          <svg class="mx-auto my-8 md:my-10 block w-24 h-2.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" data-gsap-about="squiggle"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" pathLength="1" /></svg>
 
           <!-- Cuerpo · texto editorial con acentos manuscritos -->
-          <div class="reveal-item max-w-3xl mx-auto">
-            <p class="text-sm md:text-base lg:text-lg text-white/55 font-body font-light leading-[1.8] md:leading-[1.9] tracking-[0.01em]">
-              Mtsprz nació en <span class="text-white/80">Puerto Varas</span> con la misión de llevar <span class="relative whitespace-nowrap text-white/75">soluciones digitales<svg class="absolute -inset-x-1 -bottom-0.5 w-[calc(100%+0.5rem)] h-2 -rotate-1" viewBox="0 0 300 6" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"><path d="M2 4c40-4 80 4 120 0s80-4 120 0" /></svg></span> profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad <span class="relative whitespace-nowrap text-white/75">sin pagar precios de Santiago<svg class="absolute -inset-x-1 -inset-y-1 w-[calc(100%+0.5rem)] h-[calc(100%+0.5rem)] rotate-1" viewBox="0 0 200 24" preserveAspectRatio="none" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 5"><ellipse cx="100" cy="12" rx="99" ry="11" /></svg></span>. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
+          <div class="max-w-3xl mx-auto">
+            <p class="text-sm md:text-base lg:text-lg text-white/55 font-body font-light leading-[1.8] md:leading-[1.9] tracking-[0.01em]" data-gsap-about="body-copy">
+              Mtsprz nació en <span class="text-white/80">Puerto Varas</span> con la misión de llevar <span class="relative whitespace-nowrap text-white/75">soluciones digitales<svg class="absolute -inset-x-1 -bottom-0.5 w-[calc(100%+0.5rem)] h-2 -rotate-1" viewBox="0 0 300 6" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round"><path d="M2 4c40-4 80 4 120 0s80-4 120 0" pathLength="1" data-gsap-about="body-accent-1" /></svg></span> profesionales a las pymes del sur de Chile. Sabemos que las empresas de la Región de Los Lagos necesitan presencia digital de calidad <span class="relative whitespace-nowrap text-white/75">sin pagar precios de Santiago<svg class="absolute -inset-x-1 -inset-y-1 w-[calc(100%+0.5rem)] h-[calc(100%+0.5rem)] rotate-1" viewBox="0 0 200 24" preserveAspectRatio="none" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 5"><ellipse cx="100" cy="12" rx="99" ry="11" data-gsap-about="body-accent-2" /></svg></span>. Por eso creamos sitios web ultrarrápidos con Astro, estrategias SEO locales que realmente posicionan en Google, automatizaciones que ahorran horas de trabajo y diseño gráfico que construye marcas memorables.
             </p>
-            <p class="mt-7 md:mt-9 flex items-center justify-center gap-2.5 rotate-1 font-hand text-lg md:text-xl" style="color: #a5b4fc;">
+            <p class="mt-7 md:mt-9 flex items-center justify-center gap-2.5 rotate-1 font-hand text-lg md:text-xl" style="color: #a5b4fc;" data-gsap-about="hand-line">
               trabajamos con negocios de toda la región
               <svg class="w-4 h-4 -rotate-6" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></svg>
             </p>
           </div>
 
           <!-- Regiones · stickers artesanales -->
-          <div class="reveal-item mt-8 md:mt-10 flex flex-wrap justify-center gap-4">
+          <div class="mt-8 md:mt-10 flex flex-wrap justify-center gap-4" data-gsap-about="stickers">
             {[
-              { name: "Puerto Varas", slug: "puerto-varas", color: "#6ee7b7", rot: "-rotate-2", br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
-              { name: "Osorno", slug: "osorno", color: "#f59e0b", rot: "rotate-1", br: "4px 12px 4px 14px / 14px 4px 12px 4px" },
-              { name: "Valdivia", slug: "valdivia", color: "#a5b4fc", rot: "-rotate-1", br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
-              { name: "Ancud", slug: "ancud", color: "#fde68a", rot: "rotate-2", br: "4px 12px 4px 14px / 14px 4px 12px 4px" },
-              { name: "Castro", slug: "castro", color: "#10b981", rot: "-rotate-2", br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
+              { name: "Puerto Varas", slug: "puerto-varas", color: "#6ee7b7", rot: "-rotate-2", rotVal: -2, br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
+              { name: "Osorno", slug: "osorno", color: "#f59e0b", rot: "rotate-1", rotVal: 1, br: "4px 12px 4px 14px / 14px 4px 12px 4px" },
+              { name: "Valdivia", slug: "valdivia", color: "#a5b4fc", rot: "-rotate-1", rotVal: -1, br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
+              { name: "Ancud", slug: "ancud", color: "#fde68a", rot: "rotate-2", rotVal: 2, br: "4px 12px 4px 14px / 14px 4px 12px 4px" },
+              { name: "Castro", slug: "castro", color: "#10b981", rot: "-rotate-2", rotVal: -2, br: "4px 14px 4px 12px / 12px 4px 14px 4px" },
             ].map((r) => (
               <a
                 href={`/regiones/${r.slug}`}
                 class={`group inline-flex items-center gap-2 ${r.rot} px-4 md:px-5 py-2 md:py-2.5 font-hand text-base md:text-lg border-2 border-dashed transition-transform duration-300 hover:rotate-0`}
                 style={`color: ${r.color}; border-color: ${r.color}55; background: ${r.color}14; border-radius: ${r.br};`}
                 aria-label={`Agencia digital en ${r.name}`}
+                data-gsap-about="sticker"
+                data-rot={r.rotVal}
               >
                 <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke={r.color} stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
                 {r.name}
@@ -427,19 +487,19 @@ const anio = _hoy.getFullYear();
     </section>
 
     <!-- Portafolio · proyectos reales -->
-    <section class="relative bg-[#010101] w-full overflow-hidden">
-      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+    <section class="relative bg-[#010101] w-full overflow-hidden" data-gsap-portfolio="section">
+      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" data-gsap-portfolio="rule-top" />
 
-      <div class="relative mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <div class="reveal-group">
-          <div class="reveal-item flex items-center gap-2.5 -rotate-1 w-fit font-hand text-lg md:text-xl mb-6 md:mb-8" style="color: #fde68a;">
+      <div class="relative w-full px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 py-24 md:py-32">
+        <div data-gsap-portfolio="header">
+          <div class="flex items-center gap-2.5 -rotate-1 w-fit font-hand text-lg md:text-xl mb-6 md:mb-8" data-gsap-portfolio="eyebrow" style="color: #fde68a;">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
             Portafolio
           </div>
-          <div class="reveal-item flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] max-w-2xl">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16" data-gsap-portfolio="title">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] max-w-4xl">
               Proyectos que<br /><span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #a5b4fc);">ya están en producción</span>
-              <svg class="block w-[58%] h-2.5 mt-1.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" /></svg>
+              <svg class="block w-[58%] h-2.5 mt-1.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round" data-gsap-portfolio="underline"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" pathLength="1" /></svg>
             </h2>
             <a href="/portafolio" class="group inline-flex items-center gap-2 -rotate-1 shrink-0 font-hand text-base md:text-xl transition-transform duration-300 hover:rotate-1" style="color: #fde68a;">
               Ver portafolio completo
@@ -448,40 +508,75 @@ const anio = _hoy.getFullYear();
           </div>
         </div>
 
-        <div class="reveal-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px" style="background: rgba(255,255,255,0.06);">
+        <!-- Catálogo editorial · filas full-width (hojas sobre la mesa) -->
+        <!-- data-gsap-portfolio nuevos: "stamp" = sello en producción  -->
+        <!-- (se estampa al entrar y se re-estampa al hover)           -->
+        <div class="border-t-2 border-dashed divide-y-2 divide-dashed" style="border-color: rgba(255,255,255,0.12);">
           {projectsData.slice(0, 6).map((p, i) => (
             <a
               href={p.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="reveal-item group relative overflow-hidden"
-              style="background: #0A0A0A;"
+              class="group grid grid-cols-1 md:grid-cols-12 items-center gap-8 md:gap-12 py-10 md:py-14"
+              data-gsap-portfolio="card"
             >
-              <div class="relative aspect-[16/10] overflow-hidden">
-                {p.images[0] ? (
-                  <img
-                    src={p.images[0]}
-                    alt={p.title}
-                    loading="lazy"
-                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                  />
-                ) : (
-                  <div class="w-full h-full flex items-center justify-center" style="background: rgba(99,102,241,0.08);">
-                    <span class="text-xs uppercase tracking-[0.2em] font-heading font-bold" style="color: rgba(99,102,241,0.6);">{p.title}</span>
+              <!-- Impresión · marco artesanal (5/12, zig-zag en desktop) -->
+              <div class={`relative md:col-span-5 ${i % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
+                <div
+                  class="relative aspect-[16/10] overflow-hidden border border-dashed border-white/15 transition-colors duration-300 group-hover:border-[rgba(245,158,11,0.45)]"
+                  style="border-radius: 6px 14px 6px 12px / 12px 6px 14px 6px; background: #0A0A0A;"
+                >
+                  <div class="absolute inset-0 overflow-hidden" data-gsap-portfolio="media">
+                    {p.images[0] ? (
+                      <img
+                        src={p.images[0]}
+                        alt={p.title}
+                        loading="lazy"
+                        class="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex items-center justify-center" style="background: rgba(99,102,241,0.08);">
+                        <span class="text-xs uppercase tracking-[0.2em] font-heading font-bold" style="color: rgba(99,102,241,0.6);">{p.title}</span>
+                      </div>
+                    )}
                   </div>
-                )}
-                <div class="absolute inset-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100" style="background: linear-gradient(to top, rgba(1,1,1,0.9), rgba(1,1,1,0.1));"></div>
-                <span class="absolute top-3 left-3 px-2 py-0.5 font-hand text-sm -rotate-2" style="color: #fde68a; background: rgba(1,1,1,0.75); border: 1px dashed rgba(253,230,138,0.35); border-radius: 4px 10px 4px 8px / 8px 4px 10px 4px;">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+                  <!-- Sello "en producción" · se estampa con la fila y al hover -->
+                  <span
+                    data-gsap-portfolio="stamp"
+                    class="absolute top-3 right-3 z-10 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.15em] rotate-2"
+                    style="color: #6ee7b7; background: rgba(1,1,1,0.78); border: 1px dashed rgba(110,231,183,0.5); border-radius: 3px 9px 4px 8px / 8px 4px 9px 3px;"
+                  >en producción</span>
+                  <div
+                    data-gsap-portfolio="shine"
+                    class="pointer-events-none absolute left-[-50%] top-[-50%] z-10 h-[200%] w-[200%] opacity-0"
+                    style="background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.09), rgba(255,255,255,0.03) 40%, transparent 65%);"
+                  ></div>
+                </div>
               </div>
-              <div class="relative p-6">
-                <h3 class="font-heading font-bold text-white text-base md:text-lg leading-tight tracking-[-0.02em] transition-colors group-hover:text-white/90">{p.title}</h3>
-                <p class="mt-2 text-xs text-white/40 font-body font-light leading-relaxed line-clamp-2">{p.description}</p>
-                <div class="mt-4 flex flex-wrap gap-2">
-                  {p.tags.slice(0, 4).map((t, ti) => (
-                    <span class="font-hand text-sm leading-none px-2 py-1 -rotate-1 transition-transform duration-300 group-hover:rotate-0" style={`color: ${["#f59e0b", "#10b981", "#a5b4fc"][ti % 3]}; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12);`}>{t}</span>
-                  ))}
+
+              <!-- Contenido editorial (7/12) -->
+              <div class={`md:col-span-7 ${i % 2 === 0 ? "md:order-2" : "md:order-1"}`}>
+                <div class="flex items-start gap-4 md:gap-6">
+                  <span
+                    data-gsap-portfolio="sticker"
+                    class="shrink-0 font-hand text-5xl md:text-6xl leading-none -rotate-3 px-3 py-1.5 border-2 border-dashed transition-transform duration-300 group-hover:rotate-0"
+                    style={{ color: ["#f59e0b", "#10b981", "#a5b4fc"][i % 3], borderColor: "rgba(255,255,255,0.14)", borderRadius: "6px 14px 6px 12px / 12px 6px 14px 6px" }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div class="min-w-0 flex-1">
+                    <h3 class="font-heading font-bold text-white text-xl sm:text-2xl md:text-3xl leading-tight tracking-[-0.02em] transition-colors duration-300 group-hover:text-white/90">{p.title}</h3>
+                    <p class="mt-3 text-sm md:text-base text-white/45 font-body font-light leading-[1.7]">{p.description}</p>
+                    <div class="mt-5 flex flex-wrap gap-2">
+                      {p.tags.slice(0, 4).map((t, ti) => (
+                        <span class="font-hand text-sm leading-none px-2.5 py-1.5 -rotate-1 transition-transform duration-300 group-hover:rotate-0" style={`color: ${["#f59e0b", "#10b981", "#a5b4fc"][ti % 3]}; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12);`}>{t}</span>
+                      ))}
+                    </div>
+                    <span class="mt-6 inline-flex items-center gap-2 font-hand text-base md:text-lg transition-all duration-300 group-hover:translate-x-1" style="color: #fde68a;">
+                      Ver proyecto
+                      <svg class="w-4 h-4 -rotate-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                    </span>
+                  </div>
                 </div>
               </div>
             </a>
@@ -618,4 +713,804 @@ const anio = _hoy.getFullYear();
   </main>
 
   <Footer />
+
+  <!-- ============================================================
+       HERO · Animación scroll bi-direccional (GSAP + ScrollTrigger)
+       Estética "Made by Humans" · collage que se des-escribe
+       ------------------------------------------------------------
+       · GSAP vía CDN (jsdelivr) — no está en package.json
+       · Solo transform + opacity + stroke-dashoffset → GPU (60fps)
+       · scrub: 1 → progreso ligado al scroll en AMBAS direcciones
+       · Entrada "destacado": subrayados se DIBUJAN como marcador al
+         cargar (from() independiente del scrub, delays asimétricos)
+       · Draggable: la ficha de trabajo se mueve SOLO en su grid
+         (bounds = wrapper col-span-5). Interacción, no animación:
+         matchMedia propio sin prefers-reduced-motion.
+       · gsap.matchMedia() → móvil y reduced-motion ligero / apagado
+       · Sin-JS seguro: nada se oculta (tweens con estado natural en 0)
+       ============================================================ -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
+  <script is:inline>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const hero = document.getElementById("hero");
+      if (!hero) return;
+
+      // Selectores scoped al hero (nunca clases globales)
+      const q = gsap.utils.selector(hero);
+      const video = q("video")[0];
+      const editorial = q('[data-gsap="editorial"]')[0];
+      const sheet = q('[data-gsap="sheet"]')[0];
+      const trust = q('[data-gsap="trust"]')[0];
+      const underlines = q('[data-gsap="underline"] path');
+
+      // --- Construcción del collage (una sola timeline por viewport) ---
+      function buildCollage(tl, videoScale) {
+        // 1) Ken Burns · el video respira (scale base 1.15 evita huecos
+        //    cuando el contenido sube — las gradientes top/bottom ya tapan)
+        tl.fromTo(
+          video,
+          { scale: 1.15, willChange: "transform" },
+          { scale: videoScale, duration: 1, ease: "none" },
+          0
+        );
+
+        // 2) Subrayados manuscritos se "borran" (el collage se des-escribe)
+        //    stroke-dashoffset nativo — sin DrawSVG (CDN gratis).
+        //    En progreso 0 no se toca nada: el estado natural está dibujado.
+        underlines.forEach((path) => {
+          const len = path.getTotalLength();
+          gsap.set(path, { strokeDasharray: len, strokeDashoffset: 0 });
+          tl.to(path, { strokeDashoffset: len, duration: 0.35, ease: "none" }, 0.05);
+        });
+
+        // 3) Columna editorial: sube, rota orgánicamente y deja una traza
+        //    (0.15) — como una pegatina que se despega del collage
+        tl.to(
+          editorial,
+          {
+            yPercent: -12, rotation: -2.5, opacity: 0.15,
+            transformOrigin: "50% 80%", duration: 0.7, ease: "none",
+          },
+          0.1
+        );
+
+        // 4) Ficha técnica (desktop): se despega desde su esquina superior
+        //    derecha — el mismo lenguaje de papel del resto del hero
+        if (sheet) {
+          tl.to(
+            sheet,
+            {
+              yPercent: -18, rotation: 4, opacity: 0.12,
+              transformOrigin: "88% 30%", duration: 0.75, ease: "none",
+            },
+            0.15
+          );
+        }
+
+        // 5) Trust bar: cae con el scroll (se va por abajo, fuera del hero)
+        tl.to(trust, { yPercent: 90, opacity: 0, duration: 0.4, ease: "none" }, 0.25);
+      }
+
+      gsap.matchMedia().add({
+        // Desktop: collage completo
+        desktop: "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        // Móvil: versión ligera (la ficha técnica no existe < lg)
+        mobile: "(max-width: 767.98px) and (prefers-reduced-motion: no-preference)",
+      }, (ctx) => {
+        // PASO 1 — Timeline del scrub PRIMERO. Su gsap.set() escribe
+        // strokeDasharray = longitud del path en cada subrayado (requisito
+        // para que el borrado por dashoffset funcione) y deja dashoffset 0.
+        const tl = gsap.timeline();
+        buildCollage(tl, ctx.conditions.desktop ? 1.32 : 1.26);
+
+        ScrollTrigger.create({
+          trigger: hero,
+          start: "top top",
+          end: "bottom top",
+          scrub: 1,          // sigue al scroll hacia abajo Y hacia arriba
+          animation: tl,
+        });
+
+        // PASO 2 — Entrada "destacado" (se crea DESPUÉS de la timeline):
+        // gsap.from() independiente del scrub. Como es el último tween en
+        // escribirse, su dashoffset: len (subrayado aún invisible) gana la
+        // batalla al instante; luego dibuja hasta 0 y queda completo.
+        // Si el orden fuera inverso, el gsap.set() del scrub cortaría el
+        // trazo a mitad de dibujo (flicker). El from() NO toca dasharray:
+        // lo deja en len, que es lo que el scrub ya escribió.
+        // El estado NATURAL del SVG (dibujado) vive en el HTML: si el JS
+        // falla o hay reduced-motion, los subrayados se ven completos.
+        // Delays y duraciones asimétricos — mano que dibuja: arranque,
+        // pausa (espera al StaggerText del H1) y cierre rápido.
+        const trazos = [
+          { delay: 0.35, dur: 0.6 },  // coords · antes del H1
+          { delay: 0.9,  dur: 0.7 },  // H1 · tras el char-by-char (~0.8-1s)
+          { delay: 1.1,  dur: 0.5 },  // naranja · flick final, cierra en ~1.6s
+        ];
+        const entrada = gsap.timeline();
+        underlines.forEach((path, i) => {
+          const len = path.getTotalLength();
+          entrada.from(path, {
+            strokeDashoffset: len,
+            immediateRender: true,
+            ease: "power2.out",
+            duration: trazos[i].dur,
+          }, trazos[i].delay);
+        });
+      });
+
+      // --- Draggable de la ficha de trabajo (nota adhesiva) ---------------
+      // Interacción del usuario, NO animación → matchMedia PROPIO con solo
+      // (min-width: 1024px): no hereda el no-preference del bloque anterior
+      // (reduced-motion NO apaga el drag) y al bajar de lg se revierte solo.
+      // bounds: wrapper data-gsap="sheet" (col-span-5) → la nota se mueve
+      // SOLO dentro de su grid, nunca sale a toda la página.
+      gsap.matchMedia().add("lg", "(min-width: 1024px)", () => {
+        if (typeof window.Draggable === "undefined") return;
+        gsap.registerPlugin(Draggable);
+
+        const wrapper = q('[data-gsap="sheet"]')[0];
+        const nota = q('[data-gsap="sheet-drag"]')[0];
+        if (!wrapper || !nota) return;
+
+        Draggable.create(nota, {
+          type: "x,y",
+          bounds: wrapper,           // su cajón: la columna 5 del grid
+          inertia: false,            // papel: se queda donde la dejas
+          edgeResistance: 0.7,       // el límite no se siente duro
+          cursor: "grab",            // (además de la clase tailwind)
+          activeCursor: "grabbing",
+          allowContextMenu: true,    // clic derecho sigue funcionando
+          zIndexBoost: false,        // no altera stacking (cinta, gradientes)
+        });
+      });
+    });
+  </script>
+
+  <!-- ===== Script 2 · Servicios (AISLADO del hero) =====
+       Un error en el hero ya NO mata este bloque. Estado NATURAL del
+       track = sticky deck CSS puro (cartas apiladas que se revelan con
+       scroll, visible sin JS / móvil / reduced-motion). GSAP desktop lo
+       reemplaza por la cascada mazo→columna (pin + scrub). -->
+  <script is:inline>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+        console.warn("[mtsprz] GSAP no cargó (CDN) — servicios usa sticky deck CSS puro");
+        return;
+      }
+
+      const svcSection = document.querySelector('[data-gsap-svc="section"]');
+      const svcTrack = document.querySelector('[data-gsap-svc="track"]');
+      if (svcSection && svcTrack) {
+        const svcCards = gsap.utils.toArray(".svc-track .svc-card");
+        console.log("[mtsprz] servicios GSAP activo —", svcCards.length, "cards");
+        // Desktop: mazo de cartas → cascada vertical (pin + scrub).
+        // Cada carta cae del mazo y se deposita en una columna; la siguiente
+        // arranca al ~40% de la caída anterior (overlap suave).
+        gsap.matchMedia().add(
+          "svc-desktop",
+          "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+          () => {
+            const cards = gsap.utils.toArray(".svc-track .svc-card");
+            if (!cards.length) return;
+
+            svcTrack.classList.add("svc-track--gsap");
+
+            // Geometría en funciones → invalidateOnRefresh re-evalúa en resize.
+            const vh = () => window.innerHeight;
+            const cardH = () => Math.min(vh() * 0.38, 380);
+            const gapY = () =>
+              (vh() * 0.8 - cardH()) / Math.max(1, cards.length - 1); // columna en ~80vh
+            const deckX = () => svcTrack.clientWidth / 2;
+            const deckY = () => vh() * 0.3; // mazo arriba; columna crece hacia abajo
+            const deckRot = (i) => (i % 2 === 0 ? -1.5 : 1.5);
+            const deckOffX = (i) => (i % 2 === 0 ? 3 : -3);
+            const deckOffY = (i) => i * 2.5;
+            const deckShadow = (i) =>
+              `0 ${6 + i * 2}px ${16 + i * 4}px rgba(0,0,0,${0.4 + i * 0.04})`;
+            const finalY = (i) => deckY() + (cards.length - 1 - i) * gapY();
+            const finalRot = (i) =>
+              i === cards.length - 1 ? 0 : i % 2 === 0 ? -2 : 2; // CTA recto
+            const finalShadow = () => "0 24px 60px rgba(0,0,0,0.5)";
+
+            // Estado inicial: baraja — todas apiladas, centradas, con
+            // micro-desplazamiento, rotación y sombra escalonada (card 0 arriba).
+            gsap.set(cards, {
+              position: "absolute",
+              left: deckX(),
+              top: deckY(),
+              xPercent: -50,
+              yPercent: -50,
+              transformOrigin: "center",
+            });
+            cards.forEach((card, i) => {
+              gsap.set(card, {
+                x: deckOffX(i),
+                y: deckOffY(i),
+                rotation: deckRot(i),
+                zIndex: 50 - i,
+                boxShadow: deckShadow(i),
+              });
+            });
+
+            const tl = gsap.timeline({
+              defaults: { ease: "power3.inOut" },
+              scrollTrigger: {
+                trigger: svcSection,
+                start: "top top",          // pin exacto cuando la sección llega arriba
+                end: () => "+=" + cards.length * 220, // ~1760px con 8 cartas
+                scrub: 1,                  // sigue al scroll en AMBAS direcciones
+                pin: true,                 // ancla (pinSpacing true → spacer estándar)
+                anticipatePin: 1,          // evita el salto brusco al activar el pin
+                invalidateOnRefresh: true, // re-resuelve geometría al redimensionar
+                animation: tl,
+              },
+            });
+
+            const step = 1 / cards.length;
+            const dur = step * 1.6; // overlap ~40% de la caída anterior
+            cards.forEach((card, i) => {
+              tl.to(
+                card,
+                {
+                  y: () => finalY(i) - deckY(),
+                  rotation: finalRot(i),
+                  boxShadow: finalShadow(),
+                  duration: dur,
+                },
+                step * i
+              );
+              // zIndex se mantiene ALTO durante el vuelo (50-i del mazo) y solo
+              // baja al depositarse → vuela por encima de las depositadas.
+              tl.set(card, { zIndex: i }, step * i + dur);
+            });
+          }
+        );
+
+        // Móvil / reduced-motion: NADA de pin ni transform → swipe nativo.
+        // Remueve la clase por si quedó del estado desktop: matchMedia
+        // revierte tweens/triggers pero NO las clases tocadas con classList.
+        gsap.matchMedia().add(
+          "svc-mobile",
+          "(max-width: 767.98px), (prefers-reduced-motion: reduce)",
+          () => {
+            svcTrack.classList.remove("svc-track--gsap");
+          }
+        );
+
+        // El scrollWidth puede variar tras cargar fuentes/imágenes: refresca
+        // ScrollTrigger una vez que el documento terminó de cargar.
+        window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
+      }
+    });
+  </script>
+
+  <!-- ============================================================
+       SECCIÓN SOBRE NOSOTROS · entrada editorial "Made by Humans"
+       ------------------------------------------------------------
+       · GSAP vía CDN ya cargado (gsap + ScrollTrigger)
+       · Solo transform + opacity + stroke-dashoffset → GPU (60fps)
+       · toggleActions play-none: entra UNA vez al llegar al 72%
+       · Subrayado y garabato se DIBUJAN (pathLength="1" → dasharray 1)
+       · Stickers: pop back.out con su data-rot; al final clearProps
+         devuelve el control a CSS → hover:rotate-0 sigue funcionando
+       · matchMedia no-preference: reduced-motion = sección estática
+       · Sin-JS seguro: nada oculto por CSS (tweens solo hacia dentro)
+       ============================================================ -->
+  <script is:inline>
+    window.addEventListener("DOMContentLoaded", () => {
+      if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+        console.warn("[mtsprz] GSAP no cargó (CDN) — sobre nosotros estático");
+        return;
+      }
+
+      const section = document.querySelector('[data-gsap-about="section"]');
+      if (!section) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Selectores scoped a la sección (nunca clases globales)
+      const q = gsap.utils.selector(section);
+      const eyebrow = q('[data-gsap-about="eyebrow"]')[0];
+      const titleLine1 = q('[data-gsap-about="title-line-1"]')[0];
+      const titleLine2 = q('[data-gsap-about="title-line-2"]')[0];
+      const titleUnderline = q('[data-gsap-about="title-underline"] path')[0];
+      const squiggle = q('[data-gsap-about="squiggle"] path')[0];
+      const bodyCopy = q('[data-gsap-about="body-copy"]')[0];
+      const accent1 = q('[data-gsap-about="body-accent-1"]')[0];
+      const accent2 = q('[data-gsap-about="body-accent-2"]')[0];
+      const handLine = q('[data-gsap-about="hand-line"]')[0];
+      const stickers = q('[data-gsap-about="sticker"]');
+      if (!eyebrow || !titleLine1 || !titleLine2 || !bodyCopy || !stickers.length) return;
+
+      console.log("[mtsprz] sobre nosotros GSAP activo —", 1 + stickers.length, "elementos");
+
+      gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+        // Los stickers traen transition-transform (hover:rotate-0): si no la
+        // matamos, CSS ease cada frame de GSAP y la entrada se ve lerda.
+        gsap.set(stickers, { transition: "none" });
+
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+          scrollTrigger: {
+            trigger: section,
+            // "top bottom" = dispara EXACTO cuando el top de la sección cruza
+            // el borde inferior del viewport (asomo). Es el disparo más
+            // robusto posible: inmune a desviaciones de medición/pin de
+            // servicios — nunca dispara "tarde" (la sección ya está
+            // apareciendo cuando juega la timeline).
+            start: "top bottom",
+            toggleActions: "play none none none",
+            // CRÍTICO: este trigger vive DESPUÉS del pin de servicios
+            // (~1760px). refreshPriority 1 → en cada refresh ScrollTrigger
+            // re-mide este trigger DESPUÉS de resolver el pin (default 0),
+            // si no, la posición queda desfasada.
+            refreshPriority: 1,
+          },
+        });
+
+        tl.fromTo(eyebrow, { autoAlpha: 0, y: -10, rotation: -5 }, { autoAlpha: 1, y: 0, rotation: -1, duration: 0.5 }, 0)
+          .fromTo(titleLine1, { autoAlpha: 0, y: 44, filter: "blur(6px)" }, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.7 }, "-=0.25")
+          .fromTo(titleLine2, { autoAlpha: 0, y: 44, filter: "blur(6px)" }, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.7 }, "-=0.45")
+          .fromTo(titleUnderline, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.7, ease: "power2.inOut" }, "-=0.35")
+          .fromTo(squiggle, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut" }, "-=0.2")
+          .fromTo(bodyCopy, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.7 }, "-=0.35")
+          .fromTo(accent1, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5, ease: "power2.inOut" }, "-=0.3")
+          .fromTo(accent2, { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, "-=0.35")
+          .fromTo(handLine, { autoAlpha: 0, y: 12, rotation: -4 }, { autoAlpha: 1, y: 0, rotation: 1, duration: 0.5 }, "-=0.2")
+          .fromTo(stickers,
+            { autoAlpha: 0, scale: 0.6, rotation: (i, el) => (parseFloat(el.dataset.rot) || 0) - 12 },
+            { autoAlpha: 1, scale: 1, rotation: (i, el) => parseFloat(el.dataset.rot) || 0, duration: 0.55, ease: "back.out(1.8)", stagger: 0.07 },
+            "-=0.25"
+          )
+          // Restaura hover:rotate-0: limpia transform/opacity/transition
+          // inline → CSS vuelve a mandar tras la entrada.
+          .add(() => gsap.set(stickers, { clearProps: "transform,opacity,visibility,transition" }), "+=0.15");
+
+        // Geometría cambia al cargar fuentes/imágenes → re-mide triggers.
+        window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
+      });
+
+      // Refresco robusto FUERA del matchMedia (corre siempre): el pin de
+      // servicios arriba y las fuentes/imágenes que cargan tarde pueden
+      // mover el top real de esta sección después del refresh inicial.
+      // load + document.fonts.ready + timeout de seguridad cubren
+      // bfcache / caché donde load pudo ocurrir antes del registro.
+      const refresh = () => ScrollTrigger.refresh();
+      window.addEventListener("load", refresh, { once: true });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+      setTimeout(refresh, 800);
+    });
+  </script>
+
+  <!-- ============================================================
+       SECCIÓN PORTAFOLIO · "EL CATÁLOGO SOBRE LA MESA" — handmade
+       ------------------------------------------------------------
+       Concepto editorial "Made by Humans": las filas full-width
+       (hojas de catálogo) se colocan sobre la mesa con rotación
+       asimétrica MUY sutil (±0.8–1.5°, filas anchas no admiten
+       rotaciones grandes), stagger orgánico, números que se
+       estampan (elastic amplitud baja) y sellos "en producción".
+       La regla superior y el subrayado se pintan como trazos.
+       Sin fallos falsos.
+       · Todos los dispositivos: eyebrow/título/regla/subrayado,
+         filas con stagger, stickers numéricos, sellos, tags —
+         fromTo, nada oculto por CSS sin JS.
+       · pointer:fine + reduced-motion off: SIN tilt 3D (una fila
+         full-width con perspectiva distorsiona borde dashed y
+         texto — barroco, no humano). En su lugar micro-interacciones
+         de oficio: foto enmarcada (la impresión sigue al cursor
+         ±8px con quickTo), shine cursor, marco que se enciende
+         (CSS), re-estampado del sello y micro-press del número.
+       · min-width:768px: parallax generoso en el wrapper
+         data-gsap-portfolio="media" (nunca en la <img>): scale
+         base 1.12, yPercent -6→6 con scrub.
+       · Sin plugins pro: core + ScrollTrigger únicamente.
+       ============================================================ -->
+  <script is:inline>
+    // Inicializador real (extraído para reintentar si el CDN falló en el
+    // primer intento — fallo transitorio de red — sin duplicar lógica).
+    const initPortfolio = () => {
+      if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+        console.warn("[mtsprz] GSAP no cargó (CDN) — portafolio estático");
+        return false;
+      }
+
+      // reduced-motion del SO → cero animación por diseño (a11y).
+      // El log "portafolio GSAP activo" de abajo corre igual en ambos
+      // casos: distingue diseño de bug en la consola.
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        console.info("[mtsprz] prefers-reduced-motion activo — animaciones desactivadas por diseño");
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const section = document.querySelector('[data-gsap-portfolio="section"]');
+      if (!section) return;
+
+      // Selectores scoped a la sección: nunca clases globales.
+      const q = gsap.utils.selector(section);
+      const header = q('[data-gsap-portfolio="header"]')[0];
+      const eyebrow = q('[data-gsap-portfolio="eyebrow"]')[0];
+      const title = q('[data-gsap-portfolio="title"]')[0];
+      const ruleTop = q('[data-gsap-portfolio="rule-top"]')[0];
+      const underline = q('[data-gsap-portfolio="underline"] path')[0];
+      const cards = q('[data-gsap-portfolio="card"]');
+      const medias = q('[data-gsap-portfolio="media"]');
+      const stickers = q('[data-gsap-portfolio="sticker"]');
+      const stamps = q('[data-gsap-portfolio="stamp"]');
+      const shines = q('[data-gsap-portfolio="shine"]');
+      const tags = section.querySelectorAll('[data-gsap-portfolio="card"] .flex-wrap span');
+
+      console.log("[mtsprz] portafolio GSAP activo —", cards.length, "cards");
+
+      // TODO dentro de matchMedia con no-preference: reduced-motion →
+      // cero animación, estado natural visible. Los fromTo solo ocultan
+      // cuando el JS crea el tween aquí (sin-JS seguro).
+      const mm = gsap.matchMedia();
+
+      // ---- A) Cabecera · B) mazo · C) stickers · D) tags ----
+      mm.add("portfolio-reveal", "(prefers-reduced-motion: no-preference)", () => {
+        // A) Cabecera: regla + eyebrow + título + subrayado dibujado.
+        if (header && eyebrow && title) {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: header,
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+              refreshPriority: 0,
+            },
+          });
+
+          // Regla superior: trazo que se pinta de izquierda a derecha.
+          if (ruleTop) {
+            tl.fromTo(
+              ruleTop,
+              { scaleX: 0 },
+              { scaleX: 1, duration: 0.8, ease: "power3.out" },
+              0
+            );
+          }
+
+          // Eyebrow: fade + blur + y. La rotación CSS (-rotate-1) la
+          // conserva GSAP al componer transform (computed style).
+          tl.fromTo(
+            eyebrow,
+            { autoAlpha: 0, y: 16, filter: "blur(6px)" },
+            { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power2.out" },
+            0.1
+          );
+
+          // Título: fade + yPercent 8→0 (incluye el link completo).
+          tl.fromTo(
+            title,
+            { autoAlpha: 0, yPercent: 8 },
+            { autoAlpha: 1, yPercent: 0, duration: 0.7, ease: "power3.out" },
+            "-=0.2"
+          );
+
+          // Subrayado: draw 1→0 (requiere pathLength="1" en el HTML),
+          // luego la tinta se asienta: retira la cola 5% y vuelve.
+          // Secuencia explícita SIN solapar tweens del mismo property
+          // (evita keyframes anidados en fromTo — patrón ambiguo).
+          if (underline) {
+            tl.fromTo(
+              underline,
+              { strokeDasharray: 1, strokeDashoffset: 1 },
+              { strokeDashoffset: 0, duration: 0.9, ease: "power3.out" },
+              "-=0.4"
+            );
+            tl.to(underline, { strokeDashoffset: -0.05, duration: 0.25, ease: "power1.inOut" });
+            tl.to(underline, { strokeDashoffset: 0, duration: 0.4, ease: "power2.out" });
+          }
+        }
+
+        // B) El mazo: cards que se levantan de la mesa con rotación
+        // irregular (imperfección real de mano) y stagger asimétrico.
+        // C) + D) viven EN LA MISMA timeline → se estampan al entrar
+        // en scroll (antes corrían con delay suelto sin trigger y
+        // estampaban antes de ser visibles).
+        if (cards.length) {
+          // Rotación MUY sutil en filas anchas (±0.9–1.4°): la mano
+          // asienta cada hoja con imperfección real, sin barroquismo.
+          // Rotación más presente (±1.3–1.8°): la mano asienta cada hoja
+          // con imperfección creíble, sin barroquismo.
+          const deckRot = [1.5, -1.8, 1.3, -1.5, 1.6];
+          // Stagger asimétrico más amplio: la ola de hojas se percibe
+          // claramente al entrar (pares antes, impares después).
+          const cardStagger = (i) => 0.16 + (i % 2) * 0.1;
+          const deckTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: cards[0],
+              start: "top 85%",
+              toggleActions: "play none none reverse",
+              refreshPriority: 1,
+            },
+          });
+
+          deckTl.fromTo(
+            cards,
+            { y: 80, autoAlpha: 0, scale: 0.98, rotation: (i) => deckRot[i % deckRot.length] },
+            {
+              y: 0, autoAlpha: 1, scale: 1, rotation: 0,
+              duration: 1.15, ease: "power3.out",
+              stagger: cardStagger,
+            },
+            0
+          );
+
+          // C) Stickers: elastic contenido (amplitud 1 → el número se
+          // estampa con un asentamiento perceptible, sin rebote payaso).
+          // Stagger alineado con las filas (cardStagger), offset 0 → el
+          // número se estampa con su hoja. clearProps devuelve el
+          // -rotate-3 real del CSS.
+          if (stickers.length) {
+            deckTl.fromTo(
+              stickers,
+              { scale: 0, autoAlpha: 0 },
+              {
+                scale: 1, autoAlpha: 1,
+                duration: 0.85,
+                ease: "elastic.out(1, 0.45)",
+                stagger: cardStagger,
+                clearProps: "transform",
+              },
+              0
+            );
+          }
+
+          // C2) Sellos "en producción": se estampan con back.out(1.7)
+          // (pisa con fuerza, sin rebote elástico). Offset 0 = estampa
+          // con su fila. clearProps devuelve el rotate-2 del CSS.
+          if (stamps.length) {
+            deckTl.fromTo(
+              stamps,
+              { scale: 0.7, autoAlpha: 0, rotation: -4 },
+              {
+                scale: 1, autoAlpha: 1, rotation: 0,
+                duration: 0.55, ease: "back.out(1.7)",
+                stagger: cardStagger,
+                clearProps: "transform",
+              },
+              0
+            );
+          }
+
+          // D) Tags: cinta que se pega, overshoot mínimo (back 1.4).
+          if (tags.length) {
+            deckTl.fromTo(
+              tags,
+              { autoAlpha: 0, scale: 0.8, y: 6 },
+              {
+                autoAlpha: 1, scale: 1, y: 0,
+                duration: 0.4,
+                ease: "back.out(1.4)",
+                stagger: 0.07,
+              },
+              ">-0.2"
+            );
+          }
+        }
+      });
+
+      // ---- E) Foto enmarcada + shine + re-estampado + micro-press ----
+      // SIN tilt 3D: una fila full-width con perspectiva distorsiona el
+      // borde dashed y el texto — barroco, no humano. En su lugar, de
+      // oficio: la impresión sigue al cursor ±8px (quickTo → 60fps),
+      // el shine acompaña, el marco se enciende por CSS (group-hover)
+      // y el sello se re-estampa al agarrar la hoja.
+      // pointer:fine AND hover:hover: en laptops táctiles con mouse, un
+      // toque al scrollear dispararía pointerenter → mediaX/Y ±8px sin
+      // intención. Exigir hover real elimina ese micro-drag fantasma.
+      mm.add("portfolio-touch", "(pointer: fine) and (hover: hover) and (prefers-reduced-motion: no-preference)", () => {
+        if (!cards.length) return;
+
+        // Base del parallax dinámica: si el bloque F no corre (<768px o
+        // reduced-motion), la base es 1, no 1.12 → nunca queda escala
+        // fantasma tras un resize.
+        const parallaxBase = () =>
+          window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)").matches
+            ? 1.12
+            : 1;
+
+        cards.forEach((card, i) => {
+          const shine = shines[i];
+          const media = medias[i];
+          const sticker = stickers[i];
+          const stamp = stamps[i];
+
+          // La impresión (wrapper media) sigue al cursor ±8px. GSAP
+          // compone x/y con el scale + yPercent del parallax (bloque F)
+          // sin conflicto: mismo transform, orígenes distintos.
+          const mediaX = media && gsap.quickTo(media, "x", { duration: 0.4, ease: "power2.out" });
+          const mediaY = media && gsap.quickTo(media, "y", { duration: 0.4, ease: "power2.out" });
+
+          // Shine: overlay nace centrado en la card; se desplaza
+          // (px - w/2) para llevar el centro del gradiente al puntero.
+          const shineX = shine && gsap.quickTo(shine, "x", { duration: 0.5, ease: "power2.out" });
+          const shineY = shine && gsap.quickTo(shine, "y", { duration: 0.5, ease: "power2.out" });
+          const shineOp = shine && gsap.quickTo(shine, "opacity", { duration: 0.3, ease: "power2.out" });
+
+          // Micro-press: el número se hunde un instante al agarrar.
+          const pressSticker = () => {
+            if (!sticker) return;
+            gsap.to(sticker, {
+              scale: 0.93, rotation: -2, duration: 0.2, ease: "power2.out",
+              overwrite: "auto",
+            });
+          };
+          const releaseSticker = () => {
+            if (!sticker) return;
+            gsap.to(sticker, {
+              scale: 1, rotation: -2, duration: 0.4, ease: "back.out(2)",
+              overwrite: "auto",
+            });
+          };
+
+          // Re-estampado: el sello pisa de nuevo con fuerza (elastic
+          // suave). clearProps al final devuelve el rotate-2 del CSS.
+          const restamp = () => {
+            if (!stamp) return;
+            gsap.fromTo(
+              stamp,
+              { scale: 0.7, rotation: -3 },
+              {
+                scale: 1, rotation: 0, duration: 0.5,
+                ease: "elastic.out(0.8, 0.45)",
+                overwrite: "auto",
+                clearProps: "transform",
+              }
+            );
+          };
+
+          // Hover de la impresión: base (1.12 con parallax / 1 sin él)
+          // → 1.18 en desktop o 1.05 sin parallax. overwrite auto mata
+          // el tween rival de scale al entrar/salir rápido.
+          const hoverMedia = () => {
+            if (!media) return;
+            gsap.to(media, {
+              scale: parallaxBase() === 1.12 ? 1.18 : 1.05,
+              duration: 0.4, ease: "power3.out",
+              overwrite: "auto",
+            });
+          };
+          const unHoverMedia = () => {
+            if (!media) return;
+            gsap.to(media, {
+              scale: parallaxBase(),
+              duration: 0.5, ease: "back.out(1.4)",
+              overwrite: "auto",
+            });
+          };
+
+          const onMove = (e) => {
+            const rect = card.getBoundingClientRect();
+            const px = e.clientX - rect.left;
+            const py = e.clientY - rect.top;
+            const x = px / rect.width - 0.5;   // -0.5..0.5
+            const y = py / rect.height - 0.5;
+            if (mediaX && mediaY) {
+              mediaX(x * 16);   // ±8px horizontal
+              mediaY(y * 16);   // ±8px vertical
+            }
+            if (shineX && shineY && shineOp) {
+              shineX(px - rect.width / 2);
+              shineY(py - rect.height / 2);
+              shineOp(1);
+            }
+          };
+
+          const onLeave = () => {
+            if (mediaX && mediaY) {
+              mediaX(0);
+              mediaY(0);
+            }
+            if (shineOp) shineOp(0);
+            releaseSticker();
+            unHoverMedia();
+          };
+
+          // Solo lectura: el <a> sigue siendo navegable (sin
+          // preventDefault ni stopPropagation).
+          card.addEventListener("pointermove", onMove, { passive: true });
+          card.addEventListener("pointerleave", onLeave, { passive: true });
+          card.addEventListener(
+            "pointerenter",
+            () => {
+              pressSticker();
+              restamp();
+              hoverMedia();
+            },
+            { passive: true }
+          );
+        });
+      });
+
+      // ---- F) Parallax de las impresiones · desktop + no-preference ----
+      // Vive en el wrapper data-gsap-portfolio="media" (no en la <img>)
+      // para no matar el group-hover:scale-[1.04] del CSS.
+      mm.add("portfolio-parallax", "(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+        if (!medias.length) return;
+        gsap.set(medias, { scale: 1.12 });
+        medias.forEach((media) => {
+          gsap.fromTo(
+            media,
+            { yPercent: -6 },
+            {
+              yPercent: 6,
+              ease: "none",
+              scrollTrigger: {
+                trigger: media,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0.5,
+              },
+            }
+          );
+        });
+      });
+
+      // Refresco robusto FUERA del matchMedia (corre siempre): el pin de
+      // servicios arriba y las fuentes/imágenes que cargan tarde pueden
+      // mover el top real de esta sección después del refresh inicial.
+      // load + document.fonts.ready + timeout de seguridad cubren
+      // bfcache / caché donde load pudo ocurrir antes del registro.
+      const refresh = () => ScrollTrigger.refresh();
+      window.addEventListener("load", refresh, { once: true });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+      setTimeout(refresh, 800);
+
+      return true;
+    };
+
+    // Intento 1: DOMContentLoaded — los CDN síncronos (líneas 732-734)
+    // ya se ejecutaron, así que aquí gsap existe o falló en firme.
+    window.addEventListener("DOMContentLoaded", () => {
+      if (initPortfolio()) return;
+
+      // Intento 2 (una sola vez, sin duplicar listeners): si el CDN
+      // síncrono falló por un fallo transitorio de red, se re-inyecta
+      // core + ScrollTrigger en window.load. Si sigue undefined ahí, es
+      // bloqueo real (offline/adblocker) → guard de initPortfolio deja
+      // el catálogo estático (sin-JS seguro, nada oculto por CSS).
+      console.warn("[mtsprz] GSAP no disponible al DOMContentLoaded — reintento en load");
+      window.addEventListener(
+        "load",
+        () => {
+          if (typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined") {
+            initPortfolio();
+            return;
+          }
+          const inject = (src) =>
+            new Promise((resolve, reject) => {
+              const s = document.createElement("script");
+              s.src = src;
+              s.async = true;
+              s.onload = resolve;
+              s.onerror = reject;
+              document.head.appendChild(s);
+            });
+          Promise.all([
+            inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"),
+            inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"),
+          ])
+            .then(() => {
+              if (!initPortfolio()) {
+                console.warn("[mtsprz] GSAP cargó pero la init falló — portafolio estático");
+              }
+            })
+            .catch(() => {
+              console.warn("[mtsprz] GSAP no cargó (CDN bloqueado u offline) — portafolio estático por diseño");
+            });
+        },
+        { once: true }
+      );
+    });
+  </script>
 </BaseLayout>
