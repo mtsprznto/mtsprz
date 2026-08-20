@@ -16,5 +16,6 @@ overrides:
   fast-uri: '>=3.1.5'        # GHSA-7p8r-x3mc-p8w7 (ajv — @astrojs/check, dev)
   tar: '>=7.5.21'            # GHSA-r292-9mhp-454m (@vercel/nft → node-pre-gyp, build)
   postcss: '>=8.5.23'        # GHSA-fxqj-rqcc-2cmp (vite ^8.5.17 ok, build)
+  nanoid: '>=3.3.18'         # GHSA-2v37-7h3g-55p8 (postcss → nanoid loop infinito size=0)
   path-to-regexp: '>=6.3.0'  # GHSA-9wv6-86v2-598j (routing-utils pide 6.1.0 exacto; Vercel ya usa 6.3.0 alias)
   glob: '>=11.1.0'           # override previo que estaba en package.json (pnpm 11 lo ignoraba)
