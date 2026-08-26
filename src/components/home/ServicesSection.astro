@@ -1,0 +1,130 @@
+---
+import ScrollCard from "../ScrollCard.astro";
+import BlurText from "../BlurText.astro";
+
+export interface Props {
+  services: any[];
+}
+
+const { services } = Astro.props;
+---
+
+<!-- Services · scroll carousel horizontal (pin + ScrollTrigger) -->
+<section id="servicios" data-gsap-svc="section"
+  class="relative flex min-h-screen w-full flex-col bg-[#0A0A0A]">
+  <div class="mx-auto max-w-5xl shrink-0 px-6 pt-20 pb-10 text-center md:pt-28 md:pb-12">
+    <div class="reveal-group">
+      <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Servicios</p>
+      <BlurText
+        text="Todo lo que tu negocio necesita para crecer en el entorno digital"
+        as="h2"
+        className="reveal-item text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] max-w-3xl mx-auto"
+        wordMs={60}
+      />
+    </div>
+  </div>
+
+  <div class="svc-track w-full px-6 pb-12 md:px-10" data-gsap-svc="track">
+    {services.map((s, i) => (
+      <ScrollCard
+        title={s.title}
+        description={s.description}
+        accent={s.accent}
+        index={i}
+        href={s.landingUrl || "/cotizar"}
+        ctaText={s.landingUrl ? "Explorar" : "Cotizar"}
+      />
+    ))}
+
+    <a
+      href="/servicios"
+      class="svc-card group relative block h-full border border-dashed border-white/20 no-underline transition-colors duration-300 hover:border-white/40 focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0A]"
+      style="--i: 8; border-radius: 3px 22px 3px 24px / 24px 3px 22px 3px; background: #1A1A1A;"
+    >
+      <div class="flex h-full -rotate-1 flex-col items-center justify-center gap-7 p-8 text-center">
+        <span class="font-hand text-5xl leading-none text-white/80 md:text-6xl">Ver todos los servicios</span>
+        <span class="inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.2em] text-indigo-300 transition-all duration-300 group-hover:gap-5">
+          Explorar catálogo
+          <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" /><path d="M12 5l7 7-7 7" />
+          </svg>
+        </span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- GSAP · Servicios carousel -->
+<script is:inline>
+  window.addEventListener("DOMContentLoaded", () => {
+    if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+      console.warn("[mtsprz] GSAP no cargó (CDN) — servicios usa sticky deck CSS puro");
+      return;
+    }
+
+    const svcSection = document.querySelector('[data-gsap-svc="section"]');
+    const svcTrack = document.querySelector('[data-gsap-svc="track"]');
+    if (svcSection && svcTrack) {
+      const svcCards = gsap.utils.toArray(".svc-track .svc-card");
+      console.log("[mtsprz] servicios GSAP activo —", svcCards.length, "cards");
+
+      gsap.matchMedia().add(
+        "svc-desktop",
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const cards = gsap.utils.toArray(".svc-track .svc-card");
+          if (!cards.length) return;
+
+          svcTrack.classList.add("svc-track--gsap");
+
+          const vh = () => window.innerHeight;
+          const cardH = () => Math.min(vh() * 0.38, 380);
+          const gapY = () => (vh() * 0.8 - cardH()) / Math.max(1, cards.length - 1);
+          const deckX = () => svcTrack.clientWidth / 2;
+          const deckY = () => vh() * 0.3;
+          const deckRot = (i) => (i % 2 === 0 ? -1.5 : 1.5);
+          const deckOffX = (i) => (i % 2 === 0 ? 3 : -3);
+          const deckOffY = (i) => i * 2.5;
+          const deckShadow = (i) => `0 ${6 + i * 2}px ${16 + i * 4}px rgba(0,0,0,${0.4 + i * 0.04})`;
+          const finalY = (i) => deckY() + (cards.length - 1 - i) * gapY();
+          const finalRot = (i) => i === cards.length - 1 ? 0 : i % 2 === 0 ? -2 : 2;
+          const finalShadow = () => "0 24px 60px rgba(0,0,0,0.5)";
+
+          gsap.set(cards, { position: "absolute", left: deckX(), top: deckY(), xPercent: -50, yPercent: -50, transformOrigin: "center" });
+          cards.forEach((card, i) => {
+            gsap.set(card, { x: deckOffX(i), y: deckOffY(i), rotation: deckRot(i), zIndex: 50 - i, boxShadow: deckShadow(i) });
+          });
+
+          const tl = gsap.timeline({
+            defaults: { ease: "power3.inOut" },
+            scrollTrigger: {
+              trigger: svcSection,
+              start: "top top",
+              end: () => "+=" + cards.length * 220,
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+              invalidateOnRefresh: true,
+              animation: tl,
+            },
+          });
+
+          const step = 1 / cards.length;
+          const dur = step * 1.6;
+          cards.forEach((card, i) => {
+            tl.to(card, { y: () => finalY(i) - deckY(), rotation: finalRot(i), boxShadow: finalShadow(), duration: dur }, step * i);
+            tl.set(card, { zIndex: i }, step * i + dur);
+          });
+        }
+      );
+
+      gsap.matchMedia().add(
+        "svc-mobile",
+        "(max-width: 767.98px), (prefers-reduced-motion: reduce)",
+        () => { svcTrack.classList.remove("svc-track--gsap"); }
+      );
+
+      window.addEventListener("load", () => ScrollTrigger.refresh(), { once: true });
+    }
+  });
+</script>

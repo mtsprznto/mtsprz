@@ -80,7 +80,12 @@ export const CASOS: Caso[] = [
       { label: "Segmentación", valor: "Automática" },
       { label: "Escala", valor: "Sin costo fijo" },
     ],
-    testimonio: null,
+    testimonio: {
+      nombre: "Pedro Collado Quinteros",
+      cargo: "Líder TAP · MBA (c) · Ing. Civil en Minas",
+      empresa: "Maxam",
+      cita: "Destaco especialmente su habilidad para el desarrollo de algoritmos, su disposición para enfrentar nuevos desafíos y su constante orientación hacia la mejora continua.",
+    },
     icon: "mail",
   },
   {

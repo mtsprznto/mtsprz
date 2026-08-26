@@ -231,7 +231,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
               <div class="relative aspect-[16/10] overflow-hidden bg-[#0A0A0A]">
                 <img
                   src={img}
-                  alt=""
+                  alt={post.data.title}
                   loading="lazy"
                   decoding="async"
                   class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
@@ -294,7 +294,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
                   <div class="relative aspect-[4/3] overflow-hidden bg-[#0A0A0A]">
                     <img
                       src={img}
-                      alt=""
+                      alt={post.data.title}
                       loading="lazy"
                       decoding="async"
                       class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
@@ -344,7 +344,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
                   <div class="relative aspect-[3/2] overflow-hidden bg-[#0A0A0A]">
                     <img
                       src={img}
-                      alt=""
+                      alt={post.data.title}
                       loading="lazy"
                       decoding="async"
                       class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"

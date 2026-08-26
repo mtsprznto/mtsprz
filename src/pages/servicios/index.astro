@@ -6,6 +6,7 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import CinematicColumn from "../../components/CinematicColumn.astro";
 import BlurText from "../../components/BlurText.astro";
 import Footer from "../../components/Footer.astro";
+import StickyCTA from "../../components/StickyCTA.astro";
 import { query, initDb } from "../../lib/db";
 import { toServiceDisplay } from "../../lib/service-display";
 
@@ -20,7 +21,7 @@ const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
 ---
 
 <BaseLayout
-  title="Servicios Digitales Profesionales · Mtsprz"
+  title="Servicios Digitales Profesionales · Osorno, Puerto Varas, Región de Los Lagos"
   description="Transformamos procesos manuales en software automatizado. Desarrollo web, automatizaci\u00f3n de procesos, dashboards de datos, bots WhatsApp, SEO local y m\u00e1s. Soluciones digitales para pymes en la Regi\u00f3n de Los Lagos."
   canonical="https://mtsprz.org/servicios"
   breadcrumbs={[{ name: "Servicios", path: "/servicios" }]}
@@ -339,5 +340,6 @@ const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
     </section>
   </main>
 
+  <StickyCTA text="Cotizar ahora" />
   <Footer />
 </BaseLayout>

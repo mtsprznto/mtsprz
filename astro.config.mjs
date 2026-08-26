@@ -16,7 +16,8 @@ export default defineConfig({
         !page.includes("/registro") &&
         !page.includes("/contratos") &&
         !page.includes("/buscar") &&
-        !page.includes("/cotizar"),
+        !page.includes("/cotizar") &&
+        !page.includes("/firmar"),
     }),
   ],
   output: "server",

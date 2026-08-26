@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "id": "pedro-collado-maxam",
+    "name": "Pedro Collado Quinteros",
+    "role": "Líder TAP",
+    "business": "Maxam",
+    "location": "Chile",
+    "text": "Quiero destacar el excelente trabajo de Matías, quien se ha desempeñado como programador y desarrollador de algoritmos en BLAST-UP, demostrando una gran capacidad técnica, compromiso y profesionalismo. Ha demostrado una excelente capacidad para abordar problemas complejos, transformándolos en soluciones prácticas, confiables y eficientes.",
+    "rating": 5
+  }
+]

@@ -110,6 +110,26 @@ export function sequenceEmail(step: number, name: string, unsubscribeUrl?: strin
   );
 }
 
+/* ── 2b. Secuencia día 21: testimonios + oferta ── */
+
+export function sequenceEmailStep4(name: string, unsubscribeUrl?: string): string {
+  const foot = footer(unsubscribeUrl);
+  return layout(
+    "Lo que dicen nuestros clientes",
+    `${paragraph(`Hola ${sanitizeHtml(name)},`)}
+     ${paragraph("Hemos trabajado con negocios de la Región de Los Lagos. Esto es lo que dicen:", "💬")}
+     <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:16px;margin:0 0 16px">
+       <p style="font-size:13px;color:rgba(250,250,250,0.6);margin:0 0 8px;font-style:italic;line-height:1.6">"Destaco especialmente su habilidad para el desarrollo de algoritmos, su disposición para enfrentar nuevos desafíos y su constante orientación hacia la mejora continua."</p>
+       <p style="font-size:11px;color:rgba(250,250,250,0.3);margin:0">— Pedro Collado Quinteros, Maxam</p>
+     </div>
+     ${paragraph("Si quieres algo similar para tu negocio, tenemos una oferta especial para nuevos clientes:", "🎁")}
+     ${paragraph("<strong style='color:#10b981'>-30% en tu primer proyecto</strong> · Landing, web o automatización · Solo 3 cupos disponibles")}
+     ${ctaButton(`${SITE}/diagnostico`, "Reservar mi cupo", "linear-gradient(135deg,#25D366,#128C7E)")}
+     ${paragraph("Esta oferta vence en 7 días. Si ya tomaste una decisión, perfecto — nos vemos del otro lado.", "Nota:")}`,
+    foot
+  );
+}
+
 /* ── 3. Solicitudes de reseña (J1) ── */
 
 export function reviewRequestEmail(clientName: string, project: string, day: number): string {

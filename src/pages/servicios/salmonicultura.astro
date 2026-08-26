@@ -1,0 +1,186 @@
+---
+export const prerender = false;
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import StickyCTA from "../../components/StickyCTA.astro";
+
+const title = "Desarrollo Web para Salmonicultura en Chile";
+const description = "Sitios web, dashboards y herramientas digitales para empresas salmonicultoras en la Región de Los Lagos. Portal de datos, intranet,报告es automatizados.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+>
+  <Header />
+  <main id="main-content">
+    <!-- Hero -->
+    <section class="relative min-h-[70vh] flex items-center bg-[#010101] overflow-hidden">
+      <div class="absolute inset-0 opacity-20" style="background: radial-gradient(ellipse at 30% 50%, #06b6d420 0%, transparent 60%), radial-gradient(ellipse at 70% 30%, #0891b210 0%, transparent 50%);" />
+      <div class="relative mx-auto max-w-5xl px-6 py-24 md:py-32">
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#06b6d4]/70 font-body font-medium mb-4">Sector Salmonicultura</p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[1.0] tracking-[-1.5px]">
+          Herramientas digitales<br />
+          <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #06b6d4, #0891b2);">para la industria salmonera</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-base md:text-lg text-white/50 font-body font-light leading-relaxed">
+          Dashboards de producción, portales de datos, intranets y reportes automatizados. Soluciones digitales diseñadas para la operación salmonera en el sur de Chile.
+        </p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <a href="/contacto" class="inline-flex items-center gap-3 px-7 py-3.5 text-xs font-medium tracking-[0.15em] uppercase text-white transition-all" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+            Cotizar proyecto
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://wa.me/56966929818?text=Hola,%20quiero%20información%20sobre%20herramientas%20digitales%20para%20salmonicultura" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-7 py-3.5 text-xs font-medium tracking-[0.15em] uppercase text-white/60 border border-white/10 hover:border-white/20 transition-all">
+            WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problemas que resolvemos -->
+    <section class="relative bg-[#0A0A0A] w-full py-20 md:py-28">
+      <div class="mx-auto max-w-5xl px-6">
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#06b6d4]/60 font-body font-medium mb-6">Problemas que resolvemos</p>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] mb-12">
+          La salmonicultura genera datos.<br />Lo que falta es hacerlos útiles.
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            {
+              title: "Datos en planillas sueltas",
+              desc: "Producción, mortalidad, alimento, calidad del agua — todo en Excel compartido por email. Sin histórico, sin alertas, sin trazabilidad.",
+              icon: "📊",
+            },
+            {
+              title: "Reportes manuales cada semana",
+              desc: "Alguien dedica horas a copiar datos de un sistema a otro para generar un reporte que el gerente pide viernes por la tarde.",
+              icon: "📋",
+            },
+            {
+              title: "Sin visibilidad en tiempo real",
+              desc: "El gerente quiere saber cuánto alimento se usó hoy. La respuesta es 'mañana te lo paso'. Eso no es competitivo.",
+              icon: "👁️",
+            },
+            {
+              title: "Comunicación entre centros",
+              desc: "Centros de cultivo en distintas ubicaciones, cada uno con su sistema. Consolidar datos para la matriz es un calvario.",
+              icon: "🔗",
+            },
+          ].map((item) => (
+            <div class="p-6 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-[#06b6d4]/20 transition-colors">
+              <span class="text-3xl mb-4 block">{item.icon}</span>
+              <h3 class="text-lg font-heading font-bold text-white mb-2">{item.title}</h3>
+              <p class="text-sm text-white/40 font-body font-light leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Soluciones -->
+    <section class="relative bg-[#0A0A0A] w-full py-20 md:py-28">
+      <div class="absolute inset-0 opacity-30" style="background: radial-gradient(ellipse at 60% 0%, #06b6d410 0%, transparent 50%);" />
+      <div class="relative mx-auto max-w-5xl px-6">
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#06b6d4]/60 font-body font-medium mb-6">Nuestras soluciones</p>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] mb-12">
+          Herramientas que se integran<br />con tu operación real
+        </h2>
+
+        <div class="space-y-8">
+          {[
+            {
+              title: "Dashboard de Producción",
+              desc: "Panel en tiempo real con métricas clave: biomasa, alimento, FCA, mortalidad, crecimiento. Datos de tus sensores y planillas, unificados en un solo lugar.",
+              features: ["Gráficos en tiempo real", "Alertas automáticas", "Comparativa entre centros", "Exportación a Excel/PDF"],
+            },
+            {
+              title: "Portal de Datos para Gerencia",
+              desc: "Reportes ejecutivos que se generan solos. El gerente recibe un resumen semanal por email con los KPIs que le importan.",
+              features: ["Reportes automáticos por email", "KPIs personalizados", "Historico consultable", "Acceso desde celular"],
+            },
+            {
+              title: "Intranet Operativa",
+              desc: "Portal interno donde el equipo accede a procedimientos, protocolos, capacitaciones y formularios. Todo centralizado.",
+              features: ["Documentos versionados", "Formularios digitales", "Capacitaciones online", "Búsqueda full-text"],
+            },
+            {
+              title: "Integraciones con Sistemas Existentes",
+              desc: "Conectamos tu sistema de control de alimento, sensores de calidad de agua y ERP. No reemplazamos — integramos.",
+              features: ["APIs de sensores", "Conexión con ERPs", "ETL de datos", "Webhooks en tiempo real"],
+            },
+          ].map((item) => (
+            <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.04] hover:border-[#06b6d4]/15 transition-colors">
+              <h3 class="text-xl md:text-2xl font-heading font-bold text-white mb-3">{item.title}</h3>
+              <p class="text-sm text-white/45 font-body font-light leading-relaxed mb-6 max-w-2xl">{item.desc}</p>
+              <div class="flex flex-wrap gap-2">
+                {item.features.map((f) => (
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[10px] md:text-[11px] font-body tracking-wide text-[#06b6d4]/70 border border-[#06b6d4]/15 rounded-full">
+                    <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    {f}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Stack técnico -->
+    <section class="relative bg-[#0A0A0A] w-full py-20 md:py-28">
+      <div class="mx-auto max-w-5xl px-6">
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#06b6d4]/60 font-body font-medium mb-6">Stack técnico</p>
+        <h2 class="text-3xl md:text-4xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] mb-12">
+          Tecnología probada para operaciones críticas
+        </h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { name: "Next.js", desc: "Frontend rápido" },
+            { name: "Astro", desc: "Sitios estáticos" },
+            { name: "PostgreSQL", desc: "Base de datos" },
+            { name: "Docker", desc: "Despliegue" },
+            { name: "Grafana", desc: "Monitoreo" },
+            { name: "Python", desc: "ETL y análisis" },
+            { name: "REST APIs", desc: "Integraciones" },
+            { name: "VPS/Cloud", desc: "Hosting Chile" },
+          ].map((t) => (
+            <div class="p-4 rounded-lg bg-white/[0.02] border border-white/[0.04] text-center">
+              <p class="text-sm font-heading font-bold text-white">{t.name}</p>
+              <p class="text-[10px] text-white/30 font-body mt-1">{t.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="relative bg-[#0A0A0A] w-full py-24 md:py-32">
+      <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at 50% 50%, #06b6d418 0%, transparent 50%);" />
+      <div class="relative mx-auto max-w-3xl px-6 text-center">
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#06b6d4]/60 font-body font-medium mb-6">Comencemos</p>
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-[1.0] tracking-[-1.5px] mb-6">
+          ¿Tu salmonicultura necesita<br />herramientas digitales?
+        </h2>
+        <p class="text-sm md:text-base text-white/45 font-body font-light leading-relaxed max-w-lg mx-auto mb-10">
+          Cuéntanos qué datos manejas y qué necesitas visualizar. Diseñamos la solución exacta para tu operación.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/contacto" class="inline-flex items-center gap-3 px-8 py-4 text-xs font-medium tracking-[0.15em] uppercase text-white" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+            Cotizar proyecto
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="https://wa.me/56966929818?text=Hola,%20quiero%20una%20herramienta%20digital%20para%20mi%20salmonicultura" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-8 py-4 text-xs font-medium tracking-[0.15em] uppercase text-[#25D366] border border-[#25D366]/30 hover:border-[#25D366]/50 transition-all">
+            WhatsApp directo
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <StickyCTA text="Cotizar" whatsapp={true} />
+</BaseLayout>

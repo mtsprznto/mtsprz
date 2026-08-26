@@ -1,0 +1,151 @@
+---
+export const prerender = false;
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const title = "Programa de Referidos Mtsprz";
+const description = "Recomiéndanos y ambos ganamos. Obtén 1 mes de mantenimiento SEO gratis por cada cliente que nos refieras.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+>
+  <Header />
+  <main id="main-content">
+    <!-- Hero -->
+    <section class="relative min-h-[60vh] flex items-center bg-[#010101] overflow-hidden">
+      <div class="absolute inset-0 opacity-20" style="background: radial-gradient(ellipse at 40% 50%, #10b98120 0%, transparent 60%);" />
+      <div class="relative mx-auto max-w-4xl px-6 py-24 md:py-32 text-center">
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#10b981]/70 font-body font-medium mb-4">Programa de Referidos</p>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-heading font-bold text-white leading-[1.0] tracking-[-1.5px]">
+          Recomiéndanos.<br />
+          <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #10b981, #059669);">Ambos ganamos.</span>
+        </h1>
+        <p class="mt-6 max-w-xl mx-auto text-base md:text-lg text-white/50 font-body font-light leading-relaxed">
+          Por cada cliente que nos refieras y contrate un servicio, ambos recibimos <strong class="text-white/80">1 mes de mantenimiento SEO gratis</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Como funciona -->
+    <section class="relative bg-[#0A0A0A] w-full py-20 md:py-28">
+      <div class="mx-auto max-w-4xl px-6">
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#10b981]/60 font-body font-medium mb-6">Cómo funciona</p>
+        <h2 class="text-3xl md:text-4xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] mb-12">
+          3 pasos simples
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            {
+              step: "01",
+              title: "Recomiéndanos",
+              desc: "Cuando alguien te pregunte por una agencia digital, recomiéndanos. Puede ser un contacto, un amigo o un negocio que conozcas.",
+            },
+            {
+              step: "02",
+              title: "El cliente contrata",
+              desc: "Cuando tu referido contrate un servicio (landing, web, SEO o pack completo), activamos la recompensa para ambos.",
+            },
+            {
+              step: "03",
+              title: "Ambos ganan",
+              desc: "Tú y tu referido reciben 1 mes de mantenimiento SEO gratis. Sin letras pequeñas, sin condición adicional.",
+            },
+          ].map((item) => (
+            <div class="text-center md:text-left">
+              <span class="text-5xl md:text-6xl font-heading font-bold text-[#10b981]/20">{item.step}</span>
+              <h3 class="text-lg font-heading font-bold text-white mt-3 mb-2">{item.title}</h3>
+              <p class="text-sm text-white/40 font-body font-light leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Detalles -->
+    <section class="relative bg-[#0A0A0A] w-full py-20 md:py-28">
+      <div class="mx-auto max-w-4xl px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Lo que ganas -->
+          <div class="p-8 rounded-xl bg-white/[0.02] border border-[#10b981]/15">
+            <h3 class="text-xl font-heading font-bold text-white mb-4">Lo que ganas</h3>
+            <ul class="space-y-3">
+              {[
+                "1 mes de mantenimiento SEO gratis (~$250.000 CLP de valor)",
+                "Incluye: actualizaciones, monitoreo, reportes mensuales",
+                "Sin límite de referidos — puedes recomendar a todos",
+                "Válido para cualquier servicio que contrate tu referido",
+              ].map((item) => (
+                <li class="flex items-start gap-3 text-sm text-white/50 font-body font-light">
+                  <svg class="w-4 h-4 text-[#10b981] mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Reglas -->
+          <div class="p-8 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+            <h3 class="text-xl font-heading font-bold text-white mb-4">Reglas simples</h3>
+            <ul class="space-y-3">
+              {[
+                "El referido debe ser un cliente nuevo (no registrado previamente)",
+                "Servicio mínimo: Landing Page ($290K) o superior",
+                "Tracking: menciónanos al contactarnos o usa tu nombre como referencia",
+                "La recompensa se activa después del primer pago del referido",
+              ].map((item) => (
+                <li class="flex items-start gap-3 text-sm text-white/50 font-body font-light">
+                  <span class="text-[#10b981] mt-0.5 shrink-0">→</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ejemplo -->
+    <section class="relative bg-[#0A0A0A] w-full py-20 md:py-28">
+      <div class="mx-auto max-w-3xl px-6 text-center">
+        <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#10b981]/60 font-body font-medium mb-6">Ejemplo real</p>
+        <div class="p-8 md:p-10 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+          <p class="text-base md:text-lg text-white/60 font-body font-light leading-relaxed italic">
+            "Tu amigo Juan tiene una restaurante en Puerto Varas. Le comentas sobre Mtsprz. Juan nos contacta y contrata una Landing Page ($320K).
+          </p>
+          <div class="my-6 w-16 h-[1px] mx-auto bg-[#10b981]/30" />
+          <p class="text-base md:text-lg text-white/60 font-body font-light leading-relaxed italic">
+            <strong class="text-[#10b981]">Resultado:</strong> Juan recibe 1 mes de SEO gratis. Tú también. Ambos ganan."
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="relative bg-[#0A0A0A] w-full py-24 md:py-32">
+      <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at 50% 50%, #10b98115 0%, transparent 50%);" />
+      <div class="relative mx-auto max-w-3xl px-6 text-center">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-white leading-[1.0] tracking-[-1.5px] mb-6">
+          ¿Tienes a alguien en mente?
+        </h2>
+        <p class="text-sm md:text-base text-white/45 font-body font-light leading-relaxed max-w-lg mx-auto mb-10">
+          Cuéntanos quién es y qué necesita. Nosotros nos encargamos del resto.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="https://wa.me/56966929818?text=Hola,%20quiero%20recomendar%20a%20un%20contacto%20al%20programa%20de%20referidos" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-8 py-4 text-xs font-medium tracking-[0.15em] uppercase text-white" style="background: linear-gradient(135deg, #10b981, #059669);">
+            Recomendar por WhatsApp
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="/contacto" class="inline-flex items-center gap-3 px-8 py-4 text-xs font-medium tracking-[0.15em] uppercase text-white/60 border border-white/10 hover:border-white/20 transition-all">
+            Formulario de contacto
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

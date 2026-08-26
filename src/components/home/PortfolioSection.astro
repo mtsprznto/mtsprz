@@ -1,0 +1,307 @@
+---
+export interface Props {
+  projects: any[];
+}
+
+const { projects } = Astro.props;
+---
+
+<!-- Portafolio · proyectos reales -->
+<section class="relative bg-[#010101] w-full overflow-hidden" data-gsap-portfolio="section">
+  <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" data-gsap-portfolio="rule-top" />
+
+  <div class="relative w-full px-6 sm:px-8 lg:px-12 xl:px-16 2xl:px-24 py-24 md:py-32">
+    <div data-gsap-portfolio="header">
+      <div class="flex items-center gap-2.5 -rotate-1 w-fit font-hand text-lg md:text-xl mb-6 md:mb-8" data-gsap-portfolio="eyebrow" style="color: #fde68a;">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+        Portafolio
+      </div>
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16" data-gsap-portfolio="title">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-[1.05] tracking-[-1px] max-w-4xl">
+          Proyectos que<br /><span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #a5b4fc);">ya están en producción</span>
+          <svg class="block w-[58%] h-2.5 mt-1.5" viewBox="0 0 300 10" preserveAspectRatio="none" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round" data-gsap-portfolio="underline"><path d="M3 7c50-5 100 5 150 0s100-5 144-1" pathLength="1" /></svg>
+        </h2>
+        <a href="/portafolio" class="group inline-flex items-center gap-2 -rotate-1 shrink-0 font-hand text-base md:text-xl transition-transform duration-300 hover:rotate-1" style="color: #fde68a;">
+          Ver portafolio completo
+          <svg class="w-4 h-4 -rotate-6 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Catálogo editorial · filas full-width (hojas sobre la mesa) -->
+    <div class="border-t-2 border-dashed divide-y-2 divide-dashed" style="border-color: rgba(255,255,255,0.12);">
+      {projects.slice(0, 6).map((p, i) => (
+        <a
+          href={p.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group grid grid-cols-1 md:grid-cols-12 items-center gap-8 md:gap-12 py-10 md:py-14"
+          data-gsap-portfolio="card"
+        >
+          <!-- Impresión · marco artesanal (5/12, zig-zag en desktop) -->
+          <div class={`relative md:col-span-5 ${i % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
+            <div
+              class="relative aspect-[16/10] overflow-hidden border border-dashed border-white/15 transition-colors duration-300 group-hover:border-[rgba(245,158,11,0.45)]"
+              style="border-radius: 6px 14px 6px 12px / 12px 6px 14px 6px; background: #0A0A0A;"
+            >
+              <div class="absolute inset-0 overflow-hidden" data-gsap-portfolio="media">
+                {p.images[0] ? (
+                  <img
+                    src={p.images[0]}
+                    alt={p.title}
+                    loading="lazy"
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center" style="background: rgba(99,102,241,0.08);">
+                    <span class="text-xs uppercase tracking-[0.2em] font-heading font-bold" style="color: rgba(99,102,241,0.6);">{p.title}</span>
+                  </div>
+                )}
+              </div>
+              <!-- Sello "en producción" -->
+              <span
+                data-gsap-portfolio="stamp"
+                class="absolute top-3 right-3 z-10 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.15em] rotate-2"
+                style="color: #6ee7b7; background: rgba(1,1,1,0.78); border: 1px dashed rgba(110,231,183,0.5); border-radius: 3px 9px 4px 8px / 8px 4px 9px 3px;"
+              >en producción</span>
+              <div
+                data-gsap-portfolio="shine"
+                class="pointer-events-none absolute left-[-50%] top-[-50%] z-10 h-[200%] w-[200%] opacity-0"
+                style="background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.09), rgba(255,255,255,0.03) 40%, transparent 65%);"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Contenido editorial (7/12) -->
+          <div class={`md:col-span-7 ${i % 2 === 0 ? "md:order-2" : "md:order-1"}`}>
+            <div class="flex items-start gap-4 md:gap-6">
+              <span
+                data-gsap-portfolio="sticker"
+                class="shrink-0 font-hand text-5xl md:text-6xl leading-none -rotate-3 px-3 py-1.5 border-2 border-dashed transition-transform duration-300 group-hover:rotate-0"
+                style={{ color: ["#f59e0b", "#10b981", "#a5b4fc"][i % 3], borderColor: "rgba(255,255,255,0.14)", borderRadius: "6px 14px 6px 12px / 12px 6px 14px 6px" }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div class="min-w-0 flex-1">
+                <h3 class="font-heading font-bold text-white text-xl sm:text-2xl md:text-3xl leading-tight tracking-[-0.02em] transition-colors duration-300 group-hover:text-white/90">{p.title}</h3>
+                <p class="mt-3 text-sm md:text-base text-white/45 font-body font-light leading-[1.7]">{p.description}</p>
+                <div class="mt-5 flex flex-wrap gap-2">
+                  {p.tags.slice(0, 4).map((t, ti) => (
+                    <span class="font-hand text-sm leading-none px-2.5 py-1.5 -rotate-1 transition-transform duration-300 group-hover:rotate-0" style={`color: ${["#f59e0b", "#10b981", "#a5b4fc"][ti % 3]}; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12);`}>{t}</span>
+                  ))}
+                </div>
+                <span class="mt-6 inline-flex items-center gap-2 font-hand text-base md:text-lg transition-all duration-300 group-hover:translate-x-1" style="color: #fde68a;">
+                  Ver proyecto
+                  <svg class="w-4 h-4 -rotate-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
+</section>
+
+<!-- GSAP · portafolio "el catálogo sobre la mesa" -->
+<script is:inline>
+  const initPortfolio = () => {
+    if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") {
+      console.warn("[mtsprz] GSAP no cargó (CDN) — portafolio estático");
+      return false;
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      console.info("[mtsprz] prefers-reduced-motion activo — animaciones desactivadas por diseño");
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const section = document.querySelector('[data-gsap-portfolio="section"]');
+    if (!section) return;
+
+    const q = gsap.utils.selector(section);
+    const header = q('[data-gsap-portfolio="header"]')[0];
+    const eyebrow = q('[data-gsap-portfolio="eyebrow"]')[0];
+    const title = q('[data-gsap-portfolio="title"]')[0];
+    const ruleTop = q('[data-gsap-portfolio="rule-top"]')[0];
+    const underline = q('[data-gsap-portfolio="underline"] path')[0];
+    const cards = q('[data-gsap-portfolio="card"]');
+    const medias = q('[data-gsap-portfolio="media"]');
+    const stickers = q('[data-gsap-portfolio="sticker"]');
+    const stamps = q('[data-gsap-portfolio="stamp"]');
+    const shines = q('[data-gsap-portfolio="shine"]');
+    const tags = section.querySelectorAll('[data-gsap-portfolio="card"] .flex-wrap span');
+
+    console.log("[mtsprz] portafolio GSAP activo —", cards.length, "cards");
+
+    const mm = gsap.matchMedia();
+
+    mm.add("portfolio-reveal", "(prefers-reduced-motion: no-preference)", () => {
+      if (header && eyebrow && title) {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: header,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+            refreshPriority: 0,
+          },
+        });
+
+        if (ruleTop) {
+          tl.fromTo(ruleTop, { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power3.out" }, 0);
+        }
+
+        tl.fromTo(eyebrow, { autoAlpha: 0, y: 16, filter: "blur(6px)" }, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "power2.out" }, 0.1);
+        tl.fromTo(title, { autoAlpha: 0, yPercent: 8 }, { autoAlpha: 1, yPercent: 0, duration: 0.7, ease: "power3.out" }, "-=0.2");
+
+        if (underline) {
+          tl.fromTo(underline, { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.9, ease: "power3.out" }, "-=0.4");
+          tl.to(underline, { strokeDashoffset: -0.05, duration: 0.25, ease: "power1.inOut" });
+          tl.to(underline, { strokeDashoffset: 0, duration: 0.4, ease: "power2.out" });
+        }
+      }
+
+      if (cards.length) {
+        const deckRot = [1.5, -1.8, 1.3, -1.5, 1.6];
+        const cardStagger = (i) => 0.16 + (i % 2) * 0.1;
+        const deckTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: cards[0],
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+            refreshPriority: 1,
+          },
+        });
+
+        deckTl.fromTo(cards,
+          { y: 80, autoAlpha: 0, scale: 0.98, rotation: (i) => deckRot[i % deckRot.length] },
+          { y: 0, autoAlpha: 1, scale: 1, rotation: 0, duration: 1.15, ease: "power3.out", stagger: cardStagger },
+          0
+        );
+
+        if (stickers.length) {
+          deckTl.fromTo(stickers,
+            { scale: 0, autoAlpha: 0 },
+            { scale: 1, autoAlpha: 1, duration: 0.85, ease: "elastic.out(1, 0.45)", stagger: cardStagger, clearProps: "transform" },
+            0
+          );
+        }
+
+        if (stamps.length) {
+          deckTl.fromTo(stamps,
+            { scale: 0.7, autoAlpha: 0, rotation: -4 },
+            { scale: 1, autoAlpha: 1, rotation: 0, duration: 0.55, ease: "back.out(1.7)", stagger: cardStagger, clearProps: "transform" },
+            0
+          );
+        }
+
+        if (tags.length) {
+          deckTl.fromTo(tags,
+            { autoAlpha: 0, scale: 0.8, y: 6 },
+            { autoAlpha: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(1.4)", stagger: 0.07 },
+            ">-0.2"
+          );
+        }
+      }
+    });
+
+    mm.add("portfolio-touch", "(pointer: fine) and (hover: hover) and (prefers-reduced-motion: no-preference)", () => {
+      if (!cards.length) return;
+
+      const parallaxBase = () =>
+        window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)").matches ? 1.12 : 1;
+
+      cards.forEach((card, i) => {
+        const shine = shines[i];
+        const media = medias[i];
+        const sticker = stickers[i];
+        const stamp = stamps[i];
+
+        const mediaX = media && gsap.quickTo(media, "x", { duration: 0.4, ease: "power2.out" });
+        const mediaY = media && gsap.quickTo(media, "y", { duration: 0.4, ease: "power2.out" });
+        const shineX = shine && gsap.quickTo(shine, "x", { duration: 0.5, ease: "power2.out" });
+        const shineY = shine && gsap.quickTo(shine, "y", { duration: 0.5, ease: "power2.out" });
+        const shineOp = shine && gsap.quickTo(shine, "opacity", { duration: 0.3, ease: "power2.out" });
+
+        const pressSticker = () => {
+          if (!sticker) return;
+          gsap.to(sticker, { scale: 0.93, rotation: -2, duration: 0.2, ease: "power2.out", overwrite: "auto" });
+        };
+        const releaseSticker = () => {
+          if (!sticker) return;
+          gsap.to(sticker, { scale: 1, rotation: -2, duration: 0.4, ease: "back.out(2)", overwrite: "auto" });
+        };
+        const restamp = () => {
+          if (!stamp) return;
+          gsap.fromTo(stamp, { scale: 0.7, rotation: -3 }, { scale: 1, rotation: 0, duration: 0.5, ease: "elastic.out(0.8, 0.45)", overwrite: "auto", clearProps: "transform" });
+        };
+        const hoverMedia = () => {
+          if (!media) return;
+          gsap.to(media, { scale: parallaxBase() === 1.12 ? 1.18 : 1.05, duration: 0.4, ease: "power3.out", overwrite: "auto" });
+        };
+        const unHoverMedia = () => {
+          if (!media) return;
+          gsap.to(media, { scale: parallaxBase(), duration: 0.5, ease: "back.out(1.4)", overwrite: "auto" });
+        };
+
+        const onMove = (e) => {
+          const rect = card.getBoundingClientRect();
+          const px = e.clientX - rect.left;
+          const py = e.clientY - rect.top;
+          const x = px / rect.width - 0.5;
+          const y = py / rect.height - 0.5;
+          if (mediaX && mediaY) { mediaX(x * 16); mediaY(y * 16); }
+          if (shineX && shineY && shineOp) { shineX(px - rect.width / 2); shineY(py - rect.height / 2); shineOp(1); }
+        };
+
+        const onLeave = () => {
+          if (mediaX && mediaY) { mediaX(0); mediaY(0); }
+          if (shineOp) shineOp(0);
+          releaseSticker();
+          unHoverMedia();
+        };
+
+        card.addEventListener("pointermove", onMove, { passive: true });
+        card.addEventListener("pointerleave", onLeave, { passive: true });
+        card.addEventListener("pointerenter", () => { pressSticker(); restamp(); hoverMedia(); }, { passive: true });
+      });
+    });
+
+    mm.add("portfolio-parallax", "(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+      if (!medias.length) return;
+      gsap.set(medias, { scale: 1.12 });
+      medias.forEach((media) => {
+        gsap.fromTo(media, { yPercent: -6 }, {
+          yPercent: 6, ease: "none",
+          scrollTrigger: { trigger: media, start: "top bottom", end: "bottom top", scrub: 0.5 },
+        });
+      });
+    });
+
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refresh, { once: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+    setTimeout(refresh, 800);
+
+    return true;
+  };
+
+  window.addEventListener("DOMContentLoaded", () => {
+    if (initPortfolio()) return;
+
+    console.warn("[mtsprz] GSAP no disponible al DOMContentLoaded — reintento en load");
+    window.addEventListener("load", () => {
+      if (typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined") {
+        initPortfolio();
+        return;
+      }
+      const inject = (src) => new Promise((resolve, reject) => { const s = document.createElement("script"); s.src = src; s.async = true; s.onload = resolve; s.onerror = reject; document.head.appendChild(s); });
+      Promise.all([inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"), inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js")])
+        .then(() => { if (!initPortfolio()) console.warn("[mtsprz] GSAP cargó pero la init falló — portafolio estático"); })
+        .catch(() => { console.warn("[mtsprz] GSAP no cargó (CDN bloqueado u offline) — portafolio estático por diseño"); });
+    }, { once: true });
+  });
+</script>

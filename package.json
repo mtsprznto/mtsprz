@@ -5,6 +5,7 @@
   "description": "Landing page profesional para Soluciones Digitales en la Región de Los Lagos, Chile",
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/patch-nft-symlink.mjs",
     "dev": "astro dev",
     "prebuild": "node scripts/clean-vercel.mjs",
     "build": "node scripts/generate-image-sitemap.mjs && astro build",

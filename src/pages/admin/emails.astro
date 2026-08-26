@@ -1,0 +1,242 @@
+---
+export const prerender = false;
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { query, initDb } from "../../lib/db";
+
+await initDb();
+
+// Fetch leads capturados via lead magnets
+let leads: any[] = [];
+let totalLeads = 0;
+let leadsConEmail = 0;
+let leadsRecientes: any[] = [];
+
+try {
+  const result = await query(
+    `SELECT id, name, email, source, created_at
+     FROM leads
+     ORDER BY created_at DESC
+     LIMIT 50`
+  );
+  leads = result.rows;
+  totalLeads = leads.length;
+  leadsConEmail = leads.filter((l: any) => l.email).length;
+  leadsRecientes = leads.slice(0, 10);
+} catch {
+  // Table might not exist yet
+}
+
+// Fetch contact form submissions as proxy for conversion
+let contactos: any[] = [];
+try {
+  const result = await query(
+    `SELECT id, name, email, service, budget, message, created_at
+     FROM contacts
+     ORDER BY created_at DESC
+     LIMIT 50`
+  );
+  contactos = result.rows;
+} catch {
+  // Table might not exist
+}
+
+const totalContactos = contactos.length;
+
+// Fetch email events (from Resend webhooks)
+let emailEvents: any[] = [];
+let emailStats = { delivered: 0, opened: 0, clicked: 0, bounced: 0, complained: 0 };
+try {
+  const result = await query(
+    `SELECT event_type, COUNT(*) as count
+     FROM email_events
+     WHERE created_at > NOW() - INTERVAL '30 days'
+     GROUP BY event_type`
+  );
+  for (const row of result.rows) {
+    if (row.event_type in emailStats) {
+      emailStats[row.event_type as keyof typeof emailStats] = parseInt(row.count);
+    }
+  }
+  // Recent events for the log
+  const eventsResult = await query(
+    `SELECT event_type, email, created_at
+     FROM email_events
+     ORDER BY created_at DESC
+     LIMIT 20`
+  );
+  emailEvents = eventsResult.rows;
+} catch {
+  // Table might not exist yet (needs migration 022)
+}
+
+// Monthly breakdown
+const mesesES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const ahora = new Date();
+const mesActual = mesesES[ahora.getMonth()];
+const anioActual = ahora.getFullYear();
+---
+
+<AdminLayout title="Dashboard de Email y Métricas">
+  <div class="p-6 md:p-10 max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-10">
+      <h1 class="text-2xl md:text-3xl font-heading font-bold text-white">Dashboard de Métricas</h1>
+      <p class="mt-2 text-sm text-white/40 font-body">Resumen de leads, contactos y captura de emails · {mesActual} {anioActual}</p>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+      <div class="p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+        <p class="text-[10px] uppercase tracking-[0.15em] text-white/30 font-body mb-2">Leads Totales</p>
+        <p class="text-3xl font-heading font-bold text-white">{totalLeads}</p>
+      </div>
+      <div class="p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+        <p class="text-[10px] uppercase tracking-[0.15em] text-white/30 font-body mb-2">Con Email</p>
+        <p class="text-3xl font-heading font-bold text-[#10b981]">{leadsConEmail}</p>
+      </div>
+      <div class="p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+        <p class="text-[10px] uppercase tracking-[0.15em] text-white/30 font-body mb-2">Contactos Formulario</p>
+        <p class="text-3xl font-heading font-bold text-[#6366f1]">{totalContactos}</p>
+      </div>
+      <div class="p-5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+        <p class="text-[10px] uppercase tracking-[0.15em] text-white/30 font-body mb-2">Tasa Conversión</p>
+        <p class="text-3xl font-heading font-bold text-white">
+          {totalLeads > 0 ? `${Math.round((totalContactos / totalLeads) * 100)}%` : "—"}
+        </p>
+      </div>
+    </div>
+
+    <!-- Email Events Stats (from Resend webhooks) -->
+    <div class="mb-10">
+      <h2 class="text-sm font-heading font-bold text-white mb-4">Métricas Email (últimos 30 días)</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        {[
+          { key: "delivered", label: "Entregados", color: "#10b981" },
+          { key: "opened", label: "Abiertos", color: "#6366f1" },
+          { key: "clicked", label: "Clics", color: "#f59e0b" },
+          { key: "bounced", label: "Rebotados", color: "#ef4444" },
+          { key: "complained", label: "Spam", color: "#dc2626" },
+        ].map((s) => (
+          <div class="p-4 rounded-xl bg-white/[0.02] border border-white/[0.04] text-center">
+            <p class="text-2xl font-heading font-bold" style={`color:${s.color}`}>
+              {emailStats[s.key as keyof typeof emailStats]}
+            </p>
+            <p class="text-[10px] uppercase tracking-[0.12em] text-white/30 font-body mt-1">{s.label}</p>
+          </div>
+        ))}
+      </div>
+      {emailEvents.length > 0 && (
+        <div class="mt-4 rounded-xl bg-white/[0.02] border border-white/[0.04] overflow-hidden">
+          <div class="px-5 py-3 border-b border-white/[0.04]">
+            <h3 class="text-xs font-heading font-bold text-white">Eventos Recientes</h3>
+          </div>
+          <div class="divide-y divide-white/[0.03] max-h-60 overflow-y-auto">
+            {emailEvents.map((ev: any) => (
+              <div class="px-5 py-2 flex items-center justify-between gap-3">
+                <span class={`inline-flex items-center px-2 py-0.5 text-[9px] font-body tracking-wide rounded-full border ${
+                  ev.event_type === 'delivered' ? 'text-[#10b981]/70 border-[#10b981]/15' :
+                  ev.event_type === 'opened' ? 'text-[#6366f1]/70 border-[#6366f1]/15' :
+                  ev.event_type === 'clicked' ? 'text-[#f59e0b]/70 border-[#f59e0b]/15' :
+                  'text-[#ef4444]/70 border-[#ef4444]/15'
+                }`}>
+                  {ev.event_type}
+                </span>
+                <span class="text-[11px] text-white/30 font-body truncate">{ev.email}</span>
+                <span class="text-[10px] text-white/20 font-body shrink-0">
+                  {ev.created_at ? new Date(ev.created_at).toLocaleDateString("es-CL") : "—"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- Two columns: Recent Leads + Recent Contacts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Recent Leads -->
+      <div class="rounded-xl bg-white/[0.02] border border-white/[0.04] overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/[0.04]">
+          <h2 class="text-sm font-heading font-bold text-white">Leads Recientes</h2>
+        </div>
+        {leadsRecientes.length > 0 ? (
+          <div class="divide-y divide-white/[0.03]">
+            {leadsRecientes.map((lead: any) => (
+              <div class="px-5 py-3 flex items-center justify-between gap-4">
+                <div class="min-w-0">
+                  <p class="text-sm text-white/70 font-body truncate">{lead.name || "Sin nombre"}</p>
+                  <p class="text-[11px] text-white/30 font-body truncate">{lead.email}</p>
+                </div>
+                <div class="text-right shrink-0">
+                  <span class="inline-flex items-center px-2 py-0.5 text-[9px] font-body tracking-wide text-[#10b981]/70 border border-[#10b981]/15 rounded-full">
+                    {lead.source || "directo"}
+                  </span>
+                  <p class="text-[10px] text-white/20 font-body mt-1">
+                    {lead.created_at ? new Date(lead.created_at).toLocaleDateString("es-CL") : "—"}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class="px-5 py-10 text-center">
+            <p class="text-sm text-white/25 font-body">Sin leads aún</p>
+            <p class="text-[11px] text-white/15 font-body mt-1">Los leads aparecen cuando alguien descarga un lead magnet</p>
+          </div>
+        )}
+      </div>
+
+      <!-- Recent Contacts -->
+      <div class="rounded-xl bg-white/[0.02] border border-white/[0.04] overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/[0.04]">
+          <h2 class="text-sm font-heading font-bold text-white">Contactos Recientes</h2>
+        </div>
+        {contactos.length > 0 ? (
+          <div class="divide-y divide-white/[0.03]">
+            {contactos.slice(0, 10).map((c: any) => (
+              <div class="px-5 py-3 flex items-center justify-between gap-4">
+                <div class="min-w-0">
+                  <p class="text-sm text-white/70 font-body truncate">{c.name || "Sin nombre"}</p>
+                  <p class="text-[11px] text-white/30 font-body truncate">{c.email}</p>
+                </div>
+                <div class="text-right shrink-0">
+                  <span class="inline-flex items-center px-2 py-0.5 text-[9px] font-body tracking-wide text-[#6366f1]/70 border border-[#6366f1]/15 rounded-full">
+                    {c.service || "general"}
+                  </span>
+                  <p class="text-[10px] text-white/20 font-body mt-1">
+                    {c.created_at ? new Date(c.created_at).toLocaleDateString("es-CL") : "—"}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class="px-5 py-10 text-center">
+            <p class="text-sm text-white/25 font-body">Sin contactos aún</p>
+            <p class="text-[11px] text-white/15 font-body mt-1">Los contactos aparecen cuando alguien envía el formulario de contacto</p>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <!-- GA4 Events Reference -->
+    <div class="mt-10 p-5 rounded-xl bg-white/[0.02] border border-white/[0.04]">
+      <h2 class="text-sm font-heading font-bold text-white mb-3">Eventos GA4 a Monitorear</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {[
+          { event: "lead_magnet_capture", desc: "Descarga de lead magnet" },
+          { event: "whatsapp_click", desc: "Clic en botón WhatsApp" },
+          { event: "diagnostico_agendado", desc: "Diagnóstico agendado" },
+          { event: "resource_download", desc: "Descarga de recurso" },
+          { event: "blog_cta_click", desc: "Clic en CTA de blog" },
+          { event: "testimonio_view", desc: "Vista de testimonio" },
+        ].map((e) => (
+          <div class="flex items-center gap-3 p-3 rounded-lg bg-white/[0.01]">
+            <code class="text-[10px] text-[#10b981] font-mono bg-[#10b981]/5 px-2 py-1 rounded shrink-0">{e.event}</code>
+            <span class="text-[11px] text-white/35 font-body">{e.desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</AdminLayout>

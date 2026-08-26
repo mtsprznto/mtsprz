@@ -80,6 +80,24 @@
     </image:image>
   </url>
   <url>
+    <loc>https://mtsprz.org/blog/caso-blastup-email-ia</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-automatizacion-ia-pymes.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/caso-fie-automatizacion-educativa</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-agentes-ia-empresas.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/caso-gestorpass-seguridad</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-agentes-ia-empresas.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
     <loc>https://mtsprz.org/blog/catalogo-whatsapp-business-tienda-247</loc>
     <image:image>
       <image:loc>https://mtsprz.org/blog/og-catalogo-whatsapp-business.svg</image:loc>
@@ -158,7 +176,7 @@
     </image:image>
   </url>
   <url>
-    <loc>https://mtsprz.org/blog/empresar-google-maps-osorno</loc>
+    <loc>https://mtsprz.org/blog/emprender-google-maps-osorno</loc>
     <image:image>
       <image:loc>https://mtsprz.org/blog/og-empresar-google-maps-osorno.svg</image:loc>
     </image:image>
@@ -305,6 +323,12 @@
     <loc>https://mtsprz.org/blog/whatsapp-business-api-vs-app-chile</loc>
     <image:image>
       <image:loc>https://mtsprz.org/blog/og-whatsapp-api-vs-app.svg</image:loc>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mtsprz.org/blog/whatsapp-business-chile-guia-completa</loc>
+    <image:image>
+      <image:loc>https://mtsprz.org/blog/og-automatizacion-ia-pymes.svg</image:loc>
     </image:image>
   </url>
   <url>
