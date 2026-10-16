@@ -4,7 +4,7 @@ description: "Directorio completo de empresas de diseño web en Puerto Varas. Ag
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-empresas-diseno-web-puerto-varas.svg"
+image: "/blog/og-empresas-diseno-web-puerto-varas.png"
 tags: ["diseño web", "Puerto Varas", "agencia digital"]
 ---
 

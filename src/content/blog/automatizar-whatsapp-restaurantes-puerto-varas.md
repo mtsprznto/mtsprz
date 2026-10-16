@@ -4,7 +4,7 @@ description: "Guia practica para automatizar WhatsApp en tu restaurante de Puert
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
 author: "Matías Pérez Nauto"
-image: "/blog/og-automatizar-whatsapp-restaurantes-puerto-varas.svg"
+image: "/blog/og-automatizar-whatsapp-restaurantes-puerto-varas.png"
 tags: ["automatizacion", "whatsapp", "bot", "puerto varas", "restaurantes", "hosteleria"]
 ---
 

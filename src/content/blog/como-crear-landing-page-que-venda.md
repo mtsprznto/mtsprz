@@ -4,7 +4,7 @@ description: "Aprende a crear una landing page que convierta visitantes en clien
 pubDate: 2026-08-02
 modifiedTime: 2026-08-06
 author: "Matias Perez Nauto"
-image: "/blog/og-landing-page-que-venda.svg"
+image: "/blog/og-como-crear-landing-page-que-venda.png"
 tags: ["landing page", "conversion", "diseno web", "ventas", "pymes", "chile"]
 ---
 

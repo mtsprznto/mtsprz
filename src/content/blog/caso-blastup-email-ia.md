@@ -3,7 +3,7 @@ title: "Campanas de email masivas con IA: caso Blast-Up"
 description: "Como construimos un motor de campanas email que genera contenido personalizado por segmento usando inteligencia artificial. Caso real de una agencia de marketing."
 pubDate: 2026-08-26
 author: "Matias Perez Nauto"
-image: "/blog/og-automatizacion-ia-pymes.svg"
+image: "/blog/og-caso-blastup-email-ia.png"
 tags: ["ia", "email marketing", "automatizacion", "caso de estudio", "marketing", "chile"]
 ---
 

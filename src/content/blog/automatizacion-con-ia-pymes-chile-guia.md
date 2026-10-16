@@ -3,7 +3,7 @@ title: "Automatizacion con IA para pymes en Chile: por donde empezar (guia 2026)
 description: "Guia practica de automatizacion con inteligencia artificial para pymes chilenas. Chatbots, flujos automaticos y herramientas que ahorran tiempo real. Sin tecnologia ni jerga."
 pubDate: 2026-07-30
 author: "Matias Perez Nauto"
-image: "/blog/og-automatizacion-ia-pymes.svg"
+image: "/blog/og-automatizacion-con-ia-pymes-chile-guia.png"
 tags: ["ia", "automatizacion", "pymes", "chatbot", "whatsapp", "productividad", "chile"]
 ---
 

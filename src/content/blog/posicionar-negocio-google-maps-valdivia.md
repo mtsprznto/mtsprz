@@ -4,7 +4,7 @@ description: "Guia paso a paso para posicionar tu negocio en Google Maps en Vald
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
 author: "Matías Pérez Nauto"
-image: "/blog/og-posicionar-negocio-google-maps-valdivia.svg"
+image: "/blog/og-posicionar-negocio-google-maps-valdivia.png"
 tags: ["seo local", "google maps", "valdivia", "posicionamiento", "region de los rios", "pymes"]
 ---
 

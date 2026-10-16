@@ -4,7 +4,7 @@ description: "Automatiza WhatsApp en tu negocio de Puerto Varas con bots 24/7. R
 pubDate: 2026-07-18
 modifiedTime: 2026-07-18
 author: "Matías Pérez Nauto"
-image: "/blog/og-automatizar-whatsapp-negocio-puerto-varas.svg"
+image: "/blog/og-automatizar-whatsapp-negocio-puerto-varas.png"
 tags: ["whatsapp", "automatizacion", "puerto varas", "bot", "pymes", "atencion al cliente"]
 ---
 

@@ -4,7 +4,7 @@ description: "Guía para crear tu tienda online desde Chiloé. Vende artesanías
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-crear-tienda-online-chiloe.svg"
+image: "/blog/og-crear-tienda-online-chiloe.png"
 tags: ["tienda online", "Chiloé", "ecommerce", "artesanía"]
 ---
 

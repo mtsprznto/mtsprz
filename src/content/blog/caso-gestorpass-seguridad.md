@@ -3,7 +3,7 @@ title: "Gestor de contraseñas con cifrado real: caso GestorPass"
 description: "Como construimos un gestor de contraseñas seguro para pymes chilenas con cifrado AES, verificacion biometrica y auditoria completa. Caso real."
 pubDate: 2026-08-26
 author: "Matias Perez Nauto"
-image: "/blog/og-agentes-ia-empresas.svg"
+image: "/blog/og-caso-gestorpass-seguridad.png"
 tags: ["seguridad", "saas", "caso de estudio", "cifrado", "pymes", "chile"]
 ---
 

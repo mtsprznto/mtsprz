@@ -4,7 +4,7 @@ description: "Cómo configurar un bot de WhatsApp para tu restaurante en Osorno.
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-automatizar-whatsapp-restaurantes-osorno.svg"
+image: "/blog/og-automatizar-whatsapp-restaurantes-osorno.png"
 tags: ["WhatsApp bot", "restaurantes", "Osorno", "automatización"]
 ---
 

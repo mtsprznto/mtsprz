@@ -4,7 +4,7 @@ description: "Paso a paso para aparecer primero en Google Maps en Puerto Montt. 
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-posicionar-negocio-google-maps-puerto-montt.svg"
+image: "/blog/og-posicionar-negocio-google-maps-puerto-montt.png"
 tags: ["Google Maps", "Puerto Montt", "SEO local", "Google Business Profile"]
 ---
 

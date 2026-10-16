@@ -4,7 +4,7 @@ description: "Guía paso a paso para vender online desde Puerto Montt. Tienda on
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-como-vender-en-internet-desde-puerto-montt.svg"
+image: "/blog/og-como-vender-en-internet-desde-puerto-montt.png"
 tags: ["vender online", "Puerto Montt", "ecommerce", "negocio digital"]
 ---
 

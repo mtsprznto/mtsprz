@@ -3,7 +3,7 @@ title: "WhatsApp Business en Chile 2026: guia completa para pymes"
 description: "Todo lo que necesitas saber sobre WhatsApp Business en Chile: precios, funciones, API vs app, automatizaciones y como usarlo para vender mas. Guia actualizada 2026."
 pubDate: 2026-08-26
 author: "Matias Perez Nauto"
-image: "/blog/og-automatizacion-ia-pymes.svg"
+image: "/blog/og-whatsapp-business-chile-guia-completa.png"
 tags: ["whatsapp", "whatsapp business", "pymes", "chile", "automatizacion", "guia", "2026"]
 ---
 

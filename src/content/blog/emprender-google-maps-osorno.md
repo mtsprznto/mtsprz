@@ -4,7 +4,7 @@ description: "Paso a paso para aparecer en Google Maps desde Osorno. SEO local, 
 pubDate: 2026-07-25
 modifiedTime: 2026-07-25
 author: "Matías Pérez Nauto"
-image: "/blog/og-empresar-google-maps-osorno.svg"
+image: "/blog/og-emprender-google-maps-osorno.png"
 tags: ["SEO local", "Osorno", "Google Maps", "Google Business Profile", "pymes", "Región de Los Lagos"]
 ---
 

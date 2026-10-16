@@ -4,7 +4,7 @@ description: "Precios reales de páginas web en Chile 2026: desde $290.000 landi
 pubDate: 2026-08-01
 modifiedTime: 2026-08-01
 author: "Matías Pérez Nauto"
-image: "/blog/og-precios-reales-paginas-web-chile-2026.svg"
+image: "/blog/og-precios-reales-paginas-web-chile-2026.png"
 tags: ["precios", "paginas web", "chile", "pymes", "2026", "desarrollo web", "region de los lagos"]
 ---
 

@@ -4,7 +4,7 @@ description: "¿Cuánto cuesta una página web en Osorno? Precios reales de agen
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-precio-pagina-web-osorno-2026.svg"
+image: "/blog/og-precio-pagina-web-osorno-2026.png"
 tags: ["precio página web", "Osorno", "costo diseño web"]
 ---
 

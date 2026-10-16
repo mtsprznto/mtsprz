@@ -4,7 +4,7 @@ description: "Comparativa real Astro vs WordPress para pymes en Chile. Velocidad
 pubDate: 2026-07-26
 modifiedTime: 2026-07-26
 author: "Matías Pérez Nauto"
-image: "/blog/og-astro-vs-wordpress.svg"
+image: "/blog/og-astro-vs-wordpress-comparativa.png"
 tags: ["Astro", "WordPress", "desarrollo web", "velocidad", "SEO", "pymes", "sur de Chile"]
 ---
 

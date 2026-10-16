@@ -4,7 +4,7 @@ description: "Sitios web para hoteles, cabañas y tours en Puerto Varas. Diseño
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-diseno-web-turismo-puerto-varas.svg"
+image: "/blog/og-diseno-web-turismo-puerto-varas.png"
 tags: ["turismo", "Puerto Varas", "diseño web", "hoteles"]
 ---
 

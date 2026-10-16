@@ -4,7 +4,7 @@ description: "¿Buscas agencia de marketing digital en el sur de Chile? Analizam
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-agencia-marketing-digital-sur-chile.svg"
+image: "/blog/og-agencia-marketing-digital-sur-chile.png"
 tags: ["marketing digital", "sur de Chile", "agencia"]
 ---
 

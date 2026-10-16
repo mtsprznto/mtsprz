@@ -4,9 +4,10 @@
  * Generate OG Images — crea imágenes OG (1200×630) para los posts del blog
  * y para las páginas clave del sitio.
  *
- * Modo posts (default): lee src/content/blog/*.md (title + image); escribe
- * SVG siempre y PNG si @resvg/resvg-js está instalado. Auto-sincroniza el
- * `image:` del frontmatter.
+ * Modo posts (default): lee src/content/blog/*.md, genera el PNG canónico
+ * public/blog/og-<slug>.png vía sharp (1200×630), sincroniza el `image:` del
+ * frontmatter y elimina assets sin referencias (solo modo full, sin --post).
+ * Fallback SVG si sharp no está instalado.
  * Modo páginas (--pages): genera PNG en public/og/<slug>.png vía sharp
  * (devDependency) para las 10 páginas clave definidas en PAGES.
  *
@@ -17,11 +18,10 @@
  *   node scripts/generate-og-images.mjs --force  # regenera aunque existan
  *   node scripts/generate-og-images.mjs --post=slug
  *
- * Requisitos: @resvg/resvg-js (posts, opcional) · sharp (pages, devDep).
- * Sin renderer disponible se escribe el SVG y se avisa.
+ * Requisitos: sharp (devDependency). Sin sharp se escribe SVG y se avisa.
  *
  * Autor: Mtsprz SEO
- * Fecha: 2026-08 (ronda 2: modo --pages)
+ * Fecha: 2026-08 (ronda 2: --pages · ronda 2.5: posts→PNG canónico + limpieza)
  */
 
 import fs from "fs";
@@ -68,7 +68,11 @@ function pickAccent(title, slug) {
   return "#6366f1";
 }
 
-/** Lee todos los posts del blog: slug (nombre archivo) + title + image. */
+/**
+ * Lee todos los posts del blog: slug (nombre archivo) + title + image.
+ * Naming canónico: `og-<slug>.png` — auto-reparable, sin OG compartidas
+ * (cada post tiene su propia imagen aunque hoy comparta el mismo asset).
+ */
 function readPosts() {
   if (!fs.existsSync(CONTENT_DIR)) return [];
   return fs
@@ -78,11 +82,12 @@ function readPosts() {
       const raw = fs.readFileSync(path.join(CONTENT_DIR, file), "utf-8");
       const title = raw.match(/^title:\s*["']?(.*?)["']?\s*$/m)?.[1] || file.replace(/\.md$/, "");
       const image = raw.match(/^image:\s*["']?(.*?)["']?\s*$/m)?.[1] || "";
+      const slug = file.replace(/\.md$/, "");
       return {
-        slug: file.replace(/\.md$/, ""),
+        slug,
         title,
         image,
-        imageName: image ? path.basename(image) : `og-${file.replace(/\.md$/, "")}.png`,
+        imageName: `og-${slug}.png`,
         accent: pickAccent(title, file),
       };
     });
@@ -138,39 +143,39 @@ function generateSVG(post) {
 </svg>`;
 }
 
-async function generatePost(post, resvg) {
+async function generatePost(post, sharp) {
   const svg = generateSVG(post);
-  const base = path.join(BLOG_DIR, post.imageName);
-  const pngPath = base.replace(/\.svg$/, ".png");
-  const svgPath = base.replace(/\.png$/, ".svg");
+  const pngPath = path.join(BLOG_DIR, post.imageName);
+  const svgPath = pngPath.replace(/\.png$/, ".svg");
 
   if (DRY_RUN) {
-    console.log(`[dry-run] ${post.slug} → ${path.basename(base)}`);
-    return;
+    console.log(`[dry-run] ${post.slug} → ${post.imageName}`);
+    return `/blog/${post.imageName}`;
   }
 
-  // Formato de salida según disponibilidad: PNG si resvg, si no SVG.
-  const target = resvg ? pngPath : svgPath;
-  const targetName = path.basename(target);
-
-  // Regenerar solo si el target no existe (o con --force).
-  if (FORCE || !fs.existsSync(target)) {
-    if (resvg) {
-      fs.writeFileSync(pngPath, resvg.render(svg, 1200, 630));
-      console.log(`✓ ${targetName}`);
+  if (sharp) {
+    // PNG canónico 1200×630 (density 144 → render 2× y resize: texto nítido).
+    if (FORCE || !fs.existsSync(pngPath)) {
+      const buf = await sharp(Buffer.from(svg), { density: 144 })
+        .resize(1200, 630)
+        .png({ compressionLevel: 9 })
+        .toBuffer();
+      fs.writeFileSync(pngPath, buf);
+      const kb = Math.round(buf.length / 1024);
+      console.log(`✓ ${post.imageName} (${kb} KB)${kb > 300 ? "  ⚠ >300 KB" : ""}`);
     } else {
-      fs.writeFileSync(svgPath, svg, "utf-8");
-      console.log(`~ ${targetName} (SVG — resvg no instalado)`);
+      console.log(`· ${post.imageName} (ya existe)`);
     }
-  } else {
-    console.log(`· ${targetName} (ya existe)`);
+    patchFrontmatterImage(post.slug, `/blog/${post.imageName}`);
+    return `/blog/${post.imageName}`;
   }
 
-  // Auto-sincronizar frontmatter → el `image:` apunta al archivo real generado.
-  const ref = `/blog/${targetName}`;
-  if (post.image !== ref) {
-    patchFrontmatterImage(post.slug, ref);
-  }
+  // Fallback sin sharp: SVG (se regenera siempre; barato) + frontmatter al .svg.
+  fs.writeFileSync(svgPath, svg, "utf-8");
+  const svgName = path.basename(svgPath);
+  console.log(`~ ${svgName} (sharp no instalado)`);
+  patchFrontmatterImage(post.slug, `/blog/${svgName}`);
+  return `/blog/${svgName}`;
 }
 
 /** Genera la OG de una página clave en public/og/ (PNG vía sharp; SVG si falta). */
@@ -222,6 +227,31 @@ function patchFrontmatterImage(slug, newImage) {
   }
 }
 
+/**
+ * Elimina de public/blog los assets OG que ya no referencia ningún post
+ * (SVG viejos, PNG huérfanos, OG compartidas reemplazadas). Solo se invoca
+ * en modo full (sin --post); con --dry-run solo previsualiza.
+ */
+function cleanStaleAssets(usedRefs, dryRun = false) {
+  const used = new Set(usedRefs.map((r) => path.basename(r)));
+  let stale = 0;
+  for (const f of fs.readdirSync(BLOG_DIR)) {
+    if (used.has(f)) continue;
+    stale++;
+    if (dryRun) {
+      console.log(`[dry-run] - ${f} (sin referencias)`);
+    } else {
+      fs.unlinkSync(path.join(BLOG_DIR, f));
+      console.log(`- ${f} (sin referencias)`);
+    }
+  }
+  console.log(
+    stale
+      ? `  ${stale} assets ${dryRun ? "se eliminarían" : "obsoletos eliminados"}`
+      : "  sin assets obsoletos",
+  );
+}
+
 // ── Main ──
 if (PAGES_MODE) {
   // ── Modo páginas clave → public/og/<slug>.png (1200×630) ──
@@ -243,32 +273,38 @@ if (PAGES_MODE) {
   }
   console.log(`\n✓ Done`);
 } else {
-  // ── Modo posts → public/blog/ (SVG siempre; PNG si resvg) ──
+  // ── Modo posts → public/blog/og-<slug>.png (PNG vía sharp) ──
   if (!fs.existsSync(BLOG_DIR)) {
     fs.mkdirSync(BLOG_DIR, { recursive: true });
   }
 
-  let resvg = null;
+  let sharp = null;
   try {
-    const mod = await import("@resvg/resvg-js");
-    resvg = mod;
+    sharp = (await import("sharp")).default;
   } catch {
-    console.log("⚠ @resvg/resvg-js no instalado — se generarán SVGs (funcionan en web/og:image).\n");
+    console.log("⚠ sharp no instalado — fallback a SVG (correr desde Windows con deps instaladas).\n");
   }
 
   let posts = readPosts();
   posts = ONLY_POST
-    ? posts.filter((p) => p.slug.includes(ONLY_POST) || p.imageName.includes(ONLY_POST))
+    ? posts.filter((p) => p.slug.includes(ONLY_POST) || p.image.includes(ONLY_POST))
     : posts;
 
   console.log(`\nGenerando OG images para ${posts.length} posts...\n`);
 
+  const usedRefs = [];
   for (const post of posts) {
-    await generatePost(post, resvg);
+    usedRefs.push(await generatePost(post, sharp));
+  }
+
+  // Limpieza de assets sin referencias: solo en modo full (no con --post).
+  if (!ONLY_POST) {
+    console.log("");
+    cleanStaleAssets(usedRefs, DRY_RUN);
   }
 
   console.log(`\n✓ Done`);
-  if (!resvg) {
+  if (!sharp) {
     console.log(`  Para PNGs reales: pnpm install && node scripts/generate-og-images.mjs (en Windows)`);
   }
 }

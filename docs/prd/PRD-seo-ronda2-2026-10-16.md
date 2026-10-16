@@ -3,7 +3,7 @@
 - **Slug**: `seo-ronda2`
 - **Fecha**: `2026-10-16`
 - **Autor**: agente (Atlas/SEO) — a partir de `docs/marketing/SEO-PROGRESO-2026-10-16.md` (registro de progreso v2) y `docs/marketing/SEO-AUDIT-MTSPRZ-2026.md` (auditoría base 87/100)
-- **Estado**: `en ejecución` — Hitos 1–3 + F5a ejecutados (F1·F4·F6a · F2 · F3=A·F5b · F5a); F6b pospuesto (sin asset). Pendiente: verificación del usuario (`pnpm check`/`pnpm build` + generar PNG con `--pages`) y decisión §12.4 (fase 2.5).
+- **Estado**: `✅ implementado` — Hitos 1–3 verificados (build ✅ · commit `f3b3d9b`); **Fase 2.5 ejecutada por el usuario** (55 PNG + 52 assets purgados + sitemap regenerado) y `pnpm build` ✅. Pendiente: commit del usuario (working tree).
 - **Regla**: este PRD es obligatorio ANTES de tocar código (ver `AGENTS.md` REGLA #2).
 
 > **Documentos rectores** (redactados, **local y gitignored** — `.gitignore:32` → `docs/marketing/*`, no se versionan):
@@ -238,6 +238,16 @@ Chequeos manuales (el usuario):
 - **Hallazgos extra corregidos** (barridos de verificación): (a) `servicios/index.astro` — meta description con `\u00f3` literales en atributo texto-plano (Astro no procesa escapes ahí; el HTML servido mostraba `automatizaci\u00f3n` → snippet SERP roto); corregido con acentos reales. (b) `salmonicultura.astro:9` — `报告es` → `reportes`. (c) Texto corrupto CJK en posts del blog: `agencia-marketing-digital-sur-chile.md` (`零售,教育` → "retail, educación") y `mejores-crm-gratis-pymes-chile.md` (`第三方` → "terceros", ×2). Barrida CJK en `src/` = **0**.
 - **Pendiente Hito 3 (usuario)**: `pnpm check` + `pnpm build`; chequeos manuales (share `/` y `/servicios` con imagen propia; chip "Actualizado" visible en el post con fecha).
 
+### 11.4 Fase 2.5 — OG de posts en PNG canónico (2026-10-16)
+
+- **Verificación Hitos 1–3**: build del usuario ✅ y commit `f3b3d9b`. Fase 2.5 aprobada ("seguimos").
+- **`scripts/generate-og-images.mjs` (modo posts reescrito)**:
+  - PNG canónico **`public/blog/og-<slug>.png`** vía sharp (1200×630 · density 144 · compressionLevel 9); `@resvg/resvg-js` deja de ser requisito; fallback SVG + aviso si sharp falta.
+  - Naming unificado `og-<slug>`: auto-reparable, corrige el typo histórico `og-empresar-google-maps-osorno` y da imagen propia a los **6 posts que compartían 2 OG** (previews duplicadas eliminadas).
+  - **Limpieza automática**: en modo full elimina de `public/blog/` los assets sin referencias (hoy 64: 51 SVG referenciados por frontmatters `.svg` + 13 PNG huérfanos). `--dry-run` previsualiza generación + limpieza sin escribir.
+- **Corrida ejecutada (usuario, 2026-10-16)**: `--dry-run` → `--force` → `--pages --force` OK. Resultado verificado: 55 PNG de posts (49–72 KB) + 55 frontmatters → `/blog/og-<slug>.png` (0 refs `.svg`); 52 assets purgados (51 SVG + `og-empresar.png`); 10 PNG en `public/og/`; `pnpm build` ✅ regeneró `image-sitemap.xml` (66 refs `.png`, 0 `.svg`).
+- **Pendiente (usuario)**: commit de la Fase 2.5 (working tree: script + PRD + 55 md + PNGs + sitemap).
+
 ---
 
 ## 12. Decisiones — resueltas por delegación (2026-10-16)
@@ -247,4 +257,4 @@ Chequeos manuales (el usuario):
 1. **Alcance** ✅ — F1–F6 aprobados; **F6b pospuesto** (sin asset de poster; no se fabrica).
 2. **F3** ✅ — Opción **A**: `StickyCTA` eliminado (ejecutado en Hito 3).
 3. **F5** ✅ — Resuelto con fechas verificables vía git (sin inventar): solo `como-crear-landing-page-que-venda` tiene modificación real post-publicación (764cae8, 2026-08-06) → `modifiedTime: 2026-08-06`. Los otros 2 candidatos solo tienen commit de creación (2026-08-26) → sin chip.
-4. **Fase 2.5 (OG de los ~55 posts)** — 🕐 pendiente de OK: se ejecutará DESPUÉS de verificar H1–H4. Incluiría regenerar todas las OG de posts en PNG con sharp, eliminar las OG compartidas (previews duplicadas) y repuntar frontmatter `.svg`→`.png`.
+4. **Fase 2.5 (OG de los ~55 posts)** ✅ — aprobada por el usuario ("seguimos", tras build OK); **implementada** en el generador (ver §11.4). Pendiente solo la corrida del script en Windows.

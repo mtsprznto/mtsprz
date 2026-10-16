@@ -4,7 +4,7 @@ description: "Agencia de SEO local en la Región de Los Lagos. Posicionamiento e
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-agencia-seo-los-lagos.svg"
+image: "/blog/og-agencia-seo-los-lagos.png"
 tags: ["SEO", "Los Lagos", "posicionamiento Google"]
 ---
 

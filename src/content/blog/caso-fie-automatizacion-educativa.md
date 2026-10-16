@@ -3,7 +3,7 @@ title: "Automatizacion de gastos educativos con OCR + IA: caso FIE"
 description: "Como construimos una plataforma que extrae datos de comprobantes automaticamente usando OCR y RAG. Caso real de una startup edtech en el sur de Chile."
 pubDate: 2026-08-26
 author: "Matias Perez Nauto"
-image: "/blog/og-agentes-ia-empresas.svg"
+image: "/blog/og-caso-fie-automatizacion-educativa.png"
 tags: ["ia", "automatizacion", "caso de estudio", "ocr", "educacion", "chile"]
 ---
 

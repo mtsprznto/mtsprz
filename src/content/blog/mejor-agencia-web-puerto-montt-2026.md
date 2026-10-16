@@ -4,7 +4,7 @@ description: "Comparativa de agencias de diseño web en Puerto Montt. Precios, s
 pubDate: 2026-07-27
 modifiedTime: 2026-07-27
 author: "Mtsprz"
-image: "/blog/og-mejor-agencia-web-puerto-montt-2026.svg"
+image: "/blog/og-mejor-agencia-web-puerto-montt-2026.png"
 tags: ["agencia web", "Puerto Montt", "diseño web", "Los Lagos"]
 ---
 
