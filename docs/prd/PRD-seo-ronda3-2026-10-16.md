@@ -3,7 +3,7 @@
 - **Slug**: `seo-ronda3`
 - **Fecha**: `2026-10-16`
 - **Autor**: agente (Atlas/SEO) — a partir de `docs/marketing/SEO-PROGRESO-2026-10-16.md` v2, `PRD-seo-ronda2` (cerrado), `seo-test-results/ronda3-2026-08-01/` y práctica SEO/GEO 2026 verificada hoy por búsqueda web.
-- **Estado**: `aprobado — en ejecución` (aprobado 2026-10-16 · G1 ✅ commiteado (`d552c92`) · G2 ✅ docs + proxy — corrida manual pendiente · G3 ✅ playbook + G4 ✅ tracker — ejecución usuario pendiente · G5 pendiente).
+- **Estado**: `aprobado — en ejecución` (aprobado 2026-10-16 · G1 ✅ commiteado (`d552c92`) · G2 ✅ docs + proxy — corrida manual pendiente · G3 ✅ playbook + G4 ✅ tracker — ejecución usuario pendiente · G5 ✅ código — check/build pendiente del usuario).
 - **Regla**: este PRD es obligatorio ANTES de tocar código (ver `AGENTS.md` REGLA #2).
 
 > **Alcance**: SOLO lo ejecutable desde el repo (código/contenido/docs). Lo off-site (directorios, GBP, subdominios, reseñas) se ejecuta por el usuario con los playbooks; este PRD entrega **tracker + instrucciones exactas** y no edita esos proyectos.
@@ -130,7 +130,7 @@ No aplica (contenido estático). Rollback: `git revert` de los archivos tocados.
 - [ ] CA-3: R4 baseline publicada con % citas por motor (20 prompts).
 - [ ] CA-4: playbook medición entregado + vars verificadas (usuario confirma en Vercel).
 - [ ] CA-5: tracker off-site con estados + pasos exactos + verificación.
-- [ ] CA-6: `sameAs` solo con URLs que respondan 200.
+- [x] CA-6: `sameAs` solo con URLs que respondan 200. — ✅ EmpresaChile id=41 + ChilePymes verificados 200 (curl 16-oct) y añadidos a nodos org; GBP/Maps ya presente; perfiles existentes intactos.
 
 ## 9. Riesgos
 
@@ -194,9 +194,11 @@ Post-deploy (manual, navegador):
 - `scripts/seo-offsite-tracker.md`: NAP canónico, estados base de directorios (O1) + correcciones de entidad **EmpresaChile/ChilePymes aún pendientes** (PRD P2), checklist GBP + Bing WMT/Places (O2), y **re-verificación 16-oct de subdominios** (O9): dept/lllit/autcv/td/portafolio → 200 sin noindex (td con `index, follow` explícito); ota DNS muerta. Instrucciones noindex + comandos de verificación.
 - Meta PRD: ≥10 directorios con NAP canónico · 0 subdominios en SERP de marca.
 
-### Pendiente (G5)
+### G5 · Auditoría sameAs — ✅ código (2026-10-16) · check/build pendiente del usuario
 
-- G5 auditoría `sameAs` (bajo): nodos Organization/Person solo con perfiles verificados.
+- `src/layouts/BaseLayout.astro`: `personSameAs` renombrada a `orgSameAs` (contenía perfiles de empresa; usada por ProfessionalService + Organization). Añadidas **solo URLs verificadas HTTP 200** (curl con UA navegador, 16-oct): EmpresaChile (`perfil_publico.php?id=41`) + ChilePymes (`chilepymes.com/info/soluciones-digitales-spa-051B56A5A5C247CA`).
+- Person (`author.sameAs`, `src/data/author.ts`): sin cambios — LinkedIn personal responde 999 a curl (anti-bot, no verificable por script); GitHub (`github.com/mtsprz`) y Maps responden 200.
+- Observaciones: ambos listings aún muestran NAP mixto (Puerto Montt residual) → corregir en O1 (tracker G4). Instagram (200)/Facebook (400 a curl) fuera de alcance RF-7.
 
 ## 12. Decisiones
 
@@ -209,3 +211,4 @@ Post-deploy (manual, navegador):
 7. **RegionPage**: prop `quickAnswer` opcional → solo las 4 regiones en scope emiten el bloque; sin duplicación de textos en 11 regiones restantes.
 8. **G3 · Medición AI (fuentes verificadas 16-oct-2026)**: GA4 canal nativo "AI Assistant" (13-may-2026; sin backfill) + custom channel group "AI Search" (Perplexity/Copilot suelen caer en Referral; AI Overviews de Google queda en Organic Search); GSC "Generative AI performance report" (global 31-ago-2026, solo impresiones). Incluidos en playbook con fuentes.
 9. **G4 · O9 noindex**: `<meta name="robots" content="noindex">` o header `X-Robots-Tag: noindex` por subproyecto off-repo; **nunca** bloquear con robots.txt (impide leer el noindex). Re-verificación via curl + `site:` a los 30 días.
+10. **G5 · sameAs**: extender solo con URLs verificadas 200 vía curl+UA (16-oct); EmpresaChile/ChilePymes verificados y añadidos a nodos org (`orgSameAs`); LinkedIn personal responde 999 (anti-bot) — no verificable por script, sin cambio.

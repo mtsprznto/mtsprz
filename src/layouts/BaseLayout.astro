@@ -65,10 +65,13 @@ if (canonical && canonical !== site) {
   }
 }
 const resolvedBreadcrumbs = breadcrumbs && breadcrumbs.length > 0 ? breadcrumbs : defaultBreadcrumbs.length > 0 ? defaultBreadcrumbs : undefined;
-const personSameAs = [
+const orgSameAs = [
   "https://www.linkedin.com/company/mtsprz",
   "https://github.com/mtsprz",
   "https://www.google.com/maps/place/Mtsprz/@-41.3130329,-72.9944674,17z",
+  // G5 (R3): solo perfiles verificados HTTP 200 (curl 2026-10-16)
+  "https://www.empresachile.cl/paginas/perfil_publico.php?id=41",
+  "https://chilepymes.com/info/soluciones-digitales-spa-051B56A5A5C247CA",
 ];
 ---
 
@@ -195,7 +198,7 @@ const personSameAs = [
             { "@type": "City", "name": "Puerto Montt" },
             { "@type": "AdministrativeArea", "name": "Región de Los Lagos" },
           ],
-          sameAs: personSameAs,
+          sameAs: orgSameAs,
         },
         {
           "@type": "Organization",
@@ -238,7 +241,7 @@ const personSameAs = [
             availableLanguage: ["Spanish"],
             areaServed: "CL-LL",
           },
-          sameAs: personSameAs,
+          sameAs: orgSameAs,
         },
         {
           "@type": "WebSite",
