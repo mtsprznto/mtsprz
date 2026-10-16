@@ -3,7 +3,7 @@
 - **Slug**: `seo-ronda2`
 - **Fecha**: `2026-10-16`
 - **Autor**: agente (Atlas/SEO) — a partir de `docs/marketing/SEO-PROGRESO-2026-10-16.md` (registro de progreso v2) y `docs/marketing/SEO-AUDIT-MTSPRZ-2026.md` (auditoría base 87/100)
-- **Estado**: `en revisión` — pendiente aprobación del usuario (§12) antes de tocar código
+- **Estado**: `en ejecución` — Hitos 1–3 + F5a ejecutados (F1·F4·F6a · F2 · F3=A·F5b · F5a); F6b pospuesto (sin asset). Pendiente: verificación del usuario (`pnpm check`/`pnpm build` + generar PNG con `--pages`) y decisión §12.4 (fase 2.5).
 - **Regla**: este PRD es obligatorio ANTES de tocar código (ver `AGENTS.md` REGLA #2).
 
 > **Documentos rectores** (redactados, **local y gitignored** — `.gitignore:32` → `docs/marketing/*`, no se versionan):
@@ -215,11 +215,36 @@ Chequeos manuales (el usuario):
 - **2026-10-16** — PRD creado a partir del registro `SEO-PROGRESO-2026-10-16.md` v2 y el borrador de marketing `docs/marketing/PRD-seo-ronda2-2026-10-16.md`. Estado `en revisión`. Sin código tocado. Decisiones pendientes del usuario en §12.
 - Evidencia clave verificada para este PRD: `casos.astro:241-242` (únicos scripts síncronos del sitio) · `BaseLayout:50-52,131-140,281` · `generate-og-images.mjs:171-177` (resvg) · assets `public/blog/` 51 SVG/13 PNG/0 refs PNG · OG compartidas ×3+3 posts · `StickyCTA` ×3 usos · `blog.astro:227-231,313,588` · `content.config.ts:13`.
 
+### 11.1 Hito 1 — ejecutado (2026-10-16)
+
+- **F1** (`src/pages/casos.astro`): eliminados los 2 `<script src>` síncronos de jsdelivr (render-blocking) → inyección async `inject()` (promesas + `onerror` → `.catch()` silencioso) al final del IIFE, mismo patrón que `HeroSection.astro:98-144`. Guard convertido de variable estática a función dinámica `hasGsap()` re-evaluada en `applyFilter` (L276) e init (L529). Verificación estática: `grep "script is:inline src=" src/` = **0** (CA-1 grep ✓). Ruta plana y estado inicial de cards intactos (diff revisado).
+- **F4** (`public/llms.txt`): añadida sección `## Optional` con link `https://mtsprz.org/llms-full.txt`.
+- **F6a** (`src/layouts/BaseLayout.astro`): `@graph` extendido con `SiteNavigationElement` (`@id: /#navigation`) + `hasPart` con el menú real del Header (Servicios, Portafolio, Casos, Blog, Contacto).
+- **Pendiente Hito 1**: `pnpm check` + `pnpm build` (usuario, REGLA #1) + chequeo runtime de `/casos` con CDN bloqueado (DevTools).
+- **Hitos siguientes**: H2 = F2 completo (modo `--pages` + 10 páginas + PNG); H3 = F3 (decisión A/B usuario) + F5b (chip tiers 2–4); H4 = F5a (fechas reales — dato usuario) + F6b (poster — sin asset en `public/`, candidato a posponer).
+
+### 11.2 Hito 2 — ejecutado (2026-10-16)
+
+- **F2** (`scripts/generate-og-images.mjs`): nuevo modo `--pages` — manifest `PAGES` con las 10 páginas clave; render SVG→PNG 1200×630 vía `sharp` (density 144 + resize 2×, `compressionLevel: 9`); fallback SVG + aviso si sharp no está; `--force` extendido a páginas. `node --check` → OK. `public/og/` aún no existe (lo crea el script).
+- **F2** (páginas): prop `image="/og/<slug>.png"` añadida a las 10 páginas (verificado: grep = 10): `index`, `servicios`, `desarrollo-web`, `seo-local`, `automatizacion`, `contacto`, `casos`, `puerto-varas`, `osorno`, `puerto-montt`.
+- **Pendiente Hito 2 (usuario)**: `node scripts/generate-og-images.mjs --pages --dry-run` → `--pages` (genera los 10 PNG) — ANTES de `pnpm build`.
+
+### 11.3 Hito 3 + F5a — ejecutados (2026-10-16)
+
+- **F3 (Opción A)**: `StickyCTA` retirado — imports+usos eliminados de `servicios/index.astro`, `regiones/osorno.astro`, `servicios/salmonicultura.astro`; componente borrado (`src/components/StickyCTA.astro`, −57 líneas); `DESIGN.md` (3 refs actualizadas). Verificado: 0 refs en `src/`. El `WhatsAppButton` global (con tracking GA) queda como único CTA flotante.
+- **F5b**: chip "Actualizado" añadido a tiers 2–4 de `blog.astro` (tier 4 variante `lg:block`) — verificado: 5 condicionales `modifiedTime` (featured, t1, t2, t3, t4).
+- **F5a (H4)**: `modifiedTime: 2026-08-06` en `como-crear-landing-page-que-venda.md` (fecha verificada vía git, sin inventar: pubDate 2026-08-02, commit real 764cae8 del 2026-08-06). Los otros 2 candidatos solo tienen commit de creación (5a1650a, 2026-08-26) → sin fecha, sin chip.
+- **F6b**: pospuesto — no hay asset de poster en `public/` (no se fabrica).
+- **Hallazgos extra corregidos** (barridos de verificación): (a) `servicios/index.astro` — meta description con `\u00f3` literales en atributo texto-plano (Astro no procesa escapes ahí; el HTML servido mostraba `automatizaci\u00f3n` → snippet SERP roto); corregido con acentos reales. (b) `salmonicultura.astro:9` — `报告es` → `reportes`. (c) Texto corrupto CJK en posts del blog: `agencia-marketing-digital-sur-chile.md` (`零售,教育` → "retail, educación") y `mejores-crm-gratis-pymes-chile.md` (`第三方` → "terceros", ×2). Barrida CJK en `src/` = **0**.
+- **Pendiente Hito 3 (usuario)**: `pnpm check` + `pnpm build`; chequeos manuales (share `/` y `/servicios` con imagen propia; chip "Actualizado" visible en el post con fecha).
+
 ---
 
-## 12. Decisiones pendientes (usuario)
+## 12. Decisiones — resueltas por delegación (2026-10-16)
 
-1. **Alcance**: ¿aprobar F1–F6 como están? (F6a/F6b son opcionales y de menor impacto; F6b depende de asset de poster).
-2. **F3**: ¿Opción **A** (eliminar `StickyCTA`, recomendada) u **Opción B** (reposicionar)? 
-3. **F5**: ¿qué posts llevan `modifiedTime` y con qué **fechas reales**? (candidatos: los 3 más recientes; requiere dato del usuario).
-4. **Fase 2.5 (OG de los ~55 posts)**: ¿ahora, después de F1–F6, o no hacer? Incluiría regenerar todas las OG de posts en PNG con sharp, eliminar las OG compartidas (previews duplicadas) y repuntar frontmatter `.svg`→`.png`.
+> El usuario delegó las decisiones al criterio del agente ("sigamos siempre con tu recomendado").
+
+1. **Alcance** ✅ — F1–F6 aprobados; **F6b pospuesto** (sin asset de poster; no se fabrica).
+2. **F3** ✅ — Opción **A**: `StickyCTA` eliminado (ejecutado en Hito 3).
+3. **F5** ✅ — Resuelto con fechas verificables vía git (sin inventar): solo `como-crear-landing-page-que-venda` tiene modificación real post-publicación (764cae8, 2026-08-06) → `modifiedTime: 2026-08-06`. Los otros 2 candidatos solo tienen commit de creación (2026-08-26) → sin chip.
+4. **Fase 2.5 (OG de los ~55 posts)** — 🕐 pendiente de OK: se ejecutará DESPUÉS de verificar H1–H4. Incluiría regenerar todas las OG de posts en PNG con sharp, eliminar las OG compartidas (previews duplicadas) y repuntar frontmatter `.svg`→`.png`.

@@ -249,7 +249,7 @@ Cargado **hoy**:
 ### 4.3 Restricción crítica de scroll (heredada, NO cambiar)
 
 `html`/`body` usan **`overflow-x: clip`** (NO `hidden`) — preserva `position: sticky`
-(Header, StickyCTA). **No cambiar a `overflow-x: hidden`.**
+(Header). **No cambiar a `overflow-x: hidden`.**
 
 ---
 
@@ -364,7 +364,7 @@ Switch **Modo Cyber ↔ Modo Clean** (§11.2). Persiste en `localStorage`, aplic
 | `<CotizarModal>` | Modal cotizar | re-estilizar como `WebcoreWindow` |
 | `<LeadMagnetForm>` | Captura email | `POST /api/lead-magnet` |
 | `casos/CasoForm` | Cupo fundador | `POST /api/leads` (`oferta_fundador`) |
-| `<StickyCTA>` / `<WhatsAppButton>` | CTAs persistentes | No solapar en móvil |
+| `<WhatsAppButton>` | CTA persistente | Único CTA flotante (StickyCTA retirado, ronda SEO 2) |
 
 **Formulario dual** (§8 del spec): un toggle `(o) Modo Estándar · ( ) Modo Console`.
 - **Modo Estándar** (default): campos clásicos (Nombre, Empresa, Mensaje, Email, Tipo, Presupuesto).
@@ -567,7 +567,7 @@ no efectos decorativos.
 - **Región** (`regiones/*`): Header → Breadcrumbs → contenido local → `LocalidadDatos` →
   `FaqPreview` → `CiudadesRelacionadas` → Footer.
 - **SEO local** (`seo-local/*`): estructura de región + `CiudadesRelacionadas`.
-- **Servicio** (`servicios/*`): incluye `StickyCTA`.
+- **Servicio** (`servicios/*`): CTA flotante = `WhatsAppButton` global (StickyCTA retirado, ronda SEO 2).
 - **Casos** (`casos/*`): CasoCard / `OfertaFundador` + `CasoForm` + `CasoNav` +
   `TestimoniosReservados`; `TestimonioCaso` en `/casos/[slug]`.
 - **Blog / Recursos** (`recursos/*`): `Breadcrumbs` + `LeadMagnetForm` + Footer.

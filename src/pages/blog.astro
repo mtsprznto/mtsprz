@@ -372,6 +372,12 @@ const anio = new Date().getFullYear();
                       </time>
                       <span class="text-frame" aria-hidden="true">·</span>
                       <span>{readMin} min</span>
+                      {post.data.modifiedTime && (
+                        <>
+                          <span class="text-frame" aria-hidden="true">·</span>
+                          <span class="text-accent">Actualizado</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </a>
@@ -416,6 +422,12 @@ const anio = new Date().getFullYear();
                       <time>{post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}</time>
                       <span class="text-frame" aria-hidden="true">·</span>
                       <span>{readMin} min</span>
+                      {post.data.modifiedTime && (
+                        <>
+                          <span class="text-frame" aria-hidden="true">·</span>
+                          <span class="text-accent">Actualizado</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </a>
@@ -456,6 +468,9 @@ const anio = new Date().getFullYear();
                       <span class="hidden font-mono text-[10px] tracking-wide text-text-tertiary md:block">
                         {readMin} min
                       </span>
+                      {post.data.modifiedTime && (
+                        <span class="hidden font-mono text-[10px] tracking-wide text-accent lg:block">Actualizado</span>
+                      )}
                       <svg class="h-3 w-3 text-text-tertiary transition-all group-hover:translate-x-0.5 group-hover:text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
                     </div>
                   </a>

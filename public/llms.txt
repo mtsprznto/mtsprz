@@ -98,3 +98,6 @@ https://mtsprz.org/blog/como-posicionar-negocio-google-maps-los-lagos
 - Atención directa con el equipo técnico, sin call center
 - Precios transparentes publicados en el sitio web
 - Conocimiento del mercado local de la Región de Los Lagos y Chiloé
+
+## Optional
+- [llms-full.txt](https://mtsprz.org/llms-full.txt): versión extendida de este archivo — detalle completo de servicios, precios, proceso de trabajo y respuestas extensas para motores de IA.

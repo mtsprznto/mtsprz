@@ -256,6 +256,18 @@ const personSameAs = [
             "query-input": "required name=search_term_string",
           },
         },
+        {
+          "@type": "SiteNavigationElement",
+          "@id": `${site}/#navigation`,
+          name: "Navegación principal",
+          hasPart: [
+            { "@type": "WebPage", name: "Servicios", url: `${site}/servicios` },
+            { "@type": "WebPage", name: "Portafolio", url: `${site}/portafolio` },
+            { "@type": "WebPage", name: "Casos", url: `${site}/casos` },
+            { "@type": "WebPage", name: "Blog", url: `${site}/blog` },
+            { "@type": "WebPage", name: "Contacto", url: `${site}/contacto` },
+          ],
+        },
         ...(video
           ? [
               {

@@ -41,6 +41,7 @@ const statCell = [
 <BaseLayout
   title="Casos de éxito · Automatización con IA para pymes del sur"
   description="Automatización con IA para pymes del sur: casos reales de OCR, email marketing y seguridad. Oferta fundador −30% para los primeros 10 clientes."
+  image="/og/casos.png"
   canonical={url}
   breadcrumbs={[{ name: "Casos", path: "/casos" }]}
 >
@@ -237,10 +238,9 @@ const statCell = [
     }
   </style>
 
-  <!-- GSAP vía CDN (jsdelivr) — no está en package.json · mismo patrón que index.astro -->
-  <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-  <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-
+  <!-- GSAP vía CDN (jsdelivr): ya NO se carga con <script src> síncrono (render-blocking).
+       El IIFE de abajo lo inyecta async (mismo patrón que HeroSection.astro).
+       CDN caído/bloqueado → la página queda 100% funcional en ruta plana. -->
   <script is:inline>
     (function () {
       var btns = document.querySelectorAll("[data-filter-btn]");
@@ -249,8 +249,11 @@ const statCell = [
       var countEl = document.getElementById("casos-count");
 
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      var hasGsap =
-        typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+      // Guard dinámico: GSAP se inyecta async DESPUÉS de este bloque, así que se
+      // re-evalúa en cada uso (filtros y init) en vez de capturarse una sola vez.
+      function hasGsap() {
+        return typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+      }
 
       // ---------- Filtros por industria (siempre activos; no-JS-safe) ----------
       function updateMeta(filter) {
@@ -271,7 +274,7 @@ const statCell = [
       }
 
       function applyFilter(filter) {
-        if (hasGsap && !reduce) {
+        if (hasGsap() && !reduce) {
           var hide = [];
           var show = [];
           cards.forEach(function (c) {
@@ -508,51 +511,38 @@ const statCell = [
         return true;
       }
 
-      // Guard + reintento: CDN bloqueado/offline → archivo estático visible
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", function () {
-          if (!hasGsap) {
-            console.warn("[casos] GSAP no disponible al DOMContentLoaded — reintento en load");
-            window.addEventListener(
-              "load",
-              function () {
-                if (typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined") {
-                  hasGsap = true;
-                  initCasos();
-                  return;
-                }
-                var inject = function (src) {
-                  return new Promise(function (resolve, reject) {
-                    var s = document.createElement("script");
-                    s.src = src;
-                    s.async = true;
-                    s.onload = resolve;
-                    s.onerror = reject;
-                    document.head.appendChild(s);
-                  });
-                };
-                Promise.all([
-                  inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"),
-                  inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"),
-                ])
-                  .then(function () {
-                    hasGsap = true;
-                    if (!initCasos()) {
-                      console.warn("[casos] GSAP cargó pero la init falló — archivo estático");
-                    }
-                  })
-                  .catch(function () {
-                    console.warn("[casos] GSAP no cargó (CDN bloqueado u offline) — archivo estático por diseño");
-                  });
-              },
-              { once: true }
-            );
-          } else {
-            initCasos();
-          }
+      // ---------- Carga diferida de GSAP (sin render-blocking) ----------
+      // Este bloque corre al final del body. El HTML no incluye ningún <script src>
+      // de CDN: GSAP + ScrollTrigger se inyectan async aquí, en paralelo al resto
+      // de la carga. CDN ok → animaciones activas al resolver (guard re-evaluado).
+      // CDN caído/bloqueado → archivo estático 100% funcional (filtros en ruta plana).
+      function inject(src) {
+        return new Promise(function (resolve, reject) {
+          var s = document.createElement("script");
+          s.src = src;
+          s.async = true;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
         });
-      } else if (hasGsap) {
+      }
+
+      if (hasGsap()) {
+        // Caso borde: GSAP ya presente (página visitada antes / caché) → init directo.
         initCasos();
+      } else {
+        Promise.all([
+          inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"),
+          inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"),
+        ])
+          .then(function () {
+            if (!initCasos()) {
+              console.warn("[casos] GSAP cargó pero la init falló — archivo estático");
+            }
+          })
+          .catch(function () {
+            console.warn("[casos] GSAP no cargó (CDN bloqueado u offline) — archivo estático por diseño");
+          });
       }
     })();
   </script>

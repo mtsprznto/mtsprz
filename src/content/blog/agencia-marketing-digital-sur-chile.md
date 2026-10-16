@@ -28,7 +28,7 @@ Valdivia es el centro de actividad digital de la región. La escena es más redu
 
 ### Región de la Araucanía
 
-Temuco concentra la actividad. Es la tercera ciudad más grande del sur y tiene una escena de marketing digital más desarrollada. Las agencias aquí suelen atender clientes de toda la región y tienen experiencia en sectores como零售,教育 y servicios profesionales.
+Temuco concentra la actividad. Es la tercera ciudad más grande del sur y tiene una escena de marketing digital más desarrollada. Las agencias aquí suelen atender clientes de toda la región y tienen experiencia en sectores como retail, educación y servicios profesionales.
 
 ## Cuánto cuesta marketing digital en el sur de Chile
 

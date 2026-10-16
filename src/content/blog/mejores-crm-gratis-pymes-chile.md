@@ -35,7 +35,7 @@ Antes de elegir, define que necesitas:
 | Contactos | Hasta 1,000 |
 | Usuarios | Ilimitados (gratis) |
 | Idiomas | Espanol |
-| Integraciones | 500+ (WhatsApp via第三方) |
+| Integraciones | 500+ (WhatsApp via terceros) |
 | Ideal para | Pymes que empiezan con CRM |
 
 **Lo bueno:** Interfaz intuitiva, integracion con Gmail y Outlook, formularios web, pipeline de ventas visual, app movil, plantillas de email.  
@@ -139,7 +139,7 @@ Tiempo estimado: 1-2 horas.
 Si tienes mas de 20 clientes y quieres hacer seguimiento de ventas, si. Sin CRM, los clientes se pierden, las oportunidades se olvidan y no sabes que canales funcionan.
 
 ### ¿Puedo conectar WhatsApp con el CRM?
-HubSpot y Zoho tienen integraciones con WhatsApp API (via第三方). Para la app gratuita de WhatsApp Business, no hay integracion directa con CRM.
+HubSpot y Zoho tienen integraciones con WhatsApp API (via terceros). Para la app gratuita de WhatsApp Business, no hay integracion directa con CRM.
 
 ### ¿El CRM gratis es suficiente o necesito el pago?
 Para el 80% de las pymes, el plan gratuito es suficiente por al menos 6-12 meses. Cuando necesites automatizacion avanzada (flujos automaticos, secuencias de email, reportes avanzados), recien ahi considera el plan pago.

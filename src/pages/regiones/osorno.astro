@@ -4,7 +4,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
 import RegionPage from "../../components/RegionPage.astro";
-import StickyCTA from "../../components/StickyCTA.astro";
 
 const waPhone = "56966929818";
 const waMsg = encodeURIComponent("Hola, vi la página de Osorno en Mtsprz y quiero información sobre sus servicios digitales.");
@@ -38,6 +37,7 @@ const faqs = [
 <BaseLayout
   title="Agencia Digital Osorno · Web y SEO Local"
   description="Agencia digital en Osorno: páginas web profesionales, posicionamiento en Google Maps y bots WhatsApp para pymes. Sitio profesional en 7 días. Cotiza gratis."
+  image="/og/osorno.png"
   canonical="https://mtsprz.org/regiones/osorno"
   breadcrumbs={[{ name: "Osorno", path: "/regiones/osorno" }]}
 >
@@ -93,6 +93,5 @@ const faqs = [
       faqs={faqs}
     />
   </main>
-  <StickyCTA text="Cotizar ahora" />
   <Footer />
 </BaseLayout>
