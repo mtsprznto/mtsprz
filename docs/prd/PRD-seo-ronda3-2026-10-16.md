@@ -3,7 +3,7 @@
 - **Slug**: `seo-ronda3`
 - **Fecha**: `2026-10-16`
 - **Autor**: agente (Atlas/SEO) — a partir de `docs/marketing/SEO-PROGRESO-2026-10-16.md` v2, `PRD-seo-ronda2` (cerrado), `seo-test-results/ronda3-2026-08-01/` y práctica SEO/GEO 2026 verificada hoy por búsqueda web.
-- **Estado**: `aprobado — en ejecución` (aprobado 2026-10-16 · G1 ✅ código · G2 ✅ docs + proxy — corrida manual pendiente · G3–G5 por ejecutar).
+- **Estado**: `aprobado — en ejecución` (aprobado 2026-10-16 · G1 ✅ commiteado (`d552c92`) · G2 ✅ docs + proxy — corrida manual pendiente · G3 ✅ playbook + G4 ✅ tracker — ejecución usuario pendiente · G5 pendiente).
 - **Regla**: este PRD es obligatorio ANTES de tocar código (ver `AGENTS.md` REGLA #2).
 
 > **Alcance**: SOLO lo ejecutable desde el repo (código/contenido/docs). Lo off-site (directorios, GBP, subdominios, reseñas) se ejecuta por el usuario con los playbooks; este PRD entrega **tracker + instrucciones exactas** y no edita esos proyectos.
@@ -175,7 +175,7 @@ Post-deploy (manual, navegador):
   10. `/whatsapp-api` — ANSWER BLOCK ad-hoc reemplazado (accent `#25D366`, CTA "QUIERO MI COTIZACIÓN").
 - `RegionPage.astro` gana prop **opcional** → las otras 11 regiones quedan sin cambio.
 - Solo datos verificados (precios canónicos del sitio, plazos del schema, población INE 2024). Descartado "+50 proyectos" (no verificable).
-- Pendiente del usuario: `pnpm check` + `pnpm build` (REGLA #1 — el agente no ejecuta).
+- ✅ Verificado por el usuario (check/build OK) y commiteado en `d552c92`.
 
 ### G2 · Baseline citas AI — ✅ docs + corrida proxy (2026-10-16) · corrida manual pendiente
 
@@ -183,9 +183,20 @@ Post-deploy (manual, navegador):
 - Corrida proxy `websearch` (3 prompts; sección §1 de RESULTADOS): mtsprz.org ausente en los 3 → dominan agencias locales (kanale.cl), contenido genérico ES y SaaS internacional; señal de oportunidad GEO.
 - Corrida manual (usuario, navegador): R4-a pasada 1 (16→20 oct) y pasada 2 (23 oct) pendientes.
 
-### Pendiente (G3–G5) — no iniciados
+### G3 · Medición GA4/GSC — ✅ playbook entregado (2026-10-16) · ejecución usuario pendiente
 
-- G3 playbook GA4/GSC · G4 tracker off-site O1/O2/O9 · G5 auditoría `sameAs`.
+- `scripts/seo-medicion-ga4-gsc.md`: estado del tracking actual (`analytics.ts` + `tracking.ts`), canal nativo **AI Assistant** en GA4 (13-may-2026; ChatGPT/Gemini/Claude) + **custom channel group "AI Search"** (regex + orden sobre Referral), exploración "AI Referrals — baseline", checklist GSC (**Generative AI performance report**, global desde 31-ago-2026 — sin clics/queries) + revisión post-core-update, y checklist env vars (`PUBLIC_GA_ID`, `PUBLIC_CLARITY_ID`) en Vercel.
+- Hallazgo higiene (fuera de alcance): `WhatsAppButton.astro:L41-46` envía conversión Ads placeholder `send_to: "AW-CONV/whatsapp_click"` — inofensivo hoy; limpiar al crear Google Ads real (J5).
+- Pendiente del usuario (accesos): crear canal/exploración en GA4 + revisar GSC + verificar env vars.
+
+### G4 · Tracker off-site — ✅ entregado (2026-10-16) · ejecución usuario pendiente
+
+- `scripts/seo-offsite-tracker.md`: NAP canónico, estados base de directorios (O1) + correcciones de entidad **EmpresaChile/ChilePymes aún pendientes** (PRD P2), checklist GBP + Bing WMT/Places (O2), y **re-verificación 16-oct de subdominios** (O9): dept/lllit/autcv/td/portafolio → 200 sin noindex (td con `index, follow` explícito); ota DNS muerta. Instrucciones noindex + comandos de verificación.
+- Meta PRD: ≥10 directorios con NAP canónico · 0 subdominios en SERP de marca.
+
+### Pendiente (G5)
+
+- G5 auditoría `sameAs` (bajo): nodos Organization/Person solo con perfiles verificados.
 
 ## 12. Decisiones
 
@@ -196,3 +207,5 @@ Post-deploy (manual, navegador):
 5. **Datos**: solo hechos verificables (precios canónicos, plazos del schema, censo INE 2024). Descartado "+50 proyectos" (no verificable en `projects.json`).
 6. **Cards de precio stale en `/whatsapp-api`** ($390.000/$650.000 + $90.000/mes vs canónico $590.000 + $69.000/mes): detectadas, NO editadas (fuera de G1) — pendiente decisión del usuario.
 7. **RegionPage**: prop `quickAnswer` opcional → solo las 4 regiones en scope emiten el bloque; sin duplicación de textos en 11 regiones restantes.
+8. **G3 · Medición AI (fuentes verificadas 16-oct-2026)**: GA4 canal nativo "AI Assistant" (13-may-2026; sin backfill) + custom channel group "AI Search" (Perplexity/Copilot suelen caer en Referral; AI Overviews de Google queda en Organic Search); GSC "Generative AI performance report" (global 31-ago-2026, solo impresiones). Incluidos en playbook con fuentes.
+9. **G4 · O9 noindex**: `<meta name="robots" content="noindex">` o header `X-Robots-Tag: noindex` por subproyecto off-repo; **nunca** bloquear con robots.txt (impide leer el noindex). Re-verificación via curl + `site:` a los 30 días.
