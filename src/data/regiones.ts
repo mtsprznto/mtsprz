@@ -70,6 +70,16 @@ export const REGIONES: Record<string, RegionInfo> = {
     hitos: ["puerta de entrada a Chiloé", "Fuerte San Antonio", "museo regional de Chiloé"],
     notaDistancia: "incluye ferry Pargua–Chacao",
   },
+  chiloe: {
+    slug: "chiloe",
+    nombre: "Chiloé",
+    region: "Región de Los Lagos",
+    poblacion: 176865,
+    distanciaKm: 105,
+    sectores: ["turismo", "acuicultura y salmonicultura", "artesanía", "patrimonio y cultura"],
+    hitos: ["archipiélago de 10 comunas", "iglesias patrimoniales UNESCO", "palafitos de Castro y Chonchi"],
+    notaDistancia: "ferry Pargua–Chacao · varía según comuna",
+  },
   calbuco: {
     slug: "calbuco",
     nombre: "Calbuco",

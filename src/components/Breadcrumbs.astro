@@ -1,4 +1,8 @@
 ---
+/**
+ * Breadcrumbs — v2 (tokens · font-mono) · navegación de migas
+ * API intacta (items, class) — hereda a todas las páginas internas.
+ */
 export interface Props {
   items: { name: string; path: string }[];
   class?: string;
@@ -9,21 +13,21 @@ const home = { name: "Inicio", path: "/" };
 const crumbs = [home, ...items];
 ---
 
-<nav aria-label="Breadcrumb" class={`text-[11px] font-body tracking-wide ${className}`}>
-  <ol class="flex flex-wrap items-center gap-1.5 text-white/30">
+<nav aria-label="Breadcrumb" class={`font-mono text-[11px] tracking-wide ${className}`}>
+  <ol class="flex flex-wrap items-center gap-1.5 text-text-tertiary">
     {crumbs.map((crumb, i) => {
       const isLast = i === crumbs.length - 1;
       return (
-        <li class="flex items-center gap-1.5 min-w-0">
+        <li class="flex min-w-0 items-center gap-1.5">
           {i > 0 && (
-            <svg class="w-3 h-3 text-white/20 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="h-3 w-3 shrink-0 text-text-tertiary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M9 18l6-6-6-6" />
             </svg>
           )}
           {isLast ? (
-            <span class="text-white/50 truncate max-w-[160px] sm:max-w-none" aria-current="page">{crumb.name}</span>
+            <span class="max-w-[160px] truncate text-text-secondary sm:max-w-none" aria-current="page">{crumb.name}</span>
           ) : (
-            <a href={crumb.path} class="hover:text-white/60 transition-colors">{crumb.name}</a>
+            <a href={crumb.path} class="transition-colors hover:text-accent">{crumb.name}</a>
           )}
         </li>
       );

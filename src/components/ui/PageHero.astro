@@ -1,0 +1,196 @@
+---
+/**
+ * PageHero — hero canónico v2 para páginas internas (extiende home/HeroSection · DESIGN §13 [2])
+ * Mismos materiales que el hero del home: video atenuado (§5.4) + scrim, StatusLed,
+ * eyebrow mono, H1 con StaggerText, CTAs mono y strip inferior con Breadcrumbs.
+ * Slots: `actions` (fila de CTAs) · `aside` (columna derecha opcional, ej. ventana).
+ * Sin JS propio salvo parallax opcional del video (scoped · reduced-motion aware).
+ */
+import StaggerText from "../StaggerText.astro";
+import StatusLed from "./StatusLed.astro";
+import Breadcrumbs from "../Breadcrumbs.astro";
+
+export interface Props {
+  /** Línea mono superior: "// servicios · catálogo" */
+  eyebrow: string;
+  /** Línea 1 del H1 (animada char a char) */
+  title: string;
+  /** Línea 2 del H1, en acento */
+  titleAccent: string;
+  /** Párrafo de bajada */
+  subtitle: string;
+  /** Línea pequeña terciaria bajo el subtítulo */
+  note?: string;
+  ledLabel?: string;
+  ledStatus?: "ok" | "warn" | "down";
+  /** Video de fondo opcional (30% + scrim) */
+  videoUrl?: string;
+  /** Migas para el strip inferior (visibles = navegación real) */
+  breadcrumbs?: { name: string; path: string }[];
+  /** Texto mono a la derecha del strip inferior */
+  meta?: string;
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  titleAccent,
+  subtitle,
+  note,
+  ledLabel = "ALL SYSTEMS OPERATIONAL",
+  ledStatus = "ok",
+  videoUrl,
+  breadcrumbs,
+  meta,
+  class: className = "",
+} = Astro.props;
+
+const hasAside = Astro.slots.has("aside");
+const hasActions = Astro.slots.has("actions");
+const hasCrumbs = Array.isArray(breadcrumbs) && breadcrumbs.length > 0;
+const hasStrip = hasCrumbs || Boolean(meta);
+---
+
+<section
+  class={`relative isolate flex w-full flex-col overflow-hidden bg-bg lg:min-h-[88svh] ${className}`}
+  data-page-hero
+>
+  {
+    videoUrl && (
+      <>
+        <video
+          src={videoUrl}
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="metadata"
+          aria-hidden="true"
+          tabindex="-1"
+          class="absolute inset-0 h-full w-full object-cover opacity-30"
+          data-hero-video
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-bg via-bg/80 to-bg"
+          aria-hidden="true"
+        />
+      </>
+    )
+  }
+
+  <div
+    class="relative z-10 flex w-full flex-1 items-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28 xl:px-12"
+  >
+    <div class="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
+      <!-- Columna copy (7/12 con aside · 9/12 sin aside) -->
+      <div class={hasAside ? "lg:col-span-7" : "lg:col-span-9 xl:col-span-8"} data-hero-content>
+        <StatusLed label={ledLabel} status={ledStatus} />
+
+        <p class="mt-4 font-mono text-xs uppercase tracking-wider text-text-tertiary">
+          {eyebrow}
+        </p>
+
+        <h1
+          class="mt-5 font-heading font-bold leading-[1.05] tracking-[-0.02em] text-text-primary text-[clamp(2rem,4.6vw,4.4rem)]"
+        >
+          <StaggerText text={title} as="span" className="block" staggerMs={0.03} />
+          <span class="mt-1 block text-accent">{titleAccent}</span>
+        </h1>
+
+        <p class="mt-5 max-w-xl font-body text-base leading-relaxed text-text-secondary sm:text-lg">
+          {subtitle}
+          {note && <span class="mt-2 block text-sm text-text-tertiary">{note}</span>}
+        </p>
+
+        {
+          hasActions && (
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <slot name="actions" />
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Columna aside (5/12) -->
+      {
+        hasAside && (
+          <div class="lg:col-span-5" data-hero-terminal>
+            <slot name="aside" />
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  {
+    hasStrip && (
+      <div class="relative z-10 border-t border-frame bg-bg/60 backdrop-blur-sm">
+        <div class="flex w-full flex-col gap-2 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 lg:px-8 xl:px-12">
+          {hasCrumbs && <Breadcrumbs items={breadcrumbs!} />}
+          {meta && (
+            <span class="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
+              {meta}
+            </span>
+          )}
+        </div>
+      </div>
+    )
+  }
+</section>
+
+{
+  videoUrl && (
+    <script is:inline>
+      (function () {
+        var root = document.currentScript.previousElementSibling;
+        if (!root || !root.hasAttribute("data-page-hero")) return;
+
+        function inject(src) {
+          return new Promise(function (resolve, reject) {
+            var s = document.createElement("script");
+            s.src = src;
+            s.onload = resolve;
+            s.onerror = reject;
+            document.head.appendChild(s);
+          });
+        }
+
+        function init() {
+          if (typeof window.gsap === "undefined" || typeof window.ScrollTrigger === "undefined") return;
+          gsap.registerPlugin(ScrollTrigger);
+
+          var video = root.querySelector("[data-hero-video]");
+          var content = root.querySelector("[data-hero-content]");
+          var aside = root.querySelector("[data-hero-terminal]");
+
+          gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", function () {
+            var tl = gsap.timeline();
+            if (video) tl.to(video, { scale: 1.12, ease: "none" }, 0);
+            if (content) tl.to(content, { yPercent: -8, opacity: 0.35, ease: "none" }, 0);
+            if (aside) tl.to(aside, { yPercent: -12, opacity: 0.35, ease: "none" }, 0.05);
+
+            ScrollTrigger.create({
+              trigger: root,
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+              animation: tl,
+            });
+          });
+        }
+
+        if (typeof window.gsap === "undefined") {
+          Promise.all([
+            inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"),
+            inject("https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"),
+          ])
+            .then(init)
+            .catch(function () {});
+        } else {
+          init();
+        }
+      })();
+    </script>
+  )
+}

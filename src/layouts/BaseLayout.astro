@@ -5,6 +5,7 @@ import CotizarModal from "../components/CotizarModal.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import CookieBanner from "../components/CookieBanner.astro";
 import CookiePreferences from "../components/CookiePreferences.astro";
+import ScanlinesOverlay from "../components/ui/ScanlinesOverlay.astro";
 import { author } from "../data/author";
 
 export interface Props {
@@ -76,6 +77,39 @@ const personSameAs = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Modo Cyber/Clean: aplicar ANTES de pintar para evitar flash (DESIGN §11.2) -->
+    <script is:inline>
+      (function () {
+        try {
+          var mode = localStorage.getItem("ui-mode");
+          if (mode !== "clean" && mode !== "cyber") {
+            mode = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "clean" : "cyber";
+          }
+          document.documentElement.setAttribute("data-mode", mode);
+        } catch (e) {
+          document.documentElement.setAttribute("data-mode", "cyber");
+        }
+      })();
+    </script>
+
+    <!-- Sin JS: revelar contenido animado (evita H1/secciones invisibles). CSS no aplica scripts. -->
+    <noscript>
+      <style>
+        .stagger-char,
+        .blur-word {
+          opacity: 1 !important;
+          transform: none !important;
+          filter: none !important;
+        }
+        .reveal-group,
+        .reveal-item {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={currentUrl} />
@@ -88,8 +122,7 @@ const personSameAs = [
     <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" />
     <!-- Preload critical self-hosted fonts (LCP/CLS optimization) -->
     <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-400-latin.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-700-latin.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/poppins-800-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/jetbrainsmono-latin.woff2" crossorigin />
 
     <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:title" content={fullTitle} />
@@ -106,7 +139,7 @@ const personSameAs = [
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <meta name="theme-color" content="#010101" />
+    <meta name="theme-color" content="#090C10" />
     <meta name="author" content={`${author.name}, ${author.company}`} />
     <meta name="geo.region" content="CL-LL" />
     <meta name="geo.placename" content="Puerto Varas" />
@@ -307,7 +340,8 @@ const personSameAs = [
       ],
     })} />
   </head>
-  <body class="min-h-screen bg-[#010101] text-text-primary antialiased">
+  <body class="min-h-screen text-text-primary antialiased">
+    <ScanlinesOverlay />
     <a href="#main-content" class="skip-to-content">Saltar al contenido principal</a>
     <slot />
     <CotizarModal />

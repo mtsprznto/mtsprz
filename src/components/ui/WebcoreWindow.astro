@@ -1,0 +1,101 @@
+---
+/**
+ * WebcoreWindow — contenedor canónico v2 (DESIGN §5.1)
+ * Ventana de sistema con title bar + controles _ □ ✕ y sombra sólida offset.
+ * - Sin JS: se ve completa (estado abierto por defecto).
+ * - Con JS: _ minimiza, □ maximiza (span 12 col), ✕ cierra (=minimiza).
+ * - Persistencia opcional por `id` en localStorage (clave `win:<id>`).
+ * - Controles son <button> con aria-label textual; el body minimizado usa
+ *   el atributo [hidden] (no display:none suelto) y devuelve el foco al control.
+ */
+interface Props {
+  title?: string;
+  id?: string;
+  variant?: "surface" | "sunken";
+  class?: string;
+  bodyClass?: string;
+}
+const {
+  title = "",
+  id,
+  variant = "surface",
+  class: className = "",
+  bodyClass = "",
+} = Astro.props;
+
+const bodyBg = variant === "sunken" ? "bg-surface-sunken" : "bg-surface";
+// Sólo persistimos si hay id estable (evita claves aleatorias por render).
+const persistId = id ?? null;
+---
+
+<section
+  class={`webcore-window ${className}`}
+  data-window
+  data-window-id={persistId}
+>
+  <header class="flex h-9 items-center gap-3 border-b border-frame bg-surface px-3">
+    <span class="flex items-center gap-1.5" aria-hidden="true">
+      <span class="h-2.5 w-2.5 rounded-full border border-frame"></span>
+      <span class="h-2.5 w-2.5 rounded-full border border-frame"></span>
+      <span class="h-2.5 w-2.5 rounded-full border border-frame"></span>
+    </span>
+
+    {title && (
+      <span class="truncate font-mono text-[11px] font-medium uppercase tracking-wider text-text-secondary">
+        {title}
+      </span>
+    )}
+
+    <div class="ml-auto flex items-center gap-0.5">
+      <button type="button" class="win-ctl" data-win-min aria-pressed="false" aria-label="Minimizar ventana" title="Minimizar">_</button>
+      <button type="button" class="win-ctl" data-win-max aria-pressed="false" aria-label="Maximizar ventana" title="Maximizar">□</button>
+      <button type="button" class="win-ctl win-ctl--close" data-win-close aria-label="Cerrar ventana" title="Cerrar">✕</button>
+    </div>
+  </header>
+
+  <div class={`win-body ${bodyBg} ${bodyClass}`} data-win-body>
+    <slot />
+  </div>
+</section>
+
+<script is:inline>
+(function () {
+  var root = document.currentScript.previousElementSibling;
+  if (!root || !root.hasAttribute("data-window")) return;
+
+  var body = root.querySelector("[data-win-body]");
+  var min = root.querySelector("[data-win-min]");
+  var max = root.querySelector("[data-win-max]");
+  var close = root.querySelector("[data-win-close]");
+  var key = root.getAttribute("data-window-id");
+
+  function setMinimized(v) {
+    root.toggleAttribute("data-minimized", v);
+    if (body) body.hidden = v;
+    if (min) min.setAttribute("aria-pressed", String(v));
+    // devolvemos el foco al control para no perder el foco del teclado
+    if (v && min && typeof min.focus === "function") min.focus();
+  }
+
+  function persist() {
+    if (!key) return;
+    try {
+      localStorage.setItem("win:" + key, root.hasAttribute("data-minimized") ? "min" : "open");
+    } catch (e) {}
+  }
+
+  // Restaurar estado previo
+  if (key) {
+    try {
+      if (localStorage.getItem("win:" + key) === "min") setMinimized(true);
+    } catch (e) {}
+  }
+
+  if (min) min.addEventListener("click", function () { setMinimized(!root.hasAttribute("data-minimized")); persist(); });
+  if (close) close.addEventListener("click", function () { setMinimized(true); persist(); });
+  if (max) max.addEventListener("click", function () {
+    var on = root.toggleAttribute("data-maximized");
+    max.setAttribute("aria-pressed", String(on));
+  });
+})();
+</script>

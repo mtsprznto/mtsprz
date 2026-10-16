@@ -1,9 +1,9 @@
 ---
 /**
- * CasoCard · Hoja del "Archivo de Casos Sobre la Mesa" (showcase de /casos).
- * Cada caso es una HOJA del archivo: fila full-width con zig-zag editorial
- * (visual generativo + contenido alternados), número manuscrito gigante,
- * sello de estado y micro-interacciones de oficio (sin tilt 3D).
+ * CasoCard · Fila del archivo de casos v2 (showcase de /casos).
+ * Cada caso es una fila editorial full-width: visual real (screenshot, proof
+ * of work) en marco v2 + ficha con índice mono, estado, industria, título,
+ * métricas y CTA. Cero decoración manuscrita (lenguaje v1 retirado).
  * - Stretched link: toda la fila es clickeable (enlace absoluto).
  * - Filtrable por industria vía data-industria (script del page /casos).
  * - NO lleva reveal-item: el reveal lo hace GSAP (data-gsap-casos="row")
@@ -25,15 +25,13 @@ const visual = getCasoVisual(caso.slug);
 const numero = String(index + 1).padStart(2, "0");
 const isFundador = caso.tipo === "Cliente fundador";
 const par = index % 2 === 0;
-const accent = ["#f59e0b", "#10b981", "#a5b4fc"][index % 3];
 ---
 
 <article
   data-caso-card
   data-industria={caso.industria}
   data-gsap-casos="row"
-  class="group relative w-full overflow-hidden border-b-2 border-dashed"
-  style="border-color: rgba(255,255,255,0.12);"
+  class="group relative w-full overflow-hidden border-b border-frame/60"
 >
   <!-- Stretched link (toda la fila clickeable) -->
   <a
@@ -43,13 +41,10 @@ const accent = ["#f59e0b", "#10b981", "#a5b4fc"][index % 3];
   />
 
   <div class="relative mx-auto flex w-full max-w-[110rem] flex-col gap-10 px-6 py-14 sm:px-8 md:py-20 lg:grid lg:grid-cols-12 lg:items-center lg:gap-0 lg:px-12 lg:py-24 xl:px-16 2xl:px-24">
-    <!-- Visual del caso · captura real del proyecto (proof of work), impresión enmarcada -->
-    <!-- relative: ancla el sticker/stamp al cajón del visual (no al article) -->
+    <!-- Visual del caso · captura real del proyecto (proof of work) en marco v2 -->
+    <!-- relative: ancla el índice/stamp al cajón del visual (no al article) -->
     <div class={`relative order-1 lg:row-start-1 ${par ? "lg:col-span-5 lg:col-start-1" : "lg:col-span-5 lg:col-start-8"}`}>
-      <div
-        class={`relative aspect-[16/11] min-h-[220px] overflow-hidden transition-transform duration-500 sm:min-h-[280px] ${par ? "lg:rotate-1" : "lg:-rotate-1"} group-hover:rotate-0`}
-        style="border: 1px dashed rgba(255,255,255,0.25); border-radius: 8px 18px 8px 16px / 16px 8px 18px 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);"
-      >
+      <div class="relative aspect-[16/11] min-h-[220px] overflow-hidden rounded-[6px] border border-frame/60 bg-bg transition-colors duration-500 group-hover:border-frame-hover sm:min-h-[280px]">
         <!-- Sin transition-transform en CSS: GSAP conduce x/y/scale/yPercent
              (quickTo + parallax scrub). CSS transition + GSAP en la misma
              propiedad = motion mushy (cada tick re-arranca la transición). -->
@@ -72,23 +67,21 @@ const accent = ["#f59e0b", "#10b981", "#a5b4fc"][index % 3];
               class="absolute inset-0 h-full w-full object-cover object-top"
             />
           </picture>
-          <div class="absolute inset-0" style="background: radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.07), transparent 70%);" />
+          <div class="absolute inset-0" style="background: radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.05), transparent 70%);" />
         </div>
         <!-- Shine: acompaña al cursor (pointer fine + hover) -->
         <div
           data-gsap-casos="shine"
           class="pointer-events-none absolute inset-0 opacity-0"
-          style="background: radial-gradient(220px 220px at 0 0, rgba(255,255,255,0.14), transparent 60%);"
+          style="background: radial-gradient(220px 220px at 0 0, rgba(255,255,255,0.1), transparent 60%);"
         />
       </div>
 
-      <!-- Número editorial manuscrito (se estampa al entrar; clearProps
-           devuelve el -rotate-6/rotate-3 del CSS al terminar) -->
+      <!-- Índice editorial (se estampa al entrar; clearProps devuelve el transform) -->
       <span
         data-gsap-casos="sticker"
         aria-hidden="true"
-        class={`pointer-events-none absolute z-20 select-none font-hand text-[5.5rem] leading-none group-hover:rotate-0 md:text-[7.5rem] ${par ? "-right-2 top-4 -rotate-6 lg:-right-10 lg:top-6" : "-left-2 top-4 rotate-3 lg:-left-10 lg:top-6"}`}
-        style={`color: ${accent}; text-shadow: 0 4px 24px rgba(0,0,0,0.55), 0 0 44px rgba(0,0,0,0.4);`}
+        class={`pointer-events-none absolute z-20 select-none font-mono text-[3.5rem] font-bold leading-none text-text-tertiary/70 md:text-[5rem] ${par ? "-right-2 top-4 lg:-right-10 lg:top-6" : "-left-2 top-4 lg:-left-10 lg:top-6"}`}
       >
         {numero}
       </span>
@@ -97,43 +90,44 @@ const accent = ["#f59e0b", "#10b981", "#a5b4fc"][index % 3];
       <span
         data-gsap-casos="stamp"
         aria-hidden="true"
-        class={`pointer-events-none absolute bottom-4 z-20 select-none border-2 px-3 py-1.5 font-body text-[9px] font-semibold uppercase tracking-[0.2em] ${par ? "right-4 -rotate-3" : "left-4 rotate-2"}`}
-        style={`border-radius: 9999px; background: rgba(0,0,0,0.28); color: ${isFundador ? "#6ee7b7" : "rgba(255,255,255,0.6)"}; border-color: ${isFundador ? "rgba(110,231,183,0.55)" : "rgba(255,255,255,0.28)"};`}
+        class={`pointer-events-none absolute bottom-4 z-20 select-none rounded-[4px] border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] backdrop-blur-sm ${par ? "right-4" : "left-4"} ${isFundador ? "border-accent/60 bg-bg/70 text-accent" : "border-frame/80 bg-bg/70 text-text-secondary"}`}
       >
         {isFundador ? "Fundador −30%" : "Caso interno"}
       </span>
     </div>
 
-    <!-- Contenido editorial -->
+    <!-- Ficha editorial -->
     <div class={`order-2 lg:row-start-1 ${par ? "lg:col-span-6 lg:col-start-7" : "lg:col-span-6 lg:col-start-1"}`}>
-      <div class="flex items-center justify-between gap-4">
-        <span class={`inline-flex items-center gap-2 font-body text-[10px] uppercase tracking-[0.2em] ${isFundador ? "text-emerald-300" : "text-white/50"}`}>
-          <span class={`h-1 w-1 rounded-full ${isFundador ? "bg-emerald-300" : "bg-white/40"}`} />
+      <!-- Meta · índice + estado + industria -->
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px]">
+        <span class="text-text-tertiary">[{numero}]</span>
+        <span class={`inline-flex items-center gap-1.5 uppercase tracking-[0.12em] ${isFundador ? "text-accent" : "text-text-secondary"}`}>
+          <span class={`h-1.5 w-1.5 rounded-full ${isFundador ? "led-pulse bg-accent" : "bg-text-tertiary"}`} aria-hidden="true" />
           {caso.tipo}
         </span>
-        <span class="font-body text-[10px] uppercase tracking-[0.2em] text-white/40">{caso.industria}</span>
+        <span class="ml-auto hidden uppercase tracking-[0.12em] text-text-tertiary sm:block">{caso.industria}</span>
       </div>
 
-      <h3 class="mt-6 font-heading text-3xl font-bold leading-[0.98] tracking-[-0.02em] text-white md:text-4xl xl:text-5xl">
+      <h3 class="mt-4 font-heading text-2xl font-bold leading-[1.04] tracking-[-0.02em] text-text-primary transition-colors group-hover:text-accent md:text-3xl xl:text-4xl">
         {caso.titulo}
       </h3>
-      <p class="mt-4 max-w-xl font-body text-sm font-light leading-[1.7] text-white/60 md:text-base">
+      <p class="mt-4 max-w-xl font-body text-sm font-light leading-[1.75] text-text-secondary md:text-base">
         {caso.resumen}
       </p>
 
       <!-- Métricas · sin cajas, separadas por línea editorial -->
-      <div class="mt-8 grid max-w-xl grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-6">
+      <div class="mt-8 grid max-w-xl grid-cols-3 divide-x divide-frame/60 border-t border-frame/60 pt-6">
         {caso.metricas.slice(0, 3).map((m, mi) => (
           <div class={`${mi === 0 ? "pl-0" : "pl-4"} pr-4`}>
-            <p class="font-body text-[9px] uppercase tracking-[0.14em] text-white/35 md:text-[10px]">{m.label}</p>
-            <p class="mt-1 font-heading text-sm font-semibold text-white/90 md:text-base">{m.valor}</p>
+            <p class="font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary">{m.label}</p>
+            <p class="mt-1.5 font-heading text-sm font-semibold text-text-primary md:text-base">{m.valor}</p>
           </div>
         ))}
       </div>
 
-      <span class="mt-8 inline-flex items-center gap-2 font-hand text-lg transition-transform duration-300 group-hover:translate-x-1" style="color: #fde68a;">
-        Ver caso completo
-        <svg class="h-4 w-4 -rotate-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      <span class="mt-8 inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.14em] text-text-primary transition-colors group-hover:text-accent">
+        [ Ver caso completo ]
+        <ArrowUpRight class="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
       </span>
     </div>
   </div>

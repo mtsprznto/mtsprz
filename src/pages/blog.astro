@@ -2,9 +2,10 @@
 export const prerender = true;
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
-import Breadcrumbs from "../components/Breadcrumbs.astro";
 import BlogSearch from "../components/BlogSearch.astro";
 import Footer from "../components/Footer.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import WebcoreWindow from "../components/ui/WebcoreWindow.astro";
 import { author } from "../data/author";
 import { getCollection } from "astro:content";
 
@@ -39,8 +40,23 @@ function getCategoryLabel(tags: string[]): string {
   return "DIGITAL";
 }
 
+// Acento por categoría (DESIGN §2.3) — uso puntual: punto guía en labels, nunca texto
+function getCategoryAccent(tags: string[]): string {
+  switch (getCategoryLabel(tags)) {
+    case "SEO LOCAL": return "#22E584";
+    case "AUTOMATIZACIÓN": return "#22D3EE";
+    case "DESARROLLO WEB": return "#00FF66";
+    case "MARKETING": return "#EAB308";
+    default: return "#A855F7";
+  }
+}
+
 // All unique tags
 const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
+
+const heroVideo =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4";
+const anio = new Date().getFullYear();
 ---
 
 <BaseLayout
@@ -68,125 +84,159 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
     ],
   })} />
   <Header />
-  <link rel="preload" as="video" href="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4" fetchpriority="high" />
+  <link rel="preload" as="video" href={heroVideo} fetchpriority="high" />
   <main id="main-content">
 
     <!-- ═══════════════════════════════════════════
-         HERO · Full-viewport cinematic intro
+         Hero · primitiva reutilizable ui/PageHero (mismo patrón que home, /servicios, /portafolio y /casos)
     ═══════════════════════════════════════════ -->
-    <section class="relative w-screen h-[100dvh] md:h-screen overflow-hidden bg-[#0A0A0A]">
-      <video
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
-        autoplay loop muted playsinline
-        preload="metadata"
-        class="z-[1] brightness-[0.4] saturate-[0.55]"
-        style="position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; max-width: none !important; min-width: 0 !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; display: block !important;"
-      />
-      <!-- Scrim full-screen: anula las letras del video, lo deja como textura de movimiento -->
-      <div style="position: absolute !important; inset: 0; z-index: 2;" class="bg-[#0A0A0A]/[0.8]"></div>
-      <div style="position: absolute !important; top: 0; left: 0; width: 100%; height: 24%; z-index: 2;" class="bg-gradient-to-b from-[#0A0A0A] to-transparent"></div>
-      <div style="position: absolute !important; bottom: 0; left: 0; width: 100%; height: 45%; z-index: 2;" class="bg-gradient-to-t from-[#0A0A0A] to-transparent"></div>
+    <PageHero
+      ledLabel={`${posts.length} artículos publicados`}
+      eyebrow="// blog · marketing digital y seo"
+      title="Marketing digital y SEO"
+      titleAccent="explicado para pymes."
+      subtitle="Guías, estrategias y herramientas digitales para pymes del sur de Chile. Publicamos lo que probamos en proyectos reales: sin relleno y sin humo."
+      videoUrl={heroVideo}
+      breadcrumbs={[{ name: "Blog", path: "/blog" }]}
+      meta={`© ${anio} mtsprz · puerto varas`}
+    >
+      <Fragment slot="actions">
+        <a
+          href="#articulos"
+          class="inline-flex items-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-bg transition-colors hover:bg-accent-hover sm:text-sm"
+          >[ Explorar artículos ]</a
+        >
+        <a
+          href="#newsletter"
+          class="inline-flex items-center rounded-[6px] border border-frame px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-wider text-text-primary transition-colors hover:border-accent hover:text-accent sm:text-sm"
+          >[ Suscribirme ]</a
+        >
+      </Fragment>
 
-      <!-- Central content -->
-      <div style="position: absolute !important; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; pointer-events: none;">
-        <div class="text-center px-6" style="pointer-events: auto;">
-          <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] text-[#6366f1] font-body font-medium mb-4">Blog</p>
-          <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[0.85] tracking-[-3px] md:tracking-[-5px]">
-            BLOG
-          </h1>
-          <p class="mt-5 text-white/45 font-body font-light max-w-md mx-auto text-sm md:text-base leading-relaxed">
-            Guías, estrategias y herramientas digitales para pymes del sur de Chile
-          </p>
-          <!-- Tag pills -->
-          <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
-            {allTags.slice(0, 6).map((tag) => (
-              <span class="inline-flex items-center px-3 py-1 text-[10px] font-body tracking-[0.08em] uppercase text-white/40 border border-white/[0.1] rounded-full hover:text-white/70 hover:border-white/20 transition-all cursor-default">
-                {tag}
-              </span>
-            ))}
+      <Fragment slot="aside">
+        <WebcoreWindow title="blog --list" variant="sunken">
+          <ul class="divide-y divide-frame">
+            {sortedPosts.slice(0, 5).map((p, idx) => {
+              const pSlug = p.id.replace(/\.(md|mdx)$/, "");
+              return (
+                <li class="flex items-center gap-3 px-4 py-3">
+                  <span class="font-mono text-[11px] text-text-tertiary">
+                    [{String(idx + 1).padStart(2, "0")}]
+                  </span>
+                  <a
+                    href={`/blog/${pSlug}`}
+                    class="min-w-0 truncate font-body text-sm text-text-primary transition-colors hover:text-accent"
+                  >
+                    {p.data.title}
+                  </a>
+                  <span class="ml-auto hidden shrink-0 font-mono text-[10px] uppercase tracking-wider text-text-tertiary sm:block">
+                    {p.data.pubDate.toLocaleDateString("es-CL", { day: "2-digit", month: "short" })}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          <div class="flex items-center justify-between border-t border-frame px-4 py-2.5 font-mono text-[11px]">
+            <span class="text-text-tertiary">{posts.length} artículos</span>
+            <a href="#articulos" class="text-text-secondary transition-colors hover:text-accent">
+              explorar ↓
+            </a>
           </div>
+        </WebcoreWindow>
+      </Fragment>
+    </PageHero>
 
-          <!-- Search -->
-          <div class="mt-8 flex justify-center">
-            <BlogSearch />
-          </div>
+    <!-- Strip de control · búsqueda + temas de portada (ex-hero v1) -->
+    <section class="w-full border-b border-frame/60 bg-bg" aria-label="Buscar en el blog">
+      <div class="flex w-full flex-col gap-4 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8 lg:px-8 xl:px-12">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="mr-1 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">temas:</span>
+          {allTags.slice(0, 6).map((tag) => (
+            <span class="inline-flex items-center rounded-[4px] border border-frame bg-surface px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary">
+              {tag}
+            </span>
+          ))}
         </div>
-      </div>
-
-      <!-- Scroll indicator -->
-      <div class="absolute bottom-8 left-0 w-full flex justify-center z-10">
-        <div class="w-5 h-8 rounded-full border border-white/15 flex items-start justify-center pt-1.5">
-          <div class="w-1 h-2 rounded-full bg-white/30" />
+        <div class="w-full lg:w-[380px] lg:shrink-0">
+          <BlogSearch />
         </div>
       </div>
     </section>
 
     <!-- ═══════════════════════════════════════════
-         FEATURED · Full-bleed cinematic column
+         FEATURED · Columna cinematográfica full-bleed (§5.4) — post destacado
     ═══════════════════════════════════════════ -->
     {
       featured && (() => {
         const fSlug = featured.id.replace(/\.(md|mdx)$/, "");
         const fReadMin = readingTime(featured.body || "");
-        const fImg = featured.data.image || "/logo.jpg";
         const fCat = getCategoryLabel(featured.data.tags || []);
         return (
-          <section class="relative w-full overflow-hidden bg-[#0A0A0A]">
-            <a href={`/blog/${fSlug}`} class="group block relative w-full h-[80dvh] md:h-[90vh] overflow-hidden">
-              <!-- Base plate: fondo sólido tras la imagen -->
-              <div class="absolute inset-0 bg-[#0A0A0A]" />
-              <!-- Full-bleed image · se muestra como textura, no como texto legible -->
+          <section class="relative w-full overflow-hidden border-b border-frame/60 bg-bg">
+            <a
+              href={`/blog/${fSlug}`}
+              class="group relative block h-[420px] w-full overflow-hidden sm:h-[520px] lg:h-[600px]"
+            >
+              <!-- Base plate · fondo sólido tras la imagen -->
+              <div class="absolute inset-0 bg-bg" aria-hidden="true" />
+              <!-- Full-bleed image · textura, no texto legible -->
               <img
                 src={featured.data.image || "/logo.jpg"}
                 alt={featured.data.title}
-                class="absolute inset-0 w-full h-full object-cover opacity-25 brightness-[0.85] transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
+                class="absolute inset-0 h-full w-full object-cover opacity-25 brightness-[0.85] transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
                 loading="eager"
                 fetchpriority="high"
                 decoding="async"
               />
-              <!-- Dark gradient overlay · bottom heavy, cubre el texto horneado del OG -->
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent" />
-              <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/50 via-transparent to-transparent h-32" />
+              <!-- Scrims · bottom-heavy, cubren el texto horneado del OG -->
+              <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-transparent" aria-hidden="true" />
+              <div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-bg/50 to-transparent" aria-hidden="true" />
 
-              <!-- Content overlaid at bottom -->
-              <div class="absolute bottom-0 left-0 right-0 z-10 px-6 md:px-12 lg:px-16 pb-12 md:pb-16 lg:pb-20">
-                <div class="max-w-6xl mx-auto">
-                  {/* Category · large bold label */}
-                  <p class="text-[11px] md:text-xs uppercase tracking-[0.3em] font-body font-medium mb-3 md:mb-4" style="color: #6366f1;">
-                    {fCat}
-                  </p>
+              <!-- Contenido anclado abajo · full width -->
+              <div class="absolute inset-x-0 bottom-0 z-10 px-4 pb-10 sm:px-6 md:pb-14 lg:px-8 lg:pb-16 xl:px-12">
+                <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+                  <div class="min-w-0">
+                    {/* Eyebrow editorial */}
+                    <p class="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+                      // destacado
+                    </p>
 
-                  {/* Title · massive editorial */}
-                  <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-white leading-[0.95] tracking-[-1px] md:tracking-[-2px] max-w-4xl group-hover:text-white/80 transition-colors duration-500">
-                    {featured.data.title}
-                  </h2>
+                    {/* Título · mono v2 */}
+                    <h2 class="max-w-4xl font-heading text-2xl font-bold leading-[1.05] tracking-[-0.02em] text-text-primary transition-colors duration-300 group-hover:text-accent sm:text-3xl md:text-4xl lg:text-5xl">
+                      {featured.data.title}
+                    </h2>
 
-                  {/* Meta + CTA row */}
-                  <div class="mt-5 md:mt-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                    <div class="flex items-center gap-3 text-[11px] md:text-xs text-white/40 font-body tracking-wide">
-                      <time datetime={featured.data.pubDate.toISOString()}>
+                    {/* Meta · chips mono */}
+                    <div class="mt-4 flex flex-wrap items-center gap-2 md:mt-5">
+                      <span class="inline-flex items-center rounded-[4px] border border-frame bg-surface px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary">
+                        {fCat}
+                      </span>
+                      <time
+                        datetime={featured.data.pubDate.toISOString()}
+                        class="inline-flex items-center rounded-[4px] border border-frame bg-surface px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary"
+                      >
                         {featured.data.pubDate.toLocaleDateString("es-CL", {
                           year: "numeric",
-                          month: "long",
-                          day: "numeric",
+                          month: "short",
+                          day: "2-digit",
                         })}
                       </time>
-                      <span class="text-white/15">·</span>
-                      <span>{fReadMin} min de lectura</span>
+                      <span class="inline-flex items-center rounded-[4px] border border-frame bg-surface px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary">
+                        {fReadMin} min de lectura
+                      </span>
                       {featured.data.modifiedTime && (
-                        <>
-                          <span class="text-white/15">·</span>
-                          <span class="text-emerald-400/70">Actualizado</span>
-                        </>
+                        <span class="inline-flex items-center rounded-[4px] border border-accent/40 bg-accent-subtle px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.08em] text-accent">
+                          Actualizado
+                        </span>
                       )}
                     </div>
-
-                    {/* CTA button · solid dark, editorial */}
-                    <span class="inline-flex items-center gap-2.5 px-6 py-3 bg-white/[0.08] hover:bg-white/[0.14] text-white text-[11px] font-body font-medium tracking-[0.18em] uppercase transition-all duration-300 group-hover:gap-3.5">
-                      Explorar guía
-                      <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-                    </span>
                   </div>
+
+                  {/* CTA · borde metálico */}
+                  <span class="inline-flex shrink-0 items-center gap-2 self-start rounded-[6px] border border-frame px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-primary transition-colors duration-300 group-hover:border-accent group-hover:text-accent lg:self-end">
+                    [ Leer artículo ]
+                    <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                  </span>
                 </div>
               </div>
             </a>
@@ -201,20 +251,18 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
          Los OG traen el título horneado dentro de la imagen, por eso
          el texto va FUERA de la imagen. Cero texto sobre texto.
     ═══════════════════════════════════════════ -->
-    <section class="relative w-full bg-[#0A0A0A]">
-      <!-- Section label -->
-      <div class="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 pt-16 md:pt-24 pb-8 md:pb-12">
-        <div class="flex items-end justify-between gap-6">
-          <p class="text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium" style="color: #6366f1aa;">
-            Últimos artículos
-          </p>
-          <p class="text-[10px] md:text-xs font-body tracking-[0.15em] text-white/25 hidden sm:block">
-            {sortedPosts.length} artículos
-          </p>
-        </div>
+    <section id="articulos" class="relative w-full scroll-mt-20 bg-bg">
+      <!-- Header canónico · full width -->
+      <div class="flex items-end justify-between gap-6 px-4 pb-8 pt-16 sm:px-6 md:pb-12 md:pt-20 lg:px-8 xl:px-12">
+        <p class="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+          // últimos artículos
+        </p>
+        <p class="hidden font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary sm:block">
+          {sortedPosts.length} artículos
+        </p>
       </div>
 
-      <div class="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 pb-16 md:pb-24 space-y-5 md:space-y-8" style="content-visibility:auto; contain-intrinsic-size: 2200px;">
+      <div class="w-full space-y-5 px-4 pb-16 sm:px-6 md:space-y-8 md:pb-24 lg:px-8 xl:px-12" style="content-visibility:auto; contain-intrinsic-size: 2200px;">
 
         <!-- ─── Tier 1 · Dos grandes, asimétricos 7/5 ─── -->
         <div class="grid grid-cols-1 gap-5 md:grid-cols-12 md:gap-6">
@@ -223,12 +271,13 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
           const readMin = readingTime(post.body || "");
           const img = post.data.image || "/logo.jpg";
           const cat = getCategoryLabel(post.data.tags || []);
+          const accent = getCategoryAccent(post.data.tags || []);
           return (
             <a
               href={`/blog/${postSlug}`}
-              class={`group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.05] bg-[#0D0D0F] transition-all duration-300 hover:border-white/[0.12] hover:bg-[#111114] ${i === 0 ? "md:col-span-7" : "md:col-span-5"}`}
+              class={`group relative flex h-full flex-col overflow-hidden rounded-[6px] border border-frame/60 bg-surface transition-colors duration-300 hover:border-frame-hover hover:bg-surface-hover ${i === 0 ? "md:col-span-7" : "md:col-span-5"}`}
             >
-              <div class="relative aspect-[16/10] overflow-hidden bg-[#0A0A0A]">
+              <div class="relative aspect-[16/10] overflow-hidden bg-surface-sunken">
                 <img
                   src={img}
                   alt={post.data.title}
@@ -237,39 +286,40 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
                   class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                 />
                 {/* Fusión imagen → panel */}
-                <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0D0D0F] to-transparent" />
-                {/* Recent badge */}
+                <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface to-transparent" aria-hidden="true" />
+                {/* Recent badge · LED accent */}
                 {isRecent(post.data.pubDate) && (
-                  <div class="absolute top-4 left-4 flex items-center gap-1.5 px-2.5 py-1 bg-[#0A0A0A]/70 backdrop-blur-sm text-white text-[10px] font-body font-medium tracking-[0.08em] uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
+                  <div class="absolute left-4 top-4 flex items-center gap-1.5 rounded-[4px] border border-accent/60 bg-bg/70 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.08em] text-accent backdrop-blur-sm">
+                    <span class="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true" />
                     Nuevo
                   </div>
                 )}
               </div>
               <div class="flex flex-1 flex-col p-5 md:p-6">
-                <p class="text-[10px] uppercase tracking-[0.25em] font-body font-medium mb-2" style="color: #6366f1;">
+                <p class="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary">
+                  <span class="h-1.5 w-1.5 rounded-full" style={`background:${accent}`} aria-hidden="true" />
                   {cat}
                 </p>
-                <h2 class="font-heading font-bold text-white leading-[1.15] tracking-[-0.02em] text-xl md:text-2xl lg:text-[1.7rem] line-clamp-3 group-hover:text-white/80 transition-colors duration-300">
+                <h2 class="font-heading text-xl font-bold leading-[1.15] tracking-[-0.02em] text-text-primary transition-colors duration-300 group-hover:text-accent line-clamp-3 md:text-2xl lg:text-[1.7rem]">
                   {post.data.title}
                 </h2>
-                <div class="mt-auto pt-5 flex items-center justify-between gap-4">
-                  <div class="flex items-center gap-2 text-[11px] text-white/40 font-body tracking-wide">
+                <div class="mt-auto flex items-center justify-between gap-4 pt-5">
+                  <div class="flex items-center gap-2 font-mono text-[11px] tracking-wide text-text-tertiary">
                     <time datetime={post.data.pubDate.toISOString()}>
-                      {post.data.pubDate.toLocaleDateString("es-CL", { month: "long", day: "numeric" })}
+                      {post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}
                     </time>
-                    <span class="text-white/15">·</span>
+                    <span class="text-frame" aria-hidden="true">·</span>
                     <span>{readMin} min</span>
                     {post.data.modifiedTime && (
                       <>
-                        <span class="text-white/15">·</span>
-                        <span class="text-emerald-400/70">Actualizado</span>
+                        <span class="text-frame" aria-hidden="true">·</span>
+                        <span class="text-accent">Actualizado</span>
                       </>
                     )}
                   </div>
-                  <span class="inline-flex items-center gap-2 text-[10px] font-body font-medium tracking-[0.15em] uppercase text-white/50 group-hover:text-white transition-all duration-300 group-hover:gap-3">
-                    Explorar
-                    <svg class="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                  <span class="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-text-secondary transition-colors duration-300 group-hover:text-accent">
+                    [ Explorar ]
+                    <svg class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
                   </span>
                 </div>
               </div>
@@ -286,12 +336,13 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
               const readMin = readingTime(post.body || "");
               const img = post.data.image || "/logo.jpg";
               const cat = getCategoryLabel(post.data.tags || []);
+              const accent = getCategoryAccent(post.data.tags || []);
               return (
                 <a
                   href={`/blog/${postSlug}`}
-                  class="group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.05] bg-[#0D0D0F] transition-all duration-300 hover:border-white/[0.12] hover:bg-[#111114]"
+                  class="group relative flex h-full flex-col overflow-hidden rounded-[6px] border border-frame/60 bg-surface transition-colors duration-300 hover:border-frame-hover hover:bg-surface-hover"
                 >
-                  <div class="relative aspect-[4/3] overflow-hidden bg-[#0A0A0A]">
+                  <div class="relative aspect-[4/3] overflow-hidden bg-surface-sunken">
                     <img
                       src={img}
                       alt={post.data.title}
@@ -299,26 +350,27 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
                       decoding="async"
                       class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                     />
-                    <div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#0D0D0F] to-transparent" />
+                    <div class="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-surface to-transparent" aria-hidden="true" />
                     {isRecent(post.data.pubDate) && (
-                      <div class="absolute top-3.5 left-3.5 flex items-center gap-1.5 px-2 py-0.5 bg-[#0A0A0A]/70 backdrop-blur-sm text-white text-[9px] font-body font-medium tracking-[0.08em] uppercase">
-                        <span class="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
+                      <div class="absolute left-3.5 top-3.5 flex items-center gap-1.5 rounded-[4px] border border-accent/60 bg-bg/70 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.08em] text-accent backdrop-blur-sm">
+                        <span class="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true" />
                         Nuevo
                       </div>
                     )}
                   </div>
                   <div class="flex flex-1 flex-col p-5">
-                    <p class="text-[9px] uppercase tracking-[0.25em] font-body font-medium mb-2" style="color: #6366f1;">
+                    <p class="mb-2 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-text-tertiary">
+                      <span class="h-1.5 w-1.5 rounded-full" style={`background:${accent}`} aria-hidden="true" />
                       {cat}
                     </p>
-                    <h3 class="font-heading font-bold text-white leading-[1.2] tracking-[-0.02em] text-lg md:text-xl line-clamp-3 group-hover:text-white/80 transition-colors duration-300">
+                    <h3 class="font-heading text-lg font-bold leading-[1.2] tracking-[-0.02em] text-text-primary transition-colors duration-300 group-hover:text-accent line-clamp-3 md:text-xl">
                       {post.data.title}
                     </h3>
-                    <div class="mt-auto pt-4 flex items-center gap-2 text-[10px] text-white/35 font-body tracking-wide">
+                    <div class="mt-auto flex items-center gap-2 pt-4 font-mono text-[10px] tracking-wide text-text-tertiary">
                       <time datetime={post.data.pubDate.toISOString()}>
                         {post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}
                       </time>
-                      <span class="text-white/15">·</span>
+                      <span class="text-frame" aria-hidden="true">·</span>
                       <span>{readMin} min</span>
                     </div>
                   </div>
@@ -336,12 +388,13 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
               const readMin = readingTime(post.body || "");
               const img = post.data.image || "/logo.jpg";
               const cat = getCategoryLabel(post.data.tags || []);
+              const accent = getCategoryAccent(post.data.tags || []);
               return (
                 <a
                   href={`/blog/${postSlug}`}
-                  class="group relative flex h-full flex-col overflow-hidden rounded-lg border border-white/[0.05] bg-[#0D0D0F] transition-all duration-300 hover:border-white/[0.12] hover:bg-[#111114]"
+                  class="group relative flex h-full flex-col overflow-hidden rounded-[6px] border border-frame/60 bg-surface transition-colors duration-300 hover:border-frame-hover hover:bg-surface-hover"
                 >
-                  <div class="relative aspect-[3/2] overflow-hidden bg-[#0A0A0A]">
+                  <div class="relative aspect-[3/2] overflow-hidden bg-surface-sunken">
                     <img
                       src={img}
                       alt={post.data.title}
@@ -349,18 +402,19 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
                       decoding="async"
                       class="absolute inset-0 h-full w-full object-cover opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                     />
-                    <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#0D0D0F] to-transparent" />
+                    <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-surface to-transparent" aria-hidden="true" />
                   </div>
                   <div class="flex flex-1 flex-col p-4 md:p-5">
-                    <p class="text-[8px] uppercase tracking-[0.2em] font-body font-medium mb-1.5" style="color: #6366f1;">
+                    <p class="mb-1.5 flex items-center gap-1.5 font-mono text-[8px] uppercase tracking-[0.12em] text-text-tertiary">
+                      <span class="h-1 w-1 rounded-full" style={`background:${accent}`} aria-hidden="true" />
                       {cat}
                     </p>
-                    <h4 class="font-heading font-bold text-white leading-[1.25] tracking-[-0.01em] text-sm md:text-[15px] line-clamp-2 group-hover:text-white/80 transition-colors duration-300">
+                    <h4 class="font-heading text-sm font-bold leading-[1.25] tracking-[-0.01em] text-text-primary transition-colors duration-300 group-hover:text-accent line-clamp-2 md:text-[15px]">
                       {post.data.title}
                     </h4>
-                    <div class="mt-auto pt-3 flex items-center gap-2 text-[10px] text-white/30 font-body tracking-wide">
+                    <div class="mt-auto flex items-center gap-2 pt-3 font-mono text-[10px] tracking-wide text-text-tertiary">
                       <time>{post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}</time>
-                      <span class="text-white/15">·</span>
+                      <span class="text-frame" aria-hidden="true">·</span>
                       <span>{readMin} min</span>
                     </div>
                   </div>
@@ -370,75 +424,172 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
           </div>
         )}
 
-        <!-- ─── Tier 4 · Filas restantes ─── -->
+        <!-- ─── Tier 4 · Filas restantes · archivo paginado (5/página) ─── -->
         {rest.length > 9 && (
           <>
-            <div class="h-[1px]" style="background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);" />
-            <div class="pt-4 md:pt-6">
+            <div class="h-px bg-frame/60" aria-hidden="true" />
+            <div class="pt-4 md:pt-6" data-archive-list>
               {rest.slice(9).map((post) => {
                 const postSlug = post.id.replace(/\.(md|mdx)$/, "");
                 const readMin = readingTime(post.body || "");
                 const cat = getCategoryLabel(post.data.tags || []);
+                const accent = getCategoryAccent(post.data.tags || []);
                 return (
                   <a
                     href={`/blog/${postSlug}`}
-                    class="group flex items-center justify-between gap-4 py-4 border-b border-white/[0.04] hover:border-white/[0.1] transition-all duration-300"
+                    data-archive-item
+                    class="group flex items-center justify-between gap-4 border-b border-frame/60 py-4 transition-colors duration-300 hover:border-frame-hover"
                   >
-                    <div class="flex items-center gap-4 min-w-0">
-                      <span class="text-[9px] uppercase tracking-[0.15em] font-body font-medium shrink-0" style="color: #6366f1aa;">
+                    <div class="flex min-w-0 items-center gap-4">
+                      <span class="flex shrink-0 items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-text-tertiary">
+                        <span class="h-1.5 w-1.5 rounded-full" style={`background:${accent}`} aria-hidden="true" />
                         {cat}
                       </span>
-                      <h4 class="text-sm md:text-[15px] font-body font-medium text-white/55 group-hover:text-white transition-colors duration-300 truncate">
+                      <h4 class="truncate font-heading text-sm font-medium text-text-secondary transition-colors duration-300 group-hover:text-accent md:text-[15px]">
                         {post.data.title}
                       </h4>
                     </div>
-                    <div class="flex items-center gap-3 shrink-0">
-                      <span class="text-[10px] text-white/20 font-body tracking-wide hidden sm:block">
+                    <div class="flex shrink-0 items-center gap-3">
+                      <span class="hidden font-mono text-[10px] tracking-wide text-text-tertiary sm:block">
                         {post.data.pubDate.toLocaleDateString("es-CL", { month: "short", day: "numeric" })}
                       </span>
-                      <span class="text-[10px] text-white/20 font-body tracking-wide hidden md:block">
+                      <span class="hidden font-mono text-[10px] tracking-wide text-text-tertiary md:block">
                         {readMin} min
                       </span>
-                      <svg class="w-3 h-3 text-white/15 group-hover:text-white/50 transition-all group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                      <svg class="h-3 w-3 text-text-tertiary transition-all group-hover:translate-x-0.5 group-hover:text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
                     </div>
                   </a>
                 );
               })}
             </div>
+            <nav data-archive-pager class="flex flex-wrap items-center justify-center gap-2 pt-8 md:pt-10" aria-label="Paginación de artículos"></nav>
           </>
         )}
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════
-         NEWSLETTER · Minimal CTA
-    ═══════════════════════════════════════════ -->
-    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
-      <div class="absolute inset-0 opacity-30" style="background: radial-gradient(ellipse at 50% 50%, #6366f112 0%, transparent 60%);" />
-      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
+    <script>
+      // Archivo Tier 4 · paginación progresiva (5 filas por página).
+      // Sin JS todas las filas quedan visibles → HTML estático intacto para SEO.
+      const ARCHIVE_PER_PAGE = 5;
+      const archiveList = document.querySelector<HTMLElement>("[data-archive-list]");
+      const archivePager = document.querySelector<HTMLElement>("[data-archive-pager]");
 
-      <div class="relative mx-auto max-w-2xl px-6 py-20 md:py-28 text-center">
+      if (archiveList && archivePager) {
+        const items = Array.from(archiveList.querySelectorAll<HTMLElement>("[data-archive-item]"));
+        const totalPages = Math.ceil(items.length / ARCHIVE_PER_PAGE);
+        let page = 1;
+
+        if (totalPages <= 1) {
+          archivePager.style.display = "none";
+        } else {
+          const base = "inline-flex h-9 min-w-9 items-center justify-center rounded-[4px] border px-3 font-mono text-[11px] transition-colors";
+          const clsIdle = `${base} cursor-pointer border-frame bg-surface text-text-secondary hover:border-frame-hover hover:text-text-primary`;
+          const clsActive = `${base} border-accent/60 bg-accent-subtle text-accent`;
+          const clsEdge = `${base} cursor-pointer border-frame bg-surface text-text-tertiary hover:border-frame-hover hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40`;
+
+          const pageWindow = (): (number | "…")[] => {
+            const out: (number | "…")[] = [];
+            for (let i = 1; i <= totalPages; i++) {
+              if (i === 1 || i === totalPages || (i >= page - 1 && i <= page + 1)) {
+                out.push(i);
+              } else if (out[out.length - 1] !== "…") {
+                out.push("…");
+              }
+            }
+            return out;
+          };
+
+          const scrollToArchive = () => {
+            const top = archiveList.getBoundingClientRect().top + window.scrollY - 88;
+            window.scrollTo({ top, behavior: "smooth" });
+          };
+
+          const renderArchive = (scroll: boolean) => {
+            const start = (page - 1) * ARCHIVE_PER_PAGE;
+            items.forEach((el, i) => {
+              el.style.display = i >= start && i < start + ARCHIVE_PER_PAGE ? "" : "none";
+            });
+
+            archivePager.replaceChildren();
+
+            const makeEdge = (label: string, target: number, disabled: boolean, aria: string) => {
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = clsEdge;
+              btn.textContent = label;
+              btn.disabled = disabled;
+              btn.setAttribute("aria-label", aria);
+              btn.addEventListener("click", () => {
+                page = Math.min(totalPages, Math.max(1, target));
+                renderArchive(true);
+              });
+              return btn;
+            };
+
+            archivePager.appendChild(makeEdge("←", page - 1, page === 1, "Página anterior"));
+
+            pageWindow().forEach((p) => {
+              if (p === "…") {
+                const dots = document.createElement("span");
+                dots.className = "px-1 font-mono text-[11px] text-text-tertiary";
+                dots.textContent = "…";
+                dots.setAttribute("aria-hidden", "true");
+                archivePager.appendChild(dots);
+                return;
+              }
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = p === page ? clsActive : clsIdle;
+              btn.textContent = String(p);
+              btn.setAttribute("aria-label", `Página ${p}`);
+              if (p === page) btn.setAttribute("aria-current", "page");
+              btn.addEventListener("click", () => {
+                if (page === p) return;
+                page = p;
+                renderArchive(true);
+              });
+              archivePager.appendChild(btn);
+            });
+
+            archivePager.appendChild(makeEdge("→", page + 1, page === totalPages, "Página siguiente"));
+
+            if (scroll) scrollToArchive();
+          };
+
+          renderArchive(false);
+        }
+      }
+    </script>
+
+    <!-- ═══════════════════════════════════════════
+         NEWSLETTER · CTA minimal
+    ═══════════════════════════════════════════ -->
+    <section id="newsletter" class="relative w-full scroll-mt-20 overflow-hidden border-t border-frame/60 bg-bg">
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true" style="background: radial-gradient(ellipse 60% 50% at 50% 0%, #00FF660D 0%, transparent 70%);" />
+
+      <div class="relative mx-auto max-w-2xl px-4 py-20 text-center sm:px-6 md:py-28 lg:px-8">
         <div class="reveal-group">
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-5" style="color: #6366f1aa;">No te pierdas nada</p>
-          <h2 class="reveal-item text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-white leading-[1.1] tracking-[-0.5px] md:tracking-[-1px]">
+          <p class="reveal-item font-mono text-[11px] uppercase tracking-[0.14em] text-accent">// no te pierdas nada</p>
+          <h2 class="reveal-item mt-4 font-heading text-2xl font-bold leading-[1.1] tracking-[-0.02em] text-text-primary sm:text-3xl md:text-4xl">
             Artículos sobre digital<br />para tu negocio
           </h2>
-          <p class="reveal-item mt-3 text-sm text-white/40 font-body font-light">
+          <p class="reveal-item mt-3 font-body text-sm text-text-secondary">
             SEO, automatizaciones, desarrollo web y más. Directo a tu bandeja.
           </p>
-          <form id="newsletter-form" class="reveal-item mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto" novalidate>
+          <form id="newsletter-form" class="reveal-item mx-auto mt-8 flex max-w-md flex-col items-center justify-center gap-3 sm:flex-row" novalidate>
             <input
               id="newsletter-email"
               type="email"
               required
               placeholder="tu@email.com"
-              class="w-full sm:flex-1 px-4 py-3 bg-white/[0.04] border border-white/[0.08] text-sm text-white font-body placeholder:text-white/25 focus:outline-none focus:border-[#6366f1]/50 transition-colors"
+              class="w-full rounded-[4px] border border-frame bg-surface px-4 py-3 font-mono text-sm text-text-primary transition-colors placeholder:text-text-tertiary focus:border-accent focus:outline-none sm:flex-1"
             />
-            <button type="submit" id="newsletter-btn" class="w-full sm:w-auto px-6 py-3 bg-white/[0.08] hover:bg-white/[0.14] text-white text-[11px] font-body font-medium tracking-[0.15em] uppercase transition-all cursor-pointer">
+            <button type="submit" id="newsletter-btn" class="w-full cursor-pointer rounded-[4px] border border-accent/40 bg-accent-subtle px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-accent transition-colors hover:border-accent hover:bg-accent hover:text-bg sm:w-auto">
               Suscribir
             </button>
           </form>
-          <p id="newsletter-status" class="hidden text-xs font-body mt-3"></p>
+          <p id="newsletter-status" class="mt-3 hidden font-mono text-[11px]"></p>
         </div>
       </div>
     </section>
@@ -454,7 +605,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
         var email = (emailInput.value || '').trim().toLowerCase();
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           status.textContent = 'Ingresa un correo válido';
-          status.className = 'text-xs font-body mt-3 text-red-400';
+          status.className = 'mt-3 font-mono text-[11px] text-danger';
           return;
         }
         btn.disabled = true;
@@ -468,16 +619,16 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
           var data = await res.json();
           if (res.ok) {
             status.textContent = '¡Listo! Te avisamos de los próximos artículos.';
-            status.className = 'text-xs font-body mt-3 text-emerald-400';
+            status.className = 'mt-3 font-mono text-[11px] text-accent';
             emailInput.value = '';
             if (window.trackEvent) window.trackEvent('newsletter_subscribed');
           } else {
             status.textContent = data.error || 'Error al suscribir. Intenta de nuevo.';
-            status.className = 'text-xs font-body mt-3 text-red-400';
+            status.className = 'mt-3 font-mono text-[11px] text-danger';
           }
         } catch (err) {
           status.textContent = 'Error de conexión. Intenta de nuevo.';
-          status.className = 'text-xs font-body mt-3 text-red-400';
+          status.className = 'mt-3 font-mono text-[11px] text-danger';
         }
         btn.disabled = false;
         btn.textContent = 'Suscribir';

@@ -1,0 +1,353 @@
+---
+/**
+ * RegionPage — plantilla canónica v2 de páginas región (/regiones/*) · PRD Fase 7.
+ * Hero §13[2] + servicios en columnas full-bleed + guías + FAQ (accordion + GEO)
+ * + datos locales + CTA final + ciudades relacionadas (malla interna).
+ * Los wrappers (/regiones/<slug>.astro) conservan BaseLayout y JSON-LD verbatim de v1.
+ */
+import PageHero from "./ui/PageHero.astro";
+import WebcoreWindow from "./ui/WebcoreWindow.astro";
+import BlurText from "./BlurText.astro";
+import FaqPreview from "./FaqPreview.astro";
+import LocalidadDatos from "./LocalidadDatos.astro";
+import CiudadesRelacionadas from "./CiudadesRelacionadas.astro";
+import { getRegion } from "../data/regiones";
+
+export interface Props {
+  slug: string;
+  /** URL wa.me completa (el wrapper la construye con waPhone/waMsg verbatim) */
+  waUrl: string;
+  kicker: string;
+  subtitle: string;
+  ctaKicker: string;
+  guides: { href: string; title: string; desc: string }[];
+  faqs: { q: string; a: string }[];
+  webDesc: string;
+  seoDesc: string;
+  autoDesc: string;
+  servicesLayout?: "web-seo" | "seo-first" | "auto-first";
+  /** Ancho de la columna web en desktop (55 = valdivia 55/45) */
+  colWeb?: number;
+  videoUrl?: string;
+}
+
+const VIDEO_HERO =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4";
+
+const {
+  slug,
+  waUrl,
+  kicker,
+  subtitle,
+  ctaKicker,
+  guides,
+  faqs,
+  webDesc,
+  seoDesc,
+  autoDesc,
+  servicesLayout = "web-seo",
+  colWeb = 60,
+  videoUrl = VIDEO_HERO,
+} = Astro.props;
+
+const info = getRegion(slug);
+const nombre = info?.nombre ?? slug;
+const poblacion = new Intl.NumberFormat("es-CL").format(info?.poblacion ?? 0);
+const regionShort = (info?.region ?? "Región de Los Lagos")
+  .replace("Región de ", "")
+  .toLowerCase();
+const distanciaCorta = !info || info.distanciaKm === 0 ? "base" : `${info.distanciaKm} km`;
+const sectoresTop = info?.sectores.slice(0, 2).join(" · ") ?? "servicios digitales";
+
+interface Servicio {
+  num: string;
+  label: string;
+  title: string;
+  desc: string;
+  href: string;
+  price: string;
+  accent: string;
+  cta: string;
+  aria: string;
+}
+
+const web: Servicio = {
+  num: "01",
+  label: "Desarrollo web",
+  title: "Páginas web profesionales",
+  desc: webDesc,
+  href: "/desarrollo-web",
+  price: "Desde $290.000",
+  accent: "#00FF66",
+  cta: "Explorar servicio",
+  aria: `Servicio de desarrollo web profesional en ${nombre} · Desde $290.000`,
+};
+const seo: Servicio = {
+  num: "02",
+  label: "SEO local",
+  title: "Google Maps",
+  desc: seoDesc,
+  href: "/seo-local",
+  price: "Desde $190.000",
+  accent: "#22E584",
+  cta: "Ver planes",
+  aria: `SEO local en ${nombre} · Desde $190.000`,
+};
+const auto: Servicio = {
+  num: "03",
+  label: "Automatización",
+  title: "Bot WhatsApp · CRM · Dashboards",
+  desc: autoDesc,
+  href: "/automatizacion",
+  price: "Desde $590.000",
+  accent: "#22D3EE",
+  cta: "Ver soluciones",
+  aria: `Automatización en ${nombre} · Desde $590.000`,
+};
+
+const ordered =
+  servicesLayout === "auto-first"
+    ? [auto, web, seo]
+    : servicesLayout === "seo-first"
+      ? [seo, web, auto]
+      : [web, seo, auto];
+const numbered = ordered.map((s, i) => ({ ...s, num: String(i + 1).padStart(2, "0") }));
+const rows =
+  servicesLayout === "auto-first"
+    ? [[numbered[0]], [numbered[1], numbered[2]]]
+    : [
+        [numbered[0], numbered[1]],
+        [numbered[2]],
+      ];
+
+const webColClass = colWeb === 55 ? "md:w-[55%]" : "md:w-[60%]";
+const seoColClass = colWeb === 55 ? "md:w-[45%]" : "md:w-[40%]";
+
+const panelBase =
+  "group relative flex flex-col justify-end overflow-hidden border-t border-frame bg-surface no-underline transition-colors hover:bg-surface-hover";
+const panelSize = "min-h-[20rem] p-6 sm:min-h-[24rem] sm:p-8 md:min-h-[27rem] lg:p-10";
+const panelSizeAuto = "min-h-[15rem] p-6 sm:min-h-[18rem] sm:p-8 md:min-h-[20rem] lg:p-10";
+
+function panelClass(s: Servicio, idx: number): string {
+  const parts = [panelBase, s.href === "/automatizacion" ? panelSizeAuto : panelSize];
+  if (idx > 0) parts.push("md:border-l md:border-frame");
+  if (s.href === "/desarrollo-web") parts.push(webColClass);
+  if (s.href === "/seo-local") parts.push(seoColClass);
+  return parts.join(" ");
+}
+
+const btnPrimary =
+  "inline-flex w-full items-center justify-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-[0.14em] text-bg transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:w-auto";
+const btnMetal =
+  "inline-flex w-full items-center justify-center rounded-[6px] border border-frame px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:w-auto";
+---
+
+<link rel="preload" as="video" href={videoUrl} fetchpriority="high" />
+
+<PageHero
+  eyebrow={`// ${kicker.toLowerCase()}`}
+  title="Agencia digital en"
+  titleAccent={`${nombre}.`}
+  subtitle={subtitle}
+  ledLabel={`${poblacion} hab · censo 2024`}
+  videoUrl={videoUrl}
+  breadcrumbs={[{ name: nombre, path: `/regiones/${slug}` }]}
+  meta={`${nombre.toLowerCase()} · ${regionShort} · chile`}
+>
+  <Fragment slot="actions">
+    <a href="/cotizar" class={btnPrimary}>[ Cotizar gratis ]</a>
+    <a href={waUrl} target="_blank" rel="noopener noreferrer" class={btnMetal}>
+      [ Consultar ahora ]
+    </a>
+  </Fragment>
+
+  <Fragment slot="aside">
+    <WebcoreWindow title={`${slug} --ficha`} variant="sunken">
+      <ul class="divide-y divide-frame">
+        <li class="flex items-center gap-3 px-4 py-3">
+          <span class="font-mono text-[11px] text-text-tertiary" aria-hidden="true">[01]</span>
+          <span class="truncate font-body text-sm text-text-primary">población</span>
+          <span class="ml-auto hidden shrink-0 font-mono text-[10px] uppercase tracking-wider text-text-tertiary sm:block">
+            {poblacion} hab
+          </span>
+        </li>
+        <li class="flex items-center gap-3 px-4 py-3">
+          <span class="font-mono text-[11px] text-text-tertiary" aria-hidden="true">[02]</span>
+          <span class="truncate font-body text-sm text-text-primary">cobertura</span>
+          <span class="ml-auto hidden shrink-0 font-mono text-[10px] uppercase tracking-wider text-text-tertiary sm:block">
+            {distanciaCorta}
+          </span>
+        </li>
+        <li class="flex items-center gap-3 px-4 py-3">
+          <span class="font-mono text-[11px] text-text-tertiary" aria-hidden="true">[03]</span>
+          <span class="truncate font-body text-sm text-text-primary">sectores</span>
+          <span class="ml-auto hidden max-w-[55%] truncate font-mono text-[10px] uppercase tracking-wider text-text-tertiary sm:block">
+            {sectoresTop}
+          </span>
+        </li>
+      </ul>
+      <div class="flex items-center justify-between gap-4 border-t border-frame px-4 py-3">
+        <span class="font-mono text-[10px] uppercase tracking-wider text-text-tertiary">
+          fuente: INE · censo 2024
+        </span>
+        <a
+          href="#datos-locales"
+          class="font-mono text-[10px] uppercase tracking-wider text-accent no-underline transition-colors hover:text-accent-hover"
+        >
+          ver datos ↓
+        </a>
+      </div>
+    </WebcoreWindow>
+  </Fragment>
+</PageHero>
+
+<!-- SERVICIOS · columnas full-bleed -->
+<section aria-label={`Servicios digitales en ${nombre}`} class="relative w-full">
+  {rows.map((row) => (
+    <div class="flex flex-col md:flex-row">
+      {row.map((s, idx) => (
+        <a href={s.href} class={panelClass(s, idx)} aria-label={s.aria}>
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-text-tertiary">
+            <span style={`color:${s.accent}`}>[{s.num}]</span>
+            {" · "}
+            {s.label}
+          </p>
+          <h2 class="mt-4 font-heading text-[clamp(1.6rem,3.4vw,3rem)] font-bold leading-[1.02] tracking-[-0.02em] text-text-primary">
+            {s.title}
+          </h2>
+          <p class="mt-3 max-w-md font-body text-sm font-light leading-relaxed text-text-secondary md:text-base">
+            {s.desc}
+          </p>
+          <div class="mt-6 flex flex-wrap items-center gap-4">
+            <span class="inline-flex items-center rounded-[4px] border border-frame px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary transition-colors group-hover:border-frame-hover group-hover:text-text-primary">
+              [ {s.cta} ]
+            </span>
+            <span class="font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary">
+              {s.price}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  ))}
+</section>
+
+<!-- GUÍAS -->
+<section class="relative w-full border-t border-frame bg-bg">
+  <div class="w-full px-4 py-16 sm:px-6 md:py-20 lg:px-8 xl:px-12">
+    <div class="reveal-group">
+      <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+        // guías para negocios en {nombre.toLowerCase()}
+      </p>
+      <div class="mt-8 grid gap-4 md:grid-cols-3">
+        {guides.map((g) => (
+          <a
+            href={g.href}
+            class="reveal-item group flex flex-col rounded-[6px] border border-frame bg-surface p-5 no-underline transition-colors hover:border-frame-hover hover:bg-surface-hover md:p-6"
+          >
+            <p class="font-heading text-base font-semibold leading-snug tracking-[-0.01em] text-text-primary">
+              {g.title}
+            </p>
+            <p class="mt-2 flex-1 font-body text-sm font-light leading-relaxed text-text-secondary">
+              {g.desc}
+            </p>
+            <span class="mt-5 font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary transition-colors group-hover:text-accent">
+              leer guía →
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq-completo" class="relative w-full scroll-mt-16 border-t border-frame bg-bg">
+  <div class="w-full px-4 py-20 sm:px-6 md:py-28 lg:px-8 xl:px-12">
+    <div class="reveal-group mb-10 md:mb-12">
+      <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+        // preguntas frecuentes
+      </p>
+      <BlurText
+        text="Lo que nos preguntan"
+        as="h2"
+        className="mt-4 max-w-3xl font-heading text-3xl font-bold leading-[1.08] tracking-[-0.02em] text-text-primary sm:text-4xl md:text-5xl"
+      />
+    </div>
+
+    <!-- FAQ Preview visible para LLMs (GEO) -->
+    <div class="reveal-item mb-10 md:mb-12">
+      <FaqPreview city={nombre} />
+    </div>
+
+    <div class="reveal-group border-t border-frame/60">
+      {faqs.map((faq, i) => (
+        <details class="reveal-item group border-b border-frame/60">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-text-primary transition-colors hover:text-accent focus-visible:outline-none focus-visible:text-accent md:py-6 [&::-webkit-details-marker]:hidden">
+            <span class="flex items-baseline gap-3 md:gap-4">
+              <span class="shrink-0 font-mono text-[11px] leading-none text-text-tertiary" aria-hidden="true">
+                [{String(i + 1).padStart(2, "0")}]
+              </span>
+              <span class="font-heading text-base font-semibold leading-snug tracking-[-0.01em] md:text-lg">
+                {faq.q}
+              </span>
+            </span>
+            <span
+              class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] border border-frame text-text-tertiary transition-colors duration-300 group-open:border-accent/60 group-open:text-accent"
+              aria-hidden="true"
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                class="transition-transform duration-300 group-open:rotate-45"
+              >
+                <path d="M12 5v14"></path>
+                <path d="M5 12h14"></path>
+              </svg>
+            </span>
+          </summary>
+          <div class="pb-6 md:pb-7">
+            <p class="max-w-3xl pl-8 font-body text-sm font-light leading-relaxed text-text-secondary md:pl-9 md:text-base">
+              {faq.a}
+            </p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- DATOS LOCALES -->
+<LocalidadDatos slug={slug} />
+
+<!-- CTA FINAL -->
+<section class="relative w-full border-t border-frame bg-bg" aria-label={`Contacto · ${nombre}`}>
+  <div class="w-full px-4 py-20 sm:px-6 md:py-28 lg:px-8 xl:px-12">
+    <div class="reveal-group">
+      <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+        // {ctaKicker.toLowerCase()}
+      </p>
+      <h2 class="reveal-item mt-4 font-heading text-4xl font-bold leading-[1.02] tracking-[-0.02em] text-text-primary sm:text-5xl md:text-6xl">
+        Tu negocio,{" "}
+        <span class="text-accent">digital.</span>
+      </h2>
+      <p class="reveal-item mt-4 max-w-xl font-body text-sm font-light leading-relaxed text-text-secondary md:text-base">
+        Cuéntanos qué necesitas. Respuesta en menos de 24 horas.
+      </p>
+      <div class="reveal-item mt-8 flex flex-wrap gap-3">
+        <a href={waUrl} target="_blank" rel="noopener noreferrer" class={btnPrimary}>
+          [ WhatsApp ahora ]
+        </a>
+        <a href="/cotizar" class={btnMetal}>[ Cotizar online ]</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CIUDADES RELACIONADAS -->
+<CiudadesRelacionadas current={slug} />

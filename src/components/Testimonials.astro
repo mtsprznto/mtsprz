@@ -1,4 +1,10 @@
 ---
+/**
+ * Testimonials — v2 "Technopunk Enterprise" (DESIGN §13 [8 Testimonios])
+ * - Conserva API (Testimonial/Props), datos y JSON-LD Review (SEO).
+ * - Superficie v2: ventana de reseña (chrome + body sunken), estrellas en acento.
+ * - Sin liquid-glass ni hex v1; reveal CSS puro; 100% width.
+ */
 export interface Testimonial {
   id: string;
   name: string;
@@ -19,57 +25,73 @@ const hasTestimonials = testimonials.length > 0;
 
 {
   hasTestimonials && (
-    <section class="bg-[#010101] py-28 md:py-36 border-t border-white/[0.03]">
-      <div class="mx-auto max-w-6xl px-6">
-        <div class="reveal-group mb-12 md:mb-16 text-center">
-          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Testimonios</p>
-          <h2 class="reveal-item text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.1] tracking-[-1px]">
-            Lo que dicen nuestros clientes
+    <section id="testimonios" class="relative w-full scroll-mt-20 bg-bg">
+      <div class="w-full px-4 py-20 sm:px-6 md:py-28 lg:px-8 xl:px-12">
+        <div class="reveal-group mb-12 md:mb-16">
+          <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            // testimonios
+          </p>
+          <h2 class="reveal-item mt-4 font-heading text-3xl font-bold leading-[1.08] tracking-[-0.02em] text-text-primary sm:text-4xl md:text-5xl">
+            Lo que dicen <span class="text-accent">nuestros clientes</span>
           </h2>
-          <p class="reveal-item mt-3 text-white/50 font-body font-light max-w-lg mx-auto text-sm">
+          <p class="reveal-item mt-4 max-w-lg font-body text-sm font-light text-text-secondary">
             Empresas de la Región de Los Lagos que confiaron en Mtsprz
           </p>
         </div>
 
         <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((t, i) => (
-            <div
-              class="reveal-item liquid-glass rounded-[1.375rem] p-6 sm:p-7 flex flex-col"
-              style={`transition-delay: ${i * 0.1}s`}
-            >
-              <!-- Stars -->
-              <div class="flex items-center gap-0.5 mb-4" aria-label={`${t.rating} de 5 estrellas`}>
-                {Array.from({ length: 5 }, (_, j) => (
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill={j < t.rating ? "#f59e0b" : "none"}
-                    stroke={j < t.rating ? "#f59e0b" : "rgba(255,255,255,0.15)"}
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                  </svg>
-                ))}
+            <figure class="reveal-item webcore-window" style={`transition-delay: ${i * 0.1}s`}>
+              <div class="flex h-9 items-center gap-2 border-b border-frame bg-surface px-3">
+                <span
+                  class="h-2 w-2 shrink-0 rounded-full bg-accent"
+                  style="box-shadow:0 0 8px var(--color-accent);"
+                  aria-hidden="true"
+                />
+                <span class="truncate font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary">
+                  reseña --verificada
+                </span>
+                <span class="ml-auto shrink-0 font-mono text-[11px] text-text-tertiary">
+                  {t.rating}.0/5
+                </span>
               </div>
 
-              <!-- Texto -->
-              <blockquote class="flex-1">
-                <p class="text-sm sm:text-base text-white/70 font-body font-light leading-relaxed">
-                  &ldquo;{t.text}&rdquo;
-                </p>
-              </blockquote>
+              <div class="flex flex-col bg-surface-sunken p-6 sm:p-7">
+                <!-- Rating -->
+                <div class="mb-4 flex items-center gap-0.5" aria-label={`${t.rating} de 5 estrellas`}>
+                  {Array.from({ length: 5 }, (_, j) => (
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill={j < t.rating ? "var(--color-accent)" : "none"}
+                      stroke={j < t.rating ? "var(--color-accent)" : "var(--color-frame)"}
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  ))}
+                </div>
 
-              <!-- Autor -->
-              <div class="mt-5 pt-4 border-t border-white/[0.06]">
-                <p class="text-sm text-white font-heading font-semibold">{t.name}</p>
-                <p class="text-[11px] text-white/40 font-body">
-                  {t.role}, {t.business} &middot; {t.location}
-                </p>
+                <!-- Texto -->
+                <blockquote class="flex-1">
+                  <p class="font-body text-sm font-light leading-[1.8] text-text-secondary">
+                    &ldquo;{t.text}&rdquo;
+                  </p>
+                </blockquote>
+
+                <!-- Autor -->
+                <figcaption class="mt-6 border-t border-frame pt-4">
+                  <p class="font-heading text-sm font-semibold text-text-primary">{t.name}</p>
+                  <p class="mt-1 font-mono text-[11px] text-text-tertiary">
+                    {t.role}, {t.business} &middot; {t.location}
+                  </p>
+                </figcaption>
               </div>
-            </div>
+            </figure>
           ))}
         </div>
 

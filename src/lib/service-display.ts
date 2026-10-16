@@ -2,9 +2,8 @@
  * Mapeo de categorías DB → display público.
  * Solo datos de presentación · NO precios, deliverables, etc.
  *
- * Cada categoría tiene un fondo editorial único generado por `getEditorialBg`.
- * Los gradientes son cinematográficos, oscuros y texturizados · simulan
- * sesiones fotográficas de estudio con iluminación dramática.
+ * Acentos por categoría/rol según §2.3 (se conserva el rol, no el hex):
+ * uso puntual (icono, dot, línea activa) — nunca como texto pequeño.
  */
 export const categoryDisplay: Record<
   string,
@@ -12,46 +11,46 @@ export const categoryDisplay: Record<
 > = {
   "Desarrollo Web": {
     icon: "Code",
-    accent: "#6366f1",
+    accent: "#00FF66",
     slug: "desarrollo-web",
     tags: ["Landing Pages", "Sitios Web", "E-commerce", "Apps Web"],
     landingUrl: "/desarrollo-web",
   },
   "Automatización de Procesos": {
     icon: "Bot",
-    accent: "#06b6d4",
+    accent: "#22D3EE",
     slug: "automatizaciones",
     tags: ["WhatsApp Bots", "Excel", "CRM", "Workflows"],
     landingUrl: "/automatizacion",
   },
   "Datos e Inteligencia": {
     icon: "BarChart3",
-    accent: "#f97316",
+    accent: "#A855F7",
     slug: "datos",
     tags: ["Dashboards", "Scraping", "APIs", "OCR"],
   },
   SEO: {
     icon: "Search",
-    accent: "#10b981",
+    accent: "#22E584",
     slug: "seo",
     tags: ["SEO Local", "Google Maps", "Auditoría", "Contenido"],
     landingUrl: "/seo-local",
   },
   "Marketing Digital": {
     icon: "TrendingUp",
-    accent: "#f59e0b",
+    accent: "#EAB308",
     slug: "marketing-digital",
     tags: ["Google Ads", "Redes Sociales", "Contenido", "Analítica"],
   },
   "Diseño Gráfico": {
     icon: "Palette",
-    accent: "#ec4899",
+    accent: "#C084FC",
     slug: "diseno-grafico",
     tags: ["Logos", "Identidad", "Marca", "UX/UI"],
   },
   Consultoría: {
     icon: "Globe",
-    accent: "#8b5cf6",
+    accent: "#FF3366",
     slug: "consultoria",
     tags: ["Diagnóstico", "Plan", "Pymes", "Estrategia"],
   },
@@ -60,35 +59,23 @@ export const categoryDisplay: Record<
 export const DEFAULT_CATEGORY = "Consultoría";
 
 /**
- * Genera fondo editorial cinematográfico único por categoría.
- * Cada fondo combina:
- * - Un gradiente base oscuro de fondo (dominante)
- * - Un foco de luz radial inspirado en iluminación Rembrandt/estudio
- * - Un gradiente lineal inferior para transición suave al overlay de texto
- *
- * Uso: inline CSS en `background` property.
+ * Capacidades/stack honesto por línea de servicio (§6.4 capa técnica).
+ * Fuente única para home + /servicios.
  */
-export function getEditorialBg(accent: string, index: number): string {
-  const lightAngle = index % 2 === 0 ? "70% 30%" : "30% 70%";
-  const secondaryLight = index % 3 === 0 ? "80% 90%" : "20% 10%";
-  return `
-    radial-gradient(ellipse at ${lightAngle}, ${accent}22 0%, transparent 60%),
-    radial-gradient(ellipse at ${secondaryLight}, ${accent}0d 0%, transparent 50%),
-    linear-gradient(170deg, #0A0A0A 0%, ${accent}06 35%, #0A0A0A 100%)
-  `;
-}
-
-/**
- * Fondo para hover · intensifica la iluminación.
- */
-export function getEditorialBgHover(accent: string, index: number): string {
-  const lightAngle = index % 2 === 0 ? "70% 30%" : "30% 70%";
-  return `
-    radial-gradient(ellipse at ${lightAngle}, ${accent}44 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 90%, ${accent}1a 0%, transparent 50%),
-    linear-gradient(170deg, #0A0A0A 0%, ${accent}0d 35%, #0A0A0A 100%)
-  `;
-}
+export const serviceStack: Record<string, string[]> = {
+  "desarrollo-web": ["Astro", "TypeScript", "Tailwind CSS", "Core Web Vitals"],
+  seo: [
+    "SEO técnico on-page",
+    "Schema.org",
+    "Google Business Profile",
+    "Search Console",
+  ],
+  automatizaciones: ["TypeScript", "APIs REST", "WhatsApp (WAHA)", "Schedulers / cron"],
+  datos: ["PostgreSQL", "SQL", "Scraping", "Dashboards"],
+  "marketing-digital": ["Analítica (GA4)", "Contenido", "Campañas", "Tracking"],
+  "diseno-grafico": ["Identidad de marca", "UI / UX", "Design tokens", "Prototipos"],
+  consultoria: ["Diagnóstico técnico", "Roadmap", "Arquitectura", "Estimación"],
+};
 
 export interface ServiceDisplay {
   icon: string;
@@ -98,6 +85,7 @@ export interface ServiceDisplay {
   accent: string;
   slug: string;
   landingUrl?: string;
+  stack: string[];
 }
 
 export function toServiceDisplay(row: {
@@ -116,5 +104,6 @@ export function toServiceDisplay(row: {
     accent: cfg.accent,
     slug: cfg.slug,
     landingUrl: cfg.landingUrl,
+    stack: serviceStack[cfg.slug] ?? [],
   };
 }

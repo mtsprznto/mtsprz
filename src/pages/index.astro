@@ -13,6 +13,7 @@ import { toServiceDisplay } from "../lib/service-display";
 import HeroSection from "../components/home/HeroSection.astro";
 import DiagnosticoSection from "../components/home/DiagnosticoSection.astro";
 import ServicesSection from "../components/home/ServicesSection.astro";
+import MethodologyPipeline from "../components/home/MethodologyPipeline.astro";
 import NosotrosSection from "../components/home/NosotrosSection.astro";
 import PortfolioSection from "../components/home/PortfolioSection.astro";
 import RecursosSection from "../components/home/RecursosSection.astro";
@@ -30,9 +31,9 @@ const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
 const diagnosisSlugs = ["desarrollo-web", "seo", "automatizaciones"];
 const diagnosisServices = services.filter((s: any) => diagnosisSlugs.includes(s.slug));
 const diagnosisFallbacks = [
-  { title: "Sitio Web Profesional", description: "Páginas ultrarrápidas con Astro, diseño responsive y SEO local incluido para tu negocio en el sur de Chile.", accent: "#6366f1", slug: "desarrollo-web", icon: "Code", tags: [], landingUrl: "/desarrollo-web" },
-  { title: "Posicionamiento SEO Local", description: "Aparece en Google Maps y búsquedas locales en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos.", accent: "#10b981", slug: "seo", icon: "Search", tags: [], landingUrl: "/seo-local" },
-  { title: "Automatización de Procesos", description: "Bots para WhatsApp, flujos de email marketing, integraciones CRM y workflows que ahorran horas a tu pyme.", accent: "#06b6d4", slug: "automatizaciones", icon: "Bot", tags: [], landingUrl: "/automatizacion" },
+  { title: "Sitio Web Profesional", description: "Páginas ultrarrápidas con Astro, diseño responsive y SEO local incluido para tu negocio en el sur de Chile.", accent: "#00FF66", slug: "desarrollo-web", icon: "Code", tags: [], landingUrl: "/desarrollo-web" },
+  { title: "Posicionamiento SEO Local", description: "Aparece en Google Maps y búsquedas locales en Puerto Varas, Osorno, Valdivia y toda la Región de Los Lagos.", accent: "#22E584", slug: "seo", icon: "Search", tags: [], landingUrl: "/seo-local" },
+  { title: "Automatización de Procesos", description: "Bots para WhatsApp, flujos de email marketing, integraciones CRM y workflows que ahorran horas a tu pyme.", accent: "#22D3EE", slug: "automatizaciones", icon: "Bot", tags: [], landingUrl: "/automatizacion" },
 ];
 const featured = diagnosisServices.length >= 3 ? diagnosisServices : diagnosisFallbacks;
 
@@ -105,6 +106,7 @@ const anio = _hoy.getFullYear();
     })} />
 
     <ServicesSection services={services} />
+    <MethodologyPipeline />
     <NosotrosSection />
     <PortfolioSection projects={projectsData} />
     <RecursosSection />

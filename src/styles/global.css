@@ -3,30 +3,54 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-surface: #141416;
-  --color-surface-hover: #1c1c20;
-  --color-border: #1f1f23;
-  --color-border-hover: #2a2a30;
-  --color-text-primary: #fafafa;
-  --color-text-secondary: #a1a1aa;
-  --color-text-tertiary: #6b6b78;
-  --color-accent: #4f46e5;
-  --color-accent-hover: #6366f1;
-  --color-accent-subtle: rgba(79, 70, 229, 0.12);
-  --color-success: #22c55e;
-  --color-warning: #eab308;
-  --color-error: #ef4444;
+  /* ── Design System v2 · Technopunk Enterprise (DESIGN.md §2.1) ── */
 
-  --font-heading: "Poppins", system-ui, sans-serif;
+  /* Superficies */
+  --color-bg: #090C10;             /* Deep Terminal Black · body */
+  --color-surface: #161B22;        /* Window Charcoal · cards/ventanas/modales */
+  --color-surface-hover: #1C232D;  /* hover de superficie */
+  --color-surface-sunken: #0D1117; /* fondo interior de ventana/terminal */
+
+  /* Marcos y bordes */
+  --color-frame: #30363D;          /* Metal Frame Gray · bordes ventanas/inputs */
+  --color-frame-hover: #444C56;
+
+  /* Texto */
+  --color-text-primary: #F0F6FC;   /* High-Contrast White */
+  --color-text-secondary: #8B949E; /* Code Muted Gray */
+  --color-text-tertiary: #6E7681;  /* meta, captions, disabled */
+
+  /* Acentos */
+  --color-accent: #00FF66;         /* Terminal Hack Green · CTA/status */
+  --color-accent-hover: #33FF85;
+  --color-accent-subtle: rgba(0, 255, 102, 0.12);
+  --color-brand: #A855F7;          /* Cybergoth Purple · badges/hover/marca */
+  --color-brand-hover: #C084FC;
+  --color-brand-subtle: rgba(168, 85, 247, 0.12);
+  --color-danger: #FF3366;         /* Industrial Red · alertas/close */
+  --color-danger-hover: #FF5C82;
+
+  /* Semánticos */
+  --color-success: #00FF66;
+  --color-warning: #EAB308;
+  --color-error: #FF3366;
+
+  /* ── Aliases transitorios v1→v2 (retirar en Fase 7 al migrar todo el sitio) ── */
+  --color-border: var(--color-frame);
+  --color-border-hover: var(--color-frame-hover);
+
+  /* Tipografía */
+  --font-heading: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
-  --font-mono: "Fira Code", "JetBrains Mono", monospace;
-  --font-alt: "Montserrat", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  /* TRANSITIONAL v1: se retira en Fase 7 junto con los usos de .font-hand */
   --font-hand: "Caveat", "Comic Sans MS", cursive;
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  /* Radios (v2 · estética OS dura) */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
 
   --spacing-section: 5rem;
 }
@@ -39,7 +63,7 @@ html {
 }
 
 body {
-  background-color: #010101;
+  background-color: var(--color-bg);
   color: var(--color-text-primary);
   font-family: var(--font-body);
   font-weight: 400;
@@ -66,8 +90,8 @@ img {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: 600;
-  line-height: 1.2;
+  font-weight: 700;
+  line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
@@ -75,10 +99,7 @@ code, pre, kbd, samp {
   font-family: var(--font-mono);
 }
 
-.font-alt {
-  font-family: var(--font-alt);
-}
-
+/* TRANSITIONAL v1: .font-hand se retira en Fase 7 con los componentes que lo usan. */
 .font-hand {
   font-family: var(--font-hand);
 }
@@ -88,13 +109,13 @@ input, select, textarea {
 }
 
 select option {
-  background-color: #141416;
-  color: #fafafa;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
 }
 
 ::selection {
   background-color: var(--color-accent);
-  color: white;
+  color: var(--color-bg);
 }
 
 ::-webkit-scrollbar {
@@ -284,42 +305,7 @@ select option {
 .reveal-group.visible > .reveal-item:nth-child(7) { transition-delay: 0.26s; }
 .reveal-group.visible > .reveal-item:nth-child(8) { transition-delay: 0.30s; }
 
-/* Track de servicios (index.astro)
-   ESTADO NATURAL (sin JS / móvil / reduced-motion): STICKY DECK CSS PURO.
-   Cada card es position: sticky con top = 12vh + (8 - i) * 5.5vh → con
-   scroll vertical las cards se apilan una encima de otra como un mazo de
-   cartas y TODAS quedan visibles escalonadas: card 0 (la principal) abajo,
-   las demás subiendo, la CTA coronando arriba. No requiere JS → se ve
-   siempre, incluso si el CDN de GSAP no carga.
-   GSAP desktop añade .svc-track--gsap (cards absolute + pin) que reemplaza
-   el sticky con la cascada mazo→columna (mismo lenguaje visual). */
-.svc-track {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  overflow: visible;
-}
-.svc-track .svc-card {
-  position: sticky;
-  top: calc(12vh + (8 - var(--i, 8)) * 5.5vh);
-  height: min(38vh, 380px);
-  width: 100%;
-}
-.svc-track--gsap {
-  /* Cascada GSAP: las cards son absolute (GSAP); el track solo es el contenedor */
-  position: relative;
-  overflow: visible;                  /* el pin (transform) controla el track */
-  padding: 0;
-}
-.svc-track--gsap .svc-card {
-  /* Cascada: carta alta (borde superior visible) y compacta (la columna
-     entera cabe en ~80vh con 8 cartas) */
-  position: absolute;
-  height: min(38vh, 380px);
-  width: 100%;
-}
-
-/* Grano fotográfico para las ScrollCard (data URI SVG, sin JS) */
+/* Grano fotográfico (data URI SVG, sin JS) */
 .grain {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
@@ -375,12 +361,12 @@ select option {
 
 /* Focus-visible styles for keyboard navigation */
 :focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 /* Remove outline for mouse users */
@@ -737,4 +723,99 @@ button:focus-visible {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Design System v2 · Technopunk Enterprise
+   Primitivas: WebcoreWindow · StatusLed · scanlines · Modo Clean
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── WebcoreWindow (contenedor canónico v2 · DESIGN §5.1) ── */
+.webcore-window {
+  position: relative;
+  border: 1px solid var(--color-frame);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: 4px 4px 0 0 var(--color-frame); /* sombra sólida offset, sin blur */
+  overflow: hidden;
+}
+
+/* Maximizar → la ventana ocupa todo el ancho del grid de 12 col (§4.2) */
+[data-window][data-maximized] {
+  grid-column: 1 / -1;
+}
+
+/* Controles de ventana (_ □ ✕) */
+.win-ctl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.win-ctl:hover,
+.win-ctl:focus-visible {
+  color: var(--color-text-primary);
+  background: var(--color-surface-hover);
+}
+.win-ctl--close:hover,
+.win-ctl--close:focus-visible {
+  color: var(--color-bg);
+  background: var(--color-danger);
+}
+
+/* Estado minimizado: JS alterna el atributo [hidden] del body (a11y-safe) */
+.win-body[hidden] {
+  display: none !important;
+}
+
+/* ── Scanlines (overlay global · ≤3% opacidad · DESIGN §5.3) ── */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.03) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+/* ── StatusLed · pulso lento 2s (DESIGN §6.3) ── */
+@keyframes led-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+.led-pulse {
+  animation: led-pulse 2s ease-in-out infinite;
+}
+
+/* ── Modo Clean (html[data-mode="clean"] · DESIGN §11.2) ── */
+html[data-mode="clean"] body {
+  background-color: var(--color-surface-sunken);
+}
+html[data-mode="clean"] .scanlines,
+html[data-mode="clean"] .grain {
+  display: none;
+}
+html[data-mode="clean"] .led-pulse {
+  animation: none;
+  opacity: 1;
+}
+html[data-mode="clean"] [data-glow] {
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* ── reduced-motion: LED estático, sin scanlines (DESIGN §8.3) ── */
+@media (prefers-reduced-motion: reduce) {
+  .led-pulse { animation: none; }
+  .scanlines { display: none; }
 }

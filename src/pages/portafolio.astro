@@ -2,9 +2,36 @@
 export const prerender = true;
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
-import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import WebcoreWindow from "../components/ui/WebcoreWindow.astro";
+import BlurText from "../components/BlurText.astro";
 import Footer from "../components/Footer.astro";
 import projects from "../data/projects.json";
+
+// Video hero · misma pieza cinematográfica del home (§5.4)
+const heroVideo = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4";
+
+// Strip del hero · año de build (página prerender)
+const anio = new Date().getFullYear();
+
+// Datos derivados · una sola derivación para el aside y los spreads
+// head/sub parten el título por "·" · host real · número editorial
+const items = projects.map((p, idx) => {
+  const [head, ...rest] = p.title.split(" · ");
+  let host = p.url ?? "";
+  try {
+    host = new URL(p.url).host;
+  } catch {
+    /* host queda como url cruda */
+  }
+  return {
+    ...p,
+    head,
+    sub: rest.join(" · "),
+    host,
+    num: String(idx + 1).padStart(2, "0"),
+  };
+});
 ---
 
 <BaseLayout
@@ -34,211 +61,249 @@ import projects from "../data/projects.json";
   <Header />
   <link rel="preload" as="video" href="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4" fetchpriority="high" />
   <main id="main-content">
-    <!-- Hero · video background full-bleed -->
-    <section class="relative w-screen h-[100dvh] md:h-screen overflow-hidden bg-[#010101]">
-      <video
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
-        autoplay loop muted playsinline
-        preload="metadata"
-        class="z-[1]"
-        style="position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; max-width: none !important; min-width: 0 !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; display: block !important;"
-      />
-      <div style="position: absolute !important; top: 0; left: 0; width: 100%; height: 24%; z-index: 2;" class="bg-gradient-to-b from-[#010101] to-transparent sm:h-32"></div>
-      <div style="position: absolute !important; bottom: 0; left: 0; width: 100%; height: 36%; z-index: 2;" class="bg-gradient-to-t from-[#010101] to-transparent sm:h-48"></div>
+    <!-- Hero · primitiva reutilizable ui/PageHero (mismo patrón que home y /servicios) -->
+    <PageHero
+      ledLabel={`${projects.length} proyectos en producción`}
+      eyebrow="// portafolio · en producción"
+      title="Portafolio"
+      titleAccent="Web y aplicaciones a medida."
+      subtitle="Proyectos que reflejan nuestro compromiso con la calidad y el diseño."
+      videoUrl={heroVideo}
+      breadcrumbs={[{ name: "Portafolio", path: "/portafolio" }]}
+      meta={`© ${anio} mtsprz · puerto varas`}
+    >
+      <Fragment slot="actions">
+        <button
+          type="button"
+          onclick="window.openCotizarModal && window.openCotizarModal()"
+          class="inline-flex items-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-bg transition-colors hover:bg-accent-hover sm:text-sm"
+          >[ Cotizar Proyecto ]</button
+        >
+        <a
+          href="#proyectos"
+          class="inline-flex items-center rounded-[6px] border border-frame px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-wider text-text-primary transition-colors hover:border-accent hover:text-accent sm:text-sm"
+          >[ Ver Proyectos ]</a
+        >
+      </Fragment>
 
-      <!-- Contenido central -->
-      <div style="position: absolute !important; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; pointer-events: none;">
-        <div class="text-center px-6" style="pointer-events: auto;">
-          <p class="text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Portafolio</p>
-          <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-heading font-bold text-white leading-[0.9] tracking-[-3px] md:tracking-[-4px]">PORTAFOLIO</h1>
-          <p class="mt-4 text-white/50 font-body font-light max-w-md mx-auto text-sm md:text-base">
-            Proyectos que reflejan nuestro compromiso con la calidad y el diseño
-          </p>
-        </div>
-      </div>
+      <Fragment slot="aside">
+        <WebcoreWindow title="portafolio --list" variant="sunken">
+          <ul class="divide-y divide-frame">
+            {items.map((p) => (
+              <li class="flex items-center gap-3 px-4 py-3">
+                <span class="font-mono text-[11px] text-text-tertiary">
+                  [{p.num}]
+                </span>
+                <span class="truncate font-body text-sm text-text-primary">{p.title}</span>
+                <span class="ml-auto hidden shrink-0 font-mono text-[10px] uppercase tracking-wider text-text-tertiary sm:block">
+                  {p.host}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div class="flex items-center justify-between border-t border-frame px-4 py-2.5 font-mono text-[11px]">
+            <span class="text-text-tertiary">{String(projects.length).padStart(2, "0")} items</span>
+            <a href="#proyectos" class="text-text-secondary transition-colors hover:text-accent">
+              ver detalle ↓
+            </a>
+          </div>
+        </WebcoreWindow>
+      </Fragment>
+    </PageHero>
 
-      <!-- Breadcrumb · integrado en hero, esquina inferior -->
-      <div class="absolute bottom-8 md:bottom-10 left-0 right-0 z-20 px-6">
-        <div class="mx-auto max-w-6xl">
-          <Breadcrumbs items={[{ name: "Portafolio", path: "/portafolio" }]} />
-        </div>
-      </div>
-    </section>
-
-    <!-- Project editorial spreads -->
-    {projects.map((p, idx) => {
-      const accents = ["#6366f1", "#8b5cf6"];
-      const accent = accents[idx % accents.length];
-      const gradientId = `project-grad-${idx}`;
-      return (
-        <section class="group/project relative w-full overflow-hidden bg-[#0A0A0A]">
-          <!-- Background cinematográfico por proyecto -->
-          <div class="absolute inset-0" style="background: #0A0A0A;" />
-          <div class="absolute inset-0" style={`background: radial-gradient(ellipse at ${idx % 2 === 0 ? '70%' : '30%'} 40%, ${accent}15 0%, transparent 50%);`} />
-          <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
-          <!-- Línea decorativa superior -->
-          <div class="absolute top-0 left-0 right-0 h-[1px]" style={`background: linear-gradient(90deg, transparent, ${accent}44, transparent);`} />
-
-          <div class="relative w-full min-h-screen flex flex-col lg:flex-row">
-            <!-- Image area · carrusel cinematográfico -->
-            <div class="relative w-full lg:w-3/5 xl:w-2/3 min-h-[50vh] lg:min-h-screen overflow-hidden">
-              <div class="project-carousel relative w-full min-h-[50vh] lg:min-h-screen overflow-hidden">
-                <div class="carousel-track relative flex transition-transform duration-500 ease-out" style="width:100%; min-height:inherit;">
-                  {p.images.map((img, iIdx) => {
-                    const avifSrc = img.replace(/\.(png|jpg|jpeg)$/i, '.avif');
-                    const webpSrc = img.replace(/\.(png|jpg|jpeg)$/i, '.webp');
-                    return (
-                      <div class="carousel-slide shrink-0 relative" style="width:100%; min-height:inherit;">
-                        <picture class="block w-full h-full">
-                          <source srcset={avifSrc} type="image/avif" />
-                          <source srcset={webpSrc} type="image/webp" />
-                          <img
-                            src={img}
-                            alt={iIdx === 0 ? `Captura principal ${p.title}` : `${p.title} - vista ${iIdx + 1}`}
-                            loading={iIdx === 0 ? "eager" : "lazy"}
-                            decoding="async"
-                            class="w-full h-full object-cover object-top"
-                            style="min-height: inherit;"
-                          />
-                        </picture>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <!-- Gradient · DENTRO de project-carousel, sobre imágenes -->
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/20 to-transparent pointer-events-none lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#0A0A0A]/60" />
-
-                <!-- Carousel controls · DENTRO de project-carousel para que JS los alcance -->
-                {p.images.length > 1 && (
-                  <div class="carousel-controls absolute bottom-5 left-5 z-30 flex items-center gap-3 opacity-60 md:opacity-0 md:group-hover/project:opacity-100 transition-all duration-300">
-                    <div class="carousel-dots flex gap-1.5">
-                      {p.images.map((_, i) => (
-                        <button
-                          class="w-1.5 h-1.5 rounded-full bg-white/50 transition-all hover:bg-white/80 active:scale-125 cursor-pointer"
-                          data-index={i}
-                          aria-label={`Imagen ${i + 1}`}
+    <!-- Project editorial spreads · v2 -->
+    {items.map((p, idx) => (
+      <section
+        id={idx === 0 ? "proyectos" : undefined}
+        class={`group/project relative w-full overflow-hidden border-t border-frame/60 bg-bg${idx === 0 ? " scroll-mt-16" : ""}`}
+      >
+        <div class="grid w-full lg:grid-cols-12">
+          <!-- Imagen · carrusel cinematográfico -->
+          <div class="relative h-[300px] overflow-hidden border-b border-frame/60 sm:h-[420px] lg:col-span-7 lg:h-auto lg:min-h-[560px] lg:border-b-0 lg:border-r">
+            <div class="project-carousel relative h-full w-full overflow-hidden">
+              <div class="carousel-track flex h-full w-full transition-transform duration-500 ease-out">
+                {p.images.map((img, iIdx) => {
+                  const avifSrc = img.replace(/\.(png|jpg|jpeg)$/i, ".avif");
+                  const webpSrc = img.replace(/\.(png|jpg|jpeg)$/i, ".webp");
+                  return (
+                    <div class="carousel-slide relative h-full w-full shrink-0">
+                      <picture class="block h-full w-full">
+                        <source srcset={avifSrc} type="image/avif" />
+                        <source srcset={webpSrc} type="image/webp" />
+                        <img
+                          src={img}
+                          alt={iIdx === 0 ? `Captura principal — ${p.title}` : `${p.title} — vista ${iIdx + 1}`}
+                          loading={idx === 0 && iIdx === 0 ? "eager" : "lazy"}
+                          decoding="async"
+                          class="h-full w-full object-cover object-top"
                         />
-                      ))}
+                      </picture>
                     </div>
-                    <div class="flex gap-1">
-                      <button class="carousel-prev w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white/70 hover:bg-black/80 hover:text-white transition-all active:scale-90 cursor-pointer" aria-label="Anterior">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-                      </button>
-                      <button class="carousel-next w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white/70 hover:bg-black/80 hover:text-white transition-all active:scale-90 cursor-pointer" aria-label="Siguiente">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-                      </button>
-                    </div>
-                    <!-- Indicador de posición tipo editorial -->
-                    <span class="carousel-indicator text-[10px] font-body tracking-[0.15em] text-white/40 font-mono ml-1">01 / {String(p.images.length).padStart(2, '0')}</span>
+                  );
+                })}
+              </div>
+
+              <!-- Scrim sutil · legibilidad de controles -->
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-transparent" />
+
+              <!-- Controles del carrusel -->
+              {p.images.length > 1 && (
+                <div class="carousel-controls absolute bottom-5 left-5 z-30 flex items-center gap-3 opacity-90 transition-opacity duration-300 md:opacity-0 md:group-hover/project:opacity-100 md:group-focus-within/project:opacity-100">
+                  <div class="carousel-dots flex items-center gap-1.5">
+                    {p.images.map((_, i) => (
+                      <button
+                        class="h-1.5 w-1.5 cursor-pointer rounded-full bg-frame transition-all hover:bg-text-tertiary active:scale-125"
+                        data-index={i}
+                        aria-label={`Imagen ${i + 1}`}
+                      />
+                    ))}
                   </div>
-                )}
-              </div>
-
-              <!-- Overlay de gradiente secundario FUERA del carrusel (capa extra sobre todo) -->
-              <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/40 via-transparent to-transparent pointer-events-none lg:hidden" />
-            </div>
-
-            <!-- Content area · info editorial sobre fondo oscuro -->
-            <div class="relative w-full lg:w-2/5 xl:w-1/3 flex items-end lg:items-center p-8 md:p-12 lg:p-16 xl:p-20">
-              <div class="w-full max-w-md reveal-group">
-                <!-- Número editorial -->
-                <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium" style={`color: ${accent}aa;`}>
-                  Proyecto {String(idx + 1).padStart(2, '0')}
-                </p>
-
-                <!-- Título · enorme, mayúscula, como titular de revista -->
-                <h2 class="reveal-item text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[0.92] tracking-[-1.5px] md:tracking-[-2px] mt-2 md:mt-3">
-                  {p.title}
-                </h2>
-
-                <!-- Separador editorial -->
-                <div class="reveal-item my-5 md:my-6 w-8 h-[1px]" style={`background: linear-gradient(90deg, ${accent}66, transparent);`} />
-
-                <!-- Descripción · cuerpo editorial -->
-                <p class="reveal-item text-sm md:text-[15px] text-white/45 font-body font-light leading-[1.8]">
-                  {p.description}
-                </p>
-
-                <!-- Tags · como notas editoriales -->
-                <div class="reveal-item mt-6 flex flex-wrap gap-x-4 gap-y-1.5">
-                  {p.tags.map((tag, tIdx) => (
-                    <span class="text-[10px] md:text-xs text-white/30 font-body tracking-[0.05em]">
-                      {tIdx > 0 && <span class="mr-4 text-white/10">/</span>}
-                      {tag}
-                    </span>
-                  ))}
+                  <div class="flex gap-1">
+                    <button class="carousel-prev flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-frame bg-surface/80 text-text-secondary transition-colors hover:border-accent hover:text-accent active:scale-95" aria-label="Anterior">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <button class="carousel-next flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] border border-frame bg-surface/80 text-text-secondary transition-colors hover:border-accent hover:text-accent active:scale-95" aria-label="Siguiente">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                  </div>
+                  <span class="carousel-indicator ml-1 font-mono text-[11px] tracking-[0.15em] text-text-tertiary">01 / {String(p.images.length).padStart(2, "0")}</span>
                 </div>
-
-                <!-- CTA · botón carbono -->
-                <div class="reveal-item mt-8 md:mt-10">
-                  <a
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group inline-flex items-center gap-2.5 px-6 md:px-7 py-3 md:py-3.5 text-[11px] md:text-xs font-medium uppercase tracking-[0.15em] transition-all duration-300"
-                    style={`color: ${accent}cc; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);`}
-                    onmouseover={`this.style.background='${accent}22'; this.style.borderColor='${accent}44'`}
-                    onmouseout={`this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(255,255,255,0.06)'`}
-                  >
-                    <span>Visitar proyecto</span>
-                    <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-                  </a>
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
-          <!-- Línea decorativa inferior -->
-          <div class="absolute bottom-0 left-0 right-0 h-[1px]" style={`background: linear-gradient(90deg, transparent, ${accent}22, transparent);`} />
-        </section>
-      );
-    })}
+          <!-- Contenido · ficha editorial -->
+          <div class="flex items-center lg:col-span-5">
+            <div class="reveal-group flex w-full max-w-2xl flex-col gap-5 px-6 py-12 sm:px-10 lg:px-12 lg:py-16 xl:px-16">
+              <p class="reveal-item font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
+                // proyecto {p.num}
+              </p>
 
-    <!-- CTA · editorial call to action -->
-    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
-      <div class="absolute inset-0" style="background: #0A0A0A;" />
-      <div class="absolute inset-0 opacity-50" style="background: radial-gradient(ellipse at 50% 0%, #6366f128 0%, transparent 50%), radial-gradient(ellipse at 30% 100%, #8b5cf610 0%, transparent 50%);" />
-      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
-      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
-      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
+              <div>
+                <BlurText
+                  text={p.head}
+                  as="h2"
+                  className="font-heading text-4xl font-bold leading-[0.95] tracking-[-1.5px] text-text-primary sm:text-5xl lg:text-6xl"
+                />
+                {p.sub && (
+                  <p class="mt-2 font-heading text-lg font-semibold leading-snug text-accent sm:text-xl lg:text-2xl">
+                    {p.sub}
+                  </p>
+                )}
+              </div>
 
-      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44 text-center">
-        <div class="reveal-group">
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Contacto</p>
+              <p class="reveal-item font-body text-sm font-light leading-[1.8] text-text-secondary lg:text-[15px]">
+                {p.description}
+              </p>
 
-          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px] lg:tracking-[-3px]">
-            Tienes un proyecto<br />
-            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">en mente?</span>
-          </h2>
+              <ul class="reveal-item flex flex-wrap gap-2">
+                {p.tags.map((tag) => (
+                  <li class="rounded-[4px] border border-frame bg-surface px-2 py-1 font-mono text-[11px] text-text-secondary">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
 
-          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
+              <div class="reveal-item mt-2 flex flex-wrap items-center gap-x-5 gap-y-3">
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center rounded-[6px] border border-frame px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-wider text-text-primary transition-colors hover:border-accent hover:text-accent sm:text-sm"
+                >
+                  [ Visitar proyecto ↗ ]
+                </a>
+                <span class="font-mono text-[11px] text-text-tertiary">{p.host}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
 
-          <p class="reveal-item mx-auto max-w-xl text-sm md:text-base lg:text-lg text-white/50 font-body font-light leading-relaxed">
-            Cada proyecto inicia con una conversación. Trabajemos juntos para llevar tu idea al siguiente nivel.
-          </p>
-
-          <div class="reveal-item mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="/contacto"
-              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300"
-              style="color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+    <!-- CTA final · ventana de contacto v2 (canon §13[8]) -->
+    <section id="contacto" class="relative w-full scroll-mt-16 bg-bg py-20 md:py-28">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6">
+        <div class="webcore-window">
+          <!-- Title bar -->
+          <div class="flex h-9 items-center gap-2 border-b border-frame bg-surface px-3">
+            <span
+              class="h-2 w-2 shrink-0 rounded-full bg-accent"
+              style="box-shadow:0 0 8px var(--color-accent);"
+              aria-hidden="true"></span>
+            <span
+              class="font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary"
+              >contact — iniciar conversación</span
             >
-              <span>Contactar</span>
-              <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-            </a>
-            <a
-              href="https://portafolio.mtsprz.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group inline-flex items-center gap-2.5 px-6 md:px-7 py-3 md:py-3.5 text-[11px] md:text-xs font-medium uppercase tracking-[0.15em] transition-all duration-300"
-              style="color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);"
-              onmouseover="this.style.color='rgba(255,255,255,0.8)'; this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(255,255,255,0.15)'"
-              onmouseout="this.style.color='rgba(255,255,255,0.5)'; this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(255,255,255,0.08)'"
+          </div>
+
+          <!-- Body -->
+          <div class="reveal-group px-6 py-12 text-center sm:px-8 md:py-16">
+            <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+              // contacto
+            </p>
+
+            <h2
+              class="reveal-item mx-auto mt-5 max-w-2xl font-heading text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-text-primary sm:text-4xl md:text-5xl"
             >
-              <span>Portafolio completo</span>
-              <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-            </a>
+              ¿Tienes un proyecto <span class="text-accent">en mente?</span>
+            </h2>
+
+            <p
+              class="reveal-item mx-auto mt-5 max-w-xl font-body text-sm font-light leading-relaxed text-text-secondary md:text-base"
+            >
+              Cada proyecto inicia con una conversación. Trabajemos juntos para
+              llevar tu idea al siguiente nivel.
+            </p>
+
+            <div
+              class="reveal-item mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row"
+            >
+              <a
+                href="/contacto"
+                class="inline-flex w-full items-center justify-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-[0.14em] text-bg transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:w-auto"
+              >
+                [ Contactar ]
+              </a>
+              <a
+                href="https://portafolio.mtsprz.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex w-full items-center justify-center rounded-[6px] border border-frame px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:w-auto"
+              >
+                [ Portafolio completo ↗ ]
+              </a>
+            </div>
+
+            <p class="reveal-item mt-6 font-mono text-xs text-text-tertiary">
+              o llama al <span class="text-text-secondary">+56 9 6692 9818</span>
+            </p>
+
+            <div
+              class="reveal-item mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 border-t border-frame pt-8"
+            >
+              {
+                ["Sin compromiso", "Respuesta en 24 hrs", "Atención en el sur de Chile"].map(
+                  (t) => (
+                    <span class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary">
+                      <svg
+                        class="h-3.5 w-3.5 text-accent"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
+                      {t}
+                    </span>
+                  )
+                )
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -277,7 +342,7 @@ import projects from "../data/projects.json";
 
       function updateDots() {
         dots.forEach(function(d, j) {
-          d.className = 'rounded-full transition-all duration-300 cursor-pointer ' + (j === current ? 'bg-white/80 w-2.5 h-1.5' : 'bg-white/40 w-1.5 h-1.5 hover:bg-white/70 active:scale-125');
+          d.className = 'rounded-full transition-all duration-300 cursor-pointer ' + (j === current ? 'bg-accent w-2.5 h-1.5' : 'bg-frame w-1.5 h-1.5 hover:bg-text-tertiary active:scale-125');
         });
       }
 

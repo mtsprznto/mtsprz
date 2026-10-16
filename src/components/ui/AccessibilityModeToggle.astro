@@ -1,0 +1,54 @@
+---
+/**
+ * AccessibilityModeToggle — Modo Cyber ↔ Modo Clean (DESIGN §6.5 / §11.2)
+ * - Persiste en localStorage (`ui-mode`).
+ * - Aplica `data-mode` en <html>.
+ * - Accesible por teclado, con aria-pressed.
+ * El estado inicial se aplica en <head> (BaseLayout) para evitar flash;
+ * este componente sincroniza su UI y maneja el click.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+---
+
+<button
+  type="button"
+  data-mode-toggle
+  aria-pressed="false"
+  aria-label="Alternar Modo Cyber y Modo Clean"
+  class={`inline-flex items-center gap-2 rounded-sm border border-frame bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-text-secondary transition-colors hover:border-frame-hover hover:text-text-primary ${className}`}
+>
+  <span data-mode-icon aria-hidden="true" class="text-accent">◐</span>
+  <span data-mode-label>MODO CYBER</span>
+</button>
+
+<script is:inline>
+(function () {
+  var btn = document.currentScript.previousElementSibling;
+  if (!btn) return;
+  var label = btn.querySelector("[data-mode-label]");
+  var icon = btn.querySelector("[data-mode-icon]");
+
+  function apply(mode) {
+    var clean = mode === "clean";
+    document.documentElement.setAttribute("data-mode", mode);
+    btn.setAttribute("aria-pressed", String(clean));
+    if (label) label.textContent = clean ? "MODO CLEAN" : "MODO CYBER";
+    if (icon) icon.style.color = clean ? "" : "var(--color-accent)";
+  }
+
+  function current() {
+    return document.documentElement.getAttribute("data-mode") === "clean" ? "clean" : "cyber";
+  }
+
+  apply(current());
+
+  btn.addEventListener("click", function () {
+    var next = current() === "clean" ? "cyber" : "clean";
+    try { localStorage.setItem("ui-mode", next); } catch (e) {}
+    apply(next);
+  });
+})();
+</script>

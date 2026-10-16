@@ -1,6 +1,7 @@
 ---
 // GEO-visible FAQ: muestra Q&A en texto plano visible (no hidden en details)
-// Los LLMs extraen esto como contenido citable
+// Los LLMs extraen esto como contenido citable.
+// v2: tokens Technopunk + fallback corregido (sin cruzar FAQs de Puerto Varas).
 export interface Props {
   city: string;
 }
@@ -41,17 +42,23 @@ const defaultFaqs = [
 ];
 
 const cityKey = city.toLowerCase().replace(/\s+/g, "-").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-const pairs = faqs[cityKey] || faqs["puerto-varas"] || defaultFaqs;
+const pairs = faqs[cityKey] || defaultFaqs;
 ---
 
-<div class="mb-8 md:mb-10 grid gap-3">
+<div class="grid gap-4 md:grid-cols-2">
   {pairs.slice(0, 2).map((faq) => (
-    <div class="geo-answer relative pl-4 md:pl-5 border-l-2 border-[#6366f1]/30 py-2">
-      <p class="text-xs md:text-sm font-heading font-semibold text-white/70 mb-1">{faq.q}</p>
-      <p class="text-xs md:text-sm text-white/40 font-body font-light leading-relaxed">{faq.a}</p>
+    <div class="geo-answer border-l-2 border-frame pl-4 md:pl-5">
+      <p class="font-heading text-sm font-semibold leading-snug tracking-[-0.01em] text-text-primary md:text-base">
+        {faq.q}
+      </p>
+      <p class="mt-2 font-body text-sm font-light leading-relaxed text-text-secondary">
+        {faq.a}
+      </p>
     </div>
   ))}
-  <p class="text-[10px] md:text-[11px] text-white/25 font-body mt-2">
-    <a href="#faq-completo" class="text-[#6366f1]/60 hover:text-[#6366f1] transition-colors">Ver todas las preguntas frecuentes →</a>
+  <p class="font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary md:col-span-2">
+    <a href="#faq-completo" class="text-accent no-underline transition-colors hover:text-accent-hover">
+      ver todas las preguntas frecuentes ↓
+    </a>
   </p>
 </div>

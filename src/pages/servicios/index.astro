@@ -2,8 +2,9 @@
 export const prerender = false;
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Header from "../../components/Header.astro";
-import Breadcrumbs from "../../components/Breadcrumbs.astro";
-import CinematicColumn from "../../components/CinematicColumn.astro";
+import PageHero from "../../components/ui/PageHero.astro";
+import WebcoreWindow from "../../components/ui/WebcoreWindow.astro";
+import ServiceCard from "../../components/ServiceCard.astro";
 import BlurText from "../../components/BlurText.astro";
 import Footer from "../../components/Footer.astro";
 import StickyCTA from "../../components/StickyCTA.astro";
@@ -18,6 +19,12 @@ const dbRows = await query(
 );
 const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
 
+// Video hero · misma pieza cinematográfica del home (§5.4)
+const heroVideo = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4";
+
+// Temporal realness · año SSR para el strip del hero
+const anio = new Date().getFullYear();
+
 ---
 
 <BaseLayout
@@ -26,14 +33,14 @@ const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
   canonical="https://mtsprz.org/servicios"
   breadcrumbs={[{ name: "Servicios", path: "/servicios" }]}
   video={{
-    url: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4",
+    url: heroVideo,
     name: "Mtsprz Servicios Digitales",
     description: "Soluciones digitales profesionales: desarrollo web, automatizaci\u00f3n de procesos, dashboards de datos, SEO local, marketing digital, diseño gr\u00e1fico y consultor\u00eda para pymes en la Regi\u00f3n de Los Lagos.",
     thumbnailUrl: "https://mtsprz.org/logo.jpg",
     uploadDate: "2026-06-19T19:13:46Z",
   }}
 >
-  <link rel="preload" as="video" href="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4" fetchpriority="high" />
+  <link rel="preload" as="video" href={heroVideo} fetchpriority="high" />
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -157,183 +164,242 @@ const services = dbRows.rows.map((row: any) => toServiceDisplay(row as any));
   <Header />
 
   <main id="main-content">
-    <!-- Hero -->
-    <section class="relative w-screen h-[100dvh] md:h-screen overflow-hidden bg-[#010101]">
-      <video
-        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4"
-        autoplay loop muted playsinline
-        preload="metadata"
-        class="z-[1]"
-        style="position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; max-width: none !important; min-width: 0 !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; border: 0 !important; display: block !important;"
-      />
-      <div style="position: absolute !important; top: 0; left: 0; width: 100%; height: 24%; z-index: 2;" class="bg-gradient-to-b from-[#010101] to-transparent sm:h-32"></div>
-      <div style="position: absolute !important; bottom: 0; left: 0; width: 100%; height: 36%; z-index: 2;" class="bg-gradient-to-t from-[#010101] to-transparent sm:h-48"></div>
-      <div style="position: absolute !important; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; pointer-events: none;">
-        <div class="text-center px-6" style="pointer-events: auto;">
-          <p class="text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Servicios</p>
-          <h1 class="text-5xl sm:text-7xl md:text-8xl font-heading font-bold text-white leading-[0.9] tracking-[-2px]">SERVICIOS</h1>
-          <p class="mt-4 text-white/60 font-body font-light max-w-md mx-auto">Todo lo que tu negocio necesita para crecer en el entorno digital</p>
-        </div>
-      </div>
+    <!-- Hero · primitiva reutilizable ui/PageHero (mismo patrón que el hero del home) -->
+    <PageHero
+      ledLabel={`${services.length} servicios activos`}
+      eyebrow="// servicios · catálogo"
+      title="Servicios digitales"
+      titleAccent="Web, SEO y automatización."
+      subtitle="Todo lo que tu negocio necesita para crecer en el entorno digital."
+      note="Soluciones digitales diseñadas para pymes y empresas del sur de Chile."
+      videoUrl={heroVideo}
+      breadcrumbs={[{ name: "Servicios", path: "/servicios" }]}
+      meta={`© ${anio} mtsprz · puerto varas`}
+    >
+      <Fragment slot="actions">
+        <button
+          type="button"
+          onclick="window.openCotizarModal && window.openCotizarModal()"
+          class="inline-flex items-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-bg transition-colors hover:bg-accent-hover sm:text-sm"
+          >[ Cotizar Proyecto ]</button
+        >
+        <a
+          href="#servicios"
+          class="inline-flex items-center rounded-[6px] border border-frame px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-wider text-text-primary transition-colors hover:border-accent hover:text-accent sm:text-sm"
+          >[ Ver Catálogo ]</a
+        >
+      </Fragment>
 
-      <!-- Breadcrumb · integrado en hero, esquina inferior izquierda -->
-      <div class="absolute bottom-8 md:bottom-10 left-0 right-0 z-20 px-6">
-        <div class="mx-auto max-w-6xl">
-          <Breadcrumbs items={[{ name: "Servicios", path: "/servicios" }]} />
-        </div>
-      </div>
-    </section>
+      <Fragment slot="aside">
+        <WebcoreWindow title="catálogo --list" variant="sunken">
+          <ul class="divide-y divide-frame">
+            {services.map((s, i) => (
+              <li class="flex items-center gap-3 px-4 py-3">
+                <span class="font-mono text-[11px] text-text-tertiary">
+                  [{String(i + 1).padStart(2, "0")}]
+                </span>
+                <span class="truncate font-body text-sm text-text-primary">{s.title}</span>
+                <span class="ml-auto hidden shrink-0 font-mono text-[10px] uppercase tracking-wider text-text-tertiary sm:block">
+                  {s.slug}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div class="flex items-center justify-between border-t border-frame px-4 py-2.5 font-mono text-[11px]">
+            <span class="text-text-tertiary">{String(services.length).padStart(2, "0")} items</span>
+            <a href="#servicios" class="text-text-secondary transition-colors hover:text-accent">
+              catálogo completo ↓
+            </a>
+          </div>
+        </WebcoreWindow>
+      </Fragment>
+    </PageHero>
 
-    <!-- Services: editorial cinematic columns -->
-    <section class="relative bg-[#0A0A0A] w-full">
-      <!-- Section header · compacto, como intro de revista -->
-      <div class="mx-auto max-w-6xl px-6 pt-28 md:pt-36 pb-16 md:pb-20">
-        <div class="reveal-group text-center">
-          <p class="reveal-item text-xs uppercase tracking-[0.2em] text-white/40 font-body mb-4">Nuestros Servicios</p>
+    <!-- Servicios · catálogo v2: grid de WebcoreWindow (ServiceCard) · mismo criterio que el home -->
+    <section id="servicios" class="relative w-full scroll-mt-16 bg-bg">
+      <div class="w-full px-4 py-20 sm:px-6 md:py-28 lg:px-8 xl:px-12">
+        <div class="reveal-group mb-12 md:mb-16">
+          <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            // nuestros servicios
+          </p>
           <BlurText
             text="Todo lo que tu negocio necesita"
             as="h2"
-            className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-white leading-[1.1] tracking-[-1px]"
+            className="mt-4 max-w-3xl font-heading text-3xl font-bold leading-[1.08] tracking-[-0.02em] text-text-primary sm:text-4xl md:text-5xl"
             wordMs={60}
           />
-          <p class="reveal-item mt-4 text-white/50 font-body font-light max-w-lg mx-auto text-sm">
+          <p class="reveal-item mt-4 max-w-2xl font-body text-sm font-light leading-relaxed text-text-secondary md:text-base">
             Soluciones digitales diseñadas para pymes y empresas del sur de Chile
           </p>
         </div>
-      </div>
 
-      <!-- Columnas editoriales · full-bleed, asimétricas, sin contenedores -->
-      <div class="w-full overflow-hidden">
-        <div class="reveal-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12">
-          {services.map((s, i) => {
-            const span = i % 3 === 0 ? "lg:col-span-6" : "lg:col-span-3";
-            return (
-              <div class={`${span} md:col-span-1 reveal-item`}>
-                <CinematicColumn
-                  title={s.title}
-                  description={s.description}
-                  accent={s.accent}
-                  slug={s.slug}
-                  index={i}
-                  href={s.landingUrl}
-                  ctaText={s.landingUrl ? "Explorar servicio" : "Cotizar"}
-                />
-              </div>
-            );
-          })}
+        <div class="reveal-group grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {services.map((s, i) => (
+            <div class="reveal-item h-full">
+              <ServiceCard
+                icon={s.icon}
+                title={s.title}
+                description={s.description}
+                tags={s.tags}
+                number={i + 1}
+                accent={s.accent}
+                id={`servicio-${s.slug}`}
+                href={s.landingUrl}
+                stack={s.stack}
+                ctaText={s.landingUrl ? "Explorar servicio" : "Cotizar"}
+                ctaHref={s.landingUrl ?? "/cotizar"}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- FAQ · editorial accordion -->
-    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
-      <!-- Background cinematográfico -->
-      <div class="absolute inset-0" style="background: #0A0A0A;" />
-      <div class="absolute inset-0 opacity-40" style="background: radial-gradient(ellipse at 30% 0%, #6366f112 0%, transparent 50%), radial-gradient(ellipse at 70% 100%, #8b5cf606 0%, transparent 50%);" />
-      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
-      <!-- Líneas decorativas -->
-      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
-      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
-
-      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44">
-        <div class="reveal-group text-center">
-          <!-- Label editorial -->
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Preguntas Frecuentes</p>
-
-          <!-- Título -->
-          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px]">
-            Resolvemos <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">tus dudas</span>
-          </h2>
-
-          <!-- Separador editorial -->
-          <div class="reveal-item mx-auto my-10 md:my-12 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
-        </div>
-
-        <!-- FAQ items · estilo columna editorial, clean, borders minimal -->
-        <div class="reveal-group mx-auto max-w-2xl">
-          <div class="divide-y divide-white/[0.06]">
-            {[
-              { q: "¿Cuánto cuesta una página web profesional?", a: "Landing pages desde $290.000, sitios corporativos (5-10 páginas) desde $690.000, tiendas online desde $1.500.000. Todos incluyen hosting, SSL, SEO básico y Analytics. Cotización personalizada sin compromiso." },
-              { q: "¿Qué procesos puedo automatizar en mi pyme?", a: "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots 24/7 que atienden clientes), email marketing (secuencias que nutren y venden), integración CRM (datos que fluyen solos) y workflows completos. Una corredora típica ahorra 10+ horas semanales." },
-              { q: "¿Qué es un dashboard de datos y para qué sirve?", a: "Un dashboard muestra tus indicadores clave en tiempo real: ventas, clientes, inventario. Conectamos tus datos (Excel, base de datos, APIs) y creamos visualizaciones interactivas accesibles desde cualquier dispositivo. Decisiones basadas en datos." },
-              { q: "¿En qué se diferencia Astro de WordPress?", a: "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos de WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son más seguros al no depender de plugins, y tienen mejor SEO desde el día uno." },
-            ].map((faq) => (
-              <details class="reveal-item group open:pb-6 transition-all duration-300">
-                <summary class="flex cursor-pointer items-center justify-between gap-4 py-5 md:py-6 text-sm md:text-base font-heading font-semibold text-white/85 hover:text-white transition-colors list-none [&::-webkit-details-marker]:hidden">
-                  <span class="leading-snug">{faq.q}</span>
-                  <span class="shrink-0 flex items-center justify-center w-6 h-6 rounded-full border border-white/10 text-white/30 group-open:text-[#6366f1] group-open:border-[#6366f1]/40 transition-all duration-300">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="transition-transform duration-300 group-open:rotate-45"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-                  </span>
-                </summary>
-                <div class="pb-2">
-                  <p class="text-sm md:text-[15px] text-white/45 font-body font-light leading-[1.8] max-w-xl">{faq.a}</p>
-                </div>
-              </details>
-            ))}
-          </div>
-        </div>
-
-        <!-- Bottom CTA · más preguntas -->
-        <div class="reveal-item mt-16 md:mt-20 text-center">
-          <p class="text-sm text-white/40 font-body">¿Tienes más preguntas?</p>
-          <a
-            href="/contacto"
-            class="group inline-flex items-center gap-2.5 mt-3 text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300 hover:gap-4"
-            style="color: #6366f1;"
-          >
-            <span>Hablemos</span>
-            <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA · editorial call to action -->
-    <section class="relative bg-[#0A0A0A] w-full overflow-hidden">
-      <div class="absolute inset-0" style="background: #0A0A0A;" />
-      <div class="absolute inset-0 opacity-50" style="background: radial-gradient(ellipse at 50% 0%, #6366f128 0%, transparent 50%), radial-gradient(ellipse at 30% 100%, #8b5cf610 0%, transparent 50%);" />
-      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
-      <div class="absolute top-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
-      <div class="absolute bottom-0 left-0 right-0 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f122, transparent);" />
-
-      <div class="relative mx-auto max-w-4xl px-6 py-28 md:py-36 lg:py-44 text-center">
-        <div class="reveal-group">
-          <p class="reveal-item text-[10px] md:text-xs uppercase tracking-[0.25em] font-body font-medium mb-6 md:mb-8" style="color: #6366f1aa;">Contacto</p>
-
-          <h2 class="reveal-item text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-heading font-bold text-white leading-[0.95] tracking-[-1.5px] md:tracking-[-2px] lg:tracking-[-3px]">
-            Listo para impulsar<br />
-            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">tu negocio?</span>
-          </h2>
-
-          <div class="reveal-item mx-auto my-8 md:my-10 w-12 h-[1px]" style="background: linear-gradient(90deg, transparent, #6366f166, transparent);" />
-
-          <p class="reveal-item mx-auto max-w-xl text-sm md:text-base lg:text-lg text-white/50 font-body font-light leading-relaxed">
-            Conversemos sin compromiso. Te ayudamos a definir la mejor estrategia digital para tu empresa en el sur de Chile.
+    <!-- FAQ · v2: header mono + accordion editorial full-width (mismo criterio que grilla/home) -->
+    <section id="faq" class="relative w-full scroll-mt-16 bg-bg">
+      <div class="w-full px-4 py-20 sm:px-6 md:py-28 lg:px-8 xl:px-12">
+        <div class="reveal-group mb-12 md:mb-16">
+          <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            // preguntas frecuentes
           </p>
+          <BlurText
+            text="Resolvemos tus dudas"
+            as="h2"
+            className="mt-4 max-w-3xl font-heading text-3xl font-bold leading-[1.08] tracking-[-0.02em] text-text-primary sm:text-4xl md:text-5xl"
+            wordMs={60}
+          />
+          <p class="reveal-item mt-4 max-w-2xl font-body text-sm font-light leading-relaxed text-text-secondary md:text-base">
+            Lo que más nos preguntan antes de cotizar.
+          </p>
+        </div>
 
-          <div class="reveal-item mt-10 md:mt-12 flex flex-col sm:flex-row items-center justify-center gap-5">
+        <div class="reveal-group border-t border-frame/60">
+          {[
+            { q: "¿Cuánto cuesta una página web profesional?", a: "Landing pages desde $290.000, sitios corporativos (5-10 páginas) desde $690.000, tiendas online desde $1.500.000. Todos incluyen hosting, SSL, SEO básico y Analytics. Cotización personalizada sin compromiso." },
+            { q: "¿Qué procesos puedo automatizar en mi pyme?", a: "Automatizamos Excel (reportes que se generan solos), WhatsApp (bots 24/7 que atienden clientes), email marketing (secuencias que nutren y venden), integración CRM (datos que fluyen solos) y workflows completos. Una corredora típica ahorra 10+ horas semanales." },
+            { q: "¿Qué es un dashboard de datos y para qué sirve?", a: "Un dashboard muestra tus indicadores clave en tiempo real: ventas, clientes, inventario. Conectamos tus datos (Excel, base de datos, APIs) y creamos visualizaciones interactivas accesibles desde cualquier dispositivo. Decisiones basadas en datos." },
+            { q: "¿En qué se diferencia Astro de WordPress?", a: "Los sitios con Astro cargan en menos de 1.5 segundos vs 3-6 segundos de WordPress, obtienen puntaje superior a 95 en PageSpeed Insights, son más seguros al no depender de plugins, y tienen mejor SEO desde el día uno." },
+          ].map((faq, i) => (
+            <details class="reveal-item group border-b border-frame/60">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-text-primary transition-colors hover:text-accent focus-visible:outline-none focus-visible:text-accent md:py-6 [&::-webkit-details-marker]:hidden">
+                <span class="flex items-baseline gap-3 md:gap-4">
+                  <span class="shrink-0 font-mono text-[11px] leading-none text-text-tertiary" aria-hidden="true">
+                    [0{i + 1}]
+                  </span>
+                  <span class="font-heading text-base font-semibold leading-snug tracking-[-0.01em] md:text-lg">{faq.q}</span>
+                </span>
+                <span
+                  class="flex h-7 w-7 shrink-0 items-center justify-center rounded-[4px] border border-frame text-text-tertiary transition-colors duration-300 group-open:border-accent/60 group-open:text-accent"
+                  aria-hidden="true"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="transition-transform duration-300 group-open:rotate-45"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                </span>
+              </summary>
+              <div class="pb-6 md:pb-7">
+                <p class="max-w-3xl font-body text-sm font-light leading-relaxed text-text-secondary md:text-base">{faq.a}</p>
+              </div>
+            </details>
+          ))}
+        </div>
+
+        <!-- CTA inferior · full width, alineado a la izquierda -->
+        <div class="reveal-group">
+          <div class="reveal-item mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between md:mt-10">
+            <p class="font-body text-sm text-text-secondary">¿Tienes más preguntas?</p>
             <a
               href="/contacto"
-              class="group inline-flex items-center gap-3 px-7 md:px-8 py-3.5 md:py-4 text-xs md:text-sm font-medium tracking-[0.15em] uppercase transition-all duration-300"
-              style="color: #fff; background: linear-gradient(135deg, #6366f1, #8b5cf6);"
+              class="inline-flex w-fit items-center gap-2 rounded-[6px] border border-frame bg-surface px-5 py-3 font-mono text-xs font-bold uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
             >
-              <span>Contáctanos</span>
-              <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+              Hablemos
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
             </a>
-            <span class="text-[11px] md:text-xs text-white/30 font-body tracking-wide">o llama al <span class="text-white/50">+56966929818</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA · v2: ventana de contacto canónica (mismo criterio que home §13[8]) -->
+    <section id="contacto" class="relative w-full scroll-mt-16 bg-bg py-20 md:py-28">
+      <div class="mx-auto max-w-4xl px-4 sm:px-6">
+        <div class="webcore-window">
+          <!-- Title bar -->
+          <div class="flex h-9 items-center gap-2 border-b border-frame bg-surface px-3">
+            <span
+              class="h-2 w-2 shrink-0 rounded-full bg-accent"
+              style="box-shadow:0 0 8px var(--color-accent);"
+              aria-hidden="true"></span>
+            <span
+              class="font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary"
+              >contact — iniciar conversación</span
+            >
           </div>
 
-          <div class="reveal-item mt-12 md:mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
-            {[
-              { label: "Sin compromiso", accent: "#6366f1" },
-              { label: "Respuesta en 24 hrs", accent: "#10b981" },
-              { label: "Atención personalizada", accent: "#6366f1" },
-            ].map((t) => (
-              <span class="inline-flex items-center gap-2 text-[10px] md:text-xs font-medium tracking-[0.1em] uppercase" style="color: rgba(255,255,255,0.35);">
-                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke={t.accent} stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                {t.label}
-              </span>
-            ))}
+          <!-- Body -->
+          <div class="reveal-group px-6 py-12 text-center sm:px-8 md:py-16">
+            <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+              // hablemos
+            </p>
+
+            <h2
+              class="reveal-item mx-auto mt-5 max-w-2xl font-heading text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-text-primary sm:text-4xl md:text-5xl"
+            >
+              ¿Listo para impulsar tu negocio?
+            </h2>
+
+            <p
+              class="reveal-item mx-auto mt-5 max-w-xl font-body text-sm font-light leading-relaxed text-text-secondary md:text-base"
+            >
+              Conversemos sin compromiso. Te ayudamos a definir la mejor estrategia
+              digital para tu empresa en el sur de Chile.
+            </p>
+
+            <div
+              class="reveal-item mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row"
+            >
+              <button
+                type="button"
+                onclick="window.openCotizarModal && window.openCotizarModal()"
+                class="inline-flex w-full items-center justify-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-[0.14em] text-bg transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:w-auto"
+              >
+                [ Cotizar proyecto ]
+              </button>
+              <a
+                href="/contacto"
+                class="inline-flex w-full items-center justify-center rounded-[6px] border border-frame px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-text-primary transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:w-auto"
+              >
+                [ Contáctanos ]
+              </a>
+            </div>
+
+            <p class="reveal-item mt-6 font-mono text-xs text-text-tertiary">
+              o llama al <span class="text-text-secondary">+56 9 6692 9818</span>
+            </p>
+
+            <div
+              class="reveal-item mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 border-t border-frame pt-8"
+            >
+              {
+                ["Sin compromiso", "Respuesta en 24 hrs", "Atención personalizada"].map(
+                  (t) => (
+                    <span class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary">
+                      <svg
+                        class="h-3.5 w-3.5 text-accent"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
+                      {t}
+                    </span>
+                  )
+                )
+              }
+            </div>
           </div>
         </div>
       </div>

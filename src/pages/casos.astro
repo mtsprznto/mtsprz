@@ -3,7 +3,8 @@ export const prerender = true;
 
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/Header.astro";
-import Breadcrumbs from "../components/Breadcrumbs.astro";
+import PageHero from "../components/ui/PageHero.astro";
+import WebcoreWindow from "../components/ui/WebcoreWindow.astro";
 import Footer from "../components/Footer.astro";
 import CasoCard from "../components/casos/CasoCard.astro";
 import OfertaFundador from "../components/casos/OfertaFundador.astro";
@@ -14,12 +15,26 @@ import { CUPOS_FUNDADOR } from "../data/oferta-fundador";
 const site = "https://mtsprz.org";
 const url = `${site}/casos`;
 
+// Video hero · misma pieza cinematográfica del home (§5.4)
+const heroVideo = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_191346_9d19d66e-86a4-47f7-8dc6-712c1788c3b2.mp4";
+
+// Strip del hero · año de build (página prerender)
+const anio = new Date().getFullYear();
+
 // Stats del hero · 100% data-driven (nada inventado)
 const stats = [
   { label: "Casos publicados", valor: String(CASOS.length).padStart(2, "0") },
   { label: "Casos internos", valor: String(CASOS.filter((c) => c.tipo === "Caso interno").length).padStart(2, "0") },
   { label: "Industrias cubiertas", valor: String(INDUSTRIAS.length).padStart(2, "0") },
   { label: "Cupos fundador", valor: String(CUPOS_FUNDADOR).padStart(2, "0") },
+];
+
+// Bordes de celda del strip de cifras · mobile 2-col → desktop 4-col
+const statCell = [
+  "py-7 md:py-8",
+  "border-l border-frame/60 pl-6 py-7 md:py-8",
+  "border-t border-frame/60 py-7 md:py-8 lg:border-t-0 lg:border-l lg:pl-6",
+  "border-t border-l border-frame/60 pl-6 py-7 md:py-8 lg:border-t-0",
 ];
 ---
 
@@ -50,97 +65,68 @@ const stats = [
   })} />
 
   <Header />
+  <link rel="preload" as="video" href={heroVideo} fetchpriority="high" />
   <main id="main-content">
-    <!-- ===== Hero editorial ===== -->
-    <section class="relative flex min-h-[92vh] items-center overflow-hidden bg-[#010101]">
-      <!-- Capas de fondo -->
-      <div class="absolute inset-0" style="background: #010101;" />
-      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 75% 25%, #6366f118 0%, transparent 55%), radial-gradient(ellipse at 15% 85%, #8b5cf612 0%, transparent 50%);" />
-      <div class="absolute inset-0 opacity-[0.012] mix-blend-overlay pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'1\'/%3E%3C/svg%3E'); background-repeat: repeat; background-size: 256px 256px;" />
-      <div class="absolute top-0 left-0 right-0 h-px" style="background: linear-gradient(90deg, transparent, #6366f144, transparent);" />
+    <!-- Hero · primitiva reutilizable ui/PageHero (mismo patrón que home, /servicios y /portafolio) -->
+    <PageHero
+      ledLabel={`${CASOS.length} casos documentados`}
+      eyebrow="// casos · sur de chile"
+      title="Trabajo real, números reales."
+      titleAccent="Sin humo."
+      subtitle="Somos una agencia digital en Puerto Varas. Construimos automatización con IA para pymes del sur y lo mostramos con trabajo propio: cada caso con su problema, su solución y sus números."
+      videoUrl={heroVideo}
+      breadcrumbs={[{ name: "Casos", path: "/casos" }]}
+      meta={`© ${anio} mtsprz · puerto varas`}
+    >
+      <Fragment slot="actions">
+        <a
+          href="/diagnostico"
+          class="inline-flex items-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-bg transition-colors hover:bg-accent-hover sm:text-sm"
+          >[ Diagnóstico Gratis ]</a
+        >
+        <a
+          href="#showcase"
+          class="inline-flex items-center rounded-[6px] border border-frame px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-wider text-text-primary transition-colors hover:border-accent hover:text-accent sm:text-sm"
+          >[ Ver los Casos ]</a
+        >
+      </Fragment>
 
-      <!-- Decoración de archivo (aria-hidden · responsive: escala fluida) -->
-      <div class="pointer-events-none absolute right-2 top-0 z-10 sm:right-4" aria-hidden="true">
-        <div class="border border-dashed border-white/[0.15] border-b-0 bg-[#010101] px-2.5 pb-1.5 pt-1 font-mono text-[7px] tracking-[0.25em] text-white/35 sm:px-4 sm:pb-2.5 sm:pt-1.5 sm:text-[9px] sm:tracking-[0.3em]">ARCHIVO · CASOS</div>
-      </div>
-      <div class="pointer-events-none absolute -left-8 top-[20%] h-[26%] w-[14%] rotate-[-3deg] border border-dashed border-white/[0.07] md:-left-16 md:top-[18%] md:h-[52%] md:w-[34%]" aria-hidden="true" />
-      <div class="pointer-events-none absolute -right-10 top-[30%] hidden h-[42%] w-[26%] rotate-[2.5deg] border border-dashed border-white/[0.05] lg:block" aria-hidden="true" />
-      <span class="pointer-events-none absolute right-1 top-8 z-0 select-none font-hand text-[clamp(4.5rem,22vw,15rem)] leading-none text-white/[0.05] sm:right-4 md:top-12 lg:top-16" aria-hidden="true">2026</span>
-
-      <div class="relative mx-auto grid w-full gap-12 px-5 pb-24 pt-32 sm:px-8 md:px-10 md:pb-28 md:pt-36 lg:grid-cols-[1fr_16rem] lg:gap-8 lg:px-10 xl:px-20 2xl:px-28">
-        <div class="reveal-group">
-          <div class="reveal-item mb-12 md:mb-16">
-            <Breadcrumbs items={[{ name: "Casos", path: "/casos" }]} />
-          </div>
-
-          <div class="reveal-item flex flex-wrap items-center justify-between gap-3">
-            <p class="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/40 md:text-xs">
-              Casos de estudio · Sur de Chile
-            </p>
-            <span class="inline-flex rotate-[-4deg] border-2 border-dashed border-white/20 px-2.5 py-1 font-mono text-[8px] tracking-[0.22em] text-white/50 sm:px-3 sm:py-1.5 sm:text-[9px] sm:tracking-[0.25em]" aria-hidden="true">ARCHIVO · 2026</span>
-          </div>
-          <h1 class="reveal-item mt-6 font-heading text-[clamp(2.7rem,8vw,8.5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-white">
-            Trabajo real,<br />
-            números reales.<br />
-            <span class="text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);">Sin humo.</span>
-          </h1>
-          <p class="reveal-item mt-7 max-w-2xl font-body text-sm font-light leading-[1.8] text-white/50 md:text-lg">
-            Somos una agencia digital en Puerto Varas. Construimos automatización con IA para pymes del sur y lo mostramos con trabajo propio: cada caso con su problema, su solución y sus números.
-          </p>
-
-          <div class="reveal-item mt-10 flex flex-col gap-4 sm:flex-row">
-            <a
-              href="/diagnostico"
-              class="group inline-flex items-center justify-center gap-3 px-7 py-4 font-body text-xs font-medium uppercase tracking-[0.15em] text-white transition-all duration-300"
-              style="background-image: linear-gradient(135deg, #6366f1, #8b5cf6);"
-            >
-              <span>Agenda diagnóstico gratis</span>
-              <svg class="h-4 w-4 transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:translate-x-1 group-hover:-translate-y-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-            </a>
-            <a
-              href="#showcase"
-              class="inline-flex items-center justify-center border border-white/[0.08] bg-white/[0.04] px-6 py-4 font-body text-xs font-medium uppercase tracking-[0.15em] text-white/50 transition-all duration-300 hover:border-white/[0.16] hover:text-white/80"
-            >
-              Ver los casos
-            </a>
-          </div>
-
-          <!-- Stats · data-driven, inline editorial -->
-          <dl class="reveal-item mt-16 grid grid-cols-2 gap-y-10 border-b-2 border-dashed border-white/10 pb-10 sm:grid-cols-4 sm:divide-x sm:divide-white/10">
-            {stats.map((s) => (
-              <div class="pr-8 sm:pl-8 sm:first:pl-0">
-                <dt class="font-body text-[9px] uppercase tracking-[0.2em] text-white/35 md:text-[10px]">{s.label}</dt>
-                <dd class="mt-2 font-heading text-3xl font-bold tracking-[-0.02em] text-white md:text-5xl">{s.valor}</dd>
-              </div>
+      <Fragment slot="aside">
+        <WebcoreWindow title="casos --list" variant="sunken">
+          <ul class="divide-y divide-frame">
+            {CASOS.map((c, idx) => (
+              <li class="flex items-center gap-3 px-4 py-3">
+                <span class="font-mono text-[11px] text-text-tertiary">
+                  [{String(idx + 1).padStart(2, "0")}]
+                </span>
+                <span class="truncate font-body text-sm text-text-primary">{c.cliente}</span>
+                <span class="ml-auto hidden shrink-0 font-mono text-[10px] uppercase tracking-wider text-text-tertiary sm:block">
+                  {c.industria}
+                </span>
+              </li>
             ))}
-          </dl>
-        </div>
+          </ul>
+          <div class="flex items-center justify-between border-t border-frame px-4 py-2.5 font-mono text-[11px]">
+            <span class="text-text-tertiary">{String(CASOS.length).padStart(2, "0")} casos</span>
+            <a href="#showcase" class="text-text-secondary transition-colors hover:text-accent">
+              abrir archivo ↓
+            </a>
+          </div>
+        </WebcoreWindow>
+      </Fragment>
+    </PageHero>
 
-        <!-- Índice de secciones + indicador scroll (desktop) -->
-        <aside class="hidden justify-between self-stretch pb-2 text-right lg:flex lg:flex-col lg:items-end">
-          <nav aria-label="Secciones de la página">
-            <ul class="space-y-4">
-              {[
-                { href: "#showcase", label: "01 · El trabajo" },
-                { href: "#testimonios", label: "02 · Testimonios" },
-                { href: "#oferta", label: "03 · Oferta fundador" },
-              ].map((item) => (
-                <li>
-                  <a
-                    href={item.href}
-                    class="font-body text-[10px] uppercase tracking-[0.2em] text-white/30 transition-colors duration-500 hover:text-white/80"
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <p class="flex items-center gap-3 font-mono text-[10px] tracking-[0.3em] text-white/25 [writing-mode:vertical-rl]">
-            SCROLL
-            <span class="inline-block h-10 w-px bg-white/20" />
-          </p>
-        </aside>
+    <!-- Strip de cifras · ex-stats del hero v1, data-driven (J1: nada inventado) -->
+    <section class="w-full border-b border-frame/60 bg-bg" aria-label="Cifras del archivo">
+      <div class="mx-auto max-w-[100rem] px-4 sm:px-6 lg:px-8 xl:px-12">
+        <dl class="grid grid-cols-2 lg:grid-cols-4">
+          {stats.map((s, i) => (
+            <div class={statCell[i]}>
+              <dt class="font-mono text-[10px] uppercase tracking-[0.2em] text-text-tertiary">{s.label}</dt>
+              <dd class="mt-2 font-heading text-3xl font-bold tracking-[-0.02em] text-text-primary md:text-4xl">{s.valor}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
 
@@ -148,37 +134,20 @@ const stats = [
     <section
       id="showcase"
       data-gsap-casos="section"
-      class="relative w-full scroll-mt-20 overflow-hidden bg-[#0A0A0A]"
+      class="relative w-full scroll-mt-20 overflow-hidden bg-bg"
       aria-label="Casos de estudio"
     >
       <!-- Encabezado del archivo (reveal editorial con GSAP) -->
-      <div data-gsap-casos="header" class="mx-auto max-w-[72rem] px-6 pt-20 md:pt-28">
+      <div data-gsap-casos="header" class="mx-auto max-w-[110rem] px-6 pt-20 sm:px-8 md:pt-28 lg:px-12 xl:px-16 2xl:px-24">
         <div class="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p data-gsap-casos="eyebrow" class="font-body text-[10px] font-medium uppercase tracking-[0.3em] text-white/30 md:text-xs">01 · El trabajo</p>
-            <h2 class="relative mt-3 font-heading text-3xl font-bold tracking-[-0.5px] text-white md:text-5xl">
-              <span data-gsap-casos="title">Casos sobre la mesa</span>
-              <svg
-                data-gsap-casos="underline"
-                class="absolute -bottom-3 left-0 hidden h-3 w-full md:block"
-                viewBox="0 0 320 12"
-                fill="none"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M3 8 C 70 2, 190 3, 317 6"
-                  stroke="#6ee7b7"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  pathLength="1"
-                  style="stroke-dasharray: 1; stroke-dashoffset: 0;"
-                />
-              </svg>
+            <p data-gsap-casos="eyebrow" class="font-mono text-xs uppercase tracking-[0.2em] text-accent">// 01 · el trabajo</p>
+            <h2 class="mt-4 font-heading text-3xl font-bold leading-[1.08] tracking-[-0.02em] text-text-primary sm:text-4xl md:text-5xl">
+              <span data-gsap-casos="title" class="inline-block">Casos sobre la mesa</span>
             </h2>
-            <p class="mt-5 font-hand text-lg md:text-xl" style="color: #fde68a;">todas las historias, una sola mesa</p>
+            <p class="mt-3 font-mono text-xs text-text-tertiary">// todas las historias, una sola mesa</p>
           </div>
-          <span id="casos-count" class="font-mono text-[11px] tracking-[0.14em] text-white/25" aria-live="polite"></span>
+          <span id="casos-count" class="font-mono text-[11px] tracking-[0.14em] text-text-tertiary" aria-live="polite"></span>
         </div>
 
         <!-- Chips de filtro por industria -->
@@ -188,7 +157,7 @@ const stats = [
             data-filter-btn
             data-filter="todos"
             aria-pressed="true"
-            class="filter-btn border border-white/[0.08] bg-white/[0.03] px-4 py-2 font-body text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors hover:text-white/80"
+            class="filter-btn rounded-[4px] border border-frame bg-surface px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-frame-hover hover:text-text-primary"
           >
             Todos
           </button>
@@ -198,7 +167,7 @@ const stats = [
               data-filter-btn
               data-filter={ind}
               aria-pressed="false"
-              class="filter-btn border border-white/[0.08] bg-white/[0.03] px-4 py-2 font-body text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors hover:text-white/80"
+              class="filter-btn rounded-[4px] border border-frame bg-surface px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-frame-hover hover:text-text-primary"
             >
               {ind}
             </button>
@@ -207,11 +176,10 @@ const stats = [
       </div>
 
       <!-- Regla superior del archivo (se dibuja con GSAP; visible sin JS) -->
-      <div class="mx-auto max-w-[110rem] px-6 pt-12 sm:px-8 md:pt-16 lg:px-12 xl:px-16 2xl:px-24">
+      <div class="w-full pt-12 md:pt-16">
         <div
           data-gsap-casos="rule-top"
-          class="h-0.5 w-full origin-left"
-          style="background: repeating-linear-gradient(90deg, rgba(255,255,255,0.14) 0 8px, transparent 8px 14px);"
+          class="h-px w-full origin-left bg-frame"
         />
       </div>
 
@@ -223,14 +191,14 @@ const stats = [
       </div>
 
       <!-- Estado vacío (robustez: filtro sin resultados) -->
-      <div class="mx-auto max-w-[72rem] px-6 pb-6">
-        <div id="casos-empty" class="mt-12 hidden rounded-[1.25rem] border border-dashed border-white/[0.08] px-6 py-16 text-center" role="status">
-          <p class="font-body text-sm text-white/40">No hay casos de esta industria todavía.</p>
+      <div class="mx-auto max-w-[110rem] px-6 pb-16 sm:px-8 lg:px-12 xl:px-16 2xl:px-24">
+        <div id="casos-empty" class="mt-12 hidden rounded-[6px] border border-frame/60 bg-surface-sunken px-6 py-16 text-center" role="status">
+          <p class="font-mono text-sm text-text-tertiary">// sin resultados · no hay casos de esta industria todavía</p>
           <button
             type="button"
             data-filter-btn
             data-filter="todos"
-            class="mt-5 border border-white/[0.08] bg-white/[0.03] px-4 py-2 font-body text-[11px] uppercase tracking-[0.12em] text-white/50 transition-colors hover:text-white/80"
+            class="filter-btn mt-5 rounded-[4px] border border-frame bg-surface px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-frame-hover hover:text-text-primary"
           >
             Ver todos los casos
           </button>
@@ -263,9 +231,9 @@ const stats = [
 
   <style>
     .filter-btn.is-active {
-      background: rgba(255, 255, 255, 0.92);
-      color: #010101;
-      border-color: transparent;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-color: var(--color-accent);
     }
   </style>
 
@@ -403,31 +371,29 @@ const stats = [
               { yPercent: 40, autoAlpha: 0, filter: "blur(6px)" },
               { yPercent: 0, autoAlpha: 1, filter: "blur(0px)", duration: 0.8 },
               0.2
-            )
-            .fromTo(
-              q('[data-gsap-casos="underline"]'),
+            );
+
+          // Subrayado dibujado (opcional · solo si la sección lo incluye)
+          var underline = q('[data-gsap-casos="underline"]');
+          if (underline.length) {
+            tl.fromTo(
+              underline,
               { strokeDashoffset: 1 },
               { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" },
               0.45
             );
+          }
 
           var rows = q('[data-gsap-casos="row"]');
           if (rows.length) {
-            var rot = [1.4, -1.6, 1.2, -1.4, 1.5];
             tl.fromTo(
               rows,
-              {
-                y: 80,
-                autoAlpha: 0,
-                scale: 0.98,
-                rotation: function (i) { return rot[i % rot.length]; },
-              },
+              { y: 80, autoAlpha: 0, scale: 0.99 },
               {
                 y: 0,
                 autoAlpha: 1,
                 scale: 1,
-                rotation: 0,
-                duration: 1.15,
+                duration: 1.0,
                 stagger: function (i) { return 0.16 + (i % 2) * 0.1; },
               },
               0.35

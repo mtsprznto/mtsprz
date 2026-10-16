@@ -1,0 +1,125 @@
+---
+/**
+ * MethodologyPipeline — sección Metodología · NUEVA (DESIGN §13 [5] · RF-12)
+ * Pipeline Audit → Architecture → Build → Deploy → Scale en formato terminal:
+ * ventana `pipeline --run all` con 5 etapas en mosaico hairline (comando + descripción).
+ * Sin JS y sin métricas inventadas (§9): copy de proceso, verificable.
+ */
+const steps = [
+  {
+    n: "01",
+    name: "Audit",
+    cmd: "mtsprz audit --deep",
+    desc: "Auditamos tu negocio, tu competencia y tu presencia digital. Recibes un diagnóstico con prioridades claras.",
+  },
+  {
+    n: "02",
+    name: "Architecture",
+    cmd: "mtsprz plan --lock",
+    desc: "Definimos arquitectura, stack y alcance. Apruebas el plan antes de que se escriba una línea de código.",
+  },
+  {
+    n: "03",
+    name: "Build",
+    cmd: "mtsprz build --preview",
+    desc: "Construimos en iteraciones cortas con previews en vivo: ves avance real en cada entrega.",
+  },
+  {
+    n: "04",
+    name: "Deploy",
+    cmd: "mtsprz deploy --production",
+    desc: "Publicamos en producción con dominio, SSL y analítica configurados desde el día uno.",
+  },
+  {
+    n: "05",
+    name: "Scale",
+    cmd: "mtsprz scale --measure",
+    desc: "Medimos resultados y escalamos: SEO, automatizaciones y mejoras continuas mes a mes.",
+  },
+];
+---
+
+<!-- Metodología · pipeline en 5 etapas (orden canónico §14: Servicios → Metodología → Equipo) -->
+<section id="metodologia" class="relative w-full scroll-mt-20 bg-bg">
+  <div class="w-full px-4 py-20 sm:px-6 md:py-28 lg:px-8 xl:px-12">
+    <!-- Header -->
+    <div class="reveal-group mb-12 md:mb-16">
+      <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent">
+        // metodología
+      </p>
+      <h2
+        class="reveal-item mt-4 font-heading text-3xl font-bold leading-[1.08] tracking-[-0.02em] text-text-primary sm:text-4xl md:text-5xl"
+      >
+        Así trabajamos.<br /><span class="text-accent">De la auditoría al despliegue.</span>
+      </h2>
+    </div>
+
+    <!-- Pipeline · 5 etapas -->
+    <div class="reveal-group">
+      <div class="reveal-item webcore-window">
+        <div class="flex h-9 items-center gap-2 border-b border-frame bg-surface px-3">
+          <span
+            class="h-2 w-2 shrink-0 rounded-full bg-accent"
+            style="box-shadow:0 0 8px var(--color-accent);"
+            aria-hidden="true"></span>
+          <span class="truncate font-mono text-[11px] uppercase tracking-[0.14em] text-text-secondary">
+            pipeline --run all
+          </span>
+          <span class="ml-auto hidden shrink-0 font-mono text-[11px] text-text-tertiary sm:block">
+            {String(steps.length).padStart(2, "0")} stages
+          </span>
+        </div>
+
+        <div class="grid gap-px bg-frame sm:grid-cols-2 lg:grid-cols-5">
+          {
+            steps.map((s) => (
+              <div class="bg-surface-sunken p-5">
+                <div class="flex items-center gap-2 font-mono text-[11px]">
+                  <span class="text-text-tertiary">[{s.n}]</span>
+                  <span class="led-pulse h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
+                  <span class="ml-auto uppercase tracking-[0.16em] text-accent">{s.name}</span>
+                </div>
+                <p
+                  class="mt-4 truncate rounded-[4px] border border-frame bg-surface px-2.5 py-1.5 font-mono text-[11px] text-text-secondary"
+                  title={s.cmd}
+                >
+                  <span class="text-text-tertiary">$</span> {s.cmd}
+                </p>
+                <p class="mt-4 font-body text-sm font-light leading-[1.7] text-text-secondary">
+                  {s.desc}
+                </p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div
+          class="flex flex-col gap-3 border-t border-frame bg-surface px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5"
+        >
+          <p class="font-mono text-[11px] tracking-[0.08em] text-text-secondary">
+            <span class="text-accent">→</span> Cada etapa se aprueba antes de pasar a la siguiente
+          </p>
+          <a
+            href="/contacto"
+            class="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.08em] text-text-primary transition-colors hover:text-accent"
+          >
+            [ Solicitar diagnóstico ]
+            <svg
+              class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 12h14" />
+              <path d="M12 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

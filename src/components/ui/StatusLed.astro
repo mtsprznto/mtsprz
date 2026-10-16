@@ -1,0 +1,26 @@
+---
+/**
+ * StatusLed — badge de estado con LED animado (DESIGN §6.3)
+ * Texto real siempre visible; el pulso se desactiva con reduced-motion
+ * y en Modo Clean (led queda estático).
+ */
+interface Props {
+  label?: string;
+  status?: "ok" | "warn" | "down";
+  class?: string;
+}
+const { label = "ALL SYSTEMS OPERATIONAL", status = "ok", class: className = "" } = Astro.props;
+
+const dot =
+  status === "warn" ? "bg-warning"
+  : status === "down" ? "bg-danger"
+  : "bg-accent";
+---
+
+<span
+  role="status"
+  class={`inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-text-secondary ${className}`}
+>
+  <span class={`led-pulse inline-block h-2 w-2 shrink-0 rounded-full ${dot}`} aria-hidden="true"></span>
+  <span>{label}</span>
+</span>
