@@ -25,8 +25,12 @@ function loadGA4(measurementId: string): void {
 
   // dataLayer + gtag init
   window.dataLayer = window.dataLayer || [];
-  function gtag(...args: any[]) {
-    window.dataLayer!.push(args);
+  // ⚠️ gtag.js exige un objeto Arguments en la cola: valida con
+  // Object.prototype.toString === "[object Arguments]" (fn Qb en su fuente minificada)
+  // y descarta los Arrays de rest-params EN SILENCIO — js/config/event nunca
+  // se procesarían. Verificado en https://www.googletagmanager.com/gtag/js (16-oct-2026).
+  function gtag(..._args: any[]) {
+    window.dataLayer!.push(arguments);
   }
   gtag("js", new Date());
   gtag("config", measurementId, {

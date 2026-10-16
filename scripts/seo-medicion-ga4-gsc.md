@@ -10,12 +10,22 @@
 
 | Pieza | Archivo | Estado |
 |---|---|---|
-| GA4 + Clarity loader | `src/lib/analytics.ts` | ✅ consent-gated (`__cookieConsent.isAllowed("analytics")`); expone `window.gtag` |
+| GA4 + Clarity loader | `src/lib/analytics.ts` | ✅ consent-gated (`__cookieConsent.isAllowed("analytics")`); expone `window.gtag`. **Fix 16-oct**: `gtag()` pushea `arguments` (rest-params Array → gtag.js descartaba los comandos en silencio, ver §0.1) + CSP `vercel.json` con wildcards GA4/Clarity |
 | Env vars públicas | `PUBLIC_GA_ID` · `PUBLIC_CLARITY_ID` | ⬜ verificar en Vercel (§3) |
 | Eventos funnel | `src/lib/tracking.ts` | ✅ `whatsapp_click` (delegación global en todos los `wa.me`), `cotizar_modal_open`, `email_submitted`, `verify_success/failure`, `email_resend`, `quote_submitted`, `contact_submitted`, `form_submit_diagnostico`, `newsletter_subscribed` |
 | Higiene pendiente | `src/components/WhatsAppButton.astro:41-46` | ⚠️ envía conversión Ads con `send_to: "AW-CONV/whatsapp_click"` (placeholder inválido — inofensivo hoy; limpiar o reemplazar cuando exista Google Ads real, plan J5) |
 
 **Recordatorio**: GA4 NO ve bots (GPTBot, ClaudeBot, PerplexityBot) — solo navegadores reales. El tráfico AI aquí = humanos que clickearon una cita.
+
+### 0.1 Incidente GA4 16-oct-2026 (fix en código; verificar post-deploy)
+
+**Síntoma**: GA4 `G-Z9M227R409` mostraba "Todavía no se han recibido datos" tras ~1 mes, aunque el verificador de Google decía "etiqueta instalada" — **falso positivo**: detecta el loader en la fuente, no su ejecución.
+
+**Causa raíz** (verificada en la fuente minificada de gtag.js el 16-oct-2026): `analytics.ts` hacía `window.dataLayer.push(args)` con rest-params → gtag.js valida `Object.prototype.toString === "[object Arguments]"` (fn `Qb`) y **descarta los Arrays en silencio** → `js`/`config`/`event` nunca se dispatcheaban → cero hits para todos los visitantes, con o sin consentimiento. Corrobora: southwellmedia/velocity#8, SO 60400130, nuxt/scripts#770. Bug 2 (latente): CSP sin wildcards → beacons regionales (`region1.google-analytics.com`) bloqueados aun con bug 1 resuelto.
+
+**Fixes**: (1) `push(arguments)` en `analytics.ts`; (2) CSP `vercel.json` → connect-src/img-src += `https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.clarity.ms https://c.bing.com`.
+
+**Verificación pendiente (usuario, post-deploy)**: incognito → `https://mtsprz.org` → F12 Network filtro `collect` → "Aceptar todas" → ¿request `g/collect` (204) + sesión en Realtime? Si sigue vacío: revisar **GA4 Admin → Filtros de datos** (estado "Prueba" excluye todo). Decisión aparte: **Consent Mode v2** si se quiere medir sin consentimiento (requiere PRD).
 
 ---
 
