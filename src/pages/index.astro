@@ -18,6 +18,7 @@ import NosotrosSection from "../components/home/NosotrosSection.astro";
 import PortfolioSection from "../components/home/PortfolioSection.astro";
 import RecursosSection from "../components/home/RecursosSection.astro";
 import CtaSection from "../components/home/CtaSection.astro";
+import QuickAnswer from "../components/QuickAnswer.astro";
 
 await initDb();
 const dbRows = await query(
@@ -70,6 +71,16 @@ const anio = _hoy.getFullYear();
 
   <main id="main-content">
     <HeroSection hoy={hoy} anio={anio} />
+    <QuickAnswer
+      question="¿Qué hace Mtsprz y cuánto cuestan sus servicios?"
+      answer="Mtsprz es una agencia digital en Puerto Varas: crea páginas web desde $290.000, posiciona tu negocio en Google Maps desde $190.000 y automatiza WhatsApp y procesos con IA desde $590.000. Respuesta en menos de 24 horas."
+      facts={[
+        "Páginas web ultrarrápidas con Astro · desde $290.000",
+        "SEO local y Google Maps · desde $190.000",
+        "Bots de WhatsApp y automatización · desde $590.000",
+        "Base en Puerto Varas · pymes del sur de Chile",
+      ]}
+    />
     <DiagnosticoSection featured={featured} />
 
     <!-- Structured Data: Services (SEO 2026) -->

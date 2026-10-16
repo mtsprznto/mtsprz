@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Footer from "../components/Footer.astro";
 import CiudadesRelacionadas from "../components/CiudadesRelacionadas.astro";
+import QuickAnswer from "../components/QuickAnswer.astro";
 
 const waPhone = "56966929818";
 const waMsg = encodeURIComponent("Hola! Vi la página de SEO Local y quiero posicionar mi negocio en Google Maps.");
@@ -151,6 +152,18 @@ const site = "https://mtsprz.org";
         <Breadcrumbs items={[{ name: "SEO Local", path: "/seo-local" }]} />
       </div>
     </section>
+
+
+    <QuickAnswer
+      question="¿Cuánto cuesta el SEO local para un negocio?"
+      answer="El plan Starter cuesta $190.000: optimización completa de Google Business Profile, palabras clave locales y consistencia NAP en 1 semana. El Plan Crecimiento Local cuesta $290.000/mes con resultados en 30-60 días, y el Plan Dominio Local $490.000/mes para dominar tu comuna en 3-6 meses."
+      facts={[
+        "Starter · $190.000 · Google Business Profile + NAP · 1 semana",
+        "Crecimiento Local · $290.000/mes · resultados en 30-60 días",
+        "Dominio Local · $490.000/mes · dominas tu comuna en 3-6 meses",
+        "Optimización para Google Maps y búsquedas locales",
+      ]}
+    />
 
 
     <!-- ═══════════════════════════════════════════

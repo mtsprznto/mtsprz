@@ -11,6 +11,7 @@ import BlurText from "./BlurText.astro";
 import FaqPreview from "./FaqPreview.astro";
 import LocalidadDatos from "./LocalidadDatos.astro";
 import CiudadesRelacionadas from "./CiudadesRelacionadas.astro";
+import QuickAnswer from "./QuickAnswer.astro";
 import { getRegion } from "../data/regiones";
 
 export interface Props {
@@ -29,6 +30,8 @@ export interface Props {
   /** Ancho de la columna web en desktop (55 = valdivia 55/45) */
   colWeb?: number;
   videoUrl?: string;
+  /** Bloque answer-first GEO (opcional) · Ronda 3 G1 */
+  quickAnswer?: { question: string; answer: string; facts?: string[] };
 }
 
 const VIDEO_HERO =
@@ -48,6 +51,7 @@ const {
   servicesLayout = "web-seo",
   colWeb = 60,
   videoUrl = VIDEO_HERO,
+  quickAnswer,
 } = Astro.props;
 
 const info = getRegion(slug);
@@ -200,6 +204,15 @@ const btnMetal =
     </WebcoreWindow>
   </Fragment>
 </PageHero>
+
+{quickAnswer && (
+  <QuickAnswer
+    eyebrow={`respuesta directa · ${nombre.toLowerCase()}`}
+    question={quickAnswer.question}
+    answer={quickAnswer.answer}
+    facts={quickAnswer.facts}
+  />
+)}
 
 <!-- SERVICIOS · columnas full-bleed -->
 <section aria-label={`Servicios digitales en ${nombre}`} class="relative w-full">

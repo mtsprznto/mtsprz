@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Footer from "../components/Footer.astro";
 import CiudadesRelacionadas from "../components/CiudadesRelacionadas.astro";
+import QuickAnswer from "../components/QuickAnswer.astro";
 
 const waPhone = "56966929818";
 const waMsg = encodeURIComponent("Hola! Vi la página de desarrollo web y quiero cotizar mi sitio.");
@@ -245,6 +246,18 @@ const site = "https://mtsprz.org";
       </div>
 
     </div><!-- /dw-wrapper -->
+
+
+    <QuickAnswer
+      question="¿Cuánto cuesta una página web profesional en Chile?"
+      answer="Una landing page cuesta desde $290.000 (5-7 días hábiles), un sitio corporativo desde $690.000 (2-3 semanas) y una tienda online desde $1.500.000 (4-8 semanas). Todos incluyen hosting + SSL, SEO básico y Analytics, sin costos ocultos. Mantenimiento mensual opcional desde $45.000/mes."
+      facts={[
+        "Landing page · desde $290.000 · 5-7 días hábiles",
+        "Sitio corporativo · desde $690.000 · 2-3 semanas",
+        "Tienda online · desde $1.500.000 · Transbank/Mercado Pago · 4-8 semanas",
+        "Incluye hosting + SSL, SEO básico y Analytics",
+      ]}
+    />
 
 
     <!-- ═══════════════════════════════════════════

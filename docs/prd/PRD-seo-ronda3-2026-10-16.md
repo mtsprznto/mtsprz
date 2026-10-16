@@ -3,7 +3,7 @@
 - **Slug**: `seo-ronda3`
 - **Fecha**: `2026-10-16`
 - **Autor**: agente (Atlas/SEO) — a partir de `docs/marketing/SEO-PROGRESO-2026-10-16.md` v2, `PRD-seo-ronda2` (cerrado), `seo-test-results/ronda3-2026-08-01/` y práctica SEO/GEO 2026 verificada hoy por búsqueda web.
-- **Estado**: `propuesto — pendiente de aprobación` (Regla #2: no se implementa sin aprobación).
+- **Estado**: `aprobado — en ejecución` (aprobado 2026-10-16 · G1 ✅ código · G2 ✅ docs + proxy — corrida manual pendiente · G3–G5 por ejecutar).
 - **Regla**: este PRD es obligatorio ANTES de tocar código (ver `AGENTS.md` REGLA #2).
 
 > **Alcance**: SOLO lo ejecutable desde el repo (código/contenido/docs). Lo off-site (directorios, GBP, subdominios, reseñas) se ejecuta por el usuario con los playbooks; este PRD entrega **tracker + instrucciones exactas** y no edita esos proyectos.
@@ -125,7 +125,7 @@ No aplica (contenido estático). Rollback: `git revert` de los archivos tocados.
 
 ## 8. Criterios de aceptación
 
-- [ ] CA-1: `QuickAnswer` en las 10 páginas, sin JS, con ≥2 hechos reales (o menos si no hay dato — documentado).
+- [x] CA-1: `QuickAnswer` en las 10 páginas (código verificado por grep 2026-10-16; build pendiente del usuario), sin JS, con hechos reales verificados (o sin facts donde no aplicaba — `/whatsapp-api` usa CTA).
 - [ ] CA-2: `pnpm check` + `pnpm build` OK; sin errores básicos de a11y (contraste/estructura).
 - [ ] CA-3: R4 baseline publicada con % citas por motor (20 prompts).
 - [ ] CA-4: playbook medición entregado + vars verificadas (usuario confirma en Vercel).
@@ -159,8 +159,40 @@ Post-deploy (manual, navegador):
 
 ## 11. Bitácora de ejecución
 
-_(se completará durante la ejecución, por hito — como en Ronda 2)_
+### G1 · QuickAnswer — ✅ implementado en código (2026-10-16)
+
+- Componente nuevo `src/components/QuickAnswer.astro`: answer-first, sin JS — `question` (h2) + `answer` + `facts[]` numerados `[01]`, `eyebrow` (default "respuesta directa"), `accent` configurable, `<slot />` al fondo, `aria-label="Respuesta rápida"`.
+- Insertado en las 10 páginas clave (verificado por grep):
+  1. `/` — entre HeroSection y DiagnosticoSection (precios $290k/$190k/$590k + "respuesta <24 h").
+  2. `/regiones/puerto-varas` — vía prop opcional `quickAnswer` de `RegionPage.astro` (Q: "¿Cuánto cuesta una página web en Puerto Varas?").
+  3. `/regiones/osorno` — idem ("…en Osorno?").
+  4. `/regiones/puerto-montt` — idem ("…en Puerto Montt?").
+  5. `/regiones/valdivia` — idem ("…en Valdivia?").
+  6. `/servicios` — tras PageHero.
+  7. `/desarrollo-web` — tras el wrapper del hero (plazos 5-7 días / 2-3 sem / 4-8 sem + mantención $45.000/mes).
+  8. `/seo-local` — tras Breadcrumbs (planes $190.000 / $290.000/mes / $490.000/mes).
+  9. `/automatizacion` — ANSWER BLOCK ad-hoc reemplazado (accent `#22D3EE`, CTA con precios + "[ Quiero mi diagnóstico ]").
+  10. `/whatsapp-api` — ANSWER BLOCK ad-hoc reemplazado (accent `#25D366`, CTA "QUIERO MI COTIZACIÓN").
+- `RegionPage.astro` gana prop **opcional** → las otras 11 regiones quedan sin cambio.
+- Solo datos verificados (precios canónicos del sitio, plazos del schema, población INE 2024). Descartado "+50 proyectos" (no verificable).
+- Pendiente del usuario: `pnpm check` + `pnpm build` (REGLA #1 — el agente no ejecuta).
+
+### G2 · Baseline citas AI — ✅ docs + corrida proxy (2026-10-16) · corrida manual pendiente
+
+- `seo-test-results/ronda4-2026-10-16/METODO.md` (definiciones cita/mención/ausencia, procedimiento 2 pasadas, limitaciones, criterios) + `prompts.md` (20 prompts fijos con página objetivo) + `RESULTADOS.md` (matriz 20×4 lista para completar).
+- Corrida proxy `websearch` (3 prompts; sección §1 de RESULTADOS): mtsprz.org ausente en los 3 → dominan agencias locales (kanale.cl), contenido genérico ES y SaaS internacional; señal de oportunidad GEO.
+- Corrida manual (usuario, navegador): R4-a pasada 1 (16→20 oct) y pasada 2 (23 oct) pendientes.
+
+### Pendiente (G3–G5) — no iniciados
+
+- G3 playbook GA4/GSC · G4 tracker off-site O1/O2/O9 · G5 auditoría `sameAs`.
 
 ## 12. Decisiones
 
-_(pendientes; el usuario delegó criterio en Ronda 2 — se registrarán aquí las resoluciones: alcance G1–G5, método R4, orden de ejecución)_
+1. **Orden de ejecución**: G1 (código) + G2 (docs/medición) primero; G3–G5 se ofrecen al cierre de G1+G2. (2026-10-16, aprobado por el usuario).
+2. **Método R4**: sin API estable de motores AI → corrida manual asistida con protocolo (`METODO.md`) + proxy `websearch` como señal débil separada. Sin promesa de causalidad (arXiv jul-2026).
+3. **G1 · automatizacion/whatsapp-api**: ANSWER BLOCK ad-hoc reemplazados por `QuickAnswer` (mismo texto de respuesta; CTA movido al slot) — un solo componente canónico, menos deuda de estilos.
+4. **G1 · whatsapp-api** conserva verbatim "usando la API oficial de WhatsApp Business (WAHA)" (copy original; posible corrección de precisión futura — fuera de alcance de R3).
+5. **Datos**: solo hechos verificables (precios canónicos, plazos del schema, censo INE 2024). Descartado "+50 proyectos" (no verificable en `projects.json`).
+6. **Cards de precio stale en `/whatsapp-api`** ($390.000/$650.000 + $90.000/mes vs canónico $590.000 + $69.000/mes): detectadas, NO editadas (fuera de G1) — pendiente decisión del usuario.
+7. **RegionPage**: prop `quickAnswer` opcional → solo las 4 regiones en scope emiten el bloque; sin duplicación de textos en 11 regiones restantes.

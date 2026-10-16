@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Footer from "../components/Footer.astro";
 import CiudadesRelacionadas from "../components/CiudadesRelacionadas.astro";
+import QuickAnswer from "../components/QuickAnswer.astro";
 
 const waPhone = "56966929818";
 const waMsg = encodeURIComponent("Hola! Vi la página de WhatsApp API y quiero conectar mi negocio con un bot 24/7.");
@@ -150,32 +151,25 @@ const site = "https://mtsprz.org";
 
 
     <!-- ═══════════════════════════════════════════
-         ANSWER BLOCK · respuesta directa 40-60 palabras (GEO N1)
-         Responde el prompt 11: "¿Cuánto cuesta un bot de WhatsApp?"
+         ANSWER BLOCK · QuickAnswer (GEO N1) · Ronda 3 G1
+         Responde el prompt 13: "¿Cuánto cuesta un bot de WhatsApp para una pyme en Chile?"
     ═══════════════════════════════════════════ -->
-    <section style="width:100vw; background:#010101; position:relative; overflow:hidden;">
-      <div style="position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(37,211,102,0.15),transparent);"></div>
-      <div style="max-width:920px; margin:0 auto; padding:5rem 2.5rem;">
-
-        <p style="font-size:0.6rem; letter-spacing:0.25em; text-transform:uppercase; color:rgba(37,211,102,0.5); font-family:var(--font-body); margin-bottom:1.5rem;">Respuesta directa · Costo y qué incluye</p>
-
-        <div class="reveal-group">
-          <p class="reveal-item" style="font-size:clamp(1.4rem, 3.4vw, 2.4rem); font-family:var(--font-heading); font-weight:700; color:#fff; line-height:1.25; letter-spacing:-0.02em; margin:0;">
-            Un bot de WhatsApp para pymes en Chile cuesta <span style="color:#25D366;">$590.000</span> pago único, usando la API oficial de WhatsApp Business (WAHA). Incluye respuestas 24/7 con IA, catálogo, hosting, soporte y actualizaciones. Mantenimiento mensual opcional desde <span style="color:#25D366;">$69.000/mes</span>. Cotización sin costo.
-          </p>
-        </div>
-
-        <div class="reveal-item" style="margin-top:2rem; display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
-          <a href={waUrl} target="_blank" rel="noopener noreferrer"
-            style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.62rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
-            onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
-            QUIERO MI COTIZACIÓN
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-          </a>
-          <span style="font-size:0.7rem; color:rgba(255,255,255,0.25); font-family:var(--font-body);">Demo viva: este mismo sitio responde por WhatsApp 24/7</span>
-        </div>
+    <QuickAnswer
+      eyebrow="respuesta directa · costo y qué incluye"
+      accent="#25D366"
+      question="¿Cuánto cuesta un bot de WhatsApp en Chile?"
+      answer="Un bot de WhatsApp para pymes en Chile cuesta $590.000 pago único, usando la API oficial de WhatsApp Business (WAHA). Incluye respuestas 24/7 con IA, catálogo, hosting, soporte y actualizaciones. Mantenimiento mensual opcional desde $69.000/mes. Cotización sin costo."
+    >
+      <div class="reveal-item mt-8 flex flex-wrap items-center gap-3 border-t border-frame/60 pt-6">
+        <a href={waUrl} target="_blank" rel="noopener noreferrer"
+          style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.7rem 1.5rem; background:#1A1A1A; color:#fff; font-size:0.62rem; font-family:var(--font-body); font-weight:500; text-transform:uppercase; letter-spacing:0.2em; text-decoration:none; transition:background 0.2s;"
+          onmouseover="this.style.background='#25D366'" onmouseout="this.style.background='#1A1A1A'">
+          QUIERO MI COTIZACIÓN
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        </a>
+        <span style="font-size:0.7rem; color:rgba(255,255,255,0.45); font-family:var(--font-body);">Demo viva: este mismo sitio responde por WhatsApp 24/7</span>
       </div>
-    </section>
+    </QuickAnswer>
 
 
     <!-- ═══════════════════════════════════════════

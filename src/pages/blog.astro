@@ -7,6 +7,7 @@ import Footer from "../components/Footer.astro";
 import PageHero from "../components/ui/PageHero.astro";
 import WebcoreWindow from "../components/ui/WebcoreWindow.astro";
 import { author } from "../data/author";
+import { getCategoryLabel, getCategoryAccent, readingTime } from "../lib/blog-category";
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("blog");
@@ -19,36 +20,10 @@ const sortedPosts = [...posts].sort(
 const featured = sortedPosts[0];
 const rest = sortedPosts.slice(1);
 
-function readingTime(text: string): number {
-  const words = text.split(/\s+/).length;
-  return Math.max(1, Math.ceil(words / 200));
-}
-
 function isRecent(d: Date): boolean {
   const weekAgo = new Date();
   weekAgo.setDate(weekAgo.getDate() - 7);
   return d >= weekAgo;
-}
-
-// Category label for overlay
-function getCategoryLabel(tags: string[]): string {
-  const lower = tags.map(t => t.toLowerCase());
-  if (lower.some(t => ["seo", "seo local", "google maps", "posicionamiento"].includes(t))) return "SEO LOCAL";
-  if (lower.some(t => ["automatización", "whatsapp", "bot", "crm", "email marketing"].includes(t))) return "AUTOMATIZACIÓN";
-  if (lower.some(t => ["desarrollo web", "astro", "wordpress", "velocidad", "paginas web"].includes(t))) return "DESARROLLO WEB";
-  if (lower.some(t => ["marketing digital", "agencia digital", "marketing"].includes(t))) return "MARKETING";
-  return "DIGITAL";
-}
-
-// Acento por categoría (DESIGN §2.3) — uso puntual: punto guía en labels, nunca texto
-function getCategoryAccent(tags: string[]): string {
-  switch (getCategoryLabel(tags)) {
-    case "SEO LOCAL": return "#22E584";
-    case "AUTOMATIZACIÓN": return "#22D3EE";
-    case "DESARROLLO WEB": return "#00FF66";
-    case "MARKETING": return "#EAB308";
-    default: return "#A855F7";
-  }
 }
 
 // All unique tags

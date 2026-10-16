@@ -6,6 +6,7 @@ import PageHero from "../components/ui/PageHero.astro";
 import WebcoreWindow from "../components/ui/WebcoreWindow.astro";
 import Footer from "../components/Footer.astro";
 import CiudadesRelacionadas from "../components/CiudadesRelacionadas.astro";
+import QuickAnswer from "../components/QuickAnswer.astro";
 
 const waPhone = "56966929818";
 const waMsg = encodeURIComponent("Hola! Vi la página de automatización y quiero saber cómo puedo automatizar procesos en mi negocio.");
@@ -185,75 +186,42 @@ const VIDEO_HERO = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwI
 
 
     <!-- ═══════════════════════════════════════════
-         ANSWER BLOCK · respuesta directa 40-60 palabras (GEO N1)
+         ANSWER BLOCK · QuickAnswer (GEO N1) · Ronda 3 G1
          Misma página, dos audiencias: humano + asistente IA
     ═══════════════════════════════════════════ -->
-    <section class="relative w-full bg-bg">
-      <div class="w-full px-4 py-20 sm:px-6 md:py-28 lg:px-8 xl:px-12">
-        <div class="reveal-group grid gap-6 lg:grid-cols-12 lg:gap-12">
-          <p class="reveal-item font-mono text-xs uppercase tracking-[0.2em] text-accent lg:col-span-3">
-            // respuesta directa · automatización con IA
+    <QuickAnswer
+      eyebrow="respuesta directa · automatización con IA"
+      accent="#22D3EE"
+      question="¿Qué significa automatizar procesos con IA en una pyme?"
+      answer="Automatizar procesos con IA es conectar tus herramientas para eliminar tareas manuales repetitivas: bots de WhatsApp que atienden 24/7, reportes que se generan solos y flujos que integran Excel, CRM y email. En Mtsprz empieza desde $590.000 pago único, con mantenimiento mensual opcional desde $69.000."
+      facts={[
+        "Bots de WhatsApp que atienden 24/7",
+        "Reportes que se generan solos",
+        "Flujos que integran Excel, CRM y email",
+        "Caso real: contador de Puerto Varas · 200 comprobantes al día sin digitar",
+      ]}
+    >
+      <div class="reveal-item mt-8 flex flex-col gap-6 border-t border-frame/60 pt-6 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p class="font-body text-sm text-text-secondary md:text-base">
+            Desde{' '}
+            <span class="font-heading font-bold text-accent">$590.000</span>{' '}
+            pago único · mantenimiento mensual opcional desde{' '}
+            <span class="font-heading font-bold text-accent">$69.000</span>
           </p>
-
-          <div class="lg:col-span-9">
-            <!-- Lead -->
-            <p class="reveal-item max-w-3xl font-heading text-2xl font-bold leading-[1.3] tracking-[-0.02em] text-text-primary md:text-3xl">
-              Automatizar procesos con IA en una pyme es conectar tus herramientas para
-              eliminar tareas manuales repetitivas.
-            </p>
-
-            <!-- Capacidades -->
-            <div class="reveal-item mt-8 grid gap-x-10 gap-y-5 sm:grid-cols-3">
-              <div class="flex items-baseline gap-3">
-                <span class="shrink-0 font-mono text-[11px] leading-none text-text-tertiary" aria-hidden="true">[01]</span>
-                <p class="font-body text-sm font-light leading-relaxed text-text-secondary">
-                  Bots de WhatsApp que atienden 24/7
-                </p>
-              </div>
-              <div class="flex items-baseline gap-3">
-                <span class="shrink-0 font-mono text-[11px] leading-none text-text-tertiary" aria-hidden="true">[02]</span>
-                <p class="font-body text-sm font-light leading-relaxed text-text-secondary">
-                  Reportes que se generan solos
-                </p>
-              </div>
-              <div class="flex items-baseline gap-3">
-                <span class="shrink-0 font-mono text-[11px] leading-none text-text-tertiary" aria-hidden="true">[03]</span>
-                <p class="font-body text-sm font-light leading-relaxed text-text-secondary">
-                  Flujos que integran Excel, CRM y email
-                </p>
-              </div>
-            </div>
-
-            <!-- Precio + CTA -->
-            <div class="reveal-item mt-10 border-t border-frame/60 pt-6">
-              <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                <div>
-                  <p class="font-body text-sm text-text-secondary md:text-base">
-                    En Mtsprz lo hacemos desde{' '}
-                    <span class="font-heading font-bold text-accent">$590.000</span>{' '}
-                    pago único · mantenimiento mensual opcional desde{' '}
-                    <span class="font-heading font-bold text-accent">$69.000</span>
-                  </p>
-                  <p class="mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
-                    resultados en días · sin conocimientos técnicos
-                  </p>
-                </div>
-                <a
-                  href={waUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex w-fit shrink-0 items-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-bg transition-colors hover:bg-accent-hover sm:text-sm"
-                  >[ Quiero mi diagnóstico ]</a
-                >
-              </div>
-              <p class="mt-5 font-mono text-[11px] tracking-[0.08em] text-text-tertiary">
-                Caso real: contador de Puerto Varas · 200 comprobantes al día sin digitar
-              </p>
-            </div>
-          </div>
+          <p class="mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
+            resultados en días · sin conocimientos técnicos
+          </p>
         </div>
+        <a
+          href={waUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex w-fit shrink-0 items-center rounded-[6px] bg-accent px-6 py-3.5 font-mono text-xs font-bold uppercase tracking-wider text-bg transition-colors hover:bg-accent-hover sm:text-sm"
+          >[ Quiero mi diagnóstico ]</a
+        >
       </div>
-    </section>
+    </QuickAnswer>
 
 
     <!-- ═══════════════════════════════════════════
